@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [react()],
   root: __dirname,
-  base: '/',
+  base: '/worldcup-simulation/',
   resolve: {
     alias: {
       '@shared': join(__dirname, '../engine/src'),
