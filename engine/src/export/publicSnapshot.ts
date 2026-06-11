@@ -12,6 +12,7 @@ import type {
   OutcomeDistribution,
   ResolvedMatch,
   SimulationMatch,
+  Team,
 } from '../engine/types.js';
 import {
   serializeActualResult,
