@@ -2,10 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { isKnockoutStagePhase } from '@shared/engine/phase.js';
 import { api, isPublicMode, loadInitialSimulation } from './api/client.js';
 import { loadPublicMeta } from './api/staticClient.js';
+import { persistLocalPrediction } from './lib/localPredictionStorage.js';
 import {
   clearLocalMatchScore,
   LocalSimulationError,
   setLocalMatchScore,
+  simulateLocalGroupPhase,
+  simulateLocalKnockouts,
+  simulateLocalMatch,
 } from './lib/localSimulation.js';
 import type {
   ActualResultsState,
@@ -114,6 +118,11 @@ export function App() {
   useEffect(() => {
     setViewKnockout(isKnockoutStagePhase(phase));
   }, [phase, simulationId]);
+
+  useEffect(() => {
+    if (!publicMode || !state || !publicMeta) return;
+    persistLocalPrediction(state, publicMeta);
+  }, [publicMode, state, publicMeta]);
 
   const showGroupView = !viewKnockout;
 
@@ -271,37 +280,61 @@ export function App() {
   };
 
   const handleSimulateGroup = async (games: 1 | 2 | 3) => {
-    if (simulationId == null) return;
+    if (simulationId == null || !state) return;
     setSimulating(true);
     setError(null);
     try {
-      const result = await api.simulateGroupPhase(simulationId, games);
-      await refreshState(simulationId);
-      await refreshSimulations();
-      if (masterMode) await refreshMasterState();
-      setToast(
-        `G${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
-      );
+      if (publicMode) {
+        const { state: nextState, result } = simulateLocalGroupPhase(state, games);
+        setState(nextState);
+        setToast(
+          `G${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
+        );
+      } else {
+        const result = await api.simulateGroupPhase(simulationId, games);
+        await refreshState(simulationId);
+        await refreshSimulations();
+        if (masterMode) await refreshMasterState();
+        setToast(
+          `G${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
+        );
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to simulate group phase');
+      setError(
+        err instanceof LocalSimulationError || err instanceof Error
+          ? err.message
+          : 'Failed to simulate group phase',
+      );
     } finally {
       setSimulating(false);
     }
   };
 
   const handleSimulateKnockouts = async (throughRound: string) => {
-    if (simulationId == null) return;
+    if (simulationId == null || !state) return;
     setSimulating(true);
     setError(null);
     try {
-      const result = await api.simulateKnockouts(simulationId, throughRound);
-      await refreshState(simulationId);
-      await refreshSimulations();
-      setToast(
-        `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
-      );
+      if (publicMode) {
+        const { state: nextState, result } = simulateLocalKnockouts(state, throughRound);
+        setState(nextState);
+        setToast(
+          `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
+        );
+      } else {
+        const result = await api.simulateKnockouts(simulationId, throughRound);
+        await refreshState(simulationId);
+        await refreshSimulations();
+        setToast(
+          `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
+        );
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to simulate knockouts');
+      setError(
+        err instanceof LocalSimulationError || err instanceof Error
+          ? err.message
+          : 'Failed to simulate knockouts',
+      );
     } finally {
       setSimulating(false);
     }
@@ -331,18 +364,29 @@ export function App() {
   };
 
   const handleSimulateMatch = async (matchNumber: number) => {
-    if (simulationId == null) return;
+    if (simulationId == null || !state) return;
     setSimulating(true);
     setError(null);
     try {
-      const result = await api.simulateMatch(simulationId, matchNumber);
-      await refreshState(simulationId);
-      await refreshSimulations();
-      if (masterMode) await refreshMasterState();
-      setEditingMatchNumber(null);
-      setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
+      if (publicMode) {
+        const { state: nextState, result } = simulateLocalMatch(state, matchNumber);
+        setState(nextState);
+        setEditingMatchNumber(null);
+        setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
+      } else {
+        const result = await api.simulateMatch(simulationId, matchNumber);
+        await refreshState(simulationId);
+        await refreshSimulations();
+        if (masterMode) await refreshMasterState();
+        setEditingMatchNumber(null);
+        setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to simulate match');
+      setError(
+        err instanceof LocalSimulationError || err instanceof Error
+          ? err.message
+          : 'Failed to simulate match',
+      );
     } finally {
       setSimulating(false);
     }
@@ -423,7 +467,7 @@ export function App() {
             simulating={simulating}
             onSelectMatch={setSelectedMatchNumber}
             onStartEdit={setEditingMatchNumber}
-            onSimulateMatch={publicMode ? undefined : handleSimulateMatch}
+            onSimulateMatch={handleSimulateMatch}
             onSaveScore={handleSaveScore}
             onCancelEdit={() => setEditingMatchNumber(null)}
             onClearScore={handleClearScore}
@@ -436,7 +480,7 @@ export function App() {
             simulating={simulating}
             onSelectMatch={setSelectedMatchNumber}
             onStartEdit={setEditingMatchNumber}
-            onSimulateMatch={publicMode ? undefined : handleSimulateMatch}
+            onSimulateMatch={handleSimulateMatch}
             onSaveScore={handleSaveScore}
             onCancelEdit={() => setEditingMatchNumber(null)}
             onClearScore={handleClearScore}

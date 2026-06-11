@@ -72,6 +72,44 @@ export const masterTeamStats = sqliteTable('master_team_stats', {
   championWins: integer('champion_wins').notNull(),
 });
 
+export const simulationGroupMatchResults = sqliteTable(
+  'simulation_group_match_results',
+  {
+    simulationId: integer('simulation_id')
+      .notNull()
+      .references(() => simulations.id),
+    matchNumber: integer('match_number')
+      .notNull()
+      .references(() => fixtures.matchNumber),
+    goalsHome: integer('goals_home').notNull(),
+    goalsAway: integer('goals_away').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.simulationId, t.matchNumber] })],
+);
+
+export const masterMatchOutcomes = sqliteTable('master_match_outcomes', {
+  matchNumber: integer('match_number')
+    .primaryKey()
+    .references(() => fixtures.matchNumber),
+  homeWin: integer('home_win').notNull(),
+  draw: integer('draw').notNull(),
+  awayWin: integer('away_win').notNull(),
+  total: integer('total').notNull(),
+});
+
+export const masterMatchScorelines = sqliteTable(
+  'master_match_scorelines',
+  {
+    matchNumber: integer('match_number')
+      .notNull()
+      .references(() => fixtures.matchNumber),
+    goalsHome: integer('goals_home').notNull(),
+    goalsAway: integer('goals_away').notNull(),
+    count: integer('count').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.matchNumber, t.goalsHome, t.goalsAway] })],
+);
+
 export const simulationMatches = sqliteTable(
   'simulation_matches',
   {

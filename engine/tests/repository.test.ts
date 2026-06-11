@@ -246,4 +246,44 @@ describe('repository integration', () => {
     expect(stats.teams.find((t) => t.teamId === mexicoId)?.championWins).toBe(1);
     expect(stats.teams.find((t) => t.teamId === spainId)?.championWins).toBe(1);
   });
+
+  it('maintains master group match aggregates incrementally', () => {
+    const sim1 = repo.createSimulation('One');
+    const sim2 = repo.createSimulation('Two');
+
+    repo.updateMatchResult(sim1.id, 1, 2, 1, 18);
+    repo.updateMatchResult(sim2.id, 1, 1, 1, null);
+
+    let master = repo.buildMasterGroupView();
+    expect(master.distributions[1].total).toBe(2);
+    expect(master.distributions[1].homeWin).toBe(1);
+    expect(master.distributions[1].draw).toBe(1);
+
+    repo.clearMatchResult(sim1.id, 1);
+    master = repo.buildMasterGroupView();
+    expect(master.distributions[1].total).toBe(1);
+    expect(master.distributions[1].draw).toBe(1);
+
+    repo.deleteSimulation(sim2.id);
+    master = repo.buildMasterGroupView();
+    expect(master.distributions[1].total).toBe(0);
+  });
+
+  it('rebuilds master group match aggregates from simulation data', () => {
+    const sim = repo.createSimulation('Rebuild');
+    repo.updateMatchResult(sim.id, 1, 3, 0, 18);
+    repo.updateMatchResult(sim.id, 2, 0, 2, 19);
+
+    sqlite.exec('DELETE FROM master_match_outcomes');
+    sqlite.exec('DELETE FROM master_match_scorelines');
+    sqlite.exec('DELETE FROM simulation_group_match_results');
+
+    repo.rebuildAllMasterMatchAggregates();
+    const master = repo.buildMasterGroupView();
+
+    expect(master.distributions[1].total).toBe(1);
+    expect(master.distributions[1].homeWin).toBe(1);
+    expect(master.distributions[2].total).toBe(1);
+    expect(master.distributions[2].awayWin).toBe(1);
+  });
 });

@@ -45,6 +45,12 @@ import {
   refreshSimulationTeamGoals,
   removeSimulationFromMasterStats,
 } from './masterTeamStats.js';
+import {
+  readMasterMatchDistributions,
+  rebuildAllMasterMatchAggregates,
+  refreshSimulationGroupMatchAggregates,
+  removeSimulationFromMasterMatchAggregates,
+} from './masterMatchAggregates.js';
 
 function mapTeam(row: typeof schema.teams.$inferSelect): Team {
   return {
@@ -208,6 +214,7 @@ export class Repository {
     const existing = this.getSimulation(id);
     if (!existing) return false;
     removeSimulationFromMasterStats(this.db, id);
+    removeSimulationFromMasterMatchAggregates(this.db, id);
     this.db
       .delete(schema.simulationMatches)
       .where(eq(schema.simulationMatches.simulationId, id))
@@ -430,6 +437,7 @@ export class Repository {
       });
     } else if (options.refreshMasterStats !== false) {
       refreshSimulationTeamGoals(this.db, simulationId);
+      refreshSimulationGroupMatchAggregates(this.db, simulationId);
     }
   }
 
@@ -553,6 +561,7 @@ export class Repository {
       this.syncResolvedParticipants(simulationId);
     } else {
       refreshSimulationTeamGoals(this.db, simulationId);
+      refreshSimulationGroupMatchAggregates(this.db, simulationId);
     }
   }
 
@@ -746,11 +755,21 @@ export class Repository {
 
     if (options.refreshMasterStats !== false) {
       refreshSimulationTeamGoals(this.db, simulationId);
+      refreshSimulationGroupMatchAggregates(this.db, simulationId);
     }
   }
 
   rebuildAllMasterTeamStats(): void {
     rebuildAllMasterTeamStats(this.db);
+  }
+
+  rebuildAllMasterMatchAggregates(): void {
+    rebuildAllMasterMatchAggregates(this.db);
+  }
+
+  rebuildAllMasterAggregates(): void {
+    rebuildAllMasterTeamStats(this.db);
+    rebuildAllMasterMatchAggregates(this.db);
   }
 
   buildMasterGroupView(): MasterGroupState {
@@ -760,76 +779,7 @@ export class Repository {
     const memberships = this.getGroupMemberships();
     const groupFixtures = fixtures.filter((f) => f.group != null);
 
-    const outcomeRows = this.db
-      .select({
-        matchNumber: schema.simulationMatches.matchNumber,
-        homeWin: sql<number>`sum(case when ${schema.simulationMatches.goalsHome} > ${schema.simulationMatches.goalsAway} then 1 else 0 end)`,
-        draw: sql<number>`sum(case when ${schema.simulationMatches.goalsHome} = ${schema.simulationMatches.goalsAway} then 1 else 0 end)`,
-        awayWin: sql<number>`sum(case when ${schema.simulationMatches.goalsHome} < ${schema.simulationMatches.goalsAway} then 1 else 0 end)`,
-        total: sql<number>`count(*)`,
-      })
-      .from(schema.simulationMatches)
-      .innerJoin(
-        schema.fixtures,
-        eq(schema.fixtures.matchNumber, schema.simulationMatches.matchNumber),
-      )
-      .where(
-        and(
-          sql`${schema.fixtures.group} is not null`,
-          eq(schema.simulationMatches.status, 'played'),
-        ),
-      )
-      .groupBy(schema.simulationMatches.matchNumber)
-      .all();
-
-    const scorelineRows = this.db
-      .select({
-        matchNumber: schema.simulationMatches.matchNumber,
-        goalsHome: schema.simulationMatches.goalsHome,
-        goalsAway: schema.simulationMatches.goalsAway,
-        n: sql<number>`count(*)`,
-      })
-      .from(schema.simulationMatches)
-      .innerJoin(
-        schema.fixtures,
-        eq(schema.fixtures.matchNumber, schema.simulationMatches.matchNumber),
-      )
-      .where(
-        and(
-          sql`${schema.fixtures.group} is not null`,
-          eq(schema.simulationMatches.status, 'played'),
-        ),
-      )
-      .groupBy(
-        schema.simulationMatches.matchNumber,
-        schema.simulationMatches.goalsHome,
-        schema.simulationMatches.goalsAway,
-      )
-      .all();
-
-    const outcomesByMatch = new Map(
-      outcomeRows.map((row) => [
-        row.matchNumber,
-        {
-          homeWin: Number(row.homeWin),
-          draw: Number(row.draw),
-          awayWin: Number(row.awayWin),
-          total: Number(row.total),
-        },
-      ]),
-    );
-
-    const scorelinesByMatch = new Map<number, { goalsHome: number; goalsAway: number; n: number }[]>();
-    for (const row of scorelineRows) {
-      if (row.goalsHome == null || row.goalsAway == null) continue;
-      const list = scorelinesByMatch.get(row.matchNumber) ?? [];
-      list.push({
-        goalsHome: row.goalsHome,
-        goalsAway: row.goalsAway,
-        n: Number(row.n),
-      });
-      scorelinesByMatch.set(row.matchNumber, list);
-    }
+    const { outcomesByMatch, scorelinesByMatch } = readMasterMatchDistributions(this.db);
 
     const consensusMatches: SimulationMatch[] = [];
     const distributions: Record<number, OutcomeDistribution> = {};

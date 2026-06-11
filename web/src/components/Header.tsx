@@ -102,7 +102,7 @@ export function Header({
     ) : null;
 
   const simulateMenus =
-    !actualResultsMode && !masterMode && !publicMode ? (
+    !actualResultsMode && !masterMode ? (
       <>
         {isGroupStagePhase(simulation.phase) && (
           <GroupSimulateMenu simulating={simulating} onSelect={onSimulateGroupGames} />

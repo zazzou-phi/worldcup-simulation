@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import { drizzle, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema.js';
+import { rebuildAllMasterMatchAggregates } from './masterMatchAggregates.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdirSync } from 'node:fs';
@@ -68,6 +69,27 @@ export function initSchema(sqlite: Database.Database) {
       simulations_with_matches INTEGER NOT NULL,
       champion_wins INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS simulation_group_match_results (
+      simulation_id INTEGER NOT NULL REFERENCES simulations(id),
+      match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+      goals_home INTEGER NOT NULL,
+      goals_away INTEGER NOT NULL,
+      PRIMARY KEY (simulation_id, match_number)
+    );
+    CREATE TABLE IF NOT EXISTS master_match_outcomes (
+      match_number INTEGER PRIMARY KEY REFERENCES fixtures(match_number),
+      home_win INTEGER NOT NULL,
+      draw INTEGER NOT NULL,
+      away_win INTEGER NOT NULL,
+      total INTEGER NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS master_match_scorelines (
+      match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+      goals_home INTEGER NOT NULL,
+      goals_away INTEGER NOT NULL,
+      count INTEGER NOT NULL,
+      PRIMARY KEY (match_number, goals_home, goals_away)
+    );
     CREATE TABLE IF NOT EXISTS simulation_matches (
       simulation_id INTEGER NOT NULL REFERENCES simulations(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
@@ -115,6 +137,26 @@ function migrateSchema(sqlite: Database.Database) {
     sqlite.exec(
       'ALTER TABLE simulations ADD COLUMN champion_team_id INTEGER REFERENCES teams(id)',
     );
+  }
+
+  const aggregateTable = sqlite
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'master_match_outcomes'")
+    .get();
+  if (aggregateTable) {
+    const aggregateCount = sqlite
+      .prepare('SELECT COUNT(*) AS n FROM master_match_outcomes')
+      .get() as { n: number };
+    const playedGroupCount = sqlite
+      .prepare(
+        `SELECT COUNT(*) AS n
+         FROM simulation_matches sm
+         INNER JOIN fixtures f ON f.match_number = sm.match_number
+         WHERE f."group" IS NOT NULL AND sm.status = 'played'`,
+      )
+      .get() as { n: number };
+    if (aggregateCount.n === 0 && playedGroupCount.n > 0) {
+      rebuildAllMasterMatchAggregates(drizzle(sqlite, { schema }));
+    }
   }
 }
 

@@ -54,7 +54,7 @@ export function createApiApp(repo: Repository) {
   });
 
   app.post('/api/v1/master/team-stats/rebuild', (c) => {
-    repo.rebuildAllMasterTeamStats();
+    repo.rebuildAllMasterAggregates();
     const stats = repo.buildMasterTeamStats();
     return c.json(serializeMasterTeamStats(stats));
   });

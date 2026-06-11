@@ -1,6 +1,6 @@
 import { isPublicMode } from '../config/appMode.js';
-import { staticApi, loadBootstrap } from './staticClient.js';
-import { createInitialLocalState } from '../lib/localSimulation.js';
+import { hydrateLocalState } from '../lib/localPredictionStorage.js';
+import { staticApi, loadBootstrap, loadPublicMeta } from './staticClient.js';
 import type {
   ActualResultsState,
   ApiErrorBody,
@@ -251,9 +251,9 @@ let initialSimulationLoad: Promise<{ id: number; state: TournamentState }> | nul
 
 export function loadInitialSimulation(): Promise<{ id: number; state: TournamentState }> {
   if (isPublicMode()) {
-    return loadBootstrap().then((bootstrap) => ({
+    return Promise.all([loadBootstrap(), loadPublicMeta()]).then(([bootstrap, meta]) => ({
       id: 0,
-      state: createInitialLocalState(bootstrap),
+      state: hydrateLocalState(bootstrap, meta),
     }));
   }
 
