@@ -48,7 +48,7 @@ export function App() {
   const [viewKnockout, setViewKnockout] = useState(false);
   const [actualResultsMode, setActualResultsMode] = useState(false);
   const [actualState, setActualState] = useState<ActualResultsState | null>(null);
-  const [masterMode, setMasterMode] = useState(false);
+  const [masterMode, setMasterMode] = useState(true);
   const [masterState, setMasterState] = useState<MasterGroupState | null>(null);
   const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -87,12 +87,17 @@ export function App() {
   useEffect(() => {
     (async () => {
       try {
-        const { id, state: initialState } = await loadInitialSimulation();
+        const [{ id, state: initialState }, master, meta] = await Promise.all([
+          loadInitialSimulation(),
+          api.getMasterGroupState(),
+          publicMode ? loadPublicMeta() : Promise.resolve(null),
+        ]);
         setSimulationId(id);
         setState(initialState);
-        if (publicMode) {
-          setPublicMeta(await loadPublicMeta());
-        } else {
+        setMasterState(master);
+        if (publicMode && meta) {
+          setPublicMeta(meta);
+        } else if (!publicMode) {
           await refreshSimulations();
           setTeams(await api.listTeams());
         }
