@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { TournamentState } from '../types.js';
+import { MOBILE_QUERY } from '../lib/useMediaQuery.js';
 import { KnockoutBracket, KnockoutList } from './KnockoutBracket.js';
 
 interface Props {
@@ -21,7 +22,9 @@ interface Props {
 }
 
 export function KnockoutView(props: Props) {
-  const [useBracketView, setUseBracketView] = useState(true);
+  const [useBracketView, setUseBracketView] = useState(
+    () => typeof window !== 'undefined' && !window.matchMedia(MOBILE_QUERY).matches,
+  );
   const { state } = props;
 
   return (

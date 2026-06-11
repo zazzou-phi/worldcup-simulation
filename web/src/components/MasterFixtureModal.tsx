@@ -1,9 +1,37 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import type { OutcomeDistribution, ResolvedMatch, ScorelineCount } from '../types.js';
 import { matchTeamName } from '@shared/lib/matchDisplay.js';
 
 const TOP_SCORELINES = 3;
+const TOOLTIP_MARGIN = 8;
+const TOOLTIP_GAP = 6;
+
+interface TooltipAnchor {
+  x: number;
+  y: number;
+  bottom: number;
+}
+
+function clampTooltipPosition(
+  anchor: TooltipAnchor,
+  width: number,
+  height: number,
+): { left: number; top: number } {
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
+  let top = anchor.y - height - TOOLTIP_GAP;
+  if (top < TOOLTIP_MARGIN) {
+    top = anchor.bottom + TOOLTIP_GAP;
+  }
+  top = Math.max(TOOLTIP_MARGIN, Math.min(top, vh - TOOLTIP_MARGIN - height));
+
+  let left = anchor.x - width / 2;
+  left = Math.max(TOOLTIP_MARGIN, Math.min(left, vw - TOOLTIP_MARGIN - width));
+
+  return { left, top };
+}
 
 interface Props {
   match: ResolvedMatch;
@@ -43,15 +71,26 @@ interface TooltipProps {
   count: number;
   outcomeTotal: number;
   allTotal: number;
-  x: number;
-  y: number;
+  anchor: TooltipAnchor;
 }
 
-function ScorelineTooltip({ label, count, outcomeTotal, allTotal, x, y }: TooltipProps) {
+function ScorelineTooltip({ label, count, outcomeTotal, allTotal, anchor }: TooltipProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [style, setStyle] = useState<CSSProperties>({ visibility: 'hidden' });
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const { width, height } = el.getBoundingClientRect();
+    const { left, top } = clampTooltipPosition(anchor, width, height);
+    setStyle({ left, top, visibility: 'visible' });
+  }, [anchor, label, count, outcomeTotal, allTotal]);
+
   return createPortal(
     <div
+      ref={ref}
       className="master-bar-tooltip master-bar-tooltip-fixed"
-      style={{ left: x, top: y }}
+      style={style}
       role="tooltip"
     >
       <span className="master-bar-tooltip-label">{label}</span>
@@ -74,14 +113,20 @@ interface SegmentProps {
 
 function ScorelineSegment({ label, count, outcomeTotal, allTotal, color }: SegmentProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
+  const [tooltipAnchor, setTooltipAnchor] = useState<TooltipAnchor | null>(null);
 
   const showTooltip = () => {
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    setTooltipPos({ x: rect.left + rect.width / 2, y: rect.top });
+    setTooltipAnchor({
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+      bottom: rect.bottom,
+    });
   };
+
+  const hideTooltip = () => setTooltipAnchor(null);
 
   return (
     <>
@@ -92,16 +137,19 @@ function ScorelineSegment({ label, count, outcomeTotal, allTotal, color }: Segme
         role="img"
         aria-label={`${label}: ${count.toLocaleString()} (${formatPct(count, outcomeTotal)} of outcome, ${formatPct(count, allTotal)} overall)`}
         onMouseEnter={showTooltip}
-        onMouseLeave={() => setTooltipPos(null)}
+        onMouseLeave={hideTooltip}
+        onTouchStart={(e) => {
+          e.stopPropagation();
+          showTooltip();
+        }}
       />
-      {tooltipPos && (
+      {tooltipAnchor && (
         <ScorelineTooltip
           label={label}
           count={count}
           outcomeTotal={outcomeTotal}
           allTotal={allTotal}
-          x={tooltipPos.x}
-          y={tooltipPos.y}
+          anchor={tooltipAnchor}
         />
       )}
     </>
@@ -220,7 +268,7 @@ export function MasterFixtureModal({ match, distribution, onClose }: Props) {
             />
             <p className="muted master-bar-total">
               Top {TOP_SCORELINES} scorelines plus other per outcome · {total.toLocaleString()}{' '}
-              simulation{total === 1 ? '' : 's'} · hover a section for details
+              simulation{total === 1 ? '' : 's'} · hover or tap a section for details
             </p>
           </div>
         ) : (

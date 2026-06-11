@@ -5,6 +5,7 @@ import { teamCode } from '@shared/lib/teamCodes.js';
 import type { ActualResultsState } from '../types.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
+import { GroupPhaseLayout } from './GroupPhaseLayout.js';
 
 interface Props {
   actualState: ActualResultsState;
@@ -81,21 +82,24 @@ export function ActualResultsView({
   );
 
   return (
-    <div className={`group-phase layout-${layout}`}>
-      <div className="group-phase-standings">
-        {actualState.qualifyingThirdGroups.length > 0 && (
-          <div className="third-place-banner">
-            Third-place race: {actualState.qualifyingThirdGroups.join(', ')}
-          </div>
-        )}
-        <GroupTables
-          standings={actualState.groupStandings}
-          qualifyingThirdGroups={actualState.qualifyingThirdGroups}
-          selectedTeamId={selectedTeamId}
-          onSelectTeam={handleSelectTeam}
-        />
-      </div>
-      <div className="group-phase-fixtures">
+    <GroupPhaseLayout
+      layout={layout}
+      standings={
+        <>
+          {actualState.qualifyingThirdGroups.length > 0 && (
+            <div className="third-place-banner">
+              Third-place race: {actualState.qualifyingThirdGroups.join(', ')}
+            </div>
+          )}
+          <GroupTables
+            standings={actualState.groupStandings}
+            qualifyingThirdGroups={actualState.qualifyingThirdGroups}
+            selectedTeamId={selectedTeamId}
+            onSelectTeam={handleSelectTeam}
+          />
+        </>
+      }
+      fixtures={
         <FixtureList
           matches={groupMatches}
           selectedMatchNumber={selectedMatchNumber}
@@ -109,7 +113,7 @@ export function ActualResultsView({
           onCancelEdit={onCancelEdit}
           onClear={onClearScore}
         />
-      </div>
-    </div>
+      }
+    />
   );
 }

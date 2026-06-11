@@ -8,6 +8,7 @@ import {
 import type { MasterGroupState } from '../types.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
+import { GroupPhaseLayout } from './GroupPhaseLayout.js';
 import { MasterFixtureModal } from './MasterFixtureModal.js';
 
 interface Props {
@@ -76,27 +77,30 @@ export function MasterGroupView({ masterState, layout }: Props) {
 
   return (
     <>
-      <div className={`group-phase layout-${layout}`}>
-        <div className="group-phase-standings">
-          {!hasAnyData && (
-            <div className="third-place-banner master-empty-banner">
-              No group matches played across simulations yet. Run simulations or bulk simulate to
-              build consensus.
-            </div>
-          )}
-          {masterState.qualifyingThirdGroups.length > 0 && (
-            <div className="third-place-banner">
-              Third-place race: {masterState.qualifyingThirdGroups.join(', ')}
-            </div>
-          )}
-          <GroupTables
-            standings={masterState.groupStandings}
-            qualifyingThirdGroups={masterState.qualifyingThirdGroups}
-            selectedTeamId={selectedTeamId}
-            onSelectTeam={handleSelectTeam}
-          />
-        </div>
-        <div className="group-phase-fixtures">
+      <GroupPhaseLayout
+        layout={layout}
+        standings={
+          <>
+            {!hasAnyData && (
+              <div className="third-place-banner master-empty-banner">
+                No group matches played across simulations yet. Run simulations or bulk simulate to
+                build consensus.
+              </div>
+            )}
+            {masterState.qualifyingThirdGroups.length > 0 && (
+              <div className="third-place-banner">
+                Third-place race: {masterState.qualifyingThirdGroups.join(', ')}
+              </div>
+            )}
+            <GroupTables
+              standings={masterState.groupStandings}
+              qualifyingThirdGroups={masterState.qualifyingThirdGroups}
+              selectedTeamId={selectedTeamId}
+              onSelectTeam={handleSelectTeam}
+            />
+          </>
+        }
+        fixtures={
           <FixtureList
             matches={groupMatches}
             selectedMatchNumber={selectedMatchNumber}
@@ -114,8 +118,8 @@ export function MasterGroupView({ masterState, layout }: Props) {
             onCancelEdit={() => {}}
             onClear={() => {}}
           />
-        </div>
-      </div>
+        }
+      />
 
       {modalMatch && (
         <MasterFixtureModal
