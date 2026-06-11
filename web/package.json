@@ -1,0 +1,32 @@
+{
+  "name": "wc2026-web",
+  "version": "1.0.0",
+  "description": "World Cup 2026 simulation web app",
+  "type": "module",
+  "scripts": {
+    "seed": "npm run seed --prefix ../engine",
+    "build:shared": "npm run build --prefix ../engine",
+    "dev": "npm run build:shared && tsx server.ts",
+    "build": "npm run build:shared && vite build",
+    "build:public": "npm run build:shared && VITE_APP_MODE=public vite build",
+    "start": "npm run build:shared && NODE_ENV=production tsx server.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "better-sqlite3": "^11.10.0",
+    "drizzle-orm": "^0.44.2",
+    "hono": "^4.7.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.15.30",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^4.5.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

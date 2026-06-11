@@ -1,0 +1,36 @@
+{
+  "name": "wc2026-engine",
+  "version": "1.0.0",
+  "description": "World Cup 2026 simulation engine and API",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "api": "tsx src/api/server.ts",
+    "seed": "tsx src/seed.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "generate:annex-c": "node scripts/generate-annex-c.mjs",
+    "sync:simulation": "tsx src/sync-simulation-cli.ts",
+    "export:public": "tsx src/export-public-cli.ts",
+    "simulate:group": "tsx src/simulate-cli.ts group",
+    "simulate:knockouts": "tsx src/simulate-cli.ts knockouts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hono/node-server": "^1.14.4",
+    "better-sqlite3": "^11.10.0",
+    "csv-parse": "^5.6.0",
+    "drizzle-orm": "^0.44.2",
+    "hono": "^4.7.11"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.15.30",
+    "drizzle-kit": "^0.31.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

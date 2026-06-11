@@ -1,0 +1,6 @@
+# One team per line. Fixture names and teams.csv names both work.
+# Examples:
+# England
+# United States
+# USA
+# Mexico

@@ -1,0 +1,487 @@
+import { useCallback, useEffect, useState } from 'react';
+import { isKnockoutStagePhase } from '@shared/engine/phase.js';
+import { api, isPublicMode, loadInitialSimulation } from './api/client.js';
+import { loadPublicMeta } from './api/staticClient.js';
+import {
+  clearLocalMatchScore,
+  LocalSimulationError,
+  setLocalMatchScore,
+} from './lib/localSimulation.js';
+import type {
+  ActualResultsState,
+  MasterGroupState,
+  PublicMeta,
+  SimulationListEntry,
+  Team,
+  TournamentState,
+} from './types.js';
+import { Header } from './components/Header.js';
+import { ActualResultsView } from './components/ActualResultsView.js';
+import { GroupPhaseView } from './components/GroupPhaseView.js';
+import { KnockoutView } from './components/KnockoutView.js';
+import { MasterGroupView } from './components/MasterGroupView.js';
+import { MonteCarloModal } from './components/MonteCarloModal.js';
+import { SimulationManagerModal } from './components/SimulationManagerModal.js';
+import { TeamRatingsModal } from './components/TeamRatingsModal.js';
+import { MasterTeamStatsModal } from './components/MasterTeamStatsModal.js';
+import type { MonteCarloResult } from './types.js';
+
+export function App() {
+  const publicMode = isPublicMode();
+  const [simulationId, setSimulationId] = useState<number | null>(null);
+  const [state, setState] = useState<TournamentState | null>(null);
+  const [simulations, setSimulations] = useState<SimulationListEntry[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
+  const [layout, setLayout] = useState<'horizontal' | 'vertical'>('vertical');
+  const [selectedMatchNumber, setSelectedMatchNumber] = useState<number | null>(null);
+  const [editingMatchNumber, setEditingMatchNumber] = useState<number | null>(null);
+  const [showSimulations, setShowSimulations] = useState(false);
+  const [showRatings, setShowRatings] = useState(false);
+  const [showMonteCarlo, setShowMonteCarlo] = useState(false);
+  const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
+  const [monteCarloError, setMonteCarloError] = useState<string | null>(null);
+  const [monteCarloProgress, setMonteCarloProgress] = useState<{
+    completed: number;
+    total: number;
+  } | null>(null);
+  const [bulkSimulating, setBulkSimulating] = useState(false);
+  const [viewKnockout, setViewKnockout] = useState(false);
+  const [actualResultsMode, setActualResultsMode] = useState(false);
+  const [actualState, setActualState] = useState<ActualResultsState | null>(null);
+  const [masterMode, setMasterMode] = useState(false);
+  const [masterState, setMasterState] = useState<MasterGroupState | null>(null);
+  const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [simulating, setSimulating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const [publicMeta, setPublicMeta] = useState<PublicMeta | null>(null);
+
+  const refreshSimulations = useCallback(async () => {
+    if (publicMode) return;
+    const list = await api.listSimulations();
+    setSimulations(list);
+  }, [publicMode]);
+
+  const refreshState = useCallback(
+    async (id: number) => {
+      const next = await api.getState(id);
+      setState(next);
+      return next;
+    },
+    [],
+  );
+
+  const refreshActualState = useCallback(async () => {
+    const next = await api.getActualResultsState();
+    setActualState(next);
+    return next;
+  }, []);
+
+  const refreshMasterState = useCallback(async () => {
+    const next = await api.getMasterGroupState();
+    setMasterState(next);
+    return next;
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { id, state: initialState } = await loadInitialSimulation();
+        setSimulationId(id);
+        setState(initialState);
+        if (publicMode) {
+          setPublicMeta(await loadPublicMeta());
+        } else {
+          await refreshSimulations();
+          setTeams(await api.listTeams());
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [publicMode, refreshSimulations]);
+
+  const phase = state?.simulation.phase ?? 'group';
+
+  useEffect(() => {
+    setViewKnockout(isKnockoutStagePhase(phase));
+  }, [phase, simulationId]);
+
+  const showGroupView = !viewKnockout;
+
+  const switchSimulation = async (id: number) => {
+    await api.activateSimulation(id);
+    setSimulationId(id);
+    await refreshState(id);
+    await refreshSimulations();
+    setShowSimulations(false);
+    setSelectedMatchNumber(null);
+    setEditingMatchNumber(null);
+  };
+
+  const handleSaveScore = async (
+    matchNumber: number,
+    goalsHome: number,
+    goalsAway: number,
+    winnerTeamId: number | null,
+  ) => {
+    if (simulationId == null || !state) return;
+    try {
+      if (publicMode) {
+        setState(setLocalMatchScore(state, matchNumber, goalsHome, goalsAway, winnerTeamId));
+      } else {
+        await api.setMatchScore(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId);
+        await refreshState(simulationId);
+        await refreshSimulations();
+      }
+      setEditingMatchNumber(null);
+    } catch (err) {
+      setError(
+        err instanceof LocalSimulationError || err instanceof Error
+          ? err.message
+          : 'Failed to save score',
+      );
+    }
+  };
+
+  const handleClearScore = async (matchNumber: number) => {
+    if (simulationId == null || !state) return;
+    try {
+      if (publicMode) {
+        setState(clearLocalMatchScore(state, matchNumber));
+      } else {
+        await api.clearMatchScore(simulationId, matchNumber);
+        await refreshState(simulationId);
+        await refreshSimulations();
+      }
+      setEditingMatchNumber(null);
+    } catch (err) {
+      setError(
+        err instanceof LocalSimulationError || err instanceof Error
+          ? err.message
+          : 'Failed to clear score',
+      );
+    }
+  };
+
+  const handleSaveActualScore = async (
+    matchNumber: number,
+    goalsHome: number,
+    goalsAway: number,
+    winnerTeamId: number | null,
+  ) => {
+    try {
+      await api.setActualResult(matchNumber, goalsHome, goalsAway, winnerTeamId);
+      await refreshActualState();
+      if (simulationId != null) await refreshState(simulationId);
+      setEditingMatchNumber(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save actual result');
+    }
+  };
+
+  const handleClearActualScore = async (matchNumber: number) => {
+    try {
+      await api.clearActualResult(matchNumber);
+      await refreshActualState();
+      if (simulationId != null) await refreshState(simulationId);
+      setEditingMatchNumber(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to clear actual result');
+    }
+  };
+
+  const toggleActualResultsMode = async () => {
+    if (actualResultsMode) {
+      setActualResultsMode(false);
+      setSelectedMatchNumber(null);
+      setEditingMatchNumber(null);
+      return;
+    }
+    try {
+      await refreshActualState();
+      setMasterMode(false);
+      setActualResultsMode(true);
+      setSelectedMatchNumber(null);
+      setEditingMatchNumber(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load actual results');
+    }
+  };
+
+  const toggleMasterMode = async () => {
+    if (masterMode) {
+      setMasterMode(false);
+      setSelectedMatchNumber(null);
+      setEditingMatchNumber(null);
+      return;
+    }
+    try {
+      await refreshMasterState();
+      setActualResultsMode(false);
+      setMasterMode(true);
+      setSelectedMatchNumber(null);
+      setEditingMatchNumber(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load master view');
+    }
+  };
+
+  const handleCreateSimulation = async (name: string) => {
+    const sim = await api.createSimulation(name);
+    await switchSimulation(sim.id);
+  };
+
+  const handleRenameSimulation = async (id: number, name: string) => {
+    await api.renameSimulation(id, name);
+    await refreshSimulations();
+    if (id === simulationId) await refreshState(id);
+  };
+
+  const handleDeleteSimulation = async (id: number) => {
+    await api.deleteSimulation(id);
+    const list = await api.listSimulations();
+    setSimulations(list);
+    if (id === simulationId) {
+      if (list.length === 0) {
+        const sim = await api.createSimulation('Simulation');
+        await switchSimulation(sim.id);
+      } else {
+        await switchSimulation(list[0].id);
+      }
+    }
+  };
+
+  const handleUpdateTeamRatings = async (
+    teamId: number,
+    offensiveRating: number,
+    defensiveRating: number,
+  ) => {
+    await api.updateTeamRatings(teamId, offensiveRating, defensiveRating);
+    setTeams(await api.listTeams());
+    if (simulationId != null) await refreshState(simulationId);
+  };
+
+  const handleSimulateGroup = async (games: 1 | 2 | 3) => {
+    if (simulationId == null) return;
+    setSimulating(true);
+    setError(null);
+    try {
+      const result = await api.simulateGroupPhase(simulationId, games);
+      await refreshState(simulationId);
+      await refreshSimulations();
+      if (masterMode) await refreshMasterState();
+      setToast(
+        `G${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to simulate group phase');
+    } finally {
+      setSimulating(false);
+    }
+  };
+
+  const handleSimulateKnockouts = async (throughRound: string) => {
+    if (simulationId == null) return;
+    setSimulating(true);
+    setError(null);
+    try {
+      const result = await api.simulateKnockouts(simulationId, throughRound);
+      await refreshState(simulationId);
+      await refreshSimulations();
+      setToast(
+        `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to simulate knockouts');
+    } finally {
+      setSimulating(false);
+    }
+  };
+
+  const handleMonteCarlo = async (count: number, upsetVariance: number) => {
+    setBulkSimulating(true);
+    setMonteCarloError(null);
+    setMonteCarloResult(null);
+    setMonteCarloProgress({ completed: 0, total: count });
+    try {
+      const result = await api.simulateMonteCarlo(count, upsetVariance, (completed, total) => {
+        setMonteCarloProgress({ completed, total });
+      });
+      setMonteCarloResult(result);
+      await refreshSimulations();
+      if (masterMode) await refreshMasterState();
+      setToast(
+        `Bulk simulate: saved ${result.count.toLocaleString()} simulations (#${result.firstSimulationId}–${result.lastSimulationId})`,
+      );
+    } catch (err) {
+      setMonteCarloError(err instanceof Error ? err.message : 'Failed to run bulk simulation');
+    } finally {
+      setBulkSimulating(false);
+      setMonteCarloProgress(null);
+    }
+  };
+
+  const handleSimulateMatch = async (matchNumber: number) => {
+    if (simulationId == null) return;
+    setSimulating(true);
+    setError(null);
+    try {
+      const result = await api.simulateMatch(simulationId, matchNumber);
+      await refreshState(simulationId);
+      await refreshSimulations();
+      if (masterMode) await refreshMasterState();
+      setEditingMatchNumber(null);
+      setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to simulate match');
+    } finally {
+      setSimulating(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="app-loading">Loading WC 2026 Simulator…</div>;
+  }
+
+  if (error && !state) {
+    return <div className="app-error">{error}</div>;
+  }
+
+  if (!state || simulationId == null) {
+    return <div className="app-error">No simulation loaded</div>;
+  }
+
+  return (
+    <div className="app">
+      <Header
+        state={state}
+        layout={layout}
+        showGroupView={showGroupView}
+        actualResultsMode={actualResultsMode}
+        masterMode={masterMode}
+        publicMode={publicMode}
+        masterConsensusMode={masterState?.consensusMode}
+        simulating={simulating}
+        onLayoutChange={setLayout}
+        onToggleStageView={() => setViewKnockout((v) => !v)}
+        onToggleActualResults={toggleActualResultsMode}
+        onToggleMaster={toggleMasterMode}
+        onOpenSimulations={() => setShowSimulations(true)}
+        onOpenRatings={() => setShowRatings(true)}
+        onSimulateGroupGames={handleSimulateGroup}
+        onSimulateKnockoutsThrough={handleSimulateKnockouts}
+        onOpenMonteCarlo={() => {
+          setMonteCarloError(null);
+          setShowMonteCarlo(true);
+        }}
+        onOpenMasterTeamStats={() => setShowMasterTeamStats(true)}
+      />
+
+      {toast && (
+        <div className="app-toast app-toast-success" onClick={() => setToast(null)}>
+          {toast} (click to dismiss)
+        </div>
+      )}
+
+      {error && (
+        <div className="app-toast" onClick={() => setError(null)}>
+          {error} (click to dismiss)
+        </div>
+      )}
+
+      <main className="app-main">
+        {masterMode && masterState ? (
+          <MasterGroupView masterState={masterState} layout={layout} />
+        ) : actualResultsMode && actualState ? (
+          <ActualResultsView
+            actualState={actualState}
+            layout={layout}
+            selectedMatchNumber={selectedMatchNumber}
+            editingMatchNumber={editingMatchNumber}
+            readOnly={publicMode}
+            onSelectMatch={setSelectedMatchNumber}
+            onStartEdit={setEditingMatchNumber}
+            onSaveScore={handleSaveActualScore}
+            onCancelEdit={() => setEditingMatchNumber(null)}
+            onClearScore={handleClearActualScore}
+          />
+        ) : showGroupView ? (
+          <GroupPhaseView
+            state={state}
+            layout={layout}
+            selectedMatchNumber={selectedMatchNumber}
+            editingMatchNumber={editingMatchNumber}
+            simulating={simulating}
+            onSelectMatch={setSelectedMatchNumber}
+            onStartEdit={setEditingMatchNumber}
+            onSimulateMatch={publicMode ? undefined : handleSimulateMatch}
+            onSaveScore={handleSaveScore}
+            onCancelEdit={() => setEditingMatchNumber(null)}
+            onClearScore={handleClearScore}
+          />
+        ) : (
+          <KnockoutView
+            state={state}
+            selectedMatchNumber={selectedMatchNumber}
+            editingMatchNumber={editingMatchNumber}
+            simulating={simulating}
+            onSelectMatch={setSelectedMatchNumber}
+            onStartEdit={setEditingMatchNumber}
+            onSimulateMatch={publicMode ? undefined : handleSimulateMatch}
+            onSaveScore={handleSaveScore}
+            onCancelEdit={() => setEditingMatchNumber(null)}
+            onClearScore={handleClearScore}
+          />
+        )}
+      </main>
+
+      {publicMode && publicMeta && (
+        <footer className="app-footer muted">
+          Master data as of {new Date(publicMeta.exportedAt).toLocaleString()}
+        </footer>
+      )}
+
+      {showSimulations && (
+        <SimulationManagerModal
+          simulations={simulations}
+          activeSimulationId={simulationId}
+          onClose={() => setShowSimulations(false)}
+          onSwitch={switchSimulation}
+          onCreate={handleCreateSimulation}
+          onRename={handleRenameSimulation}
+          onDelete={handleDeleteSimulation}
+        />
+      )}
+
+      {showRatings && (
+        <TeamRatingsModal
+          teams={teams}
+          onClose={() => setShowRatings(false)}
+          onSave={handleUpdateTeamRatings}
+        />
+      )}
+
+      {showMonteCarlo && (
+        <MonteCarloModal
+          running={bulkSimulating}
+          progress={monteCarloProgress}
+          result={monteCarloResult}
+          error={monteCarloError}
+          onClose={() => setShowMonteCarlo(false)}
+          onRun={handleMonteCarlo}
+        />
+      )}
+
+      {showMasterTeamStats && (
+        <MasterTeamStatsModal
+          allowRebuild={!publicMode}
+          onClose={() => setShowMasterTeamStats(false)}
+        />
+      )}
+    </div>
+  );
+}

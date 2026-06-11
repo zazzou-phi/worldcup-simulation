@@ -1,0 +1,485 @@
+{
+  "simulationCount": 100001,
+  "teams": [
+    {
+      "teamId": 0,
+      "teamName": "Spain",
+      "countryCode": "ES",
+      "flag": "🇪🇸",
+      "totalGoals": 2603006,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 26.03006,
+      "championWins": 20191
+    },
+    {
+      "teamId": 1,
+      "teamName": "Argentina",
+      "countryCode": "AR",
+      "flag": "🇦🇷",
+      "totalGoals": 1861502,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 18.61502,
+      "championWins": 13515
+    },
+    {
+      "teamId": 2,
+      "teamName": "France",
+      "countryCode": "FR",
+      "flag": "🇫🇷",
+      "totalGoals": 1689755,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 16.89755,
+      "championWins": 11154
+    },
+    {
+      "teamId": 3,
+      "teamName": "England",
+      "countryCode": null,
+      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "totalGoals": 1596822,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 15.96822,
+      "championWins": 7010
+    },
+    {
+      "teamId": 14,
+      "teamName": "Switzerland",
+      "countryCode": "CH",
+      "flag": "🇨🇭",
+      "totalGoals": 1386113,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 13.86113,
+      "championWins": 2228
+    },
+    {
+      "teamId": 4,
+      "teamName": "Brazil",
+      "countryCode": "BR",
+      "flag": "🇧🇷",
+      "totalGoals": 1381419,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 13.81419,
+      "championWins": 4751
+    },
+    {
+      "teamId": 8,
+      "teamName": "Ecuador",
+      "countryCode": "EC",
+      "flag": "🇪🇨",
+      "totalGoals": 1336479,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 13.36479,
+      "championWins": 3148
+    },
+    {
+      "teamId": 10,
+      "teamName": "Germany",
+      "countryCode": "DE",
+      "flag": "🇩🇪",
+      "totalGoals": 1283188,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 12.83188,
+      "championWins": 2868
+    },
+    {
+      "teamId": 5,
+      "teamName": "Portugal",
+      "countryCode": "PT",
+      "flag": "🇵🇹",
+      "totalGoals": 1205201,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 12.05201,
+      "championWins": 4743
+    },
+    {
+      "teamId": 7,
+      "teamName": "Netherlands",
+      "countryCode": "NL",
+      "flag": "🇳🇱",
+      "totalGoals": 1181127,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 11.81127,
+      "championWins": 3911
+    },
+    {
+      "teamId": 6,
+      "teamName": "Colombia",
+      "countryCode": "CO",
+      "flag": "🇨🇴",
+      "totalGoals": 1163673,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 11.63673,
+      "championWins": 4311
+    },
+    {
+      "teamId": 9,
+      "teamName": "Croatia",
+      "countryCode": "HR",
+      "flag": "🇭🇷",
+      "totalGoals": 1135402,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 11.35402,
+      "championWins": 2934
+    },
+    {
+      "teamId": 18,
+      "teamName": "Mexico",
+      "countryCode": "MX",
+      "flag": "🇲🇽",
+      "totalGoals": 1105678,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 11.05678,
+      "championWins": 1670
+    },
+    {
+      "teamId": 19,
+      "teamName": "Belgium",
+      "countryCode": "BE",
+      "flag": "🇧🇪",
+      "totalGoals": 1017618,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 10.17618,
+      "championWins": 1560
+    },
+    {
+      "teamId": 15,
+      "teamName": "Uruguay",
+      "countryCode": "UY",
+      "flag": "🇺🇾",
+      "totalGoals": 1013142,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 10.13142,
+      "championWins": 1889
+    },
+    {
+      "teamId": 12,
+      "teamName": "Japan",
+      "countryCode": "JP",
+      "flag": "🇯🇵",
+      "totalGoals": 958363,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 9.58363,
+      "championWins": 2121
+    },
+    {
+      "teamId": 24,
+      "teamName": "Canada",
+      "countryCode": "CA",
+      "flag": "🇨🇦",
+      "totalGoals": 950646,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 9.50646,
+      "championWins": 629
+    },
+    {
+      "teamId": 13,
+      "teamName": "Turkey",
+      "countryCode": "TR",
+      "flag": "🇹🇷",
+      "totalGoals": 942394,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 9.42394,
+      "championWins": 2152
+    },
+    {
+      "teamId": 11,
+      "teamName": "Norway",
+      "countryCode": "NO",
+      "flag": "🇳🇴",
+      "totalGoals": 864471,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 8.64471,
+      "championWins": 2119
+    },
+    {
+      "teamId": 23,
+      "teamName": "Morocco",
+      "countryCode": "MA",
+      "flag": "🇲🇦",
+      "totalGoals": 774466,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 7.74466,
+      "championWins": 836
+    },
+    {
+      "teamId": 16,
+      "teamName": "Senegal",
+      "countryCode": "SN",
+      "flag": "🇸🇳",
+      "totalGoals": 745143,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 7.45143,
+      "championWins": 1376
+    },
+    {
+      "teamId": 32,
+      "teamName": "South Korea",
+      "countryCode": "KR",
+      "flag": "🇰🇷",
+      "totalGoals": 726624,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 7.26624,
+      "championWins": 438
+    },
+    {
+      "teamId": 21,
+      "teamName": "Paraguay",
+      "countryCode": "PY",
+      "flag": "🇵🇾",
+      "totalGoals": 712516,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 7.12516,
+      "championWins": 922
+    },
+    {
+      "teamId": 31,
+      "teamName": "Iran",
+      "countryCode": "IR",
+      "flag": "🇮🇷",
+      "totalGoals": 686022,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 6.86022,
+      "championWins": 413
+    },
+    {
+      "teamId": 36,
+      "teamName": "Czechia",
+      "countryCode": "CZ",
+      "flag": "🇨🇿",
+      "totalGoals": 658806,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 6.58806,
+      "championWins": 264
+    },
+    {
+      "teamId": 26,
+      "teamName": "Scotland",
+      "countryCode": null,
+      "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "totalGoals": 633002,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 6.33002,
+      "championWins": 389
+    },
+    {
+      "teamId": 22,
+      "teamName": "Austria",
+      "countryCode": "AT",
+      "flag": "🇦🇹",
+      "totalGoals": 604532,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 6.04532,
+      "championWins": 671
+    },
+    {
+      "teamId": 25,
+      "teamName": "Australia",
+      "countryCode": "AU",
+      "flag": "🇦🇺",
+      "totalGoals": 555434,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 5.55434,
+      "championWins": 407
+    },
+    {
+      "teamId": 45,
+      "teamName": "Egypt",
+      "countryCode": "EG",
+      "flag": "🇪🇬",
+      "totalGoals": 527505,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 5.27505,
+      "championWins": 143
+    },
+    {
+      "teamId": 35,
+      "teamName": "Panama",
+      "countryCode": "PA",
+      "flag": "🇵🇦",
+      "totalGoals": 527021,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 5.27021,
+      "championWins": 202
+    },
+    {
+      "teamId": 51,
+      "teamName": "Ivory Coast",
+      "countryCode": "CI",
+      "flag": "🇨🇮",
+      "totalGoals": 511581,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 5.11581,
+      "championWins": 97
+    },
+    {
+      "teamId": 66,
+      "teamName": "Bosnia and Herzegovina",
+      "countryCode": "BA",
+      "flag": "🇧🇦",
+      "totalGoals": 456870,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 4.5687,
+      "championWins": 30
+    },
+    {
+      "teamId": 41,
+      "teamName": "Sweden",
+      "countryCode": "SE",
+      "flag": "🇸🇪",
+      "totalGoals": 446860,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 4.4686,
+      "championWins": 164
+    },
+    {
+      "teamId": 40,
+      "teamName": "United States",
+      "countryCode": "US",
+      "flag": "🇺🇸",
+      "totalGoals": 436360,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 4.3636,
+      "championWins": 174
+    },
+    {
+      "teamId": 34,
+      "teamName": "Algeria",
+      "countryCode": "DZ",
+      "flag": "🇩🇿",
+      "totalGoals": 424963,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 4.24963,
+      "championWins": 206
+    },
+    {
+      "teamId": 38,
+      "teamName": "Uzbekistan",
+      "countryCode": "UZ",
+      "flag": "🇺🇿",
+      "totalGoals": 413907,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 4.13907,
+      "championWins": 168
+    },
+    {
+      "teamId": 50,
+      "teamName": "Jordan",
+      "countryCode": "JO",
+      "flag": "🇯🇴",
+      "totalGoals": 329365,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 3.29365,
+      "championWins": 67
+    },
+    {
+      "teamId": 67,
+      "teamName": "New Zealand",
+      "countryCode": "NZ",
+      "flag": "🇳🇿",
+      "totalGoals": 325582,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 3.25582,
+      "championWins": 15
+    },
+    {
+      "teamId": 57,
+      "teamName": "Tunisia",
+      "countryCode": "TN",
+      "flag": "🇹🇳",
+      "totalGoals": 306266,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 3.06266,
+      "championWins": 34
+    },
+    {
+      "teamId": 53,
+      "teamName": "DR Congo",
+      "countryCode": "CD",
+      "flag": "🇨🇩",
+      "totalGoals": 297128,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 2.97128,
+      "championWins": 36
+    },
+    {
+      "teamId": 70,
+      "teamName": "Saudi Arabia",
+      "countryCode": "SA",
+      "flag": "🇸🇦",
+      "totalGoals": 279202,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 2.79202,
+      "championWins": 11
+    },
+    {
+      "teamId": 78,
+      "teamName": "South Africa",
+      "countryCode": "ZA",
+      "flag": "🇿🇦",
+      "totalGoals": 261288,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 2.61288,
+      "championWins": 2
+    },
+    {
+      "teamId": 71,
+      "teamName": "Cape Verde",
+      "countryCode": "CV",
+      "flag": "🇨🇻",
+      "totalGoals": 258239,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 2.58239,
+      "championWins": 6
+    },
+    {
+      "teamId": 75,
+      "teamName": "Haiti",
+      "countryCode": "HT",
+      "flag": "🇭🇹",
+      "totalGoals": 224867,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 2.24867,
+      "championWins": 7
+    },
+    {
+      "teamId": 96,
+      "teamName": "Qatar",
+      "countryCode": "QA",
+      "flag": "🇶🇦",
+      "totalGoals": 221812,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 2.21812,
+      "championWins": 0
+    },
+    {
+      "teamId": 62,
+      "teamName": "Iraq",
+      "countryCode": "IQ",
+      "flag": "🇮🇶",
+      "totalGoals": 213843,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 2.13843,
+      "championWins": 15
+    },
+    {
+      "teamId": 81,
+      "teamName": "Ghana",
+      "countryCode": "GH",
+      "flag": "🇬🇭",
+      "totalGoals": 186133,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 1.86133,
+      "championWins": 2
+    },
+    {
+      "teamId": 90,
+      "teamName": "Curaçao",
+      "countryCode": "CW",
+      "flag": "🇨🇼",
+      "totalGoals": 177145,
+      "simulationsWithMatches": 100000,
+      "avgGoalsPerSimulation": 1.77145,
+      "championWins": 1
+    }
+  ]
+}

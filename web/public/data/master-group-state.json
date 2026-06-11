@@ -1,0 +1,6383 @@
+{
+  "consensusMode": "expected",
+  "resolvedMatches": [
+    {
+      "fixture": {
+        "matchNumber": 1,
+        "round": "Matchday 1",
+        "date": "2026-06-11",
+        "time": "13:00 UTC-6",
+        "venue": "Mexico City",
+        "group": "Group A",
+        "slotHome": "Mexico",
+        "slotAway": "South Africa",
+        "teamHomeId": 18,
+        "teamAwayId": 78
+      },
+      "result": {
+        "matchNumber": 1,
+        "teamHomeId": 18,
+        "teamAwayId": 78,
+        "goalsHome": 2,
+        "goalsAway": 0,
+        "winnerTeamId": 18,
+        "status": "played"
+      },
+      "homeTeam": {
+        "id": 18,
+        "name": "Mexico",
+        "countryCode": "MX",
+        "flag": "🇲🇽",
+        "rank": 19,
+        "rating": 1868,
+        "total": 1029,
+        "goalsFor": 1824,
+        "goalsAgainst": 1055,
+        "offensiveRating": 1.1271671963752086,
+        "defensiveRating": 0.7338536503316928
+      },
+      "awayTeam": {
+        "id": 78,
+        "name": "South Africa",
+        "countryCode": "ZA",
+        "flag": "🇿🇦",
+        "rank": 79,
+        "rating": 1517,
+        "total": 525,
+        "goalsFor": 719,
+        "goalsAgainst": 542,
+        "offensiveRating": 0.468699978142208,
+        "defensiveRating": 1.7648299555565885
+      },
+      "homeLabel": "Mexico",
+      "awayLabel": "South Africa",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 2,
+        "round": "Matchday 1",
+        "date": "2026-06-11",
+        "time": "20:00 UTC-6",
+        "venue": "Guadalajara (Zapopan)",
+        "group": "Group A",
+        "slotHome": "South Korea",
+        "slotAway": "Czech Republic",
+        "teamHomeId": 32,
+        "teamAwayId": 36
+      },
+      "result": {
+        "matchNumber": 2,
+        "teamHomeId": 32,
+        "teamAwayId": 36,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 32,
+        "name": "South Korea",
+        "countryCode": "KR",
+        "flag": "🇰🇷",
+        "rank": 33,
+        "rating": 1756,
+        "total": 1051,
+        "goalsFor": 1912,
+        "goalsAgainst": 964,
+        "offensiveRating": 0.8518946409226156,
+        "defensiveRating": 0.9709836426465159
+      },
+      "awayTeam": {
+        "id": 36,
+        "name": "Czechia",
+        "countryCode": "CZ",
+        "flag": "🇨🇿",
+        "rank": 37,
+        "rating": 1733,
+        "total": 883,
+        "goalsFor": 1626,
+        "goalsAgainst": 1098,
+        "offensiveRating": 0.8042923787979221,
+        "defensiveRating": 1.0284515723378675
+      },
+      "homeLabel": "South Korea",
+      "awayLabel": "Czechia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 3,
+        "round": "Matchday 8",
+        "date": "2026-06-18",
+        "time": "12:00 UTC-4",
+        "venue": "Atlanta",
+        "group": "Group A",
+        "slotHome": "Czech Republic",
+        "slotAway": "South Africa",
+        "teamHomeId": 36,
+        "teamAwayId": 78
+      },
+      "result": {
+        "matchNumber": 3,
+        "teamHomeId": 36,
+        "teamAwayId": 78,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 36,
+        "name": "Czechia",
+        "countryCode": "CZ",
+        "flag": "🇨🇿",
+        "rank": 37,
+        "rating": 1733,
+        "total": 883,
+        "goalsFor": 1626,
+        "goalsAgainst": 1098,
+        "offensiveRating": 0.8042923787979221,
+        "defensiveRating": 1.0284515723378675
+      },
+      "awayTeam": {
+        "id": 78,
+        "name": "South Africa",
+        "countryCode": "ZA",
+        "flag": "🇿🇦",
+        "rank": 79,
+        "rating": 1517,
+        "total": 525,
+        "goalsFor": 719,
+        "goalsAgainst": 542,
+        "offensiveRating": 0.468699978142208,
+        "defensiveRating": 1.7648299555565885
+      },
+      "homeLabel": "Czechia",
+      "awayLabel": "South Africa",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 4,
+        "round": "Matchday 8",
+        "date": "2026-06-18",
+        "time": "19:00 UTC-6",
+        "venue": "Guadalajara (Zapopan)",
+        "group": "Group A",
+        "slotHome": "Mexico",
+        "slotAway": "South Korea",
+        "teamHomeId": 18,
+        "teamAwayId": 32
+      },
+      "result": {
+        "matchNumber": 4,
+        "teamHomeId": 18,
+        "teamAwayId": 32,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 18,
+        "name": "Mexico",
+        "countryCode": "MX",
+        "flag": "🇲🇽",
+        "rank": 19,
+        "rating": 1868,
+        "total": 1029,
+        "goalsFor": 1824,
+        "goalsAgainst": 1055,
+        "offensiveRating": 1.1271671963752086,
+        "defensiveRating": 0.7338536503316928
+      },
+      "awayTeam": {
+        "id": 32,
+        "name": "South Korea",
+        "countryCode": "KR",
+        "flag": "🇰🇷",
+        "rank": 33,
+        "rating": 1756,
+        "total": 1051,
+        "goalsFor": 1912,
+        "goalsAgainst": 964,
+        "offensiveRating": 0.8518946409226156,
+        "defensiveRating": 0.9709836426465159
+      },
+      "homeLabel": "Mexico",
+      "awayLabel": "South Korea",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 5,
+        "round": "Matchday 14",
+        "date": "2026-06-24",
+        "time": "19:00 UTC-6",
+        "venue": "Mexico City",
+        "group": "Group A",
+        "slotHome": "Czech Republic",
+        "slotAway": "Mexico",
+        "teamHomeId": 36,
+        "teamAwayId": 18
+      },
+      "result": {
+        "matchNumber": 5,
+        "teamHomeId": 36,
+        "teamAwayId": 18,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 36,
+        "name": "Czechia",
+        "countryCode": "CZ",
+        "flag": "🇨🇿",
+        "rank": 37,
+        "rating": 1733,
+        "total": 883,
+        "goalsFor": 1626,
+        "goalsAgainst": 1098,
+        "offensiveRating": 0.8042923787979221,
+        "defensiveRating": 1.0284515723378675
+      },
+      "awayTeam": {
+        "id": 18,
+        "name": "Mexico",
+        "countryCode": "MX",
+        "flag": "🇲🇽",
+        "rank": 19,
+        "rating": 1868,
+        "total": 1029,
+        "goalsFor": 1824,
+        "goalsAgainst": 1055,
+        "offensiveRating": 1.1271671963752086,
+        "defensiveRating": 0.7338536503316928
+      },
+      "homeLabel": "Czechia",
+      "awayLabel": "Mexico",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 6,
+        "round": "Matchday 14",
+        "date": "2026-06-24",
+        "time": "19:00 UTC-6",
+        "venue": "Monterrey (Guadalupe)",
+        "group": "Group A",
+        "slotHome": "South Africa",
+        "slotAway": "South Korea",
+        "teamHomeId": 78,
+        "teamAwayId": 32
+      },
+      "result": {
+        "matchNumber": 6,
+        "teamHomeId": 78,
+        "teamAwayId": 32,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 78,
+        "name": "South Africa",
+        "countryCode": "ZA",
+        "flag": "🇿🇦",
+        "rank": 79,
+        "rating": 1517,
+        "total": 525,
+        "goalsFor": 719,
+        "goalsAgainst": 542,
+        "offensiveRating": 0.468699978142208,
+        "defensiveRating": 1.7648299555565885
+      },
+      "awayTeam": {
+        "id": 32,
+        "name": "South Korea",
+        "countryCode": "KR",
+        "flag": "🇰🇷",
+        "rank": 33,
+        "rating": 1756,
+        "total": 1051,
+        "goalsFor": 1912,
+        "goalsAgainst": 964,
+        "offensiveRating": 0.8518946409226156,
+        "defensiveRating": 0.9709836426465159
+      },
+      "homeLabel": "South Africa",
+      "awayLabel": "South Korea",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 7,
+        "round": "Matchday 2",
+        "date": "2026-06-12",
+        "time": "15:00 UTC-4",
+        "venue": "Toronto",
+        "group": "Group B",
+        "slotHome": "Canada",
+        "slotAway": "Bosnia & Herzegovina",
+        "teamHomeId": 24,
+        "teamAwayId": 66
+      },
+      "result": {
+        "matchNumber": 7,
+        "teamHomeId": 24,
+        "teamAwayId": 66,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 24,
+        "name": "Canada",
+        "countryCode": "CA",
+        "flag": "🇨🇦",
+        "rank": 25,
+        "rating": 1784,
+        "total": 488,
+        "goalsFor": 626,
+        "goalsAgainst": 623,
+        "offensiveRating": 0.9136639719561283,
+        "defensiveRating": 0.9053391476333772
+      },
+      "awayTeam": {
+        "id": 66,
+        "name": "Bosnia and Herzegovina",
+        "countryCode": "BA",
+        "flag": "🇧🇦",
+        "rank": 67,
+        "rating": 1591,
+        "total": 280,
+        "goalsFor": 393,
+        "goalsAgainst": 385,
+        "offensiveRating": 0.5639484565881524,
+        "defensiveRating": 1.466757736333637
+      },
+      "homeLabel": "Canada",
+      "awayLabel": "Bosnia and Herzegovina",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 8,
+        "round": "Matchday 3",
+        "date": "2026-06-13",
+        "time": "12:00 UTC-7",
+        "venue": "San Francisco Bay Area (Santa Clara)",
+        "group": "Group B",
+        "slotHome": "Qatar",
+        "slotAway": "Switzerland",
+        "teamHomeId": 96,
+        "teamAwayId": 14
+      },
+      "result": {
+        "matchNumber": 8,
+        "teamHomeId": 96,
+        "teamAwayId": 14,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 96,
+        "name": "Qatar",
+        "countryCode": "QA",
+        "flag": "🇶🇦",
+        "rank": 96,
+        "rating": 1423,
+        "total": 698,
+        "goalsFor": 993,
+        "goalsAgainst": 826,
+        "offensiveRating": 0.3705405399408552,
+        "defensiveRating": 2.232348886106008
+      },
+      "awayTeam": {
+        "id": 14,
+        "name": "Switzerland",
+        "countryCode": "CH",
+        "flag": "🇨🇭",
+        "rank": 15,
+        "rating": 1894,
+        "total": 896,
+        "goalsFor": 1339,
+        "goalsAgainst": 1483,
+        "offensiveRating": 1.2028666456016333,
+        "defensiveRating": 0.6876703786065674
+      },
+      "homeLabel": "Qatar",
+      "awayLabel": "Switzerland",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 9,
+        "round": "Matchday 8",
+        "date": "2026-06-18",
+        "time": "12:00 UTC-7",
+        "venue": "Los Angeles (Inglewood)",
+        "group": "Group B",
+        "slotHome": "Switzerland",
+        "slotAway": "Bosnia & Herzegovina",
+        "teamHomeId": 14,
+        "teamAwayId": 66
+      },
+      "result": {
+        "matchNumber": 9,
+        "teamHomeId": 14,
+        "teamAwayId": 66,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 14,
+        "name": "Switzerland",
+        "countryCode": "CH",
+        "flag": "🇨🇭",
+        "rank": 15,
+        "rating": 1894,
+        "total": 896,
+        "goalsFor": 1339,
+        "goalsAgainst": 1483,
+        "offensiveRating": 1.2028666456016333,
+        "defensiveRating": 0.6876703786065674
+      },
+      "awayTeam": {
+        "id": 66,
+        "name": "Bosnia and Herzegovina",
+        "countryCode": "BA",
+        "flag": "🇧🇦",
+        "rank": 67,
+        "rating": 1591,
+        "total": 280,
+        "goalsFor": 393,
+        "goalsAgainst": 385,
+        "offensiveRating": 0.5639484565881524,
+        "defensiveRating": 1.466757736333637
+      },
+      "homeLabel": "Switzerland",
+      "awayLabel": "Bosnia and Herzegovina",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 10,
+        "round": "Matchday 8",
+        "date": "2026-06-18",
+        "time": "15:00 UTC-7",
+        "venue": "Vancouver",
+        "group": "Group B",
+        "slotHome": "Canada",
+        "slotAway": "Qatar",
+        "teamHomeId": 24,
+        "teamAwayId": 96
+      },
+      "result": {
+        "matchNumber": 10,
+        "teamHomeId": 24,
+        "teamAwayId": 96,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 24,
+        "name": "Canada",
+        "countryCode": "CA",
+        "flag": "🇨🇦",
+        "rank": 25,
+        "rating": 1784,
+        "total": 488,
+        "goalsFor": 626,
+        "goalsAgainst": 623,
+        "offensiveRating": 0.9136639719561283,
+        "defensiveRating": 0.9053391476333772
+      },
+      "awayTeam": {
+        "id": 96,
+        "name": "Qatar",
+        "countryCode": "QA",
+        "flag": "🇶🇦",
+        "rank": 96,
+        "rating": 1423,
+        "total": 698,
+        "goalsFor": 993,
+        "goalsAgainst": 826,
+        "offensiveRating": 0.3705405399408552,
+        "defensiveRating": 2.232348886106008
+      },
+      "homeLabel": "Canada",
+      "awayLabel": "Qatar",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 11,
+        "round": "Matchday 14",
+        "date": "2026-06-24",
+        "time": "12:00 UTC-7",
+        "venue": "Vancouver",
+        "group": "Group B",
+        "slotHome": "Switzerland",
+        "slotAway": "Canada",
+        "teamHomeId": 14,
+        "teamAwayId": 24
+      },
+      "result": {
+        "matchNumber": 11,
+        "teamHomeId": 14,
+        "teamAwayId": 24,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 14,
+        "name": "Switzerland",
+        "countryCode": "CH",
+        "flag": "🇨🇭",
+        "rank": 15,
+        "rating": 1894,
+        "total": 896,
+        "goalsFor": 1339,
+        "goalsAgainst": 1483,
+        "offensiveRating": 1.2028666456016333,
+        "defensiveRating": 0.6876703786065674
+      },
+      "awayTeam": {
+        "id": 24,
+        "name": "Canada",
+        "countryCode": "CA",
+        "flag": "🇨🇦",
+        "rank": 25,
+        "rating": 1784,
+        "total": 488,
+        "goalsFor": 626,
+        "goalsAgainst": 623,
+        "offensiveRating": 0.9136639719561283,
+        "defensiveRating": 0.9053391476333772
+      },
+      "homeLabel": "Switzerland",
+      "awayLabel": "Canada",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 12,
+        "round": "Matchday 14",
+        "date": "2026-06-24",
+        "time": "12:00 UTC-7",
+        "venue": "Seattle",
+        "group": "Group B",
+        "slotHome": "Bosnia & Herzegovina",
+        "slotAway": "Qatar",
+        "teamHomeId": 66,
+        "teamAwayId": 96
+      },
+      "result": {
+        "matchNumber": 12,
+        "teamHomeId": 66,
+        "teamAwayId": 96,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 66,
+        "name": "Bosnia and Herzegovina",
+        "countryCode": "BA",
+        "flag": "🇧🇦",
+        "rank": 67,
+        "rating": 1591,
+        "total": 280,
+        "goalsFor": 393,
+        "goalsAgainst": 385,
+        "offensiveRating": 0.5639484565881524,
+        "defensiveRating": 1.466757736333637
+      },
+      "awayTeam": {
+        "id": 96,
+        "name": "Qatar",
+        "countryCode": "QA",
+        "flag": "🇶🇦",
+        "rank": 96,
+        "rating": 1423,
+        "total": 698,
+        "goalsFor": 993,
+        "goalsAgainst": 826,
+        "offensiveRating": 0.3705405399408552,
+        "defensiveRating": 2.232348886106008
+      },
+      "homeLabel": "Bosnia and Herzegovina",
+      "awayLabel": "Qatar",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 13,
+        "round": "Matchday 3",
+        "date": "2026-06-13",
+        "time": "18:00 UTC-4",
+        "venue": "New York/New Jersey (East Rutherford)",
+        "group": "Group C",
+        "slotHome": "Brazil",
+        "slotAway": "Morocco",
+        "teamHomeId": 4,
+        "teamAwayId": 23
+      },
+      "result": {
+        "matchNumber": 13,
+        "teamHomeId": 4,
+        "teamAwayId": 23,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 4,
+        "name": "Brazil",
+        "countryCode": "BR",
+        "flag": "🇧🇷",
+        "rank": 5,
+        "rating": 1984,
+        "total": 1065,
+        "goalsFor": 2294,
+        "goalsAgainst": 954,
+        "offensiveRating": 1.506377224836434,
+        "defensiveRating": 0.5491159504777455
+      },
+      "awayTeam": {
+        "id": 23,
+        "name": "Morocco",
+        "countryCode": "MA",
+        "flag": "🇲🇦",
+        "rank": 24,
+        "rating": 1822,
+        "total": 728,
+        "goalsFor": 1103,
+        "goalsAgainst": 614,
+        "offensiveRating": 1.0047186773712438,
+        "defensiveRating": 0.8232909173723315
+      },
+      "homeLabel": "Brazil",
+      "awayLabel": "Morocco",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 14,
+        "round": "Matchday 3",
+        "date": "2026-06-13",
+        "time": "21:00 UTC-4",
+        "venue": "Boston (Foxborough)",
+        "group": "Group C",
+        "slotHome": "Haiti",
+        "slotAway": "Scotland",
+        "teamHomeId": 75,
+        "teamAwayId": 26
+      },
+      "result": {
+        "matchNumber": 14,
+        "teamHomeId": 75,
+        "teamAwayId": 26,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 75,
+        "name": "Haiti",
+        "countryCode": "HT",
+        "flag": "🇭🇹",
+        "rank": 76,
+        "rating": 1532,
+        "total": 561,
+        "goalsFor": 957,
+        "goalsAgainst": 759,
+        "offensiveRating": 0.4866099403392296,
+        "defensiveRating": 1.6998743614185918
+      },
+      "awayTeam": {
+        "id": 26,
+        "name": "Scotland",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "rank": 27,
+        "rating": 1770,
+        "total": 868,
+        "goalsFor": 1499,
+        "goalsAgainst": 1076,
+        "offensiveRating": 0.8822388799602389,
+        "defensiveRating": 0.9375870644369771
+      },
+      "homeLabel": "Haiti",
+      "awayLabel": "Scotland",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 15,
+        "round": "Matchday 9",
+        "date": "2026-06-19",
+        "time": "18:00 UTC-4",
+        "venue": "Boston (Foxborough)",
+        "group": "Group C",
+        "slotHome": "Scotland",
+        "slotAway": "Morocco",
+        "teamHomeId": 26,
+        "teamAwayId": 23
+      },
+      "result": {
+        "matchNumber": 15,
+        "teamHomeId": 26,
+        "teamAwayId": 23,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 26,
+        "name": "Scotland",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "rank": 27,
+        "rating": 1770,
+        "total": 868,
+        "goalsFor": 1499,
+        "goalsAgainst": 1076,
+        "offensiveRating": 0.8822388799602389,
+        "defensiveRating": 0.9375870644369771
+      },
+      "awayTeam": {
+        "id": 23,
+        "name": "Morocco",
+        "countryCode": "MA",
+        "flag": "🇲🇦",
+        "rank": 24,
+        "rating": 1822,
+        "total": 728,
+        "goalsFor": 1103,
+        "goalsAgainst": 614,
+        "offensiveRating": 1.0047186773712438,
+        "defensiveRating": 0.8232909173723315
+      },
+      "homeLabel": "Scotland",
+      "awayLabel": "Morocco",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 16,
+        "round": "Matchday 9",
+        "date": "2026-06-19",
+        "time": "20:30 UTC-4",
+        "venue": "Philadelphia",
+        "group": "Group C",
+        "slotHome": "Brazil",
+        "slotAway": "Haiti",
+        "teamHomeId": 4,
+        "teamAwayId": 75
+      },
+      "result": {
+        "matchNumber": 16,
+        "teamHomeId": 4,
+        "teamAwayId": 75,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 4,
+        "name": "Brazil",
+        "countryCode": "BR",
+        "flag": "🇧🇷",
+        "rank": 5,
+        "rating": 1984,
+        "total": 1065,
+        "goalsFor": 2294,
+        "goalsAgainst": 954,
+        "offensiveRating": 1.506377224836434,
+        "defensiveRating": 0.5491159504777455
+      },
+      "awayTeam": {
+        "id": 75,
+        "name": "Haiti",
+        "countryCode": "HT",
+        "flag": "🇭🇹",
+        "rank": 76,
+        "rating": 1532,
+        "total": 561,
+        "goalsFor": 957,
+        "goalsAgainst": 759,
+        "offensiveRating": 0.4866099403392296,
+        "defensiveRating": 1.6998743614185918
+      },
+      "homeLabel": "Brazil",
+      "awayLabel": "Haiti",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 17,
+        "round": "Matchday 14",
+        "date": "2026-06-24",
+        "time": "18:00 UTC-4",
+        "venue": "Miami (Miami Gardens)",
+        "group": "Group C",
+        "slotHome": "Scotland",
+        "slotAway": "Brazil",
+        "teamHomeId": 26,
+        "teamAwayId": 4
+      },
+      "result": {
+        "matchNumber": 17,
+        "teamHomeId": 26,
+        "teamAwayId": 4,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 26,
+        "name": "Scotland",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "rank": 27,
+        "rating": 1770,
+        "total": 868,
+        "goalsFor": 1499,
+        "goalsAgainst": 1076,
+        "offensiveRating": 0.8822388799602389,
+        "defensiveRating": 0.9375870644369771
+      },
+      "awayTeam": {
+        "id": 4,
+        "name": "Brazil",
+        "countryCode": "BR",
+        "flag": "🇧🇷",
+        "rank": 5,
+        "rating": 1984,
+        "total": 1065,
+        "goalsFor": 2294,
+        "goalsAgainst": 954,
+        "offensiveRating": 1.506377224836434,
+        "defensiveRating": 0.5491159504777455
+      },
+      "homeLabel": "Scotland",
+      "awayLabel": "Brazil",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 18,
+        "round": "Matchday 14",
+        "date": "2026-06-24",
+        "time": "18:00 UTC-4",
+        "venue": "Atlanta",
+        "group": "Group C",
+        "slotHome": "Morocco",
+        "slotAway": "Haiti",
+        "teamHomeId": 23,
+        "teamAwayId": 75
+      },
+      "result": {
+        "matchNumber": 18,
+        "teamHomeId": 23,
+        "teamAwayId": 75,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 23,
+        "name": "Morocco",
+        "countryCode": "MA",
+        "flag": "🇲🇦",
+        "rank": 24,
+        "rating": 1822,
+        "total": 728,
+        "goalsFor": 1103,
+        "goalsAgainst": 614,
+        "offensiveRating": 1.0047186773712438,
+        "defensiveRating": 0.8232909173723315
+      },
+      "awayTeam": {
+        "id": 75,
+        "name": "Haiti",
+        "countryCode": "HT",
+        "flag": "🇭🇹",
+        "rank": 76,
+        "rating": 1532,
+        "total": 561,
+        "goalsFor": 957,
+        "goalsAgainst": 759,
+        "offensiveRating": 0.4866099403392296,
+        "defensiveRating": 1.6998743614185918
+      },
+      "homeLabel": "Morocco",
+      "awayLabel": "Haiti",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 19,
+        "round": "Matchday 2",
+        "date": "2026-06-12",
+        "time": "18:00 UTC-7",
+        "venue": "Los Angeles (Inglewood)",
+        "group": "Group D",
+        "slotHome": "USA",
+        "slotAway": "Paraguay",
+        "teamHomeId": 40,
+        "teamAwayId": 21
+      },
+      "result": {
+        "matchNumber": 19,
+        "teamHomeId": 40,
+        "teamAwayId": 21,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 40,
+        "name": "United States",
+        "countryCode": "US",
+        "flag": "🇺🇸",
+        "rank": 41,
+        "rating": 1721,
+        "total": 825,
+        "goalsFor": 1246,
+        "goalsAgainst": 1073,
+        "offensiveRating": 0.7805219466715484,
+        "defensiveRating": 1.0597725856671791
+      },
+      "awayTeam": {
+        "id": 21,
+        "name": "Paraguay",
+        "countryCode": "PY",
+        "flag": "🇵🇾",
+        "rank": 22,
+        "rating": 1833,
+        "total": 788,
+        "goalsFor": 1002,
+        "goalsAgainst": 1115,
+        "offensiveRating": 1.0327318568247768,
+        "defensiveRating": 0.800958889887749
+      },
+      "homeLabel": "United States",
+      "awayLabel": "Paraguay",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 20,
+        "round": "Matchday 3",
+        "date": "2026-06-13",
+        "time": "21:00 UTC-7",
+        "venue": "Vancouver",
+        "group": "Group D",
+        "slotHome": "Australia",
+        "slotAway": "Turkey",
+        "teamHomeId": 25,
+        "teamAwayId": 13
+      },
+      "result": {
+        "matchNumber": 20,
+        "teamHomeId": 25,
+        "teamAwayId": 13,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 25,
+        "name": "Australia",
+        "countryCode": "AU",
+        "flag": "🇦🇺",
+        "rank": 26,
+        "rating": 1775,
+        "total": 636,
+        "goalsFor": 1289,
+        "goalsAgainst": 715,
+        "offensiveRating": 0.8933360789590822,
+        "defensiveRating": 0.9259401708681849
+      },
+      "awayTeam": {
+        "id": 13,
+        "name": "Turkey",
+        "countryCode": "TR",
+        "flag": "🇹🇷",
+        "rank": 14,
+        "rating": 1902,
+        "total": 669,
+        "goalsFor": 947,
+        "goalsAgainst": 969,
+        "offensiveRating": 1.227166163716275,
+        "defensiveRating": 0.6740535927825116
+      },
+      "homeLabel": "Australia",
+      "awayLabel": "Turkey",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 21,
+        "round": "Matchday 9",
+        "date": "2026-06-19",
+        "time": "12:00 UTC-7",
+        "venue": "Seattle",
+        "group": "Group D",
+        "slotHome": "USA",
+        "slotAway": "Australia",
+        "teamHomeId": 40,
+        "teamAwayId": 25
+      },
+      "result": {
+        "matchNumber": 21,
+        "teamHomeId": 40,
+        "teamAwayId": 25,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 40,
+        "name": "United States",
+        "countryCode": "US",
+        "flag": "🇺🇸",
+        "rank": 41,
+        "rating": 1721,
+        "total": 825,
+        "goalsFor": 1246,
+        "goalsAgainst": 1073,
+        "offensiveRating": 0.7805219466715484,
+        "defensiveRating": 1.0597725856671791
+      },
+      "awayTeam": {
+        "id": 25,
+        "name": "Australia",
+        "countryCode": "AU",
+        "flag": "🇦🇺",
+        "rank": 26,
+        "rating": 1775,
+        "total": 636,
+        "goalsFor": 1289,
+        "goalsAgainst": 715,
+        "offensiveRating": 0.8933360789590822,
+        "defensiveRating": 0.9259401708681849
+      },
+      "homeLabel": "United States",
+      "awayLabel": "Australia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 22,
+        "round": "Matchday 9",
+        "date": "2026-06-19",
+        "time": "20:00 UTC-7",
+        "venue": "San Francisco Bay Area (Santa Clara)",
+        "group": "Group D",
+        "slotHome": "Turkey",
+        "slotAway": "Paraguay",
+        "teamHomeId": 13,
+        "teamAwayId": 21
+      },
+      "result": {
+        "matchNumber": 22,
+        "teamHomeId": 13,
+        "teamAwayId": 21,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 13,
+        "name": "Turkey",
+        "countryCode": "TR",
+        "flag": "🇹🇷",
+        "rank": 14,
+        "rating": 1902,
+        "total": 669,
+        "goalsFor": 947,
+        "goalsAgainst": 969,
+        "offensiveRating": 1.227166163716275,
+        "defensiveRating": 0.6740535927825116
+      },
+      "awayTeam": {
+        "id": 21,
+        "name": "Paraguay",
+        "countryCode": "PY",
+        "flag": "🇵🇾",
+        "rank": 22,
+        "rating": 1833,
+        "total": 788,
+        "goalsFor": 1002,
+        "goalsAgainst": 1115,
+        "offensiveRating": 1.0327318568247768,
+        "defensiveRating": 0.800958889887749
+      },
+      "homeLabel": "Turkey",
+      "awayLabel": "Paraguay",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 23,
+        "round": "Matchday 15",
+        "date": "2026-06-25",
+        "time": "19:00 UTC-7",
+        "venue": "Los Angeles (Inglewood)",
+        "group": "Group D",
+        "slotHome": "Turkey",
+        "slotAway": "USA",
+        "teamHomeId": 13,
+        "teamAwayId": 40
+      },
+      "result": {
+        "matchNumber": 23,
+        "teamHomeId": 13,
+        "teamAwayId": 40,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 13,
+        "name": "Turkey",
+        "countryCode": "TR",
+        "flag": "🇹🇷",
+        "rank": 14,
+        "rating": 1902,
+        "total": 669,
+        "goalsFor": 947,
+        "goalsAgainst": 969,
+        "offensiveRating": 1.227166163716275,
+        "defensiveRating": 0.6740535927825116
+      },
+      "awayTeam": {
+        "id": 40,
+        "name": "United States",
+        "countryCode": "US",
+        "flag": "🇺🇸",
+        "rank": 41,
+        "rating": 1721,
+        "total": 825,
+        "goalsFor": 1246,
+        "goalsAgainst": 1073,
+        "offensiveRating": 0.7805219466715484,
+        "defensiveRating": 1.0597725856671791
+      },
+      "homeLabel": "Turkey",
+      "awayLabel": "United States",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 24,
+        "round": "Matchday 15",
+        "date": "2026-06-25",
+        "time": "19:00 UTC-7",
+        "venue": "San Francisco Bay Area (Santa Clara)",
+        "group": "Group D",
+        "slotHome": "Paraguay",
+        "slotAway": "Australia",
+        "teamHomeId": 21,
+        "teamAwayId": 25
+      },
+      "result": {
+        "matchNumber": 24,
+        "teamHomeId": 21,
+        "teamAwayId": 25,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 21,
+        "name": "Paraguay",
+        "countryCode": "PY",
+        "flag": "🇵🇾",
+        "rank": 22,
+        "rating": 1833,
+        "total": 788,
+        "goalsFor": 1002,
+        "goalsAgainst": 1115,
+        "offensiveRating": 1.0327318568247768,
+        "defensiveRating": 0.800958889887749
+      },
+      "awayTeam": {
+        "id": 25,
+        "name": "Australia",
+        "countryCode": "AU",
+        "flag": "🇦🇺",
+        "rank": 26,
+        "rating": 1775,
+        "total": 636,
+        "goalsFor": 1289,
+        "goalsAgainst": 715,
+        "offensiveRating": 0.8933360789590822,
+        "defensiveRating": 0.9259401708681849
+      },
+      "homeLabel": "Paraguay",
+      "awayLabel": "Australia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 25,
+        "round": "Matchday 4",
+        "date": "2026-06-14",
+        "time": "12:00 UTC-5",
+        "venue": "Houston",
+        "group": "Group E",
+        "slotHome": "Germany",
+        "slotAway": "Curaçao",
+        "teamHomeId": 10,
+        "teamAwayId": 90
+      },
+      "result": {
+        "matchNumber": 25,
+        "teamHomeId": 10,
+        "teamAwayId": 90,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 10,
+        "name": "Germany",
+        "countryCode": "DE",
+        "flag": "🇩🇪",
+        "rank": 11,
+        "rating": 1923,
+        "total": 1045,
+        "goalsFor": 2352,
+        "goalsAgainst": 1232,
+        "offensiveRating": 1.2933135640366722,
+        "defensiveRating": 0.6395786641348735
+      },
+      "awayTeam": {
+        "id": 90,
+        "name": "Curaçao",
+        "countryCode": "CW",
+        "flag": "🇨🇼",
+        "rank": 91,
+        "rating": 1433,
+        "total": 499,
+        "goalsFor": 880,
+        "goalsAgainst": 771,
+        "offensiveRating": 0.37992081836864483,
+        "defensiveRating": 2.1772319957245974
+      },
+      "homeLabel": "Germany",
+      "awayLabel": "Curaçao",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 26,
+        "round": "Matchday 4",
+        "date": "2026-06-14",
+        "time": "19:00 UTC-4",
+        "venue": "Philadelphia",
+        "group": "Group E",
+        "slotHome": "Ivory Coast",
+        "slotAway": "Ecuador",
+        "teamHomeId": 51,
+        "teamAwayId": 8
+      },
+      "result": {
+        "matchNumber": 26,
+        "teamHomeId": 51,
+        "teamAwayId": 8,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 51,
+        "name": "Ivory Coast",
+        "countryCode": "CI",
+        "flag": "🇨🇮",
+        "rank": 52,
+        "rating": 1676,
+        "total": 692,
+        "goalsFor": 1130,
+        "goalsAgainst": 695,
+        "offensiveRating": 0.69747234090567,
+        "defensiveRating": 1.1859620992568634
+      },
+      "awayTeam": {
+        "id": 8,
+        "name": "Ecuador",
+        "countryCode": "EC",
+        "flag": "🇪🇨",
+        "rank": 9,
+        "rating": 1935,
+        "total": 599,
+        "goalsFor": 721,
+        "goalsAgainst": 904,
+        "offensiveRating": 1.3327008258851707,
+        "defensiveRating": 0.6206762579626095
+      },
+      "homeLabel": "Ivory Coast",
+      "awayLabel": "Ecuador",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 27,
+        "round": "Matchday 10",
+        "date": "2026-06-20",
+        "time": "16:00 UTC-4",
+        "venue": "Toronto",
+        "group": "Group E",
+        "slotHome": "Germany",
+        "slotAway": "Ivory Coast",
+        "teamHomeId": 10,
+        "teamAwayId": 51
+      },
+      "result": {
+        "matchNumber": 27,
+        "teamHomeId": 10,
+        "teamAwayId": 51,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 10,
+        "name": "Germany",
+        "countryCode": "DE",
+        "flag": "🇩🇪",
+        "rank": 11,
+        "rating": 1923,
+        "total": 1045,
+        "goalsFor": 2352,
+        "goalsAgainst": 1232,
+        "offensiveRating": 1.2933135640366722,
+        "defensiveRating": 0.6395786641348735
+      },
+      "awayTeam": {
+        "id": 51,
+        "name": "Ivory Coast",
+        "countryCode": "CI",
+        "flag": "🇨🇮",
+        "rank": 52,
+        "rating": 1676,
+        "total": 692,
+        "goalsFor": 1130,
+        "goalsAgainst": 695,
+        "offensiveRating": 0.69747234090567,
+        "defensiveRating": 1.1859620992568634
+      },
+      "homeLabel": "Germany",
+      "awayLabel": "Ivory Coast",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 28,
+        "round": "Matchday 10",
+        "date": "2026-06-20",
+        "time": "19:00 UTC-5",
+        "venue": "Kansas City",
+        "group": "Group E",
+        "slotHome": "Ecuador",
+        "slotAway": "Curaçao",
+        "teamHomeId": 8,
+        "teamAwayId": 90
+      },
+      "result": {
+        "matchNumber": 28,
+        "teamHomeId": 8,
+        "teamAwayId": 90,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 8,
+        "name": "Ecuador",
+        "countryCode": "EC",
+        "flag": "🇪🇨",
+        "rank": 9,
+        "rating": 1935,
+        "total": 599,
+        "goalsFor": 721,
+        "goalsAgainst": 904,
+        "offensiveRating": 1.3327008258851707,
+        "defensiveRating": 0.6206762579626095
+      },
+      "awayTeam": {
+        "id": 90,
+        "name": "Curaçao",
+        "countryCode": "CW",
+        "flag": "🇨🇼",
+        "rank": 91,
+        "rating": 1433,
+        "total": 499,
+        "goalsFor": 880,
+        "goalsAgainst": 771,
+        "offensiveRating": 0.37992081836864483,
+        "defensiveRating": 2.1772319957245974
+      },
+      "homeLabel": "Ecuador",
+      "awayLabel": "Curaçao",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 29,
+        "round": "Matchday 15",
+        "date": "2026-06-25",
+        "time": "16:00 UTC-4",
+        "venue": "Philadelphia",
+        "group": "Group E",
+        "slotHome": "Curaçao",
+        "slotAway": "Ivory Coast",
+        "teamHomeId": 90,
+        "teamAwayId": 51
+      },
+      "result": {
+        "matchNumber": 29,
+        "teamHomeId": 90,
+        "teamAwayId": 51,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 90,
+        "name": "Curaçao",
+        "countryCode": "CW",
+        "flag": "🇨🇼",
+        "rank": 91,
+        "rating": 1433,
+        "total": 499,
+        "goalsFor": 880,
+        "goalsAgainst": 771,
+        "offensiveRating": 0.37992081836864483,
+        "defensiveRating": 2.1772319957245974
+      },
+      "awayTeam": {
+        "id": 51,
+        "name": "Ivory Coast",
+        "countryCode": "CI",
+        "flag": "🇨🇮",
+        "rank": 52,
+        "rating": 1676,
+        "total": 692,
+        "goalsFor": 1130,
+        "goalsAgainst": 695,
+        "offensiveRating": 0.69747234090567,
+        "defensiveRating": 1.1859620992568634
+      },
+      "homeLabel": "Curaçao",
+      "awayLabel": "Ivory Coast",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 30,
+        "round": "Matchday 15",
+        "date": "2026-06-25",
+        "time": "16:00 UTC-4",
+        "venue": "New York/New Jersey (East Rutherford)",
+        "group": "Group E",
+        "slotHome": "Ecuador",
+        "slotAway": "Germany",
+        "teamHomeId": 8,
+        "teamAwayId": 10
+      },
+      "result": {
+        "matchNumber": 30,
+        "teamHomeId": 8,
+        "teamAwayId": 10,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 8,
+        "name": "Ecuador",
+        "countryCode": "EC",
+        "flag": "🇪🇨",
+        "rank": 9,
+        "rating": 1935,
+        "total": 599,
+        "goalsFor": 721,
+        "goalsAgainst": 904,
+        "offensiveRating": 1.3327008258851707,
+        "defensiveRating": 0.6206762579626095
+      },
+      "awayTeam": {
+        "id": 10,
+        "name": "Germany",
+        "countryCode": "DE",
+        "flag": "🇩🇪",
+        "rank": 11,
+        "rating": 1923,
+        "total": 1045,
+        "goalsFor": 2352,
+        "goalsAgainst": 1232,
+        "offensiveRating": 1.2933135640366722,
+        "defensiveRating": 0.6395786641348735
+      },
+      "homeLabel": "Ecuador",
+      "awayLabel": "Germany",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 31,
+        "round": "Matchday 4",
+        "date": "2026-06-14",
+        "time": "15:00 UTC-5",
+        "venue": "Dallas (Arlington)",
+        "group": "Group F",
+        "slotHome": "Netherlands",
+        "slotAway": "Japan",
+        "teamHomeId": 7,
+        "teamAwayId": 12
+      },
+      "result": {
+        "matchNumber": 31,
+        "teamHomeId": 7,
+        "teamAwayId": 12,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 7,
+        "name": "Netherlands",
+        "countryCode": "NL",
+        "flag": "🇳🇱",
+        "rank": 8,
+        "rating": 1961,
+        "total": 901,
+        "goalsFor": 1892,
+        "goalsAgainst": 1142,
+        "offensiveRating": 1.4222037131476268,
+        "defensiveRating": 0.5816155266276013
+      },
+      "awayTeam": {
+        "id": 12,
+        "name": "Japan",
+        "countryCode": "JP",
+        "flag": "🇯🇵",
+        "rank": 13,
+        "rating": 1906,
+        "total": 836,
+        "goalsFor": 1518,
+        "goalsAgainst": 985,
+        "offensiveRating": 1.239499388701661,
+        "defensiveRating": 0.6673466474723551
+      },
+      "homeLabel": "Netherlands",
+      "awayLabel": "Japan",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 32,
+        "round": "Matchday 4",
+        "date": "2026-06-14",
+        "time": "20:00 UTC-6",
+        "venue": "Monterrey (Guadalupe)",
+        "group": "Group F",
+        "slotHome": "Sweden",
+        "slotAway": "Tunisia",
+        "teamHomeId": 41,
+        "teamAwayId": 57
+      },
+      "result": {
+        "matchNumber": 32,
+        "teamHomeId": 41,
+        "teamAwayId": 57,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 41,
+        "name": "Sweden",
+        "countryCode": "SE",
+        "flag": "🇸🇪",
+        "rank": 42,
+        "rating": 1719,
+        "total": 1118,
+        "goalsFor": 2226,
+        "goalsAgainst": 1482,
+        "offensiveRating": 0.776629077221956,
+        "defensiveRating": 1.0650847178590572
+      },
+      "awayTeam": {
+        "id": 57,
+        "name": "Tunisia",
+        "countryCode": "TN",
+        "flag": "🇹🇳",
+        "rank": 58,
+        "rating": 1636,
+        "total": 775,
+        "goalsFor": 1105,
+        "goalsAgainst": 839,
+        "offensiveRating": 0.631099072096583,
+        "defensiveRating": 1.3106908220386297
+      },
+      "homeLabel": "Sweden",
+      "awayLabel": "Tunisia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 33,
+        "round": "Matchday 10",
+        "date": "2026-06-20",
+        "time": "12:00 UTC-5",
+        "venue": "Houston",
+        "group": "Group F",
+        "slotHome": "Netherlands",
+        "slotAway": "Sweden",
+        "teamHomeId": 7,
+        "teamAwayId": 41
+      },
+      "result": {
+        "matchNumber": 33,
+        "teamHomeId": 7,
+        "teamAwayId": 41,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 7,
+        "name": "Netherlands",
+        "countryCode": "NL",
+        "flag": "🇳🇱",
+        "rank": 8,
+        "rating": 1961,
+        "total": 901,
+        "goalsFor": 1892,
+        "goalsAgainst": 1142,
+        "offensiveRating": 1.4222037131476268,
+        "defensiveRating": 0.5816155266276013
+      },
+      "awayTeam": {
+        "id": 41,
+        "name": "Sweden",
+        "countryCode": "SE",
+        "flag": "🇸🇪",
+        "rank": 42,
+        "rating": 1719,
+        "total": 1118,
+        "goalsFor": 2226,
+        "goalsAgainst": 1482,
+        "offensiveRating": 0.776629077221956,
+        "defensiveRating": 1.0650847178590572
+      },
+      "homeLabel": "Netherlands",
+      "awayLabel": "Sweden",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 34,
+        "round": "Matchday 10",
+        "date": "2026-06-20",
+        "time": "22:00 UTC-6",
+        "venue": "Monterrey (Guadalupe)",
+        "group": "Group F",
+        "slotHome": "Tunisia",
+        "slotAway": "Japan",
+        "teamHomeId": 57,
+        "teamAwayId": 12
+      },
+      "result": {
+        "matchNumber": 34,
+        "teamHomeId": 57,
+        "teamAwayId": 12,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 57,
+        "name": "Tunisia",
+        "countryCode": "TN",
+        "flag": "🇹🇳",
+        "rank": 58,
+        "rating": 1636,
+        "total": 775,
+        "goalsFor": 1105,
+        "goalsAgainst": 839,
+        "offensiveRating": 0.631099072096583,
+        "defensiveRating": 1.3106908220386297
+      },
+      "awayTeam": {
+        "id": 12,
+        "name": "Japan",
+        "countryCode": "JP",
+        "flag": "🇯🇵",
+        "rank": 13,
+        "rating": 1906,
+        "total": 836,
+        "goalsFor": 1518,
+        "goalsAgainst": 985,
+        "offensiveRating": 1.239499388701661,
+        "defensiveRating": 0.6673466474723551
+      },
+      "homeLabel": "Tunisia",
+      "awayLabel": "Japan",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 35,
+        "round": "Matchday 15",
+        "date": "2026-06-25",
+        "time": "18:00 UTC-5",
+        "venue": "Dallas (Arlington)",
+        "group": "Group F",
+        "slotHome": "Japan",
+        "slotAway": "Sweden",
+        "teamHomeId": 12,
+        "teamAwayId": 41
+      },
+      "result": {
+        "matchNumber": 35,
+        "teamHomeId": 12,
+        "teamAwayId": 41,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 12,
+        "name": "Japan",
+        "countryCode": "JP",
+        "flag": "🇯🇵",
+        "rank": 13,
+        "rating": 1906,
+        "total": 836,
+        "goalsFor": 1518,
+        "goalsAgainst": 985,
+        "offensiveRating": 1.239499388701661,
+        "defensiveRating": 0.6673466474723551
+      },
+      "awayTeam": {
+        "id": 41,
+        "name": "Sweden",
+        "countryCode": "SE",
+        "flag": "🇸🇪",
+        "rank": 42,
+        "rating": 1719,
+        "total": 1118,
+        "goalsFor": 2226,
+        "goalsAgainst": 1482,
+        "offensiveRating": 0.776629077221956,
+        "defensiveRating": 1.0650847178590572
+      },
+      "homeLabel": "Japan",
+      "awayLabel": "Sweden",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 36,
+        "round": "Matchday 15",
+        "date": "2026-06-25",
+        "time": "18:00 UTC-5",
+        "venue": "Kansas City",
+        "group": "Group F",
+        "slotHome": "Tunisia",
+        "slotAway": "Netherlands",
+        "teamHomeId": 57,
+        "teamAwayId": 7
+      },
+      "result": {
+        "matchNumber": 36,
+        "teamHomeId": 57,
+        "teamAwayId": 7,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 57,
+        "name": "Tunisia",
+        "countryCode": "TN",
+        "flag": "🇹🇳",
+        "rank": 58,
+        "rating": 1636,
+        "total": 775,
+        "goalsFor": 1105,
+        "goalsAgainst": 839,
+        "offensiveRating": 0.631099072096583,
+        "defensiveRating": 1.3106908220386297
+      },
+      "awayTeam": {
+        "id": 7,
+        "name": "Netherlands",
+        "countryCode": "NL",
+        "flag": "🇳🇱",
+        "rank": 8,
+        "rating": 1961,
+        "total": 901,
+        "goalsFor": 1892,
+        "goalsAgainst": 1142,
+        "offensiveRating": 1.4222037131476268,
+        "defensiveRating": 0.5816155266276013
+      },
+      "homeLabel": "Tunisia",
+      "awayLabel": "Netherlands",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 37,
+        "round": "Matchday 5",
+        "date": "2026-06-15",
+        "time": "12:00 UTC-7",
+        "venue": "Seattle",
+        "group": "Group G",
+        "slotHome": "Belgium",
+        "slotAway": "Egypt",
+        "teamHomeId": 19,
+        "teamAwayId": 45
+      },
+      "result": {
+        "matchNumber": 37,
+        "teamHomeId": 19,
+        "teamAwayId": 45,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 19,
+        "name": "Belgium",
+        "countryCode": "BE",
+        "flag": "🇧🇪",
+        "rank": 20,
+        "rating": 1867,
+        "total": 876,
+        "goalsFor": 1599,
+        "goalsAgainst": 1359,
+        "offensiveRating": 1.1243527978482617,
+        "defensiveRating": 0.7356905796624518
+      },
+      "awayTeam": {
+        "id": 45,
+        "name": "Egypt",
+        "countryCode": "EG",
+        "flag": "🇪🇬",
+        "rank": 46,
+        "rating": 1699,
+        "total": 884,
+        "goalsFor": 1545,
+        "goalsAgainst": 921,
+        "offensiveRating": 0.7387524301763617,
+        "defensiveRating": 1.1196927790770395
+      },
+      "homeLabel": "Belgium",
+      "awayLabel": "Egypt",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 38,
+        "round": "Matchday 5",
+        "date": "2026-06-15",
+        "time": "18:00 UTC-7",
+        "venue": "Los Angeles (Inglewood)",
+        "group": "Group G",
+        "slotHome": "Iran",
+        "slotAway": "New Zealand",
+        "teamHomeId": 31,
+        "teamAwayId": 67
+      },
+      "result": {
+        "matchNumber": 38,
+        "teamHomeId": 31,
+        "teamAwayId": 67,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 31,
+        "name": "Iran",
+        "countryCode": "IR",
+        "flag": "🇮🇷",
+        "rank": 32,
+        "rating": 1764,
+        "total": 669,
+        "goalsFor": 1273,
+        "goalsAgainst": 525,
+        "offensiveRating": 0.8691040542308645,
+        "defensiveRating": 0.9517568783246754
+      },
+      "awayTeam": {
+        "id": 67,
+        "name": "New Zealand",
+        "countryCode": "NZ",
+        "flag": "🇳🇿",
+        "rank": 68,
+        "rating": 1585,
+        "total": 439,
+        "goalsFor": 767,
+        "goalsAgainst": 645,
+        "offensiveRating": 0.5555523579057084,
+        "defensiveRating": 1.488924940778453
+      },
+      "homeLabel": "Iran",
+      "awayLabel": "New Zealand",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 39,
+        "round": "Matchday 11",
+        "date": "2026-06-21",
+        "time": "12:00 UTC-7",
+        "venue": "Los Angeles (Inglewood)",
+        "group": "Group G",
+        "slotHome": "Belgium",
+        "slotAway": "Iran",
+        "teamHomeId": 19,
+        "teamAwayId": 31
+      },
+      "result": {
+        "matchNumber": 39,
+        "teamHomeId": 19,
+        "teamAwayId": 31,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 19,
+        "name": "Belgium",
+        "countryCode": "BE",
+        "flag": "🇧🇪",
+        "rank": 20,
+        "rating": 1867,
+        "total": 876,
+        "goalsFor": 1599,
+        "goalsAgainst": 1359,
+        "offensiveRating": 1.1243527978482617,
+        "defensiveRating": 0.7356905796624518
+      },
+      "awayTeam": {
+        "id": 31,
+        "name": "Iran",
+        "countryCode": "IR",
+        "flag": "🇮🇷",
+        "rank": 32,
+        "rating": 1764,
+        "total": 669,
+        "goalsFor": 1273,
+        "goalsAgainst": 525,
+        "offensiveRating": 0.8691040542308645,
+        "defensiveRating": 0.9517568783246754
+      },
+      "homeLabel": "Belgium",
+      "awayLabel": "Iran",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 40,
+        "round": "Matchday 11",
+        "date": "2026-06-21",
+        "time": "18:00 UTC-7",
+        "venue": "Vancouver",
+        "group": "Group G",
+        "slotHome": "New Zealand",
+        "slotAway": "Egypt",
+        "teamHomeId": 67,
+        "teamAwayId": 45
+      },
+      "result": {
+        "matchNumber": 40,
+        "teamHomeId": 67,
+        "teamAwayId": 45,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 67,
+        "name": "New Zealand",
+        "countryCode": "NZ",
+        "flag": "🇳🇿",
+        "rank": 68,
+        "rating": 1585,
+        "total": 439,
+        "goalsFor": 767,
+        "goalsAgainst": 645,
+        "offensiveRating": 0.5555523579057084,
+        "defensiveRating": 1.488924940778453
+      },
+      "awayTeam": {
+        "id": 45,
+        "name": "Egypt",
+        "countryCode": "EG",
+        "flag": "🇪🇬",
+        "rank": 46,
+        "rating": 1699,
+        "total": 884,
+        "goalsFor": 1545,
+        "goalsAgainst": 921,
+        "offensiveRating": 0.7387524301763617,
+        "defensiveRating": 1.1196927790770395
+      },
+      "homeLabel": "New Zealand",
+      "awayLabel": "Egypt",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 41,
+        "round": "Matchday 16",
+        "date": "2026-06-26",
+        "time": "20:00 UTC-7",
+        "venue": "Seattle",
+        "group": "Group G",
+        "slotHome": "Egypt",
+        "slotAway": "Iran",
+        "teamHomeId": 45,
+        "teamAwayId": 31
+      },
+      "result": {
+        "matchNumber": 41,
+        "teamHomeId": 45,
+        "teamAwayId": 31,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 45,
+        "name": "Egypt",
+        "countryCode": "EG",
+        "flag": "🇪🇬",
+        "rank": 46,
+        "rating": 1699,
+        "total": 884,
+        "goalsFor": 1545,
+        "goalsAgainst": 921,
+        "offensiveRating": 0.7387524301763617,
+        "defensiveRating": 1.1196927790770395
+      },
+      "awayTeam": {
+        "id": 31,
+        "name": "Iran",
+        "countryCode": "IR",
+        "flag": "🇮🇷",
+        "rank": 32,
+        "rating": 1764,
+        "total": 669,
+        "goalsFor": 1273,
+        "goalsAgainst": 525,
+        "offensiveRating": 0.8691040542308645,
+        "defensiveRating": 0.9517568783246754
+      },
+      "homeLabel": "Egypt",
+      "awayLabel": "Iran",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 42,
+        "round": "Matchday 16",
+        "date": "2026-06-26",
+        "time": "20:00 UTC-7",
+        "venue": "Vancouver",
+        "group": "Group G",
+        "slotHome": "New Zealand",
+        "slotAway": "Belgium",
+        "teamHomeId": 67,
+        "teamAwayId": 19
+      },
+      "result": {
+        "matchNumber": 42,
+        "teamHomeId": 67,
+        "teamAwayId": 19,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 67,
+        "name": "New Zealand",
+        "countryCode": "NZ",
+        "flag": "🇳🇿",
+        "rank": 68,
+        "rating": 1585,
+        "total": 439,
+        "goalsFor": 767,
+        "goalsAgainst": 645,
+        "offensiveRating": 0.5555523579057084,
+        "defensiveRating": 1.488924940778453
+      },
+      "awayTeam": {
+        "id": 19,
+        "name": "Belgium",
+        "countryCode": "BE",
+        "flag": "🇧🇪",
+        "rank": 20,
+        "rating": 1867,
+        "total": 876,
+        "goalsFor": 1599,
+        "goalsAgainst": 1359,
+        "offensiveRating": 1.1243527978482617,
+        "defensiveRating": 0.7356905796624518
+      },
+      "homeLabel": "New Zealand",
+      "awayLabel": "Belgium",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 43,
+        "round": "Matchday 5",
+        "date": "2026-06-15",
+        "time": "12:00 UTC-4",
+        "venue": "Atlanta",
+        "group": "Group H",
+        "slotHome": "Spain",
+        "slotAway": "Cape Verde",
+        "teamHomeId": 0,
+        "teamAwayId": 71
+      },
+      "result": {
+        "matchNumber": 43,
+        "teamHomeId": 0,
+        "teamAwayId": 71,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 0,
+        "name": "Spain",
+        "countryCode": "ES",
+        "flag": "🇪🇸",
+        "rank": 1,
+        "rating": 2165,
+        "total": 780,
+        "goalsFor": 1591,
+        "goalsAgainst": 697,
+        "offensiveRating": 2.368383320924088,
+        "defensiveRating": 0.3492575523084423
+      },
+      "awayTeam": {
+        "id": 71,
+        "name": "Cape Verde",
+        "countryCode": "CV",
+        "flag": "🇨🇻",
+        "rank": 72,
+        "rating": 1549,
+        "total": 251,
+        "goalsFor": 267,
+        "goalsAgainst": 278,
+        "offensiveRating": 0.5077366249409897,
+        "defensiveRating": 1.6291433805670867
+      },
+      "homeLabel": "Spain",
+      "awayLabel": "Cape Verde",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 44,
+        "round": "Matchday 5",
+        "date": "2026-06-15",
+        "time": "18:00 UTC-4",
+        "venue": "Miami (Miami Gardens)",
+        "group": "Group H",
+        "slotHome": "Saudi Arabia",
+        "slotAway": "Uruguay",
+        "teamHomeId": 70,
+        "teamAwayId": 15
+      },
+      "result": {
+        "matchNumber": 44,
+        "teamHomeId": 70,
+        "teamAwayId": 15,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 70,
+        "name": "Saudi Arabia",
+        "countryCode": "SA",
+        "flag": "🇸🇦",
+        "rank": 71,
+        "rating": 1566,
+        "total": 836,
+        "goalsFor": 1282,
+        "goalsAgainst": 894,
+        "offensiveRating": 0.5297805468724088,
+        "defensiveRating": 1.5613554829020595
+      },
+      "awayTeam": {
+        "id": 15,
+        "name": "Uruguay",
+        "countryCode": "UY",
+        "flag": "🇺🇾",
+        "rank": 16,
+        "rating": 1892,
+        "total": 1019,
+        "goalsFor": 1610,
+        "goalsAgainst": 1254,
+        "offensiveRating": 1.1968673231782665,
+        "defensiveRating": 0.6911173407237252
+      },
+      "homeLabel": "Saudi Arabia",
+      "awayLabel": "Uruguay",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 45,
+        "round": "Matchday 11",
+        "date": "2026-06-21",
+        "time": "12:00 UTC-4",
+        "venue": "Atlanta",
+        "group": "Group H",
+        "slotHome": "Spain",
+        "slotAway": "Saudi Arabia",
+        "teamHomeId": 0,
+        "teamAwayId": 70
+      },
+      "result": {
+        "matchNumber": 45,
+        "teamHomeId": 0,
+        "teamAwayId": 70,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 0,
+        "name": "Spain",
+        "countryCode": "ES",
+        "flag": "🇪🇸",
+        "rank": 1,
+        "rating": 2165,
+        "total": 780,
+        "goalsFor": 1591,
+        "goalsAgainst": 697,
+        "offensiveRating": 2.368383320924088,
+        "defensiveRating": 0.3492575523084423
+      },
+      "awayTeam": {
+        "id": 70,
+        "name": "Saudi Arabia",
+        "countryCode": "SA",
+        "flag": "🇸🇦",
+        "rank": 71,
+        "rating": 1566,
+        "total": 836,
+        "goalsFor": 1282,
+        "goalsAgainst": 894,
+        "offensiveRating": 0.5297805468724088,
+        "defensiveRating": 1.5613554829020595
+      },
+      "homeLabel": "Spain",
+      "awayLabel": "Saudi Arabia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 46,
+        "round": "Matchday 11",
+        "date": "2026-06-21",
+        "time": "18:00 UTC-4",
+        "venue": "Miami (Miami Gardens)",
+        "group": "Group H",
+        "slotHome": "Uruguay",
+        "slotAway": "Cape Verde",
+        "teamHomeId": 15,
+        "teamAwayId": 71
+      },
+      "result": {
+        "matchNumber": 46,
+        "teamHomeId": 15,
+        "teamAwayId": 71,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 15,
+        "name": "Uruguay",
+        "countryCode": "UY",
+        "flag": "🇺🇾",
+        "rank": 16,
+        "rating": 1892,
+        "total": 1019,
+        "goalsFor": 1610,
+        "goalsAgainst": 1254,
+        "offensiveRating": 1.1968673231782665,
+        "defensiveRating": 0.6911173407237252
+      },
+      "awayTeam": {
+        "id": 71,
+        "name": "Cape Verde",
+        "countryCode": "CV",
+        "flag": "🇨🇻",
+        "rank": 72,
+        "rating": 1549,
+        "total": 251,
+        "goalsFor": 267,
+        "goalsAgainst": 278,
+        "offensiveRating": 0.5077366249409897,
+        "defensiveRating": 1.6291433805670867
+      },
+      "homeLabel": "Uruguay",
+      "awayLabel": "Cape Verde",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 47,
+        "round": "Matchday 16",
+        "date": "2026-06-26",
+        "time": "19:00 UTC-5",
+        "venue": "Houston",
+        "group": "Group H",
+        "slotHome": "Cape Verde",
+        "slotAway": "Saudi Arabia",
+        "teamHomeId": 71,
+        "teamAwayId": 70
+      },
+      "result": {
+        "matchNumber": 47,
+        "teamHomeId": 71,
+        "teamAwayId": 70,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 71,
+        "name": "Cape Verde",
+        "countryCode": "CV",
+        "flag": "🇨🇻",
+        "rank": 72,
+        "rating": 1549,
+        "total": 251,
+        "goalsFor": 267,
+        "goalsAgainst": 278,
+        "offensiveRating": 0.5077366249409897,
+        "defensiveRating": 1.6291433805670867
+      },
+      "awayTeam": {
+        "id": 70,
+        "name": "Saudi Arabia",
+        "countryCode": "SA",
+        "flag": "🇸🇦",
+        "rank": 71,
+        "rating": 1566,
+        "total": 836,
+        "goalsFor": 1282,
+        "goalsAgainst": 894,
+        "offensiveRating": 0.5297805468724088,
+        "defensiveRating": 1.5613554829020595
+      },
+      "homeLabel": "Cape Verde",
+      "awayLabel": "Saudi Arabia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 48,
+        "round": "Matchday 16",
+        "date": "2026-06-26",
+        "time": "18:00 UTC-6",
+        "venue": "Guadalajara (Zapopan)",
+        "group": "Group H",
+        "slotHome": "Uruguay",
+        "slotAway": "Spain",
+        "teamHomeId": 15,
+        "teamAwayId": 0
+      },
+      "result": {
+        "matchNumber": 48,
+        "teamHomeId": 15,
+        "teamAwayId": 0,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 15,
+        "name": "Uruguay",
+        "countryCode": "UY",
+        "flag": "🇺🇾",
+        "rank": 16,
+        "rating": 1892,
+        "total": 1019,
+        "goalsFor": 1610,
+        "goalsAgainst": 1254,
+        "offensiveRating": 1.1968673231782665,
+        "defensiveRating": 0.6911173407237252
+      },
+      "awayTeam": {
+        "id": 0,
+        "name": "Spain",
+        "countryCode": "ES",
+        "flag": "🇪🇸",
+        "rank": 1,
+        "rating": 2165,
+        "total": 780,
+        "goalsFor": 1591,
+        "goalsAgainst": 697,
+        "offensiveRating": 2.368383320924088,
+        "defensiveRating": 0.3492575523084423
+      },
+      "homeLabel": "Uruguay",
+      "awayLabel": "Spain",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 49,
+        "round": "Matchday 6",
+        "date": "2026-06-16",
+        "time": "15:00 UTC-4",
+        "venue": "New York/New Jersey (East Rutherford)",
+        "group": "Group I",
+        "slotHome": "France",
+        "slotAway": "Senegal",
+        "teamHomeId": 2,
+        "teamAwayId": 16
+      },
+      "result": {
+        "matchNumber": 49,
+        "teamHomeId": 2,
+        "teamAwayId": 16,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 2,
+        "name": "France",
+        "countryCode": "FR",
+        "flag": "🇫🇷",
+        "rank": 3,
+        "rating": 2081,
+        "total": 938,
+        "goalsFor": 1706,
+        "goalsAgainst": 1272,
+        "offensiveRating": 1.919774208359619,
+        "defensiveRating": 0.43087137955712
+      },
+      "awayTeam": {
+        "id": 16,
+        "name": "Senegal",
+        "countryCode": "SN",
+        "flag": "🇸🇳",
+        "rank": 17,
+        "rating": 1878,
+        "total": 704,
+        "goalsFor": 967,
+        "goalsAgainst": 669,
+        "offensiveRating": 1.1557015698026294,
+        "defensiveRating": 0.7157347391466743
+      },
+      "homeLabel": "France",
+      "awayLabel": "Senegal",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 50,
+        "round": "Matchday 6",
+        "date": "2026-06-16",
+        "time": "18:00 UTC-4",
+        "venue": "Boston (Foxborough)",
+        "group": "Group I",
+        "slotHome": "Iraq",
+        "slotAway": "Norway",
+        "teamHomeId": 62,
+        "teamAwayId": 11
+      },
+      "result": {
+        "matchNumber": 50,
+        "teamHomeId": 62,
+        "teamAwayId": 11,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 62,
+        "name": "Iraq",
+        "countryCode": "IQ",
+        "flag": "🇮🇶",
+        "rank": 63,
+        "rating": 1608,
+        "total": 760,
+        "goalsFor": 1203,
+        "goalsAgainst": 707,
+        "offensiveRating": 0.5884328745712324,
+        "defensiveRating": 1.4057266297312447
+      },
+      "awayTeam": {
+        "id": 11,
+        "name": "Norway",
+        "countryCode": "NO",
+        "flag": "🇳🇴",
+        "rank": 12,
+        "rating": 1912,
+        "total": 886,
+        "goalsFor": 1373,
+        "goalsAgainst": 1443,
+        "offensiveRating": 1.2582320230542534,
+        "defensiveRating": 0.6574111502790929
+      },
+      "homeLabel": "Iraq",
+      "awayLabel": "Norway",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 51,
+        "round": "Matchday 12",
+        "date": "2026-06-22",
+        "time": "17:00 UTC-4",
+        "venue": "Philadelphia",
+        "group": "Group I",
+        "slotHome": "France",
+        "slotAway": "Iraq",
+        "teamHomeId": 2,
+        "teamAwayId": 62
+      },
+      "result": {
+        "matchNumber": 51,
+        "teamHomeId": 2,
+        "teamAwayId": 62,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 2,
+        "name": "France",
+        "countryCode": "FR",
+        "flag": "🇫🇷",
+        "rank": 3,
+        "rating": 2081,
+        "total": 938,
+        "goalsFor": 1706,
+        "goalsAgainst": 1272,
+        "offensiveRating": 1.919774208359619,
+        "defensiveRating": 0.43087137955712
+      },
+      "awayTeam": {
+        "id": 62,
+        "name": "Iraq",
+        "countryCode": "IQ",
+        "flag": "🇮🇶",
+        "rank": 63,
+        "rating": 1608,
+        "total": 760,
+        "goalsFor": 1203,
+        "goalsAgainst": 707,
+        "offensiveRating": 0.5884328745712324,
+        "defensiveRating": 1.4057266297312447
+      },
+      "homeLabel": "France",
+      "awayLabel": "Iraq",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 52,
+        "round": "Matchday 12",
+        "date": "2026-06-22",
+        "time": "20:00 UTC-4",
+        "venue": "New York/New Jersey (East Rutherford)",
+        "group": "Group I",
+        "slotHome": "Norway",
+        "slotAway": "Senegal",
+        "teamHomeId": 11,
+        "teamAwayId": 16
+      },
+      "result": {
+        "matchNumber": 52,
+        "teamHomeId": 11,
+        "teamAwayId": 16,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 11,
+        "name": "Norway",
+        "countryCode": "NO",
+        "flag": "🇳🇴",
+        "rank": 12,
+        "rating": 1912,
+        "total": 886,
+        "goalsFor": 1373,
+        "goalsAgainst": 1443,
+        "offensiveRating": 1.2582320230542534,
+        "defensiveRating": 0.6574111502790929
+      },
+      "awayTeam": {
+        "id": 16,
+        "name": "Senegal",
+        "countryCode": "SN",
+        "flag": "🇸🇳",
+        "rank": 17,
+        "rating": 1878,
+        "total": 704,
+        "goalsFor": 967,
+        "goalsAgainst": 669,
+        "offensiveRating": 1.1557015698026294,
+        "defensiveRating": 0.7157347391466743
+      },
+      "homeLabel": "Norway",
+      "awayLabel": "Senegal",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 53,
+        "round": "Matchday 16",
+        "date": "2026-06-26",
+        "time": "15:00 UTC-4",
+        "venue": "Boston (Foxborough)",
+        "group": "Group I",
+        "slotHome": "Norway",
+        "slotAway": "France",
+        "teamHomeId": 11,
+        "teamAwayId": 2
+      },
+      "result": {
+        "matchNumber": 53,
+        "teamHomeId": 11,
+        "teamAwayId": 2,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 11,
+        "name": "Norway",
+        "countryCode": "NO",
+        "flag": "🇳🇴",
+        "rank": 12,
+        "rating": 1912,
+        "total": 886,
+        "goalsFor": 1373,
+        "goalsAgainst": 1443,
+        "offensiveRating": 1.2582320230542534,
+        "defensiveRating": 0.6574111502790929
+      },
+      "awayTeam": {
+        "id": 2,
+        "name": "France",
+        "countryCode": "FR",
+        "flag": "🇫🇷",
+        "rank": 3,
+        "rating": 2081,
+        "total": 938,
+        "goalsFor": 1706,
+        "goalsAgainst": 1272,
+        "offensiveRating": 1.919774208359619,
+        "defensiveRating": 0.43087137955712
+      },
+      "homeLabel": "Norway",
+      "awayLabel": "France",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 54,
+        "round": "Matchday 16",
+        "date": "2026-06-26",
+        "time": "15:00 UTC-4",
+        "venue": "Toronto",
+        "group": "Group I",
+        "slotHome": "Senegal",
+        "slotAway": "Iraq",
+        "teamHomeId": 16,
+        "teamAwayId": 62
+      },
+      "result": {
+        "matchNumber": 54,
+        "teamHomeId": 16,
+        "teamAwayId": 62,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 16,
+        "name": "Senegal",
+        "countryCode": "SN",
+        "flag": "🇸🇳",
+        "rank": 17,
+        "rating": 1878,
+        "total": 704,
+        "goalsFor": 967,
+        "goalsAgainst": 669,
+        "offensiveRating": 1.1557015698026294,
+        "defensiveRating": 0.7157347391466743
+      },
+      "awayTeam": {
+        "id": 62,
+        "name": "Iraq",
+        "countryCode": "IQ",
+        "flag": "🇮🇶",
+        "rank": 63,
+        "rating": 1608,
+        "total": 760,
+        "goalsFor": 1203,
+        "goalsAgainst": 707,
+        "offensiveRating": 0.5884328745712324,
+        "defensiveRating": 1.4057266297312447
+      },
+      "homeLabel": "Senegal",
+      "awayLabel": "Iraq",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 55,
+        "round": "Matchday 6",
+        "date": "2026-06-16",
+        "time": "20:00 UTC-5",
+        "venue": "Kansas City",
+        "group": "Group J",
+        "slotHome": "Argentina",
+        "slotAway": "Algeria",
+        "teamHomeId": 1,
+        "teamAwayId": 34
+      },
+      "result": {
+        "matchNumber": 55,
+        "teamHomeId": 1,
+        "teamAwayId": 34,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 1,
+        "name": "Argentina",
+        "countryCode": "AR",
+        "flag": "🇦🇷",
+        "rank": 2,
+        "rating": 2113,
+        "total": 1109,
+        "goalsFor": 2112,
+        "goalsAgainst": 1136,
+        "offensiveRating": 2.079666572771907,
+        "defensiveRating": 0.39774441365933794
+      },
+      "awayTeam": {
+        "id": 34,
+        "name": "Algeria",
+        "countryCode": "DZ",
+        "flag": "🇩🇿",
+        "rank": 35,
+        "rating": 1743,
+        "total": 688,
+        "goalsFor": 1052,
+        "goalsAgainst": 703,
+        "offensiveRating": 0.8246531373040711,
+        "defensiveRating": 1.0030590125422463
+      },
+      "homeLabel": "Argentina",
+      "awayLabel": "Algeria",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 56,
+        "round": "Matchday 6",
+        "date": "2026-06-16",
+        "time": "21:00 UTC-7",
+        "venue": "San Francisco Bay Area (Santa Clara)",
+        "group": "Group J",
+        "slotHome": "Austria",
+        "slotAway": "Jordan",
+        "teamHomeId": 22,
+        "teamAwayId": 50
+      },
+      "result": {
+        "matchNumber": 56,
+        "teamHomeId": 22,
+        "teamAwayId": 50,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 22,
+        "name": "Austria",
+        "countryCode": "AT",
+        "flag": "🇦🇹",
+        "rank": 23,
+        "rating": 1827,
+        "total": 865,
+        "goalsFor": 1560,
+        "goalsAgainst": 1321,
+        "offensiveRating": 1.0173564825665282,
+        "defensiveRating": 0.8130638333451571
+      },
+      "awayTeam": {
+        "id": 50,
+        "name": "Jordan",
+        "countryCode": "JO",
+        "flag": "🇯🇴",
+        "rank": 51,
+        "rating": 1685,
+        "total": 583,
+        "goalsFor": 728,
+        "goalsAgainst": 714,
+        "offensiveRating": 0.7133433478517346,
+        "defensiveRating": 1.1595759098128045
+      },
+      "homeLabel": "Austria",
+      "awayLabel": "Jordan",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 57,
+        "round": "Matchday 12",
+        "date": "2026-06-22",
+        "time": "12:00 UTC-5",
+        "venue": "Dallas (Arlington)",
+        "group": "Group J",
+        "slotHome": "Argentina",
+        "slotAway": "Austria",
+        "teamHomeId": 1,
+        "teamAwayId": 22
+      },
+      "result": {
+        "matchNumber": 57,
+        "teamHomeId": 1,
+        "teamAwayId": 22,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 1,
+        "name": "Argentina",
+        "countryCode": "AR",
+        "flag": "🇦🇷",
+        "rank": 2,
+        "rating": 2113,
+        "total": 1109,
+        "goalsFor": 2112,
+        "goalsAgainst": 1136,
+        "offensiveRating": 2.079666572771907,
+        "defensiveRating": 0.39774441365933794
+      },
+      "awayTeam": {
+        "id": 22,
+        "name": "Austria",
+        "countryCode": "AT",
+        "flag": "🇦🇹",
+        "rank": 23,
+        "rating": 1827,
+        "total": 865,
+        "goalsFor": 1560,
+        "goalsAgainst": 1321,
+        "offensiveRating": 1.0173564825665282,
+        "defensiveRating": 0.8130638333451571
+      },
+      "homeLabel": "Argentina",
+      "awayLabel": "Austria",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 58,
+        "round": "Matchday 12",
+        "date": "2026-06-22",
+        "time": "20:00 UTC-7",
+        "venue": "San Francisco Bay Area (Santa Clara)",
+        "group": "Group J",
+        "slotHome": "Jordan",
+        "slotAway": "Algeria",
+        "teamHomeId": 50,
+        "teamAwayId": 34
+      },
+      "result": {
+        "matchNumber": 58,
+        "teamHomeId": 50,
+        "teamAwayId": 34,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 50,
+        "name": "Jordan",
+        "countryCode": "JO",
+        "flag": "🇯🇴",
+        "rank": 51,
+        "rating": 1685,
+        "total": 583,
+        "goalsFor": 728,
+        "goalsAgainst": 714,
+        "offensiveRating": 0.7133433478517346,
+        "defensiveRating": 1.1595759098128045
+      },
+      "awayTeam": {
+        "id": 34,
+        "name": "Algeria",
+        "countryCode": "DZ",
+        "flag": "🇩🇿",
+        "rank": 35,
+        "rating": 1743,
+        "total": 688,
+        "goalsFor": 1052,
+        "goalsAgainst": 703,
+        "offensiveRating": 0.8246531373040711,
+        "defensiveRating": 1.0030590125422463
+      },
+      "homeLabel": "Jordan",
+      "awayLabel": "Algeria",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 59,
+        "round": "Matchday 17",
+        "date": "2026-06-27",
+        "time": "21:00 UTC-5",
+        "venue": "Kansas City",
+        "group": "Group J",
+        "slotHome": "Algeria",
+        "slotAway": "Austria",
+        "teamHomeId": 34,
+        "teamAwayId": 22
+      },
+      "result": {
+        "matchNumber": 59,
+        "teamHomeId": 34,
+        "teamAwayId": 22,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 34,
+        "name": "Algeria",
+        "countryCode": "DZ",
+        "flag": "🇩🇿",
+        "rank": 35,
+        "rating": 1743,
+        "total": 688,
+        "goalsFor": 1052,
+        "goalsAgainst": 703,
+        "offensiveRating": 0.8246531373040711,
+        "defensiveRating": 1.0030590125422463
+      },
+      "awayTeam": {
+        "id": 22,
+        "name": "Austria",
+        "countryCode": "AT",
+        "flag": "🇦🇹",
+        "rank": 23,
+        "rating": 1827,
+        "total": 865,
+        "goalsFor": 1560,
+        "goalsAgainst": 1321,
+        "offensiveRating": 1.0173564825665282,
+        "defensiveRating": 0.8130638333451571
+      },
+      "homeLabel": "Algeria",
+      "awayLabel": "Austria",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 60,
+        "round": "Matchday 17",
+        "date": "2026-06-27",
+        "time": "21:00 UTC-5",
+        "venue": "Dallas (Arlington)",
+        "group": "Group J",
+        "slotHome": "Jordan",
+        "slotAway": "Argentina",
+        "teamHomeId": 50,
+        "teamAwayId": 1
+      },
+      "result": {
+        "matchNumber": 60,
+        "teamHomeId": 50,
+        "teamAwayId": 1,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 50,
+        "name": "Jordan",
+        "countryCode": "JO",
+        "flag": "🇯🇴",
+        "rank": 51,
+        "rating": 1685,
+        "total": 583,
+        "goalsFor": 728,
+        "goalsAgainst": 714,
+        "offensiveRating": 0.7133433478517346,
+        "defensiveRating": 1.1595759098128045
+      },
+      "awayTeam": {
+        "id": 1,
+        "name": "Argentina",
+        "countryCode": "AR",
+        "flag": "🇦🇷",
+        "rank": 2,
+        "rating": 2113,
+        "total": 1109,
+        "goalsFor": 2112,
+        "goalsAgainst": 1136,
+        "offensiveRating": 2.079666572771907,
+        "defensiveRating": 0.39774441365933794
+      },
+      "homeLabel": "Jordan",
+      "awayLabel": "Argentina",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 61,
+        "round": "Matchday 7",
+        "date": "2026-06-17",
+        "time": "12:00 UTC-5",
+        "venue": "Houston",
+        "group": "Group K",
+        "slotHome": "Portugal",
+        "slotAway": "DR Congo",
+        "teamHomeId": 5,
+        "teamAwayId": 53
+      },
+      "result": {
+        "matchNumber": 61,
+        "teamHomeId": 5,
+        "teamAwayId": 53,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 5,
+        "name": "Portugal",
+        "countryCode": "PT",
+        "flag": "🇵🇹",
+        "rank": 5,
+        "rating": 1984,
+        "total": 694,
+        "goalsFor": 1222,
+        "goalsAgainst": 779,
+        "offensiveRating": 1.506377224836434,
+        "defensiveRating": 0.5491159504777455
+      },
+      "awayTeam": {
+        "id": 53,
+        "name": "DR Congo",
+        "countryCode": "CD",
+        "flag": "🇨🇩",
+        "rank": 54,
+        "rating": 1655,
+        "total": 547,
+        "goalsFor": 835,
+        "goalsAgainst": 641,
+        "offensiveRating": 0.6617996444852499,
+        "defensiveRating": 1.2498884949348488
+      },
+      "homeLabel": "Portugal",
+      "awayLabel": "DR Congo",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 62,
+        "round": "Matchday 7",
+        "date": "2026-06-17",
+        "time": "20:00 UTC-6",
+        "venue": "Mexico City",
+        "group": "Group K",
+        "slotHome": "Uzbekistan",
+        "slotAway": "Colombia",
+        "teamHomeId": 38,
+        "teamAwayId": 6
+      },
+      "result": {
+        "matchNumber": 62,
+        "teamHomeId": 38,
+        "teamAwayId": 6,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 38,
+        "name": "Uzbekistan",
+        "countryCode": "UZ",
+        "flag": "🇺🇿",
+        "rank": 39,
+        "rating": 1727,
+        "total": 365,
+        "goalsFor": 635,
+        "goalsAgainst": 398,
+        "offensiveRating": 0.7923180252855823,
+        "defensiveRating": 1.0439946274047476
+      },
+      "awayTeam": {
+        "id": 6,
+        "name": "Colombia",
+        "countryCode": "CO",
+        "flag": "🇨🇴",
+        "rank": 7,
+        "rating": 1975,
+        "total": 648,
+        "goalsFor": 842,
+        "goalsAgainst": 741,
+        "offensiveRating": 1.4728621952636878,
+        "defensiveRating": 0.5616111026911087
+      },
+      "homeLabel": "Uzbekistan",
+      "awayLabel": "Colombia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 63,
+        "round": "Matchday 13",
+        "date": "2026-06-23",
+        "time": "12:00 UTC-5",
+        "venue": "Houston",
+        "group": "Group K",
+        "slotHome": "Portugal",
+        "slotAway": "Uzbekistan",
+        "teamHomeId": 5,
+        "teamAwayId": 38
+      },
+      "result": {
+        "matchNumber": 63,
+        "teamHomeId": 5,
+        "teamAwayId": 38,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 5,
+        "name": "Portugal",
+        "countryCode": "PT",
+        "flag": "🇵🇹",
+        "rank": 5,
+        "rating": 1984,
+        "total": 694,
+        "goalsFor": 1222,
+        "goalsAgainst": 779,
+        "offensiveRating": 1.506377224836434,
+        "defensiveRating": 0.5491159504777455
+      },
+      "awayTeam": {
+        "id": 38,
+        "name": "Uzbekistan",
+        "countryCode": "UZ",
+        "flag": "🇺🇿",
+        "rank": 39,
+        "rating": 1727,
+        "total": 365,
+        "goalsFor": 635,
+        "goalsAgainst": 398,
+        "offensiveRating": 0.7923180252855823,
+        "defensiveRating": 1.0439946274047476
+      },
+      "homeLabel": "Portugal",
+      "awayLabel": "Uzbekistan",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 64,
+        "round": "Matchday 13",
+        "date": "2026-06-23",
+        "time": "20:00 UTC-6",
+        "venue": "Guadalajara (Zapopan)",
+        "group": "Group K",
+        "slotHome": "Colombia",
+        "slotAway": "DR Congo",
+        "teamHomeId": 6,
+        "teamAwayId": 53
+      },
+      "result": {
+        "matchNumber": 64,
+        "teamHomeId": 6,
+        "teamAwayId": 53,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 6,
+        "name": "Colombia",
+        "countryCode": "CO",
+        "flag": "🇨🇴",
+        "rank": 7,
+        "rating": 1975,
+        "total": 648,
+        "goalsFor": 842,
+        "goalsAgainst": 741,
+        "offensiveRating": 1.4728621952636878,
+        "defensiveRating": 0.5616111026911087
+      },
+      "awayTeam": {
+        "id": 53,
+        "name": "DR Congo",
+        "countryCode": "CD",
+        "flag": "🇨🇩",
+        "rank": 54,
+        "rating": 1655,
+        "total": 547,
+        "goalsFor": 835,
+        "goalsAgainst": 641,
+        "offensiveRating": 0.6617996444852499,
+        "defensiveRating": 1.2498884949348488
+      },
+      "homeLabel": "Colombia",
+      "awayLabel": "DR Congo",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 65,
+        "round": "Matchday 17",
+        "date": "2026-06-27",
+        "time": "19:30 UTC-4",
+        "venue": "Miami (Miami Gardens)",
+        "group": "Group K",
+        "slotHome": "Colombia",
+        "slotAway": "Portugal",
+        "teamHomeId": 6,
+        "teamAwayId": 5
+      },
+      "result": {
+        "matchNumber": 65,
+        "teamHomeId": 6,
+        "teamAwayId": 5,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 6,
+        "name": "Colombia",
+        "countryCode": "CO",
+        "flag": "🇨🇴",
+        "rank": 7,
+        "rating": 1975,
+        "total": 648,
+        "goalsFor": 842,
+        "goalsAgainst": 741,
+        "offensiveRating": 1.4728621952636878,
+        "defensiveRating": 0.5616111026911087
+      },
+      "awayTeam": {
+        "id": 5,
+        "name": "Portugal",
+        "countryCode": "PT",
+        "flag": "🇵🇹",
+        "rank": 5,
+        "rating": 1984,
+        "total": 694,
+        "goalsFor": 1222,
+        "goalsAgainst": 779,
+        "offensiveRating": 1.506377224836434,
+        "defensiveRating": 0.5491159504777455
+      },
+      "homeLabel": "Colombia",
+      "awayLabel": "Portugal",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 66,
+        "round": "Matchday 17",
+        "date": "2026-06-27",
+        "time": "19:30 UTC-4",
+        "venue": "Atlanta",
+        "group": "Group K",
+        "slotHome": "DR Congo",
+        "slotAway": "Uzbekistan",
+        "teamHomeId": 53,
+        "teamAwayId": 38
+      },
+      "result": {
+        "matchNumber": 66,
+        "teamHomeId": 53,
+        "teamAwayId": 38,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 53,
+        "name": "DR Congo",
+        "countryCode": "CD",
+        "flag": "🇨🇩",
+        "rank": 54,
+        "rating": 1655,
+        "total": 547,
+        "goalsFor": 835,
+        "goalsAgainst": 641,
+        "offensiveRating": 0.6617996444852499,
+        "defensiveRating": 1.2498884949348488
+      },
+      "awayTeam": {
+        "id": 38,
+        "name": "Uzbekistan",
+        "countryCode": "UZ",
+        "flag": "🇺🇿",
+        "rank": 39,
+        "rating": 1727,
+        "total": 365,
+        "goalsFor": 635,
+        "goalsAgainst": 398,
+        "offensiveRating": 0.7923180252855823,
+        "defensiveRating": 1.0439946274047476
+      },
+      "homeLabel": "DR Congo",
+      "awayLabel": "Uzbekistan",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 67,
+        "round": "Matchday 7",
+        "date": "2026-06-17",
+        "time": "15:00 UTC-5",
+        "venue": "Dallas (Arlington)",
+        "group": "Group L",
+        "slotHome": "England",
+        "slotAway": "Croatia",
+        "teamHomeId": 3,
+        "teamAwayId": 9
+      },
+      "result": {
+        "matchNumber": 67,
+        "teamHomeId": 3,
+        "teamAwayId": 9,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 3,
+        "name": "England",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "rank": 4,
+        "rating": 2020,
+        "total": 1160,
+        "goalsFor": 2719,
+        "goalsAgainst": 1118,
+        "offensiveRating": 1.6482392209752479,
+        "defensiveRating": 0.5018541914714629
+      },
+      "awayTeam": {
+        "id": 9,
+        "name": "Croatia",
+        "countryCode": "HR",
+        "flag": "🇭🇷",
+        "rank": 10,
+        "rating": 1930,
+        "total": 398,
+        "goalsFor": 694,
+        "goalsAgainst": 401,
+        "offensiveRating": 1.3161457503440561,
+        "defensiveRating": 0.6284834041958145
+      },
+      "homeLabel": "England",
+      "awayLabel": "Croatia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 68,
+        "round": "Matchday 7",
+        "date": "2026-06-17",
+        "time": "19:00 UTC-4",
+        "venue": "Toronto",
+        "group": "Group L",
+        "slotHome": "Ghana",
+        "slotAway": "Panama",
+        "teamHomeId": 81,
+        "teamAwayId": 35
+      },
+      "result": {
+        "matchNumber": 68,
+        "teamHomeId": 81,
+        "teamAwayId": 35,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 81,
+        "name": "Ghana",
+        "countryCode": "GH",
+        "flag": "🇬🇭",
+        "rank": 82,
+        "rating": 1503,
+        "total": 778,
+        "goalsFor": 1247,
+        "goalsAgainst": 822,
+        "offensiveRating": 0.45257923749391904,
+        "defensiveRating": 1.8276926846543662
+      },
+      "awayTeam": {
+        "id": 35,
+        "name": "Panama",
+        "countryCode": "PA",
+        "flag": "🇵🇦",
+        "rank": 36,
+        "rating": 1737,
+        "total": 591,
+        "goalsFor": 736,
+        "goalsAgainst": 906,
+        "offensiveRating": 0.8123756515893643,
+        "defensiveRating": 1.0182183082121763
+      },
+      "homeLabel": "Ghana",
+      "awayLabel": "Panama",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 69,
+        "round": "Matchday 13",
+        "date": "2026-06-23",
+        "time": "16:00 UTC-4",
+        "venue": "Boston (Foxborough)",
+        "group": "Group L",
+        "slotHome": "England",
+        "slotAway": "Ghana",
+        "teamHomeId": 3,
+        "teamAwayId": 81
+      },
+      "result": {
+        "matchNumber": 69,
+        "teamHomeId": 3,
+        "teamAwayId": 81,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 3,
+        "name": "England",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "rank": 4,
+        "rating": 2020,
+        "total": 1160,
+        "goalsFor": 2719,
+        "goalsAgainst": 1118,
+        "offensiveRating": 1.6482392209752479,
+        "defensiveRating": 0.5018541914714629
+      },
+      "awayTeam": {
+        "id": 81,
+        "name": "Ghana",
+        "countryCode": "GH",
+        "flag": "🇬🇭",
+        "rank": 82,
+        "rating": 1503,
+        "total": 778,
+        "goalsFor": 1247,
+        "goalsAgainst": 822,
+        "offensiveRating": 0.45257923749391904,
+        "defensiveRating": 1.8276926846543662
+      },
+      "homeLabel": "England",
+      "awayLabel": "Ghana",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 70,
+        "round": "Matchday 13",
+        "date": "2026-06-23",
+        "time": "19:00 UTC-4",
+        "venue": "Toronto",
+        "group": "Group L",
+        "slotHome": "Panama",
+        "slotAway": "Croatia",
+        "teamHomeId": 35,
+        "teamAwayId": 9
+      },
+      "result": {
+        "matchNumber": 70,
+        "teamHomeId": 35,
+        "teamAwayId": 9,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 35,
+        "name": "Panama",
+        "countryCode": "PA",
+        "flag": "🇵🇦",
+        "rank": 36,
+        "rating": 1737,
+        "total": 591,
+        "goalsFor": 736,
+        "goalsAgainst": 906,
+        "offensiveRating": 0.8123756515893643,
+        "defensiveRating": 1.0182183082121763
+      },
+      "awayTeam": {
+        "id": 9,
+        "name": "Croatia",
+        "countryCode": "HR",
+        "flag": "🇭🇷",
+        "rank": 10,
+        "rating": 1930,
+        "total": 398,
+        "goalsFor": 694,
+        "goalsAgainst": 401,
+        "offensiveRating": 1.3161457503440561,
+        "defensiveRating": 0.6284834041958145
+      },
+      "homeLabel": "Panama",
+      "awayLabel": "Croatia",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 71,
+        "round": "Matchday 17",
+        "date": "2026-06-27",
+        "time": "17:00 UTC-4",
+        "venue": "New York/New Jersey (East Rutherford)",
+        "group": "Group L",
+        "slotHome": "Panama",
+        "slotAway": "England",
+        "teamHomeId": 35,
+        "teamAwayId": 3
+      },
+      "result": {
+        "matchNumber": 71,
+        "teamHomeId": 35,
+        "teamAwayId": 3,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 35,
+        "name": "Panama",
+        "countryCode": "PA",
+        "flag": "🇵🇦",
+        "rank": 36,
+        "rating": 1737,
+        "total": 591,
+        "goalsFor": 736,
+        "goalsAgainst": 906,
+        "offensiveRating": 0.8123756515893643,
+        "defensiveRating": 1.0182183082121763
+      },
+      "awayTeam": {
+        "id": 3,
+        "name": "England",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "rank": 4,
+        "rating": 2020,
+        "total": 1160,
+        "goalsFor": 2719,
+        "goalsAgainst": 1118,
+        "offensiveRating": 1.6482392209752479,
+        "defensiveRating": 0.5018541914714629
+      },
+      "homeLabel": "Panama",
+      "awayLabel": "England",
+      "isLocked": false
+    },
+    {
+      "fixture": {
+        "matchNumber": 72,
+        "round": "Matchday 17",
+        "date": "2026-06-27",
+        "time": "17:00 UTC-4",
+        "venue": "Philadelphia",
+        "group": "Group L",
+        "slotHome": "Croatia",
+        "slotAway": "Ghana",
+        "teamHomeId": 9,
+        "teamAwayId": 81
+      },
+      "result": {
+        "matchNumber": 72,
+        "teamHomeId": 9,
+        "teamAwayId": 81,
+        "goalsHome": null,
+        "goalsAway": null,
+        "winnerTeamId": null,
+        "status": "scheduled"
+      },
+      "homeTeam": {
+        "id": 9,
+        "name": "Croatia",
+        "countryCode": "HR",
+        "flag": "🇭🇷",
+        "rank": 10,
+        "rating": 1930,
+        "total": 398,
+        "goalsFor": 694,
+        "goalsAgainst": 401,
+        "offensiveRating": 1.3161457503440561,
+        "defensiveRating": 0.6284834041958145
+      },
+      "awayTeam": {
+        "id": 81,
+        "name": "Ghana",
+        "countryCode": "GH",
+        "flag": "🇬🇭",
+        "rank": 82,
+        "rating": 1503,
+        "total": 778,
+        "goalsFor": 1247,
+        "goalsAgainst": 822,
+        "offensiveRating": 0.45257923749391904,
+        "defensiveRating": 1.8276926846543662
+      },
+      "homeLabel": "Croatia",
+      "awayLabel": "Ghana",
+      "isLocked": false
+    }
+  ],
+  "groupStandings": [
+    {
+      "groupLetter": "A",
+      "rows": [
+        {
+          "teamId": 18,
+          "team": {
+            "id": 18,
+            "name": "Mexico",
+            "countryCode": "MX",
+            "flag": "🇲🇽",
+            "rank": 19,
+            "rating": 1868,
+            "total": 1029,
+            "goalsFor": 1824,
+            "goalsAgainst": 1055,
+            "offensiveRating": 1.1271671963752086,
+            "defensiveRating": 0.7338536503316928
+          },
+          "played": 1,
+          "won": 1,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "goalDifference": 2,
+          "points": 3,
+          "position": 1
+        },
+        {
+          "teamId": 32,
+          "team": {
+            "id": 32,
+            "name": "South Korea",
+            "countryCode": "KR",
+            "flag": "🇰🇷",
+            "rank": 33,
+            "rating": 1756,
+            "total": 1051,
+            "goalsFor": 1912,
+            "goalsAgainst": 964,
+            "offensiveRating": 0.8518946409226156,
+            "defensiveRating": 0.9709836426465159
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 36,
+          "team": {
+            "id": 36,
+            "name": "Czechia",
+            "countryCode": "CZ",
+            "flag": "🇨🇿",
+            "rank": 37,
+            "rating": 1733,
+            "total": 883,
+            "goalsFor": 1626,
+            "goalsAgainst": 1098,
+            "offensiveRating": 0.8042923787979221,
+            "defensiveRating": 1.0284515723378675
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 78,
+          "team": {
+            "id": 78,
+            "name": "South Africa",
+            "countryCode": "ZA",
+            "flag": "🇿🇦",
+            "rank": 79,
+            "rating": 1517,
+            "total": 525,
+            "goalsFor": 719,
+            "goalsAgainst": 542,
+            "offensiveRating": 0.468699978142208,
+            "defensiveRating": 1.7648299555565885
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 0,
+          "lost": 1,
+          "goalsFor": 0,
+          "goalsAgainst": 2,
+          "goalDifference": -2,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "B",
+      "rows": [
+        {
+          "teamId": 14,
+          "team": {
+            "id": 14,
+            "name": "Switzerland",
+            "countryCode": "CH",
+            "flag": "🇨🇭",
+            "rank": 15,
+            "rating": 1894,
+            "total": 896,
+            "goalsFor": 1339,
+            "goalsAgainst": 1483,
+            "offensiveRating": 1.2028666456016333,
+            "defensiveRating": 0.6876703786065674
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 24,
+          "team": {
+            "id": 24,
+            "name": "Canada",
+            "countryCode": "CA",
+            "flag": "🇨🇦",
+            "rank": 25,
+            "rating": 1784,
+            "total": 488,
+            "goalsFor": 626,
+            "goalsAgainst": 623,
+            "offensiveRating": 0.9136639719561283,
+            "defensiveRating": 0.9053391476333772
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 66,
+          "team": {
+            "id": 66,
+            "name": "Bosnia and Herzegovina",
+            "countryCode": "BA",
+            "flag": "🇧🇦",
+            "rank": 67,
+            "rating": 1591,
+            "total": 280,
+            "goalsFor": 393,
+            "goalsAgainst": 385,
+            "offensiveRating": 0.5639484565881524,
+            "defensiveRating": 1.466757736333637
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 96,
+          "team": {
+            "id": 96,
+            "name": "Qatar",
+            "countryCode": "QA",
+            "flag": "🇶🇦",
+            "rank": 96,
+            "rating": 1423,
+            "total": 698,
+            "goalsFor": 993,
+            "goalsAgainst": 826,
+            "offensiveRating": 0.3705405399408552,
+            "defensiveRating": 2.232348886106008
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "C",
+      "rows": [
+        {
+          "teamId": 4,
+          "team": {
+            "id": 4,
+            "name": "Brazil",
+            "countryCode": "BR",
+            "flag": "🇧🇷",
+            "rank": 5,
+            "rating": 1984,
+            "total": 1065,
+            "goalsFor": 2294,
+            "goalsAgainst": 954,
+            "offensiveRating": 1.506377224836434,
+            "defensiveRating": 0.5491159504777455
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 23,
+          "team": {
+            "id": 23,
+            "name": "Morocco",
+            "countryCode": "MA",
+            "flag": "🇲🇦",
+            "rank": 24,
+            "rating": 1822,
+            "total": 728,
+            "goalsFor": 1103,
+            "goalsAgainst": 614,
+            "offensiveRating": 1.0047186773712438,
+            "defensiveRating": 0.8232909173723315
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 26,
+          "team": {
+            "id": 26,
+            "name": "Scotland",
+            "countryCode": null,
+            "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+            "rank": 27,
+            "rating": 1770,
+            "total": 868,
+            "goalsFor": 1499,
+            "goalsAgainst": 1076,
+            "offensiveRating": 0.8822388799602389,
+            "defensiveRating": 0.9375870644369771
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 75,
+          "team": {
+            "id": 75,
+            "name": "Haiti",
+            "countryCode": "HT",
+            "flag": "🇭🇹",
+            "rank": 76,
+            "rating": 1532,
+            "total": 561,
+            "goalsFor": 957,
+            "goalsAgainst": 759,
+            "offensiveRating": 0.4866099403392296,
+            "defensiveRating": 1.6998743614185918
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "D",
+      "rows": [
+        {
+          "teamId": 13,
+          "team": {
+            "id": 13,
+            "name": "Turkey",
+            "countryCode": "TR",
+            "flag": "🇹🇷",
+            "rank": 14,
+            "rating": 1902,
+            "total": 669,
+            "goalsFor": 947,
+            "goalsAgainst": 969,
+            "offensiveRating": 1.227166163716275,
+            "defensiveRating": 0.6740535927825116
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 21,
+          "team": {
+            "id": 21,
+            "name": "Paraguay",
+            "countryCode": "PY",
+            "flag": "🇵🇾",
+            "rank": 22,
+            "rating": 1833,
+            "total": 788,
+            "goalsFor": 1002,
+            "goalsAgainst": 1115,
+            "offensiveRating": 1.0327318568247768,
+            "defensiveRating": 0.800958889887749
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 25,
+          "team": {
+            "id": 25,
+            "name": "Australia",
+            "countryCode": "AU",
+            "flag": "🇦🇺",
+            "rank": 26,
+            "rating": 1775,
+            "total": 636,
+            "goalsFor": 1289,
+            "goalsAgainst": 715,
+            "offensiveRating": 0.8933360789590822,
+            "defensiveRating": 0.9259401708681849
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 40,
+          "team": {
+            "id": 40,
+            "name": "United States",
+            "countryCode": "US",
+            "flag": "🇺🇸",
+            "rank": 41,
+            "rating": 1721,
+            "total": 825,
+            "goalsFor": 1246,
+            "goalsAgainst": 1073,
+            "offensiveRating": 0.7805219466715484,
+            "defensiveRating": 1.0597725856671791
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "E",
+      "rows": [
+        {
+          "teamId": 8,
+          "team": {
+            "id": 8,
+            "name": "Ecuador",
+            "countryCode": "EC",
+            "flag": "🇪🇨",
+            "rank": 9,
+            "rating": 1935,
+            "total": 599,
+            "goalsFor": 721,
+            "goalsAgainst": 904,
+            "offensiveRating": 1.3327008258851707,
+            "defensiveRating": 0.6206762579626095
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 10,
+          "team": {
+            "id": 10,
+            "name": "Germany",
+            "countryCode": "DE",
+            "flag": "🇩🇪",
+            "rank": 11,
+            "rating": 1923,
+            "total": 1045,
+            "goalsFor": 2352,
+            "goalsAgainst": 1232,
+            "offensiveRating": 1.2933135640366722,
+            "defensiveRating": 0.6395786641348735
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 51,
+          "team": {
+            "id": 51,
+            "name": "Ivory Coast",
+            "countryCode": "CI",
+            "flag": "🇨🇮",
+            "rank": 52,
+            "rating": 1676,
+            "total": 692,
+            "goalsFor": 1130,
+            "goalsAgainst": 695,
+            "offensiveRating": 0.69747234090567,
+            "defensiveRating": 1.1859620992568634
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 90,
+          "team": {
+            "id": 90,
+            "name": "Curaçao",
+            "countryCode": "CW",
+            "flag": "🇨🇼",
+            "rank": 91,
+            "rating": 1433,
+            "total": 499,
+            "goalsFor": 880,
+            "goalsAgainst": 771,
+            "offensiveRating": 0.37992081836864483,
+            "defensiveRating": 2.1772319957245974
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "F",
+      "rows": [
+        {
+          "teamId": 7,
+          "team": {
+            "id": 7,
+            "name": "Netherlands",
+            "countryCode": "NL",
+            "flag": "🇳🇱",
+            "rank": 8,
+            "rating": 1961,
+            "total": 901,
+            "goalsFor": 1892,
+            "goalsAgainst": 1142,
+            "offensiveRating": 1.4222037131476268,
+            "defensiveRating": 0.5816155266276013
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 12,
+          "team": {
+            "id": 12,
+            "name": "Japan",
+            "countryCode": "JP",
+            "flag": "🇯🇵",
+            "rank": 13,
+            "rating": 1906,
+            "total": 836,
+            "goalsFor": 1518,
+            "goalsAgainst": 985,
+            "offensiveRating": 1.239499388701661,
+            "defensiveRating": 0.6673466474723551
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 41,
+          "team": {
+            "id": 41,
+            "name": "Sweden",
+            "countryCode": "SE",
+            "flag": "🇸🇪",
+            "rank": 42,
+            "rating": 1719,
+            "total": 1118,
+            "goalsFor": 2226,
+            "goalsAgainst": 1482,
+            "offensiveRating": 0.776629077221956,
+            "defensiveRating": 1.0650847178590572
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 57,
+          "team": {
+            "id": 57,
+            "name": "Tunisia",
+            "countryCode": "TN",
+            "flag": "🇹🇳",
+            "rank": 58,
+            "rating": 1636,
+            "total": 775,
+            "goalsFor": 1105,
+            "goalsAgainst": 839,
+            "offensiveRating": 0.631099072096583,
+            "defensiveRating": 1.3106908220386297
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "G",
+      "rows": [
+        {
+          "teamId": 19,
+          "team": {
+            "id": 19,
+            "name": "Belgium",
+            "countryCode": "BE",
+            "flag": "🇧🇪",
+            "rank": 20,
+            "rating": 1867,
+            "total": 876,
+            "goalsFor": 1599,
+            "goalsAgainst": 1359,
+            "offensiveRating": 1.1243527978482617,
+            "defensiveRating": 0.7356905796624518
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 31,
+          "team": {
+            "id": 31,
+            "name": "Iran",
+            "countryCode": "IR",
+            "flag": "🇮🇷",
+            "rank": 32,
+            "rating": 1764,
+            "total": 669,
+            "goalsFor": 1273,
+            "goalsAgainst": 525,
+            "offensiveRating": 0.8691040542308645,
+            "defensiveRating": 0.9517568783246754
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 45,
+          "team": {
+            "id": 45,
+            "name": "Egypt",
+            "countryCode": "EG",
+            "flag": "🇪🇬",
+            "rank": 46,
+            "rating": 1699,
+            "total": 884,
+            "goalsFor": 1545,
+            "goalsAgainst": 921,
+            "offensiveRating": 0.7387524301763617,
+            "defensiveRating": 1.1196927790770395
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 67,
+          "team": {
+            "id": 67,
+            "name": "New Zealand",
+            "countryCode": "NZ",
+            "flag": "🇳🇿",
+            "rank": 68,
+            "rating": 1585,
+            "total": 439,
+            "goalsFor": 767,
+            "goalsAgainst": 645,
+            "offensiveRating": 0.5555523579057084,
+            "defensiveRating": 1.488924940778453
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "H",
+      "rows": [
+        {
+          "teamId": 0,
+          "team": {
+            "id": 0,
+            "name": "Spain",
+            "countryCode": "ES",
+            "flag": "🇪🇸",
+            "rank": 1,
+            "rating": 2165,
+            "total": 780,
+            "goalsFor": 1591,
+            "goalsAgainst": 697,
+            "offensiveRating": 2.368383320924088,
+            "defensiveRating": 0.3492575523084423
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 15,
+          "team": {
+            "id": 15,
+            "name": "Uruguay",
+            "countryCode": "UY",
+            "flag": "🇺🇾",
+            "rank": 16,
+            "rating": 1892,
+            "total": 1019,
+            "goalsFor": 1610,
+            "goalsAgainst": 1254,
+            "offensiveRating": 1.1968673231782665,
+            "defensiveRating": 0.6911173407237252
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 70,
+          "team": {
+            "id": 70,
+            "name": "Saudi Arabia",
+            "countryCode": "SA",
+            "flag": "🇸🇦",
+            "rank": 71,
+            "rating": 1566,
+            "total": 836,
+            "goalsFor": 1282,
+            "goalsAgainst": 894,
+            "offensiveRating": 0.5297805468724088,
+            "defensiveRating": 1.5613554829020595
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 71,
+          "team": {
+            "id": 71,
+            "name": "Cape Verde",
+            "countryCode": "CV",
+            "flag": "🇨🇻",
+            "rank": 72,
+            "rating": 1549,
+            "total": 251,
+            "goalsFor": 267,
+            "goalsAgainst": 278,
+            "offensiveRating": 0.5077366249409897,
+            "defensiveRating": 1.6291433805670867
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "I",
+      "rows": [
+        {
+          "teamId": 2,
+          "team": {
+            "id": 2,
+            "name": "France",
+            "countryCode": "FR",
+            "flag": "🇫🇷",
+            "rank": 3,
+            "rating": 2081,
+            "total": 938,
+            "goalsFor": 1706,
+            "goalsAgainst": 1272,
+            "offensiveRating": 1.919774208359619,
+            "defensiveRating": 0.43087137955712
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 11,
+          "team": {
+            "id": 11,
+            "name": "Norway",
+            "countryCode": "NO",
+            "flag": "🇳🇴",
+            "rank": 12,
+            "rating": 1912,
+            "total": 886,
+            "goalsFor": 1373,
+            "goalsAgainst": 1443,
+            "offensiveRating": 1.2582320230542534,
+            "defensiveRating": 0.6574111502790929
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 16,
+          "team": {
+            "id": 16,
+            "name": "Senegal",
+            "countryCode": "SN",
+            "flag": "🇸🇳",
+            "rank": 17,
+            "rating": 1878,
+            "total": 704,
+            "goalsFor": 967,
+            "goalsAgainst": 669,
+            "offensiveRating": 1.1557015698026294,
+            "defensiveRating": 0.7157347391466743
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 62,
+          "team": {
+            "id": 62,
+            "name": "Iraq",
+            "countryCode": "IQ",
+            "flag": "🇮🇶",
+            "rank": 63,
+            "rating": 1608,
+            "total": 760,
+            "goalsFor": 1203,
+            "goalsAgainst": 707,
+            "offensiveRating": 0.5884328745712324,
+            "defensiveRating": 1.4057266297312447
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "J",
+      "rows": [
+        {
+          "teamId": 1,
+          "team": {
+            "id": 1,
+            "name": "Argentina",
+            "countryCode": "AR",
+            "flag": "🇦🇷",
+            "rank": 2,
+            "rating": 2113,
+            "total": 1109,
+            "goalsFor": 2112,
+            "goalsAgainst": 1136,
+            "offensiveRating": 2.079666572771907,
+            "defensiveRating": 0.39774441365933794
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 22,
+          "team": {
+            "id": 22,
+            "name": "Austria",
+            "countryCode": "AT",
+            "flag": "🇦🇹",
+            "rank": 23,
+            "rating": 1827,
+            "total": 865,
+            "goalsFor": 1560,
+            "goalsAgainst": 1321,
+            "offensiveRating": 1.0173564825665282,
+            "defensiveRating": 0.8130638333451571
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 34,
+          "team": {
+            "id": 34,
+            "name": "Algeria",
+            "countryCode": "DZ",
+            "flag": "🇩🇿",
+            "rank": 35,
+            "rating": 1743,
+            "total": 688,
+            "goalsFor": 1052,
+            "goalsAgainst": 703,
+            "offensiveRating": 0.8246531373040711,
+            "defensiveRating": 1.0030590125422463
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 50,
+          "team": {
+            "id": 50,
+            "name": "Jordan",
+            "countryCode": "JO",
+            "flag": "🇯🇴",
+            "rank": 51,
+            "rating": 1685,
+            "total": 583,
+            "goalsFor": 728,
+            "goalsAgainst": 714,
+            "offensiveRating": 0.7133433478517346,
+            "defensiveRating": 1.1595759098128045
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "K",
+      "rows": [
+        {
+          "teamId": 5,
+          "team": {
+            "id": 5,
+            "name": "Portugal",
+            "countryCode": "PT",
+            "flag": "🇵🇹",
+            "rank": 5,
+            "rating": 1984,
+            "total": 694,
+            "goalsFor": 1222,
+            "goalsAgainst": 779,
+            "offensiveRating": 1.506377224836434,
+            "defensiveRating": 0.5491159504777455
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 6,
+          "team": {
+            "id": 6,
+            "name": "Colombia",
+            "countryCode": "CO",
+            "flag": "🇨🇴",
+            "rank": 7,
+            "rating": 1975,
+            "total": 648,
+            "goalsFor": 842,
+            "goalsAgainst": 741,
+            "offensiveRating": 1.4728621952636878,
+            "defensiveRating": 0.5616111026911087
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 38,
+          "team": {
+            "id": 38,
+            "name": "Uzbekistan",
+            "countryCode": "UZ",
+            "flag": "🇺🇿",
+            "rank": 39,
+            "rating": 1727,
+            "total": 365,
+            "goalsFor": 635,
+            "goalsAgainst": 398,
+            "offensiveRating": 0.7923180252855823,
+            "defensiveRating": 1.0439946274047476
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 53,
+          "team": {
+            "id": 53,
+            "name": "DR Congo",
+            "countryCode": "CD",
+            "flag": "🇨🇩",
+            "rank": 54,
+            "rating": 1655,
+            "total": 547,
+            "goalsFor": 835,
+            "goalsAgainst": 641,
+            "offensiveRating": 0.6617996444852499,
+            "defensiveRating": 1.2498884949348488
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    },
+    {
+      "groupLetter": "L",
+      "rows": [
+        {
+          "teamId": 3,
+          "team": {
+            "id": 3,
+            "name": "England",
+            "countryCode": null,
+            "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+            "rank": 4,
+            "rating": 2020,
+            "total": 1160,
+            "goalsFor": 2719,
+            "goalsAgainst": 1118,
+            "offensiveRating": 1.6482392209752479,
+            "defensiveRating": 0.5018541914714629
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 1
+        },
+        {
+          "teamId": 9,
+          "team": {
+            "id": 9,
+            "name": "Croatia",
+            "countryCode": "HR",
+            "flag": "🇭🇷",
+            "rank": 10,
+            "rating": 1930,
+            "total": 398,
+            "goalsFor": 694,
+            "goalsAgainst": 401,
+            "offensiveRating": 1.3161457503440561,
+            "defensiveRating": 0.6284834041958145
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 2
+        },
+        {
+          "teamId": 35,
+          "team": {
+            "id": 35,
+            "name": "Panama",
+            "countryCode": "PA",
+            "flag": "🇵🇦",
+            "rank": 36,
+            "rating": 1737,
+            "total": 591,
+            "goalsFor": 736,
+            "goalsAgainst": 906,
+            "offensiveRating": 0.8123756515893643,
+            "defensiveRating": 1.0182183082121763
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 81,
+          "team": {
+            "id": 81,
+            "name": "Ghana",
+            "countryCode": "GH",
+            "flag": "🇬🇭",
+            "rank": 82,
+            "rating": 1503,
+            "total": 778,
+            "goalsFor": 1247,
+            "goalsAgainst": 822,
+            "offensiveRating": 0.45257923749391904,
+            "defensiveRating": 1.8276926846543662
+          },
+          "played": 0,
+          "won": 0,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 0,
+          "position": 4
+        }
+      ]
+    }
+  ],
+  "qualifyingThirdGroups": [
+    "A",
+    "C",
+    "D",
+    "F",
+    "I",
+    "J",
+    "K",
+    "L"
+  ],
+  "distributions": {
+    "1": {
+      "homeWin": 71698,
+      "draw": 13534,
+      "awayWin": 14768,
+      "total": 100000,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 5583
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 4742
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 2693
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 1324
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 630
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 305
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 141
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 69
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 34
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 9,
+          "n": 21
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 10,
+          "n": 12
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 11,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 12,
+          "n": 5
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 13,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 14,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 15,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 16,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 17,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 20,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 21,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 23,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 9251
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 6087
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 2492
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 978
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 381
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 126
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 46
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 20
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 12
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 3
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 10,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 11,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 12,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 13,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 15,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 9277
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 4733
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 1646
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 474
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 128
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 30
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 8
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 4
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 8244
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 3400
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 897
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 210
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 52
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 8
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 6407
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 2174
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 403
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 57
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 8
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 5082
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 1440
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 219
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 35
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 8
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 3825
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 873
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 116
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 14
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 3033
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 630
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 68
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 7
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 2204
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 350
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 2,
+          "n": 48
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 0,
+          "n": 1611
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 269
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 2,
+          "n": 35
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 0,
+          "n": 1274
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 1,
+          "n": 165
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 2,
+          "n": 14
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 0,
+          "n": 963
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 1,
+          "n": 102
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 2,
+          "n": 6
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 12,
+          "goalsAway": 0,
+          "n": 786
+        },
+        {
+          "goalsHome": 12,
+          "goalsAway": 1,
+          "n": 80
+        },
+        {
+          "goalsHome": 12,
+          "goalsAway": 2,
+          "n": 7
+        },
+        {
+          "goalsHome": 13,
+          "goalsAway": 0,
+          "n": 585
+        },
+        {
+          "goalsHome": 13,
+          "goalsAway": 1,
+          "n": 62
+        },
+        {
+          "goalsHome": 13,
+          "goalsAway": 2,
+          "n": 2
+        },
+        {
+          "goalsHome": 14,
+          "goalsAway": 0,
+          "n": 481
+        },
+        {
+          "goalsHome": 14,
+          "goalsAway": 1,
+          "n": 57
+        },
+        {
+          "goalsHome": 14,
+          "goalsAway": 2,
+          "n": 3
+        },
+        {
+          "goalsHome": 14,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 15,
+          "goalsAway": 0,
+          "n": 391
+        },
+        {
+          "goalsHome": 15,
+          "goalsAway": 1,
+          "n": 38
+        },
+        {
+          "goalsHome": 15,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 16,
+          "goalsAway": 0,
+          "n": 327
+        },
+        {
+          "goalsHome": 16,
+          "goalsAway": 1,
+          "n": 22
+        },
+        {
+          "goalsHome": 16,
+          "goalsAway": 2,
+          "n": 3
+        },
+        {
+          "goalsHome": 17,
+          "goalsAway": 0,
+          "n": 256
+        },
+        {
+          "goalsHome": 17,
+          "goalsAway": 1,
+          "n": 15
+        },
+        {
+          "goalsHome": 17,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 18,
+          "goalsAway": 0,
+          "n": 221
+        },
+        {
+          "goalsHome": 18,
+          "goalsAway": 1,
+          "n": 10
+        },
+        {
+          "goalsHome": 19,
+          "goalsAway": 0,
+          "n": 156
+        },
+        {
+          "goalsHome": 19,
+          "goalsAway": 1,
+          "n": 10
+        },
+        {
+          "goalsHome": 19,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 20,
+          "goalsAway": 0,
+          "n": 156
+        },
+        {
+          "goalsHome": 20,
+          "goalsAway": 1,
+          "n": 6
+        },
+        {
+          "goalsHome": 21,
+          "goalsAway": 0,
+          "n": 123
+        },
+        {
+          "goalsHome": 21,
+          "goalsAway": 1,
+          "n": 6
+        },
+        {
+          "goalsHome": 22,
+          "goalsAway": 0,
+          "n": 92
+        },
+        {
+          "goalsHome": 22,
+          "goalsAway": 1,
+          "n": 5
+        },
+        {
+          "goalsHome": 23,
+          "goalsAway": 0,
+          "n": 77
+        },
+        {
+          "goalsHome": 23,
+          "goalsAway": 1,
+          "n": 5
+        },
+        {
+          "goalsHome": 24,
+          "goalsAway": 0,
+          "n": 79
+        },
+        {
+          "goalsHome": 24,
+          "goalsAway": 1,
+          "n": 5
+        },
+        {
+          "goalsHome": 25,
+          "goalsAway": 0,
+          "n": 53
+        },
+        {
+          "goalsHome": 25,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 26,
+          "goalsAway": 0,
+          "n": 44
+        },
+        {
+          "goalsHome": 26,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 27,
+          "goalsAway": 0,
+          "n": 41
+        },
+        {
+          "goalsHome": 28,
+          "goalsAway": 0,
+          "n": 23
+        },
+        {
+          "goalsHome": 28,
+          "goalsAway": 1,
+          "n": 5
+        },
+        {
+          "goalsHome": 29,
+          "goalsAway": 0,
+          "n": 31
+        },
+        {
+          "goalsHome": 29,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 30,
+          "goalsAway": 0,
+          "n": 32
+        },
+        {
+          "goalsHome": 30,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 31,
+          "goalsAway": 0,
+          "n": 15
+        },
+        {
+          "goalsHome": 31,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 32,
+          "goalsAway": 0,
+          "n": 10
+        },
+        {
+          "goalsHome": 33,
+          "goalsAway": 0,
+          "n": 12
+        },
+        {
+          "goalsHome": 34,
+          "goalsAway": 0,
+          "n": 22
+        },
+        {
+          "goalsHome": 34,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 35,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 36,
+          "goalsAway": 0,
+          "n": 8
+        },
+        {
+          "goalsHome": 37,
+          "goalsAway": 0,
+          "n": 7
+        },
+        {
+          "goalsHome": 37,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 38,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 39,
+          "goalsAway": 0,
+          "n": 4
+        },
+        {
+          "goalsHome": 40,
+          "goalsAway": 0,
+          "n": 10
+        },
+        {
+          "goalsHome": 41,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 42,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 43,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 44,
+          "goalsAway": 0,
+          "n": 4
+        },
+        {
+          "goalsHome": 45,
+          "goalsAway": 0,
+          "n": 7
+        },
+        {
+          "goalsHome": 46,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 46,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 47,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 48,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 48,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 49,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 50,
+          "goalsAway": 0,
+          "n": 5
+        },
+        {
+          "goalsHome": 51,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 52,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 53,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 59,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 61,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 63,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 66,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 67,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 69,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 70,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 71,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 73,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 87,
+          "goalsAway": 0,
+          "n": 1
+        }
+      ]
+    },
+    "2": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "3": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "4": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "5": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "6": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "7": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "8": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "9": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "10": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "11": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "12": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "13": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "14": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "15": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "16": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "17": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "18": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "19": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "20": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "21": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "22": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "23": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "24": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "25": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "26": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "27": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "28": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "29": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "30": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "31": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "32": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "33": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "34": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "35": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "36": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "37": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "38": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "39": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "40": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "41": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "42": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "43": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "44": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "45": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "46": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "47": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "48": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "49": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "50": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "51": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "52": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "53": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "54": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "55": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "56": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "57": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "58": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "59": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "60": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "61": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "62": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "63": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "64": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "65": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "66": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "67": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "68": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "69": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "70": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "71": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    },
+    "72": {
+      "homeWin": 0,
+      "draw": 0,
+      "awayWin": 0,
+      "total": 0,
+      "scorelines": []
+    }
+  }
+}

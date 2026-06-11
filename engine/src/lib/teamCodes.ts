@@ -1,0 +1,58 @@
+import type { Team } from '../engine/types.js';
+
+/** FIFA-style three-letter team codes for compact display. */
+export const TEAM_CODES: Record<string, string> = {
+  Spain: 'ESP',
+  Argentina: 'ARG',
+  France: 'FRA',
+  England: 'ENG',
+  Brazil: 'BRA',
+  Portugal: 'POR',
+  Colombia: 'COL',
+  Netherlands: 'NED',
+  Ecuador: 'ECU',
+  Croatia: 'CRO',
+  Germany: 'GER',
+  Norway: 'NOR',
+  Japan: 'JPN',
+  Turkey: 'TUR',
+  Switzerland: 'SUI',
+  Uruguay: 'URU',
+  Senegal: 'SEN',
+  Mexico: 'MEX',
+  Belgium: 'BEL',
+  Paraguay: 'PAR',
+  Austria: 'AUT',
+  Morocco: 'MAR',
+  Canada: 'CAN',
+  Australia: 'AUS',
+  Scotland: 'SCO',
+  Iran: 'IRN',
+  'South Korea': 'KOR',
+  Algeria: 'ALG',
+  Panama: 'PAN',
+  Czechia: 'CZE',
+  Uzbekistan: 'UZB',
+  'United States': 'USA',
+  Sweden: 'SWE',
+  Egypt: 'EGY',
+  Jordan: 'JOR',
+  'Ivory Coast': 'CIV',
+  'DR Congo': 'COD',
+  Tunisia: 'TUN',
+  Iraq: 'IRQ',
+  'Bosnia and Herzegovina': 'BIH',
+  'New Zealand': 'NZL',
+  'Saudi Arabia': 'KSA',
+  'Cape Verde': 'CPV',
+  Haiti: 'HAI',
+  'South Africa': 'RSA',
+  Ghana: 'GHA',
+  Curaçao: 'CUW',
+  Qatar: 'QAT',
+};
+
+export function teamCode(team: Team | null, fallback = 'TBD'): string {
+  if (!team) return fallback.slice(0, 3).toUpperCase();
+  return TEAM_CODES[team.name] ?? team.name.slice(0, 3).toUpperCase();
+}
