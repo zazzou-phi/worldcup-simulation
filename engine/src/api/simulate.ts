@@ -54,8 +54,9 @@ export function simulateGroupPhase(
   repo: Repository,
   simulationId?: number,
   gamesTarget: GroupGamesTarget = 3,
+  upsetVariance?: number,
 ): SimulateGroupResponse {
-  const runner = new SimulationRunner(repo);
+  const runner = new SimulationRunner(repo, undefined, upsetVariance);
   try {
     const result =
       simulationId != null
@@ -74,8 +75,9 @@ export function simulateGroupPhase(
 export function simulateGroupPhaseAuto(
   repo: Repository,
   gamesTarget: GroupGamesTarget = 3,
+  upsetVariance?: number,
 ): SimulateGroupResponse {
-  const runner = new SimulationRunner(repo);
+  const runner = new SimulationRunner(repo, undefined, upsetVariance);
   const simulationId = repo.chooseSimulationForGroupPhase();
   try {
     const result = runner.simulateGroupPhaseUpTo(simulationId, gamesTarget);
@@ -93,8 +95,9 @@ export function simulateKnockouts(
   repo: Repository,
   simulationId?: number,
   throughRound?: string,
+  upsetVariance?: number,
 ): SimulateKnockoutsResponse {
-  const runner = new SimulationRunner(repo);
+  const runner = new SimulationRunner(repo, undefined, upsetVariance);
   try {
     const result = runner.simulateKnockoutsUpTo(simulationId, throughRound);
     const simulation = repo.getSimulation(result.simulationId);
@@ -111,8 +114,9 @@ export function simulateMatch(
   repo: Repository,
   simulationId: number,
   matchNumber: number,
+  upsetVariance?: number,
 ): SimulateMatchResponse {
-  const runner = new SimulationRunner(repo);
+  const runner = new SimulationRunner(repo, undefined, upsetVariance);
   try {
     const result = runner.simulateSingleMatch(simulationId, matchNumber);
     const simulation = repo.getSimulation(simulationId);

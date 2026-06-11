@@ -3,7 +3,7 @@ import { DEFAULT_UPSET_VARIANCE } from '../engine/matchSimulator.js';
 import { MONTE_CARLO_MAX_COUNT, runMonteCarlo, type MonteCarloResult } from '../simulation/monteCarlo.js';
 import { ApiError } from './errors.js';
 
-export const UPSET_VARIANCE_MAX = 5;
+export const UPSET_VARIANCE_MAX = 1;
 
 export function parseMonteCarloCount(value: unknown): number {
   if (typeof value !== 'number' || !Number.isInteger(value)) {
@@ -17,6 +17,13 @@ export function parseMonteCarloCount(value: unknown): number {
     );
   }
   return value;
+}
+
+export function parseUpsetVarianceQuery(value: string | undefined): number {
+  if (value == null || value === '') {
+    return DEFAULT_UPSET_VARIANCE;
+  }
+  return parseUpsetVariance(parseFloat(value));
 }
 
 export function parseUpsetVariance(value: unknown): number {

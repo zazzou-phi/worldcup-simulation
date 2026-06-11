@@ -1,10 +1,22 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 interface Props {
+  buttonLabel: ReactNode;
+  buttonClassName?: string;
+  menuClassName?: string;
+  ariaLabel: string;
+  active?: boolean;
   children: ReactNode;
 }
 
-export function HeaderMoreMenu({ children }: Props) {
+export function HeaderDropdownMenu({
+  buttonLabel,
+  buttonClassName = 'btn btn-ghost',
+  menuClassName = '',
+  ariaLabel,
+  active = false,
+  children,
+}: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -27,18 +39,31 @@ export function HeaderMoreMenu({ children }: Props) {
   }, [open]);
 
   return (
-    <div className={`header-more-menu ${open ? 'header-more-menu-open' : ''}`} ref={rootRef}>
+    <div
+      className={`header-dropdown-menu ${open ? 'header-dropdown-menu-open' : ''}`}
+      ref={rootRef}
+    >
       <button
         type="button"
-        className="btn btn-ghost header-more-btn"
+        className={`${buttonClassName}${active ? ' active' : ''}`}
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-label={ariaLabel}
         onClick={() => setOpen((v) => !v)}
       >
-        More
+        {buttonLabel}
       </button>
       {open && (
-        <div className="header-more-dropdown" role="menu" onClick={() => setOpen(false)}>
+        <div
+          className={`header-dropdown-panel ${menuClassName}`.trim()}
+          role="menu"
+          onClick={(e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest('button, a, [role="menuitem"]')) {
+              setOpen(false);
+            }
+          }}
+        >
           {children}
         </div>
       )}

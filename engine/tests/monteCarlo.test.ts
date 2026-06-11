@@ -113,7 +113,7 @@ describe('POST /api/v1/simulate/monte-carlo', () => {
     const res = await app.request('/api/v1/simulate/monte-carlo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ count: 5, upsetVariance: 6 }),
+      body: JSON.stringify({ count: 5, upsetVariance: 1.5 }),
     });
     expect(res.status).toBe(400);
   });

@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import type { MonteCarloResult } from '../types.js';
 import { TEAM_CODES } from '@shared/lib/teamCodes.js';
-
-const DEFAULT_UPSET_VARIANCE = 0.6;
-const UPSET_VARIANCE_MAX = 5;
+import { UpsetFactorControl } from './UpsetFactorControl.js';
 
 interface Props {
   running: boolean;
   progress: { completed: number; total: number } | null;
   result: MonteCarloResult | null;
   error: string | null;
+  upsetVariance: number;
+  onUpsetVarianceChange: (value: number) => void;
   onClose: () => void;
-  onRun: (count: number, upsetVariance: number) => void;
+  onRun: (count: number) => void;
 }
 
 function formatDuration(ms: number): string {
@@ -22,9 +22,17 @@ function formatDuration(ms: number): string {
   return `${minutes}m ${seconds}s`;
 }
 
-export function MonteCarloModal({ running, progress, result, error, onClose, onRun }: Props) {
+export function MonteCarloModal({
+  running,
+  progress,
+  result,
+  error,
+  upsetVariance,
+  onUpsetVarianceChange,
+  onClose,
+  onRun,
+}: Props) {
   const [countInput, setCountInput] = useState('1000');
-  const [upsetVariance, setUpsetVariance] = useState(DEFAULT_UPSET_VARIANCE);
   const [runStartedAt, setRunStartedAt] = useState<number | null>(null);
 
   useEffect(() => {
@@ -38,7 +46,7 @@ export function MonteCarloModal({ running, progress, result, error, onClose, onR
   const handleRun = () => {
     const count = parseInt(countInput, 10);
     if (!Number.isInteger(count) || count < 1) return;
-    onRun(count, upsetVariance);
+    onRun(count);
   };
 
   return (
@@ -66,25 +74,13 @@ export function MonteCarloModal({ running, progress, result, error, onClose, onR
           onChange={(e) => setCountInput(e.target.value)}
         />
 
-        <label className="modal-label" htmlFor="monte-carlo-upset">
-          Upset factor{' '}
-          <span className="muted monte-carlo-upset-value">{upsetVariance.toFixed(2)}</span>
-        </label>
-        <input
+        <UpsetFactorControl
           id="monte-carlo-upset"
-          className="modal-range"
-          type="range"
-          min={0}
-          max={UPSET_VARIANCE_MAX}
-          step={0.05}
+          variant="full"
           value={upsetVariance}
           disabled={running}
-          onChange={(e) => setUpsetVariance(parseFloat(e.target.value))}
+          onChange={onUpsetVarianceChange}
         />
-        <p className="muted monte-carlo-upset-hint">
-          Higher values add more random form swings — favorites stumble, underdogs punch above
-          their weight. 0 turns upsets off.
-        </p>
 
         <div className="modal-actions">
           <button type="button" className="btn btn-simulate" disabled={running} onClick={handleRun}>

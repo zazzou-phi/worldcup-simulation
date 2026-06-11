@@ -25,6 +25,9 @@ import { GroupPhaseView } from './components/GroupPhaseView.js';
 import { KnockoutView } from './components/KnockoutView.js';
 import { MasterGroupView } from './components/MasterGroupView.js';
 import { MonteCarloModal } from './components/MonteCarloModal.js';
+import type { AppView } from './lib/appView.js';
+import { DEFAULT_UPSET_VARIANCE } from './lib/upsetVariance.js';
+import { MOBILE_QUERY } from './lib/useMediaQuery.js';
 import { SimulationManagerModal } from './components/SimulationManagerModal.js';
 import { TeamRatingsModal } from './components/TeamRatingsModal.js';
 import { MasterTeamStatsModal } from './components/MasterTeamStatsModal.js';
@@ -50,9 +53,11 @@ export function App() {
   } | null>(null);
   const [bulkSimulating, setBulkSimulating] = useState(false);
   const [viewKnockout, setViewKnockout] = useState(false);
-  const [actualResultsMode, setActualResultsMode] = useState(false);
+  const [appView, setAppView] = useState<AppView>(publicMode ? 'simulations' : 'predictions');
   const [actualState, setActualState] = useState<ActualResultsState | null>(null);
-  const [masterMode, setMasterMode] = useState(true);
+  const [knockoutBracketView, setKnockoutBracketView] = useState(
+    () => typeof window !== 'undefined' && !window.matchMedia(MOBILE_QUERY).matches,
+  );
   const [masterState, setMasterState] = useState<MasterGroupState | null>(null);
   const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -60,6 +65,7 @@ export function App() {
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [publicMeta, setPublicMeta] = useState<PublicMeta | null>(null);
+  const [upsetVariance, setUpsetVariance] = useState(DEFAULT_UPSET_VARIANCE);
 
   const refreshSimulations = useCallback(async () => {
     if (publicMode) return;
@@ -208,39 +214,19 @@ export function App() {
     }
   };
 
-  const toggleActualResultsMode = async () => {
-    if (actualResultsMode) {
-      setActualResultsMode(false);
-      setSelectedMatchNumber(null);
-      setEditingMatchNumber(null);
-      return;
-    }
+  const switchAppView = async (view: AppView) => {
+    if (view === appView) return;
+    setSelectedMatchNumber(null);
+    setEditingMatchNumber(null);
     try {
-      await refreshActualState();
-      setMasterMode(false);
-      setActualResultsMode(true);
-      setSelectedMatchNumber(null);
-      setEditingMatchNumber(null);
+      if (view === 'predictions') {
+        await refreshMasterState();
+      } else if (view === 'results') {
+        await refreshActualState();
+      }
+      setAppView(view);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load actual results');
-    }
-  };
-
-  const toggleMasterMode = async () => {
-    if (masterMode) {
-      setMasterMode(false);
-      setSelectedMatchNumber(null);
-      setEditingMatchNumber(null);
-      return;
-    }
-    try {
-      await refreshMasterState();
-      setActualResultsMode(false);
-      setMasterMode(true);
-      setSelectedMatchNumber(null);
-      setEditingMatchNumber(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load master view');
+      setError(err instanceof Error ? err.message : 'Failed to switch view');
     }
   };
 
@@ -285,18 +271,18 @@ export function App() {
     setError(null);
     try {
       if (publicMode) {
-        const { state: nextState, result } = simulateLocalGroupPhase(state, games);
+        const { state: nextState, result } = simulateLocalGroupPhase(state, games, upsetVariance);
         setState(nextState);
         setToast(
-          `G${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
+          `Round ${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
         );
       } else {
-        const result = await api.simulateGroupPhase(simulationId, games);
+        const result = await api.simulateGroupPhase(simulationId, games, upsetVariance);
         await refreshState(simulationId);
         await refreshSimulations();
-        if (masterMode) await refreshMasterState();
+        if (appView === 'predictions') await refreshMasterState();
         setToast(
-          `G${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
+          `Round ${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
         );
       }
     } catch (err) {
@@ -316,13 +302,17 @@ export function App() {
     setError(null);
     try {
       if (publicMode) {
-        const { state: nextState, result } = simulateLocalKnockouts(state, throughRound);
+        const { state: nextState, result } = simulateLocalKnockouts(
+          state,
+          throughRound,
+          upsetVariance,
+        );
         setState(nextState);
         setToast(
           `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
         );
       } else {
-        const result = await api.simulateKnockouts(simulationId, throughRound);
+        const result = await api.simulateKnockouts(simulationId, throughRound, upsetVariance);
         await refreshState(simulationId);
         await refreshSimulations();
         setToast(
@@ -340,7 +330,7 @@ export function App() {
     }
   };
 
-  const handleMonteCarlo = async (count: number, upsetVariance: number) => {
+  const handleMonteCarlo = async (count: number) => {
     setBulkSimulating(true);
     setMonteCarloError(null);
     setMonteCarloResult(null);
@@ -351,7 +341,7 @@ export function App() {
       });
       setMonteCarloResult(result);
       await refreshSimulations();
-      if (masterMode) await refreshMasterState();
+      if (appView === 'predictions') await refreshMasterState();
       setToast(
         `Bulk simulate: saved ${result.count.toLocaleString()} simulations (#${result.firstSimulationId}–${result.lastSimulationId})`,
       );
@@ -369,15 +359,15 @@ export function App() {
     setError(null);
     try {
       if (publicMode) {
-        const { state: nextState, result } = simulateLocalMatch(state, matchNumber);
+        const { state: nextState, result } = simulateLocalMatch(state, matchNumber, upsetVariance);
         setState(nextState);
         setEditingMatchNumber(null);
         setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
       } else {
-        const result = await api.simulateMatch(simulationId, matchNumber);
+        const result = await api.simulateMatch(simulationId, matchNumber, upsetVariance);
         await refreshState(simulationId);
         await refreshSimulations();
-        if (masterMode) await refreshMasterState();
+        if (appView === 'predictions') await refreshMasterState();
         setEditingMatchNumber(null);
         setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
       }
@@ -408,17 +398,19 @@ export function App() {
     <div className="app">
       <Header
         state={state}
+        appView={appView}
         layout={layout}
         showGroupView={showGroupView}
-        actualResultsMode={actualResultsMode}
-        masterMode={masterMode}
+        knockoutBracketView={knockoutBracketView}
         publicMode={publicMode}
         masterConsensusMode={masterState?.consensusMode}
         simulating={simulating}
+        upsetVariance={upsetVariance}
+        onAppViewChange={switchAppView}
+        onUpsetVarianceChange={setUpsetVariance}
         onLayoutChange={setLayout}
+        onKnockoutBracketViewChange={setKnockoutBracketView}
         onToggleStageView={() => setViewKnockout((v) => !v)}
-        onToggleActualResults={toggleActualResultsMode}
-        onToggleMaster={toggleMasterMode}
         onOpenSimulations={() => setShowSimulations(true)}
         onOpenRatings={() => setShowRatings(true)}
         onSimulateGroupGames={handleSimulateGroup}
@@ -443,9 +435,9 @@ export function App() {
       )}
 
       <main className="app-main">
-        {masterMode && masterState ? (
+        {appView === 'predictions' && masterState ? (
           <MasterGroupView masterState={masterState} layout={layout} />
-        ) : actualResultsMode && actualState ? (
+        ) : appView === 'results' && actualState ? (
           <ActualResultsView
             actualState={actualState}
             layout={layout}
@@ -475,6 +467,7 @@ export function App() {
         ) : (
           <KnockoutView
             state={state}
+            useBracketView={knockoutBracketView}
             selectedMatchNumber={selectedMatchNumber}
             editingMatchNumber={editingMatchNumber}
             simulating={simulating}
@@ -490,7 +483,7 @@ export function App() {
 
       {publicMode && publicMeta && (
         <footer className="app-footer muted">
-          Master data as of {new Date(publicMeta.exportedAt).toLocaleString()}
+          Prediction data as of {new Date(publicMeta.exportedAt).toLocaleString()}
         </footer>
       )}
 
@@ -520,6 +513,8 @@ export function App() {
           progress={monteCarloProgress}
           result={monteCarloResult}
           error={monteCarloError}
+          upsetVariance={upsetVariance}
+          onUpsetVarianceChange={setUpsetVariance}
           onClose={() => setShowMonteCarlo(false)}
           onRun={handleMonteCarlo}
         />

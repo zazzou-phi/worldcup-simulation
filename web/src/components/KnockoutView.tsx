@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import type { TournamentState } from '../types.js';
-import { MOBILE_QUERY } from '../lib/useMediaQuery.js';
 import { KnockoutBracket, KnockoutList } from './KnockoutBracket.js';
 
 interface Props {
   state: TournamentState;
+  useBracketView: boolean;
   selectedMatchNumber: number | null;
   editingMatchNumber: number | null;
   simulating?: boolean;
@@ -22,29 +21,10 @@ interface Props {
 }
 
 export function KnockoutView(props: Props) {
-  const [useBracketView, setUseBracketView] = useState(
-    () => typeof window !== 'undefined' && !window.matchMedia(MOBILE_QUERY).matches,
-  );
-  const { state } = props;
+  const { state, useBracketView } = props;
 
   return (
     <div className="knockout-view">
-      <div className="knockout-toolbar">
-        <button
-          type="button"
-          className={`btn btn-ghost ${useBracketView ? 'active' : ''}`}
-          onClick={() => setUseBracketView(true)}
-        >
-          Bracket
-        </button>
-        <button
-          type="button"
-          className={`btn btn-ghost ${!useBracketView ? 'active' : ''}`}
-          onClick={() => setUseBracketView(false)}
-        >
-          List
-        </button>
-      </div>
       {useBracketView ? (
         <KnockoutBracket
           matches={state.resolvedMatches}

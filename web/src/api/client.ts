@@ -105,27 +105,40 @@ const privateApi = {
   clearActualResult: (matchNumber: number) =>
     request<void>(`/api/v1/actual-results/${matchNumber}`, { method: 'DELETE' }),
 
-  simulateGroupPhase: (simulationId: number, games?: 1 | 2 | 3) => {
-    const qs = games != null ? `?games=${games}` : '';
+  simulateGroupPhase: (simulationId: number, games?: 1 | 2 | 3, upsetVariance?: number) => {
+    const params = new URLSearchParams();
+    if (games != null) params.set('games', String(games));
+    if (upsetVariance != null) params.set('upsetVariance', String(upsetVariance));
+    const qs = params.size > 0 ? `?${params}` : '';
     return request<SimulateGroupResult>(
       `/api/v1/simulations/${simulationId}/simulate/group${qs}`,
       { method: 'POST' },
     );
   },
 
-  simulateKnockouts: (simulationId: number, throughRound?: string) => {
-    const qs = throughRound != null ? `?through=${encodeURIComponent(throughRound)}` : '';
+  simulateKnockouts: (
+    simulationId: number,
+    throughRound?: string,
+    upsetVariance?: number,
+  ) => {
+    const params = new URLSearchParams();
+    if (throughRound != null) params.set('through', throughRound);
+    if (upsetVariance != null) params.set('upsetVariance', String(upsetVariance));
+    const qs = params.size > 0 ? `?${params}` : '';
     return request<SimulateKnockoutsResult>(
       `/api/v1/simulations/${simulationId}/simulate/knockouts${qs}`,
       { method: 'POST' },
     );
   },
 
-  simulateMatch: (simulationId: number, matchNumber: number) =>
-    request<SimulateMatchResult>(
-      `/api/v1/simulations/${simulationId}/matches/${matchNumber}/simulate`,
+  simulateMatch: (simulationId: number, matchNumber: number, upsetVariance?: number) => {
+    const qs =
+      upsetVariance != null ? `?upsetVariance=${encodeURIComponent(String(upsetVariance))}` : '';
+    return request<SimulateMatchResult>(
+      `/api/v1/simulations/${simulationId}/matches/${matchNumber}/simulate${qs}`,
       { method: 'POST' },
-    ),
+    );
+  },
 
   simulateMonteCarlo: async (
     count: number,

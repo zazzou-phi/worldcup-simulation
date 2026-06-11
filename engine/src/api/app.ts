@@ -7,6 +7,7 @@ import {
   createMonteCarloStream,
   parseMonteCarloCount,
   parseUpsetVariance,
+  parseUpsetVarianceQuery,
   simulateMonteCarlo,
 } from './monteCarlo.js';
 import {
@@ -245,7 +246,8 @@ export function createApiApp(repo: Repository) {
 
   app.post('/api/v1/simulate/group', (c) => {
     const games = parseGroupGamesParam(c.req.query('games'));
-    const result = simulateGroupPhaseAuto(repo, games);
+    const upsetVariance = parseUpsetVarianceQuery(c.req.query('upsetVariance'));
+    const result = simulateGroupPhaseAuto(repo, games, upsetVariance);
     return c.json(result);
   });
 
@@ -255,7 +257,8 @@ export function createApiApp(repo: Repository) {
       throw new ApiError('Simulation not found', 404, 'simulation_not_found');
     }
     const games = parseGroupGamesParam(c.req.query('games'));
-    const result = simulateGroupPhase(repo, id, games);
+    const upsetVariance = parseUpsetVarianceQuery(c.req.query('upsetVariance'));
+    const result = simulateGroupPhase(repo, id, games, upsetVariance);
     return c.json(result);
   });
 
@@ -265,7 +268,8 @@ export function createApiApp(repo: Repository) {
       throw new ApiError('Simulation not found', 404, 'simulation_not_found');
     }
     const through = parseThroughRoundParam(c.req.query('through'));
-    const result = simulateKnockouts(repo, id, through);
+    const upsetVariance = parseUpsetVarianceQuery(c.req.query('upsetVariance'));
+    const result = simulateKnockouts(repo, id, through, upsetVariance);
     return c.json(result);
   });
 
@@ -275,7 +279,8 @@ export function createApiApp(repo: Repository) {
     if (!repo.getSimulation(id)) {
       throw new ApiError('Simulation not found', 404, 'simulation_not_found');
     }
-    const result = simulateMatch(repo, id, matchNumber);
+    const upsetVariance = parseUpsetVarianceQuery(c.req.query('upsetVariance'));
+    const result = simulateMatch(repo, id, matchNumber, upsetVariance);
     return c.json(result);
   });
 

@@ -1,5 +1,6 @@
 import type { Repository } from '../db/repository.js';
 import {
+  DEFAULT_UPSET_VARIANCE,
   simulateMatchOutcome,
   winnerFromGoals,
   type RandomSource,
@@ -28,6 +29,7 @@ export class SimulationRunner {
   constructor(
     private repo: Repository,
     private rng: RandomSource = defaultRandomSource,
+    private upsetVariance: number = DEFAULT_UPSET_VARIANCE,
   ) {}
 
   simulateMatch(
@@ -40,7 +42,11 @@ export class SimulationRunner {
     const away = this.repo.getTeamByIdOrName(team2);
     if (!home) throw new SimulationError(`Team not found: ${team1}`);
     if (!away) throw new SimulationError(`Team not found: ${team2}`);
-    return simulateMatchOutcome(home, away, knockout, { gpg, rng: this.rng });
+    return simulateMatchOutcome(home, away, knockout, {
+      gpg,
+      rng: this.rng,
+      upsetVariance: this.upsetVariance,
+    });
   }
 
   simulateGroupPhase(simulationId?: number): GroupPhaseResult {
@@ -88,7 +94,10 @@ export class SimulationRunner {
 
       const home = this.repo.getTeamByIdOrName(homeId)!;
       const away = this.repo.getTeamByIdOrName(awayId)!;
-      const match = simulateMatchOutcome(home, away, false, { rng: this.rng });
+      const match = simulateMatchOutcome(home, away, false, {
+        rng: this.rng,
+        upsetVariance: this.upsetVariance,
+      });
       const winnerTeamId = winnerFromGoals(match.goals1, match.goals2, homeId, awayId);
 
       this.repo.persistMatchResult(
@@ -163,7 +172,10 @@ export class SimulationRunner {
 
     const home = this.repo.getTeamByIdOrName(homeId)!;
     const away = this.repo.getTeamByIdOrName(awayId)!;
-    const match = simulateMatchOutcome(home, away, isKnockout, { rng: this.rng });
+    const match = simulateMatchOutcome(home, away, isKnockout, {
+      rng: this.rng,
+      upsetVariance: this.upsetVariance,
+    });
     const winnerTeamId = isKnockout
       ? (match.winnerId ?? null)
       : winnerFromGoals(match.goals1, match.goals2, homeId, awayId);
@@ -273,7 +285,10 @@ export class SimulationRunner {
 
       const home = this.repo.getTeamByIdOrName(homeId)!;
       const away = this.repo.getTeamByIdOrName(awayId)!;
-      const match = simulateMatchOutcome(home, away, true, { rng: this.rng });
+      const match = simulateMatchOutcome(home, away, true, {
+        rng: this.rng,
+        upsetVariance: this.upsetVariance,
+      });
       const winnerTeamId = match.winnerId ?? null;
 
       this.repo.persistMatchResult(

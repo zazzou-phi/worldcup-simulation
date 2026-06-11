@@ -151,6 +151,7 @@ export function clearLocalMatchScore(
 export function simulateLocalMatch(
   state: TournamentState,
   matchNumber: number,
+  upsetVariance?: number,
 ): { state: TournamentState; result: MatchResultRow } {
   const resolved = findResolvedMatch(state, matchNumber);
   if (resolved.isLocked) {
@@ -164,7 +165,9 @@ export function simulateLocalMatch(
   }
 
   const isKnockout = resolved.fixture.group == null;
-  const outcome = simulateMatchOutcome(resolved.homeTeam, resolved.awayTeam, isKnockout);
+  const outcome = simulateMatchOutcome(resolved.homeTeam, resolved.awayTeam, isKnockout, {
+    upsetVariance,
+  });
   const winnerTeamId = isKnockout
     ? (outcome.winnerId ?? null)
     : winnerFromGoals(
@@ -196,6 +199,7 @@ export function simulateLocalMatch(
 export function simulateLocalGroupPhase(
   state: TournamentState,
   gamesTarget: GroupGamesTarget,
+  upsetVariance?: number,
 ): { state: TournamentState; result: GroupPhaseResult } {
   const fixtures = state.fixtures
     .filter((f) => f.group != null && isGroupFixtureWithinGamesTarget(f, gamesTarget))
@@ -225,7 +229,7 @@ export function simulateLocalGroupPhase(
 
     const home = getTeam(state, fixture.teamHomeId);
     const away = getTeam(state, fixture.teamAwayId);
-    const outcome = simulateMatchOutcome(home, away, false);
+    const outcome = simulateMatchOutcome(home, away, false, { upsetVariance });
     const winnerTeamId = winnerFromGoals(outcome.goals1, outcome.goals2, home.id, away.id);
 
     matches = matches.map((row) =>
@@ -262,6 +266,7 @@ export function simulateLocalGroupPhase(
 export function simulateLocalKnockouts(
   state: TournamentState,
   throughRoundName?: string,
+  upsetVariance?: number,
 ): { state: TournamentState; result: KnockoutsResult } {
   const throughName =
     throughRoundName ?? SIMULATION_KNOCKOUT_ROUNDS[SIMULATION_KNOCKOUT_ROUNDS.length - 1]!.name;
@@ -301,7 +306,7 @@ export function simulateLocalKnockouts(
 
       const home = getTeam(currentState, match.teamHomeId);
       const away = getTeam(currentState, match.teamAwayId);
-      const outcome = simulateMatchOutcome(home, away, true);
+      const outcome = simulateMatchOutcome(home, away, true, { upsetVariance });
       const winnerTeamId = outcome.winnerId ?? null;
 
       matches = matches.map((row) =>
