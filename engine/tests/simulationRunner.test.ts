@@ -112,4 +112,12 @@ describe('SimulationRunner (seeded)', () => {
     expect(result.matchesPlayed).toBe(28);
     expect(result.roundsPlayed).toBe(3);
   });
+
+  it('simulateKnockoutsUpTo completes group stage first when not done', () => {
+    const sim = repo.createSimulation('KO from scratch');
+    const result = runner.simulateKnockoutsUpTo(sim.id, 'round_of_32');
+    expect(result.matchesPlayed).toBe(16);
+    expect(result.roundsPlayed).toBe(1);
+    expect(repo.getSimulation(sim.id)?.phase).toBe('round_of_32');
+  });
 });

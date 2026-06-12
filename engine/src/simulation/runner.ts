@@ -17,6 +17,7 @@ import {
   isGroupFixtureWithinGamesTarget,
 } from '../engine/groupSimulation.js';
 import { SIMULATION_KNOCKOUT_ROUNDS } from '../engine/simulationRounds.js';
+import { isGroupStageComplete } from '../engine/phase.js';
 
 export class SimulationError extends Error {
   constructor(message: string) {
@@ -209,6 +210,12 @@ export class SimulationRunner {
     const throughIndex = SIMULATION_KNOCKOUT_ROUNDS.findIndex((r) => r.name === throughName);
     if (throughIndex < 0) {
       throw new SimulationError(`Unknown knockout round: ${throughName}`);
+    }
+
+    const fixtures = this.repo.getFixtures();
+    const matches = this.repo.getSimulationMatches(resolvedId);
+    if (!isGroupStageComplete(matches, fixtures)) {
+      this.simulateGroupPhaseUpTo(resolvedId, 3);
     }
 
     const roundResults: KnockoutRoundResult[] = [];

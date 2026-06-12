@@ -13,6 +13,7 @@ import {
   type MatchResultRow,
 } from '@shared/engine/matchSimulator.js';
 import { SIMULATION_KNOCKOUT_ROUNDS } from '@shared/engine/simulationRounds.js';
+import { isGroupStageComplete } from '@shared/engine/phase.js';
 import {
   applyActualResultsToMatches,
   buildTournamentStateFromData,
@@ -276,6 +277,10 @@ export function simulateLocalKnockouts(
   }
 
   let currentState = state;
+  if (!isGroupStageComplete(toEngineMatches(currentState), currentState.fixtures)) {
+    currentState = simulateLocalGroupPhase(currentState, 3, upsetVariance).state;
+  }
+
   const roundResults: KnockoutRoundResult[] = [];
   let totalMatches = 0;
 
