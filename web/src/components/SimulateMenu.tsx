@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { getDisabledSimulateMenuKeys } from '@shared/engine/simulateMenuAvailability.js';
 import { SIMULATION_KNOCKOUT_ROUNDS } from '@shared/engine/simulationRounds.js';
+import type { TournamentState } from '../types.js';
 
 const KNOCKOUT_ROUND_LABELS: Record<string, string> = {
   round_of_32: 'Round of 32',
@@ -21,6 +23,7 @@ type MenuEntry =
   | { kind: 'divider' };
 
 interface Props {
+  state: TournamentState;
   simulating: boolean;
   publicMode?: boolean;
   onSimulateGroup: (games: 1 | 2 | 3) => void;
@@ -49,6 +52,7 @@ function buildItems(publicMode: boolean): MenuEntry[] {
 }
 
 export function SimulateMenu({
+  state,
   simulating,
   publicMode = false,
   onSimulateGroup,
@@ -58,6 +62,10 @@ export function SimulateMenu({
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const items = useMemo(() => buildItems(publicMode), [publicMode]);
+  const disabledKeys = useMemo(
+    () => getDisabledSimulateMenuKeys({ fixtures: state.fixtures, matches: state.matches }),
+    [state.fixtures, state.matches],
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -78,6 +86,7 @@ export function SimulateMenu({
   }, [open]);
 
   const handleSelect = (key: string) => {
+    if (disabledKeys.has(key)) return;
     setOpen(false);
     if (key === 'bulk') {
       onBulk();
@@ -113,6 +122,7 @@ export function SimulateMenu({
                 type="button"
                 className="simulate-menu-item"
                 role="menuitem"
+                disabled={disabledKeys.has(entry.key)}
                 onClick={() => handleSelect(entry.key)}
               >
                 <span className="simulate-menu-item-label">{entry.label}</span>

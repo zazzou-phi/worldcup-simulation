@@ -483,6 +483,7 @@ export function App() {
           <KnockoutView
             state={state}
             useBracketView={knockoutBracketView}
+            onViewChange={setKnockoutBracketView}
             selectedMatchNumber={selectedMatchNumber}
             editingMatchNumber={editingMatchNumber}
             simulating={simulating}

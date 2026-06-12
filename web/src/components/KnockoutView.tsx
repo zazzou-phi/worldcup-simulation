@@ -1,9 +1,11 @@
 import type { TournamentState } from '../types.js';
 import { KnockoutBracket, KnockoutList } from './KnockoutBracket.js';
+import { KnockoutPhaseLayout } from './KnockoutPhaseLayout.js';
 
 interface Props {
   state: TournamentState;
   useBracketView: boolean;
+  onViewChange: (useBracket: boolean) => void;
   selectedMatchNumber: number | null;
   editingMatchNumber: number | null;
   simulating?: boolean;
@@ -21,37 +23,26 @@ interface Props {
 }
 
 export function KnockoutView(props: Props) {
-  const { state, useBracketView } = props;
+  const { state } = props;
+  const matchProps = {
+    matches: state.resolvedMatches,
+    selectedMatchNumber: props.selectedMatchNumber,
+    editingMatchNumber: props.editingMatchNumber,
+    simulating: props.simulating,
+    onSelect: props.onSelectMatch,
+    onStartEdit: props.onStartEdit,
+    onSimulateMatch: props.onSimulateMatch,
+    onSave: props.onSaveScore,
+    onCancelEdit: props.onCancelEdit,
+    onClear: props.onClearScore,
+  };
 
   return (
-    <div className="knockout-view">
-      {useBracketView ? (
-        <KnockoutBracket
-          matches={state.resolvedMatches}
-          selectedMatchNumber={props.selectedMatchNumber}
-          editingMatchNumber={props.editingMatchNumber}
-          simulating={props.simulating}
-          onSelect={props.onSelectMatch}
-          onStartEdit={props.onStartEdit}
-          onSimulateMatch={props.onSimulateMatch}
-          onSave={props.onSaveScore}
-          onCancelEdit={props.onCancelEdit}
-          onClear={props.onClearScore}
-        />
-      ) : (
-        <KnockoutList
-          matches={state.resolvedMatches}
-          selectedMatchNumber={props.selectedMatchNumber}
-          editingMatchNumber={props.editingMatchNumber}
-          simulating={props.simulating}
-          onSelect={props.onSelectMatch}
-          onStartEdit={props.onStartEdit}
-          onSimulateMatch={props.onSimulateMatch}
-          onSave={props.onSaveScore}
-          onCancelEdit={props.onCancelEdit}
-          onClear={props.onClearScore}
-        />
-      )}
-    </div>
+    <KnockoutPhaseLayout
+      useBracketView={props.useBracketView}
+      onViewChange={props.onViewChange}
+      bracket={<KnockoutBracket {...matchProps} />}
+      fixtures={<KnockoutList {...matchProps} />}
+    />
   );
 }

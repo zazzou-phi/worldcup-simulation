@@ -78,11 +78,12 @@ export function Header({
 
   const showStageSetting = isSimulationsView;
   const showLayoutSetting =
-    isPredictionsView ||
-    isResultsView ||
-    (isSimulationsView && isGroupStagePhase(simulation.phase) && showGroupView);
+    !narrow &&
+    (isPredictionsView ||
+      isResultsView ||
+      (isSimulationsView && isGroupStagePhase(simulation.phase) && showGroupView));
   const showUpsetSetting = isSimulationsView;
-  const showBracketSetting = isSimulationsView && !showGroupView;
+  const showBracketSetting = isSimulationsView && !showGroupView && !narrow;
   const showRatings = isSimulationsView && !publicMode;
   const showManageSimulations = isSimulationsView && !publicMode;
   const showClearSimulation = isSimulationsView && onClearSimulation != null;
@@ -193,7 +194,7 @@ export function Header({
               className={`btn btn-ghost ${!knockoutBracketView ? 'active' : ''}`}
               onClick={() => onKnockoutBracketViewChange(false)}
             >
-              List
+              Fixtures
             </button>
           </div>
         </div>
@@ -221,6 +222,7 @@ export function Header({
   const simulateMenu =
     isSimulationsView && simulation.phase !== 'complete' ? (
       <SimulateMenu
+        state={state}
         simulating={simulating}
         publicMode={publicMode}
         onSimulateGroup={onSimulateGroupGames}

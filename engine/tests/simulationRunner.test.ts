@@ -120,4 +120,20 @@ describe('SimulationRunner (seeded)', () => {
     expect(result.roundsPlayed).toBe(1);
     expect(repo.getSimulation(sim.id)?.phase).toBe('round_of_32');
   });
+
+  it('simulateKnockoutsUpTo does not resimulate matches that already have results', () => {
+    const sim = repo.createSimulation('KO partial replay');
+    runner.simulateGroupPhaseUpTo(sim.id, 3);
+    runner.simulateKnockoutsUpTo(sim.id, 'round_of_32');
+
+    const before = repo.getSimulationMatches(sim.id).find((m) => m.matchNumber === 73)!;
+
+    const result = runner.simulateKnockoutsUpTo(sim.id, 'round_of_16');
+    expect(result.matchesPlayed).toBe(8);
+
+    const after = repo.getSimulationMatches(sim.id).find((m) => m.matchNumber === 73)!;
+
+    expect(after.goalsHome).toBe(before.goalsHome);
+    expect(after.goalsAway).toBe(before.goalsAway);
+  });
 });
