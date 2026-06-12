@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { canClearActualResult } from '@shared/engine/phase.js';
+import { canClearActualResult, canModifyActualResult } from '@shared/engine/phase.js';
 import { filterGroupMatchesByTeam } from '@shared/engine/matchFilters.js';
 import { teamCode } from '@shared/lib/teamCodes.js';
 import type { ActualResultsState } from '../types.js';
@@ -75,6 +75,12 @@ export function ActualResultsView({
     [actualState.resolvedMatches],
   );
 
+  const canModifyMatch = useCallback(
+    (matchNumber: number) =>
+      canModifyActualResult(matchNumber, actualState.actualResults, fixtures),
+    [actualState.actualResults, fixtures],
+  );
+
   const canClearMatch = useCallback(
     (matchNumber: number) =>
       canClearActualResult(matchNumber, actualState.actualResults, fixtures),
@@ -107,6 +113,7 @@ export function ActualResultsView({
           filterTeamLabel={filterTeamLabel}
           allowEdit={!readOnly}
           canClearMatch={canClearMatch}
+          canModifyMatch={canModifyMatch}
           onSelect={onSelectMatch}
           onStartEdit={onStartEdit}
           onSave={onSaveScore}

@@ -10,6 +10,7 @@ interface Props {
   allowEdit?: boolean;
   clearLockedOnly?: boolean;
   canClearMatch?: (matchNumber: number) => boolean;
+  canModifyMatch?: (matchNumber: number) => boolean;
   actualResults?: ActualMatchResult[];
   simulating?: boolean;
   doubleCount?: number;
@@ -50,6 +51,7 @@ export function FixtureList({
   allowEdit = true,
   clearLockedOnly = false,
   canClearMatch,
+  canModifyMatch,
   actualResults = [],
   simulating = false,
   doubleCount,
@@ -110,7 +112,8 @@ export function FixtureList({
           const editing = num === editingMatchNumber;
           const played = m.result.status === 'played';
           const locked = m.isLocked;
-          const canEdit = allowEdit && !locked;
+          const canEdit =
+            allowEdit && !locked && (canModifyMatch == null || canModifyMatch(num));
           const canSimulate = canEdit && !played && onSimulateMatch != null;
           const canClear =
             played &&

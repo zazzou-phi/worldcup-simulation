@@ -106,7 +106,11 @@ export function createApiApp(repo: Repository) {
     return c.body(null, 204);
   });
 
-  app.get('/api/v1/simulations', (c) => c.json(repo.listSimulationsWithCounts()));
+  app.get('/api/v1/simulations', (c) => {
+    const page = parsePositiveIntQuery(c.req.query('page'), 1);
+    const pageSize = Math.min(parsePositiveIntQuery(c.req.query('pageSize'), 50), 100);
+    return c.json(repo.listSimulationsWithCountsPage(page, pageSize));
+  });
 
   app.post('/api/v1/simulations', async (c) => {
     const body = await c.req.json().catch(() => null);
@@ -292,6 +296,15 @@ function parseIntParam(value: string, allowZero = false): number {
   const min = allowZero ? 0 : 1;
   if (!Number.isFinite(n) || n < min) {
     throw new ApiError('Invalid id parameter', 400, 'invalid_param');
+  }
+  return n;
+}
+
+function parsePositiveIntQuery(value: string | undefined, fallback: number): number {
+  if (value == null || value === '') return fallback;
+  const n = parseInt(value, 10);
+  if (!Number.isFinite(n) || n < 1) {
+    throw new ApiError('Invalid query parameter', 400, 'invalid_param');
   }
   return n;
 }

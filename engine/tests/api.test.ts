@@ -77,6 +77,62 @@ describe('HTTP API', () => {
     expect(body.match.goalsHome).toBeNull();
   });
 
+  it('PUT returns 409 when later round simulation results exist', async () => {
+    const create = await app.request('/api/v1/simulations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Cascade edit' }),
+    });
+    const { id } = await json<{ id: number }>(create);
+
+    await app.request(`/api/v1/simulations/${id}/matches/1`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goalsHome: 1, goalsAway: 0 }),
+    });
+    await app.request(`/api/v1/simulations/${id}/matches/3`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goalsHome: 2, goalsAway: 0 }),
+    });
+
+    const put = await app.request(`/api/v1/simulations/${id}/matches/1`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goalsHome: 3, goalsAway: 0 }),
+    });
+    expect(put.status).toBe(409);
+    const body = await json<{ code: string }>(put);
+    expect(body.code).toBe('match_clear_blocked');
+  });
+
+  it('DELETE returns 409 when later round simulation results exist', async () => {
+    const create = await app.request('/api/v1/simulations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Cascade clear' }),
+    });
+    const { id } = await json<{ id: number }>(create);
+
+    await app.request(`/api/v1/simulations/${id}/matches/1`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goalsHome: 1, goalsAway: 0 }),
+    });
+    await app.request(`/api/v1/simulations/${id}/matches/3`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goalsHome: 2, goalsAway: 0 }),
+    });
+
+    const del = await app.request(`/api/v1/simulations/${id}/matches/1`, {
+      method: 'DELETE',
+    });
+    expect(del.status).toBe(409);
+    const body = await json<{ code: string }>(del);
+    expect(body.code).toBe('match_clear_blocked');
+  });
+
   it('returns 404 for unknown simulation', async () => {
     const res = await app.request('/api/v1/simulations/999');
     expect(res.status).toBe(404);
@@ -222,10 +278,10 @@ describe('HTTP API', () => {
       body: JSON.stringify({ goalsHome: 0, goalsAway: 0 }),
     });
 
-    const list = await json<Array<{ id: number; playedCount: number }>>(
+    const list = await json<{ items: Array<{ id: number; playedCount: number }> }>(
       await app.request('/api/v1/simulations'),
     );
-    const sim = list.find((entry) => entry.id === id);
+    const sim = list.items.find((entry) => entry.id === id);
     expect(sim?.playedCount).toBe(2);
   });
 
@@ -238,11 +294,11 @@ describe('HTTP API', () => {
     });
     expect(res.status).toBe(200);
 
-    const list = await json<Array<{ id: number }>>(
+    const list = await json<{ items: Array<{ id: number }> }>(
       await app.request('/api/v1/simulations'),
     );
-    expect(list[0].id).toBe(first.id);
-    expect(list.some((s) => s.id === second.id)).toBe(true);
+    expect(list.items[0].id).toBe(first.id);
+    expect(list.items.some((s) => s.id === second.id)).toBe(true);
   });
 
   it('GET /teams returns all teams', async () => {

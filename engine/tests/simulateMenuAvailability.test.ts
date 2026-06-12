@@ -3,6 +3,7 @@ import {
   getDisabledSimulateMenuKeys,
   isSimulateMenuItemDisabled,
 } from '../src/engine/simulateMenuAvailability.js';
+import { SIMULATION_KNOCKOUT_ROUNDS } from '../src/engine/simulationRounds.js';
 
 const fixtures = [
   { matchNumber: 1, group: 'A', round: 'Matchday 1' },
@@ -57,5 +58,45 @@ describe('simulateMenuAvailability', () => {
     expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'round_of_32')).toBe(true);
     expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'round_of_16')).toBe(false);
     expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'quarter_final')).toBe(false);
+  });
+
+  it('disables a knockout round once that round is fully played', () => {
+    const roundOf32Matches = new Set(SIMULATION_KNOCKOUT_ROUNDS[0]!.matches);
+    const matchNumbers = new Set([
+      ...fixtures.map((fixture) => fixture.matchNumber),
+      ...roundOf32Matches,
+    ]);
+    const matches = [...matchNumbers].map((matchNumber) => ({
+      matchNumber,
+      status: roundOf32Matches.has(matchNumber) ? ('played' as const) : ('scheduled' as const),
+    }));
+
+    expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'round_of_32')).toBe(true);
+    expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'round_of_16')).toBe(false);
+  });
+
+  it('does not disable third place when only the final is played', () => {
+    const matchNumbers = new Set([
+      ...fixtures.map((fixture) => fixture.matchNumber),
+      103,
+      104,
+    ]);
+    const matches = [...matchNumbers].map((matchNumber) => ({
+      matchNumber,
+      status: matchNumber === 104 ? ('played' as const) : ('scheduled' as const),
+    }));
+
+    expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'third_place')).toBe(false);
+    expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'final')).toBe(true);
+  });
+
+  it('disables a group round once that round is fully played', () => {
+    const matches = fixtures.map((fixture) => ({
+      matchNumber: fixture.matchNumber,
+      status: fixture.matchNumber === 1 ? ('played' as const) : ('scheduled' as const),
+    }));
+
+    expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'group:1')).toBe(true);
+    expect(isSimulateMenuItemDisabled({ fixtures, matches }, 'group:2')).toBe(false);
   });
 });

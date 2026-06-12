@@ -15,7 +15,6 @@ import type {
   ActualResultsState,
   MasterGroupState,
   PublicMeta,
-  SimulationListEntry,
   Team,
   TournamentState,
 } from './types.js';
@@ -37,7 +36,6 @@ export function App() {
   const publicMode = isPublicMode();
   const [simulationId, setSimulationId] = useState<number | null>(null);
   const [state, setState] = useState<TournamentState | null>(null);
-  const [simulations, setSimulations] = useState<SimulationListEntry[]>([]);
   const [teams, setTeams] = useState<Team[]>([]);
   const [layout, setLayout] = useState<'horizontal' | 'vertical'>('vertical');
   const [selectedMatchNumber, setSelectedMatchNumber] = useState<number | null>(null);
@@ -66,12 +64,6 @@ export function App() {
   const [toast, setToast] = useState<string | null>(null);
   const [publicMeta, setPublicMeta] = useState<PublicMeta | null>(null);
   const [upsetVariance, setUpsetVariance] = useState(DEFAULT_UPSET_VARIANCE);
-
-  const refreshSimulations = useCallback(async () => {
-    if (publicMode) return;
-    const list = await api.listSimulations();
-    setSimulations(list);
-  }, [publicMode]);
 
   const refreshState = useCallback(
     async (id: number) => {
@@ -108,7 +100,6 @@ export function App() {
         if (publicMode && meta) {
           setPublicMeta(meta);
         } else if (!publicMode) {
-          await refreshSimulations();
           setTeams(await api.listTeams());
         }
       } catch (err) {
@@ -117,7 +108,7 @@ export function App() {
         setLoading(false);
       }
     })();
-  }, [publicMode, refreshSimulations]);
+  }, [publicMode]);
 
   const phase = state?.simulation.phase ?? 'group';
 
@@ -136,7 +127,6 @@ export function App() {
     await api.activateSimulation(id);
     setSimulationId(id);
     await refreshState(id);
-    await refreshSimulations();
     setShowSimulations(false);
     setSelectedMatchNumber(null);
     setEditingMatchNumber(null);
@@ -155,7 +145,6 @@ export function App() {
       } else {
         await api.setMatchScore(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId);
         await refreshState(simulationId);
-        await refreshSimulations();
       }
       setEditingMatchNumber(null);
     } catch (err) {
@@ -175,7 +164,6 @@ export function App() {
       } else {
         await api.clearMatchScore(simulationId, matchNumber);
         await refreshState(simulationId);
-        await refreshSimulations();
       }
       setEditingMatchNumber(null);
     } catch (err) {
@@ -251,20 +239,18 @@ export function App() {
 
   const handleRenameSimulation = async (id: number, name: string) => {
     await api.renameSimulation(id, name);
-    await refreshSimulations();
     if (id === simulationId) await refreshState(id);
   };
 
   const handleDeleteSimulation = async (id: number) => {
     await api.deleteSimulation(id);
-    const list = await api.listSimulations();
-    setSimulations(list);
     if (id === simulationId) {
-      if (list.length === 0) {
+      const page = await api.listSimulations(1, 1);
+      if (page.total === 0) {
         const sim = await api.createSimulation('Simulation');
         await switchSimulation(sim.id);
       } else {
-        await switchSimulation(list[0].id);
+        await switchSimulation(page.items[0].id);
       }
     }
   };
@@ -293,7 +279,6 @@ export function App() {
       } else {
         const result = await api.simulateGroupPhase(simulationId, games, upsetVariance);
         await refreshState(simulationId);
-        await refreshSimulations();
         if (appView === 'predictions') await refreshMasterState();
         setToast(
           `Round ${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
@@ -328,7 +313,6 @@ export function App() {
       } else {
         const result = await api.simulateKnockouts(simulationId, throughRound, upsetVariance);
         await refreshState(simulationId);
-        await refreshSimulations();
         setToast(
           `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
         );
@@ -354,7 +338,6 @@ export function App() {
         setMonteCarloProgress({ completed, total });
       });
       setMonteCarloResult(result);
-      await refreshSimulations();
       if (appView === 'predictions') await refreshMasterState();
       setToast(
         `Bulk simulate: saved ${result.count.toLocaleString()} simulations (#${result.firstSimulationId}–${result.lastSimulationId})`,
@@ -380,7 +363,6 @@ export function App() {
       } else {
         const result = await api.simulateMatch(simulationId, matchNumber, upsetVariance);
         await refreshState(simulationId);
-        await refreshSimulations();
         if (appView === 'predictions') await refreshMasterState();
         setEditingMatchNumber(null);
         setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
@@ -505,7 +487,6 @@ export function App() {
 
       {showSimulations && (
         <SimulationManagerModal
-          simulations={simulations}
           activeSimulationId={simulationId}
           onClose={() => setShowSimulations(false)}
           onSwitch={switchSimulation}

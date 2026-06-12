@@ -1,4 +1,4 @@
-import { eq, and, desc, sql, inArray } from 'drizzle-orm';
+import { eq, and, desc, sql, inArray, count } from 'drizzle-orm';
 import type { Db } from './client.js';
 import * as schema from './schema.js';
 import type {
@@ -6,6 +6,7 @@ import type {
   Fixture,
   Simulation,
   SimulationListEntry,
+  SimulationListPage,
   SimulationMatch,
   GroupMembership,
   TournamentState,
@@ -18,7 +19,7 @@ import type {
 } from '../engine/types.js';
 import { chooseConsensus, getConsensusMode } from '../engine/consensus.js';
 import { winnerFromGoals } from '../engine/matchSimulator.js';
-import { MatchLockedError, ActualResultError } from './errors.js';
+import { MatchLockedError, MatchClearBlockedError, ActualResultError } from './errors.js';
 import {
   collectPlayedGroupMatches,
   computeAllGroupStandings,
@@ -36,6 +37,9 @@ import {
 } from '../engine/tournamentState.js';
 import {
   canClearActualResult,
+  canClearSimulationResult,
+  canModifyActualResult,
+  canModifySimulationResult,
   computeActualPhase,
   KNOCKOUT_ELIGIBLE_PHASES,
 } from '../engine/phase.js';
@@ -196,6 +200,62 @@ export class Repository {
       ...simulation,
       playedCount: playedBySimulationId.get(simulation.id) ?? 0,
     }));
+  }
+
+  countSimulations(): number {
+    const row = this.db.select({ total: count() }).from(schema.simulations).get();
+    return Number(row?.total ?? 0);
+  }
+
+  listSimulationsWithCountsPage(page: number, pageSize: number): SimulationListPage {
+    const total = this.countSimulations();
+    if (total === 0) {
+      return { items: [], total: 0, page, pageSize };
+    }
+
+    const offset = (page - 1) * pageSize;
+    const simulations = this.db
+      .select()
+      .from(schema.simulations)
+      .orderBy(desc(schema.simulations.updatedAt))
+      .limit(pageSize)
+      .offset(offset)
+      .all()
+      .map(mapSimulation);
+
+    if (simulations.length === 0) {
+      return { items: [], total, page, pageSize };
+    }
+
+    const simulationIds = simulations.map((simulation) => simulation.id);
+    const rows = this.db
+      .select({
+        simulationId: schema.simulationMatches.simulationId,
+        playedCount: sql<number>`count(*)`,
+      })
+      .from(schema.simulationMatches)
+      .where(
+        and(
+          eq(schema.simulationMatches.status, 'played'),
+          inArray(schema.simulationMatches.simulationId, simulationIds),
+        ),
+      )
+      .groupBy(schema.simulationMatches.simulationId)
+      .all();
+
+    const playedBySimulationId = new Map(
+      rows.map((row) => [row.simulationId, Number(row.playedCount)]),
+    );
+
+    return {
+      items: simulations.map((simulation) => ({
+        ...simulation,
+        playedCount: playedBySimulationId.get(simulation.id) ?? 0,
+      })),
+      total,
+      page,
+      pageSize,
+    };
   }
 
   updateSimulationName(id: number, name: string): Simulation | null {
@@ -367,8 +427,16 @@ export class Repository {
         throw new ActualResultError('winnerTeamId does not match the goal difference');
       }
       winnerTeamId = derived;
-    } else if (fixture.group != null) {
+    } else     if (fixture.group != null) {
       winnerTeamId = null;
+    }
+
+    const fixtures = this.getFixtures();
+    const actualResults = this.getActualResults();
+    if (!canModifyActualResult(matchNumber, actualResults, fixtures)) {
+      throw new ActualResultError(
+        `Cannot change match ${matchNumber}: later tournament round results exist (clear those first)`,
+      );
     }
 
     const now = new Date().toISOString();
@@ -680,6 +748,17 @@ export class Repository {
     goalsAway: number,
     winnerTeamId: number | null,
   ): void {
+    if (this.isMatchLocked(matchNumber)) {
+      throw new MatchLockedError(matchNumber);
+    }
+
+    const fixtures = this.getFixtures();
+    const matches = this.getSimulationMatches(simulationId);
+    const locked = new Set(this.getActualResults().map((result) => result.matchNumber));
+    if (!canModifySimulationResult(matchNumber, matches, fixtures, locked)) {
+      throw new MatchClearBlockedError(matchNumber);
+    }
+
     this.persistMatchResult(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId);
   }
 
@@ -687,6 +766,14 @@ export class Repository {
     if (this.isMatchLocked(matchNumber)) {
       throw new MatchLockedError(matchNumber);
     }
+
+    const fixtures = this.getFixtures();
+    const matches = this.getSimulationMatches(simulationId);
+    const locked = new Set(this.getActualResults().map((result) => result.matchNumber));
+    if (!canClearSimulationResult(matchNumber, matches, fixtures, locked)) {
+      throw new MatchClearBlockedError(matchNumber);
+    }
+
     this.db
       .update(schema.simulationMatches)
       .set({

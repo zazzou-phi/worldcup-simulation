@@ -2,7 +2,10 @@ import {
   isGroupFixtureWithinGamesTarget,
   type GroupGamesTarget,
 } from './groupSimulation.js';
-import { SIMULATION_KNOCKOUT_ROUNDS } from './simulationRounds.js';
+import {
+  knockoutRoundTierIndex,
+  SIMULATION_KNOCKOUT_ROUNDS,
+} from './simulationRounds.js';
 import type { Fixture, SimulationMatch } from './types.js';
 
 export interface SimulateMenuAvailabilityInput {
@@ -36,10 +39,9 @@ function isExclusiveToGroupRound(fixture: Pick<Fixture, 'group' | 'round'>, roun
 
 function furthestKnockoutRoundIndex(played: Set<number>): number {
   let furthest = -1;
-  for (let i = 0; i < SIMULATION_KNOCKOUT_ROUNDS.length; i++) {
-    const round = SIMULATION_KNOCKOUT_ROUNDS[i]!;
+  for (const round of SIMULATION_KNOCKOUT_ROUNDS) {
     if (round.matches.some((matchNumber) => played.has(matchNumber))) {
-      furthest = i;
+      furthest = Math.max(furthest, knockoutRoundTierIndex(round.name));
     }
   }
   return furthest;
@@ -59,12 +61,37 @@ function hasPlayedExclusiveGroupRound(
   );
 }
 
+function groupRoundFixtures(
+  fixtures: SimulateMenuAvailabilityInput['fixtures'],
+  round: GroupGamesTarget,
+) {
+  return fixtures.filter(
+    (fixture) => fixture.group != null && isGroupFixtureWithinGamesTarget(fixture as Fixture, round),
+  );
+}
+
+function isGroupRoundComplete(
+  fixtures: SimulateMenuAvailabilityInput['fixtures'],
+  played: Set<number>,
+  round: GroupGamesTarget,
+): boolean {
+  const roundFixtures = groupRoundFixtures(fixtures, round);
+  return roundFixtures.length > 0 && roundFixtures.every((fixture) => played.has(fixture.matchNumber));
+}
+
+function isKnockoutRoundComplete(played: Set<number>, roundIndex: number): boolean {
+  const round = SIMULATION_KNOCKOUT_ROUNDS[roundIndex];
+  if (!round) return false;
+  return round.matches.every((matchNumber) => played.has(matchNumber));
+}
+
 function isGroupRoundMenuDisabled(
   fixtures: SimulateMenuAvailabilityInput['fixtures'],
   played: Set<number>,
   round: GroupGamesTarget,
 ): boolean {
   if (hasPlayedKnockoutMatch(played)) return true;
+  if (isGroupRoundComplete(fixtures, played, round)) return true;
   if (round === 1) {
     return hasPlayedExclusiveGroupRound(fixtures, played, 2) || hasPlayedExclusiveGroupRound(fixtures, played, 3);
   }
@@ -89,7 +116,11 @@ export function isSimulateMenuItemDisabled(
   const knockoutIndex = SIMULATION_KNOCKOUT_ROUNDS.findIndex((round) => round.name === key);
   if (knockoutIndex < 0) return false;
 
-  return furthestKnockoutRoundIndex(played) > knockoutIndex;
+  const tierIndex = knockoutRoundTierIndex(key);
+  return (
+    furthestKnockoutRoundIndex(played) > tierIndex ||
+    isKnockoutRoundComplete(played, knockoutIndex)
+  );
 }
 
 export function getDisabledSimulateMenuKeys(

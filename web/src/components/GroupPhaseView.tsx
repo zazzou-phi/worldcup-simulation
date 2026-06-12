@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { canClearSimulationResult, canModifySimulationResult } from '@shared/engine/phase.js';
 import { filterGroupMatchesByTeam } from '@shared/engine/matchFilters.js';
 import { teamCode } from '@shared/lib/teamCodes.js';
 import { deriveGroupStandingsFromState } from '../lib/deriveGroupStandings.js';
@@ -68,6 +69,23 @@ export function GroupPhaseView({
     [state],
   );
 
+  const lockedMatchNumbers = useMemo(
+    () => new Set(state.actualResults.map((result) => result.matchNumber)),
+    [state.actualResults],
+  );
+
+  const canModifyMatch = useCallback(
+    (matchNumber: number) =>
+      canModifySimulationResult(matchNumber, state.matches, state.fixtures, lockedMatchNumbers),
+    [state.matches, state.fixtures, lockedMatchNumbers],
+  );
+
+  const canClearMatch = useCallback(
+    (matchNumber: number) =>
+      canClearSimulationResult(matchNumber, state.matches, state.fixtures, lockedMatchNumbers),
+    [state.matches, state.fixtures, lockedMatchNumbers],
+  );
+
   return (
     <GroupPhaseLayout
       layout={layout}
@@ -93,6 +111,8 @@ export function GroupPhaseView({
           editingMatchNumber={editingMatchNumber}
           filterTeamLabel={filterTeamLabel}
           actualResults={state.actualResults}
+          canClearMatch={canClearMatch}
+          canModifyMatch={canModifyMatch}
           simulating={simulating}
           onSelect={onSelectMatch}
           onStartEdit={onStartEdit}

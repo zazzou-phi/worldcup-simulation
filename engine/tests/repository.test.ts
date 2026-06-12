@@ -155,6 +155,21 @@ describe('repository integration', () => {
     expect(() => repo.clearMatchResult(sim.id, 1)).toThrow(/locked/);
   });
 
+  it('blocks changing simulation results when later round results exist', () => {
+    const sim = repo.createSimulation('Cascade');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    repo.updateMatchResult(sim.id, 2, 1, 0, 32);
+    const g2Fixture = repo.getFixtures().find((f) => f.matchNumber === 3)!;
+    repo.updateMatchResult(sim.id, 3, 1, 0, g2Fixture.teamHomeId!);
+
+    expect(() => repo.updateMatchResult(sim.id, 1, 0, 0, null)).toThrow(/later tournament round/);
+    expect(() => repo.clearMatchResult(sim.id, 1)).toThrow(/later tournament round/);
+    repo.clearMatchResult(sim.id, 3);
+    repo.clearMatchResult(sim.id, 1);
+    const match = repo.getSimulationMatches(sim.id).find((m) => m.matchNumber === 1)!;
+    expect(match.status).toBe('scheduled');
+  });
+
   it('clears actual results and leaves new simulations scheduled', () => {
     repo.setActualResult(1, 2, 1, 18);
     repo.clearActualResult(1);

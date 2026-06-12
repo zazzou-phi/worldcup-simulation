@@ -59,6 +59,13 @@ export interface SimulationListEntry extends Simulation {
   playedCount: number;
 }
 
+export interface SimulationListPage {
+  items: SimulationListEntry[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
 export interface StandingRow {
   teamId: number;
   team: Team;

@@ -31,6 +31,8 @@ interface Props {
   ) => void;
   onCancelEdit: () => void;
   onClear: (matchNumber: number) => void;
+  canClearMatch?: (matchNumber: number) => boolean;
+  canModifyMatch?: (matchNumber: number) => boolean;
 }
 
 function teamClassName(match: ResolvedMatch, side: 'home' | 'away'): string {
@@ -129,6 +131,7 @@ export function KnockoutBracket({
   onSave,
   onCancelEdit,
   onClear,
+  canModifyMatch,
 }: Props) {
   const byNumber = new Map(matches.map((m) => [m.fixture.matchNumber, m]));
   const rows = computeBracketRows();
@@ -157,6 +160,8 @@ export function KnockoutBracket({
                 const m = byNumber.get(num);
                 if (!m) return null;
                 const large = num === FINAL_MATCH_NUMBER;
+                const editable =
+                  !m.isLocked && (canModifyMatch == null || canModifyMatch(num));
                 return (
                   <div
                     key={num}
@@ -169,7 +174,7 @@ export function KnockoutBracket({
                       editing={num === editingMatchNumber}
                       large={large}
                       simulating={simulating}
-                      canEdit
+                      canEdit={editable}
                       onSelect={() => onSelect(num === selectedMatchNumber ? null : num)}
                       onStartEdit={() => onStartEdit(num)}
                       onSimulate={
@@ -200,6 +205,8 @@ export function KnockoutList({
   onSave,
   onCancelEdit,
   onClear,
+  canClearMatch,
+  canModifyMatch,
 }: Props) {
   const knockout = matches.filter((m) => m.fixture.group == null);
 
@@ -217,6 +224,8 @@ export function KnockoutList({
         onSave={onSave}
         onCancelEdit={onCancelEdit}
         onClear={onClear}
+        canClearMatch={canClearMatch}
+        canModifyMatch={canModifyMatch}
       />
     </div>
   );

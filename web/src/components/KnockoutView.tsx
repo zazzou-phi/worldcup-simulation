@@ -1,3 +1,5 @@
+import { useCallback, useMemo } from 'react';
+import { canClearSimulationResult, canModifySimulationResult } from '@shared/engine/phase.js';
 import type { TournamentState } from '../types.js';
 import { KnockoutBracket, KnockoutList } from './KnockoutBracket.js';
 import { KnockoutPhaseLayout } from './KnockoutPhaseLayout.js';
@@ -24,6 +26,22 @@ interface Props {
 
 export function KnockoutView(props: Props) {
   const { state } = props;
+  const lockedMatchNumbers = useMemo(
+    () => new Set(state.actualResults.map((result) => result.matchNumber)),
+    [state.actualResults],
+  );
+
+  const canModifyMatch = useCallback(
+    (matchNumber: number) =>
+      canModifySimulationResult(matchNumber, state.matches, state.fixtures, lockedMatchNumbers),
+    [state.matches, state.fixtures, lockedMatchNumbers],
+  );
+
+  const canClearMatch = useCallback(
+    (matchNumber: number) =>
+      canClearSimulationResult(matchNumber, state.matches, state.fixtures, lockedMatchNumbers),
+    [state.matches, state.fixtures, lockedMatchNumbers],
+  );
   const matchProps = {
     matches: state.resolvedMatches,
     selectedMatchNumber: props.selectedMatchNumber,
@@ -35,6 +53,8 @@ export function KnockoutView(props: Props) {
     onSave: props.onSaveScore,
     onCancelEdit: props.onCancelEdit,
     onClear: props.onClearScore,
+    canClearMatch,
+    canModifyMatch,
   };
 
   return (

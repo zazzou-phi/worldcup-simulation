@@ -12,7 +12,7 @@ import type {
   SimulateKnockoutsResult,
   SimulateMatchResult,
   Simulation,
-  SimulationListEntry,
+  SimulationListPage,
   Team,
   TournamentState,
 } from '../types.js';
@@ -34,7 +34,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 const privateApi = {
-  listSimulations: () => request<SimulationListEntry[]>('/api/v1/simulations'),
+  listSimulations: (page = 1, pageSize = 50) =>
+    request<SimulationListPage>(
+      `/api/v1/simulations?page=${page}&pageSize=${pageSize}`,
+    ),
 
   createSimulation: (name: string) =>
     request<Simulation>('/api/v1/simulations', {
@@ -208,7 +211,12 @@ const privateApi = {
 };
 
 const publicApiStub = {
-  listSimulations: async (): Promise<SimulationListEntry[]> => [],
+  listSimulations: async (): Promise<SimulationListPage> => ({
+    items: [],
+    total: 0,
+    page: 1,
+    pageSize: 50,
+  }),
   createSimulation: async (): Promise<Simulation> => {
     throw new Error('Not available in public mode');
   },
@@ -272,11 +280,11 @@ export function loadInitialSimulation(): Promise<{ id: number; state: Tournament
 
   if (!initialSimulationLoad) {
     initialSimulationLoad = (async () => {
-      const simulations = await api.listSimulations();
-      if (simulations.length === 0) {
+      const simulations = await api.listSimulations(1, 1);
+      if (simulations.total === 0) {
         throw new Error('No simulations available');
       }
-      const active = simulations[0];
+      const active = simulations.items[0];
       await api.activateSimulation(active.id);
       const state = await api.getState(active.id);
       return { id: active.id, state };

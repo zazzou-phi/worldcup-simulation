@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { phaseLabel } from '@shared/engine/phase.js';
+import { api } from '../api/client.js';
 import type { SimulationListEntry } from '../types.js';
 
+const PAGE_SIZE = 50;
+
 interface Props {
-  simulations: SimulationListEntry[];
   activeSimulationId: number;
   onClose: () => void;
   onSwitch: (id: number) => void;
   onCreate: (name: string) => void;
   onRename: (id: number, name: string) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: number) => Promise<void>;
 }
 
 type Mode =
@@ -19,7 +21,6 @@ type Mode =
   | { kind: 'delete'; id: number; name: string };
 
 export function SimulationManagerModal({
-  simulations,
   activeSimulationId,
   onClose,
   onSwitch,
@@ -30,14 +31,52 @@ export function SimulationManagerModal({
   const [mode, setMode] = useState<Mode>({ kind: 'list' });
   const [selectedId, setSelectedId] = useState(activeSimulationId);
   const [inputValue, setInputValue] = useState('');
+  const [simulations, setSimulations] = useState<SimulationListEntry[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  const loadPage = useCallback(async (nextPage: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await api.listSimulations(nextPage, PAGE_SIZE);
+      setSimulations(result.items);
+      setTotal(result.total);
+      setPage(result.page);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load simulations');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadPage(1);
+  }, [loadPage]);
+
+  useEffect(() => {
+    setSelectedId(activeSimulationId);
+  }, [activeSimulationId]);
 
   const handleSubmitName = () => {
-    const name = inputValue.trim() || 'Simulation';
-    if (mode.kind === 'create') onCreate(name);
-    else if (mode.kind === 'rename') onRename(mode.id, name);
-    setMode({ kind: 'list' });
-    setInputValue('');
+    void (async () => {
+      const name = inputValue.trim() || 'Simulation';
+      const action = mode.kind;
+      if (action === 'create') await onCreate(name);
+      else if (action === 'rename') await onRename(mode.id, name);
+      setMode({ kind: 'list' });
+      setInputValue('');
+      if (action === 'rename') {
+        await loadPage(page);
+      }
+    })();
   };
+
+  const selectedSimulation = simulations.find((sim) => sim.id === selectedId);
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -47,8 +86,12 @@ export function SimulationManagerModal({
         {mode.kind === 'list' && (
           <>
             <div className="sim-list">
-              {simulations.length === 0 ? (
-                <p className="muted">No simulations — create one below.</p>
+              {loading ? (
+                <p className="muted sim-list-status">Loading…</p>
+              ) : error ? (
+                <p className="modal-warning sim-list-status">{error}</p>
+              ) : simulations.length === 0 ? (
+                <p className="muted sim-list-status">No simulations — create one below.</p>
               ) : (
                 simulations.map((sim) => (
                   <div
@@ -66,6 +109,29 @@ export function SimulationManagerModal({
                 ))
               )}
             </div>
+            {total > PAGE_SIZE && (
+              <div className="sim-pagination">
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-small"
+                  disabled={loading || page <= 1}
+                  onClick={() => void loadPage(page - 1)}
+                >
+                  Previous
+                </button>
+                <span className="sim-pagination-meta muted">
+                  Page {page} of {totalPages} ({total.toLocaleString()} total)
+                </span>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-small"
+                  disabled={loading || page >= totalPages}
+                  onClick={() => void loadPage(page + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
             <div className="modal-actions">
               <button type="button" className="btn" onClick={() => onSwitch(selectedId)}>
                 Open
@@ -83,12 +149,15 @@ export function SimulationManagerModal({
               <button
                 type="button"
                 className="btn btn-ghost"
+                disabled={!selectedSimulation}
                 onClick={() => {
-                  const sim = simulations.find((s) => s.id === selectedId);
-                  if (sim) {
-                    setMode({ kind: 'rename', id: sim.id, initialName: sim.name });
-                    setInputValue(sim.name);
-                  }
+                  if (!selectedSimulation) return;
+                  setMode({
+                    kind: 'rename',
+                    id: selectedSimulation.id,
+                    initialName: selectedSimulation.name,
+                  });
+                  setInputValue(selectedSimulation.name);
                 }}
               >
                 Rename
@@ -96,9 +165,14 @@ export function SimulationManagerModal({
               <button
                 type="button"
                 className="btn btn-danger"
+                disabled={!selectedSimulation}
                 onClick={() => {
-                  const sim = simulations.find((s) => s.id === selectedId);
-                  if (sim) setMode({ kind: 'delete', id: sim.id, name: sim.name });
+                  if (!selectedSimulation) return;
+                  setMode({
+                    kind: 'delete',
+                    id: selectedSimulation.id,
+                    name: selectedSimulation.name,
+                  });
                 }}
               >
                 Delete
@@ -147,8 +221,13 @@ export function SimulationManagerModal({
                 type="button"
                 className="btn btn-danger"
                 onClick={() => {
-                  onDelete(mode.id);
-                  setMode({ kind: 'list' });
+                  void (async () => {
+                    await onDelete(mode.id);
+                    setMode({ kind: 'list' });
+                    const nextPage =
+                      simulations.length === 1 && page > 1 ? page - 1 : page;
+                    await loadPage(nextPage);
+                  })();
                 }}
               >
                 Confirm delete

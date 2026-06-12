@@ -8,6 +8,8 @@ import { Repository } from '../src/db/repository.js';
 import { SimulationRunner } from '../src/simulation/runner.js';
 import {
   canClearActualResult,
+  canClearSimulationResult,
+  canModifySimulationResult,
   computeActualPhase,
   getFixtureResultPhase,
   isGroupStagePhase,
@@ -57,6 +59,29 @@ describe('simulation phase checkpoints', () => {
     runner.simulateKnockoutsUpTo(sim.id);
     const state = repo.buildTournamentState(sim.id)!;
     expect(state.simulation.phase).toBe('complete');
+  });
+
+  it('canModifySimulationResult allows same-round edits but blocks earlier rounds', () => {
+    const fixtures = repo.getFixtures();
+    const sim = repo.createSimulation('Modify rules');
+    runner.simulateGroupPhaseUpTo(sim.id, 3);
+    runner.simulateKnockoutsUpTo(sim.id, 'final');
+    const matches = repo.getSimulationMatches(sim.id);
+
+    expect(canModifySimulationResult(97, matches, fixtures)).toBe(false);
+    expect(canModifySimulationResult(104, matches, fixtures)).toBe(true);
+  });
+
+  it('canModifySimulationResult treats third place and final as the same round', () => {
+    const fixtures = repo.getFixtures();
+    const sim = repo.createSimulation('Finals pair');
+    runner.simulateGroupPhaseUpTo(sim.id, 3);
+    runner.simulateKnockoutsUpTo(sim.id, 'semi_final');
+    repo.updateMatchResult(sim.id, 104, 2, 1, 18);
+    const matches = repo.getSimulationMatches(sim.id);
+
+    expect(canModifySimulationResult(103, matches, fixtures)).toBe(true);
+    expect(canModifySimulationResult(104, matches, fixtures)).toBe(true);
   });
 
   it('advances to quarter_final when simulating knockouts through that round', () => {
@@ -109,5 +134,22 @@ describe('actual result phase', () => {
     const withG2 = repo.getActualResults();
     expect(canClearActualResult(1, withG2, fixtures)).toBe(false);
     expect(canClearActualResult(3, withG2, fixtures)).toBe(true);
+  });
+
+  it('canClearSimulationResult allows same-round clears but blocks earlier rounds', () => {
+    const fixtures = repo.getFixtures();
+    const sim = repo.createSimulation('Clear rules');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    repo.updateMatchResult(sim.id, 2, 1, 0, 32);
+    let matches = repo.getSimulationMatches(sim.id);
+
+    expect(canClearSimulationResult(1, matches, fixtures)).toBe(true);
+    expect(canClearSimulationResult(2, matches, fixtures)).toBe(true);
+
+    const g2Fixture = fixtures.find((f) => f.matchNumber === 3)!;
+    repo.updateMatchResult(sim.id, 3, 1, 0, g2Fixture.teamHomeId!);
+    matches = repo.getSimulationMatches(sim.id);
+    expect(canClearSimulationResult(1, matches, fixtures)).toBe(false);
+    expect(canClearSimulationResult(3, matches, fixtures)).toBe(true);
   });
 });

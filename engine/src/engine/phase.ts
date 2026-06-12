@@ -141,7 +141,7 @@ export function getFixtureResultPhase(fixture: Fixture): Phase | null {
     quarter_final: 'round_of_16',
     semi_final: 'quarter_final',
     third_place: 'semi_final',
-    final: 'third_place',
+    final: 'semi_final',
   };
 
   for (const round of SIMULATION_KNOCKOUT_ROUNDS) {
@@ -182,14 +182,12 @@ export function computeActualPhase(actualResults: ActualResultRef[], fixtures: F
   return computePhase(matchesFromActualResults(fixtures, actualResults), fixtures);
 }
 
-/** True when no actual results exist in later tournament rounds than the match's round. */
-export function canClearActualResult(
+/** True when no played results exist in later tournament rounds than the match's round. */
+export function canModifyResultInPhaseOrder(
   matchNumber: number,
-  actualResults: ActualResultRef[],
+  playedMatchNumbers: ReadonlySet<number>,
   fixtures: Fixture[],
 ): boolean {
-  if (!actualResults.some((r) => r.matchNumber === matchNumber)) return false;
-
   const fixture = fixtures.find((f) => f.matchNumber === matchNumber);
   if (!fixture) return false;
 
@@ -197,11 +195,82 @@ export function canClearActualResult(
   if (matchPhase == null) return false;
 
   const matchPhaseIdx = phaseIndex(matchPhase);
-  return !actualResults.some((r) => {
-    if (r.matchNumber === matchNumber) return false;
-    const other = fixtures.find((f) => f.matchNumber === r.matchNumber);
-    if (!other) return false;
+  for (const otherMatchNumber of playedMatchNumbers) {
+    if (otherMatchNumber === matchNumber) continue;
+    const other = fixtures.find((f) => f.matchNumber === otherMatchNumber);
+    if (!other) continue;
     const otherPhase = getFixtureResultPhase(other);
-    return otherPhase != null && phaseIndex(otherPhase) > matchPhaseIdx;
-  });
+    if (otherPhase != null && phaseIndex(otherPhase) > matchPhaseIdx) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/** True when an existing actual result may be changed or removed. */
+export function canModifyActualResult(
+  matchNumber: number,
+  actualResults: ActualResultRef[],
+  fixtures: Fixture[],
+): boolean {
+  if (!actualResults.some((result) => result.matchNumber === matchNumber)) return true;
+  return canModifyResultInPhaseOrder(
+    matchNumber,
+    new Set(actualResults.map((r) => r.matchNumber)),
+    fixtures,
+  );
+}
+
+function simulationPlayedMatchNumbers(
+  matches: ReadonlyArray<Pick<SimulationMatch, 'matchNumber' | 'status'>>,
+  lockedMatchNumbers: ReadonlySet<number> = new Set(),
+): Set<number> {
+  return new Set(
+    matches
+      .filter(
+        (match) => match.status === 'played' && !lockedMatchNumbers.has(match.matchNumber),
+      )
+      .map((match) => match.matchNumber),
+  );
+}
+
+/** True when an existing simulation result may be changed or removed. */
+export function canModifySimulationResult(
+  matchNumber: number,
+  matches: ReadonlyArray<Pick<SimulationMatch, 'matchNumber' | 'status'>>,
+  fixtures: Fixture[],
+  lockedMatchNumbers: ReadonlySet<number> = new Set(),
+): boolean {
+  const match = matches.find((row) => row.matchNumber === matchNumber);
+  const hasSimulationResult =
+    match?.status === 'played' && !lockedMatchNumbers.has(matchNumber);
+  if (!hasSimulationResult) return true;
+
+  return canModifyResultInPhaseOrder(
+    matchNumber,
+    simulationPlayedMatchNumbers(matches, lockedMatchNumbers),
+    fixtures,
+  );
+}
+
+/** True when no actual results exist in later tournament rounds than the match's round. */
+export function canClearActualResult(
+  matchNumber: number,
+  actualResults: ActualResultRef[],
+  fixtures: Fixture[],
+): boolean {
+  if (!actualResults.some((r) => r.matchNumber === matchNumber)) return false;
+  return canModifyActualResult(matchNumber, actualResults, fixtures);
+}
+
+/** True when no simulation results exist in later tournament rounds than the match's round. */
+export function canClearSimulationResult(
+  matchNumber: number,
+  matches: ReadonlyArray<Pick<SimulationMatch, 'matchNumber' | 'status'>>,
+  fixtures: Fixture[],
+  lockedMatchNumbers: ReadonlySet<number> = new Set(),
+): boolean {
+  const match = matches.find((row) => row.matchNumber === matchNumber);
+  if (!match || match.status !== 'played' || lockedMatchNumbers.has(matchNumber)) return false;
+  return canModifySimulationResult(matchNumber, matches, fixtures, lockedMatchNumbers);
 }

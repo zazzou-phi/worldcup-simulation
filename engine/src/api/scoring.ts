@@ -1,5 +1,5 @@
 import type { Repository } from '../db/repository.js';
-import { MatchLockedError } from '../db/errors.js';
+import { MatchClearBlockedError, MatchLockedError } from '../db/errors.js';
 import type { ResolvedMatch, Simulation, SimulationMatch } from '../engine/types.js';
 import { ApiError } from './errors.js';
 
@@ -134,6 +134,9 @@ export function setMatchScore(
     if (err instanceof MatchLockedError) {
       throw new ApiError(err.message, 409, 'match_locked');
     }
+    if (err instanceof MatchClearBlockedError) {
+      throw new ApiError(err.message, 409, 'match_clear_blocked');
+    }
     throw err;
   }
 
@@ -166,6 +169,9 @@ export function clearMatchScore(
   } catch (err) {
     if (err instanceof MatchLockedError) {
       throw new ApiError(err.message, 409, 'match_locked');
+    }
+    if (err instanceof MatchClearBlockedError) {
+      throw new ApiError(err.message, 409, 'match_clear_blocked');
     }
     throw err;
   }
