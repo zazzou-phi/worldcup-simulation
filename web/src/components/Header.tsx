@@ -29,6 +29,7 @@ interface Props {
   onSimulateKnockoutsThrough: (throughRound: string) => void;
   onOpenMonteCarlo: () => void;
   onOpenMasterTeamStats: () => void;
+  onClearSimulation?: () => void;
 }
 
 export function Header({
@@ -52,6 +53,7 @@ export function Header({
   onSimulateKnockoutsThrough,
   onOpenMonteCarlo,
   onOpenMasterTeamStats,
+  onClearSimulation,
 }: Props) {
   const { simulation } = state;
   const narrow = useMediaQuery(MOBILE_QUERY);
@@ -83,10 +85,15 @@ export function Header({
   const showBracketSetting = isSimulationsView && !showGroupView;
   const showRatings = isSimulationsView && !publicMode;
   const showManageSimulations = isSimulationsView && !publicMode;
+  const showClearSimulation = isSimulationsView && onClearSimulation != null;
 
   const hasTopSection = showUpsetSetting || showRatings || isPredictionsView;
   const hasBottomSection =
-    showStageSetting || showLayoutSetting || showBracketSetting || showManageSimulations;
+    showStageSetting ||
+    showLayoutSetting ||
+    showBracketSetting ||
+    showManageSimulations ||
+    showClearSimulation;
 
   const menuActive =
     (showUpsetSetting && upsetVariance !== DEFAULT_UPSET_VARIANCE) ||
@@ -195,6 +202,18 @@ export function Header({
         <button type="button" className="btn btn-ghost" onClick={onOpenSimulations}>
           Manage Simulations
         </button>
+      )}
+      {showClearSimulation && (
+        <>
+          {(hasTopSection ||
+            showStageSetting ||
+            showLayoutSetting ||
+            showBracketSetting ||
+            showManageSimulations) && <div className="header-menu-divider" role="separator" />}
+          <button type="button" className="btn btn-ghost btn-danger" onClick={onClearSimulation}>
+            Clear simulation
+          </button>
+        </>
       )}
     </HeaderDropdownMenu>
   ) : null;

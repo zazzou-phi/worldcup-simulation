@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { isKnockoutStagePhase } from '@shared/engine/phase.js';
 import { api, isPublicMode, loadInitialSimulation } from './api/client.js';
 import { loadPublicMeta } from './api/staticClient.js';
-import { persistLocalPrediction } from './lib/localPredictionStorage.js';
+import { clearStoredPrediction, persistLocalPrediction } from './lib/localPredictionStorage.js';
 import {
   clearLocalMatchScore,
   LocalSimulationError,
@@ -230,6 +230,20 @@ export function App() {
     }
   };
 
+  const handleClearSimulation = async () => {
+    try {
+      clearStoredPrediction();
+      const { state: fresh } = await loadInitialSimulation();
+      setState(fresh);
+      setSelectedMatchNumber(null);
+      setEditingMatchNumber(null);
+      setViewKnockout(isKnockoutStagePhase(fresh.simulation.phase));
+      setToast('Simulation cleared');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to clear simulation');
+    }
+  };
+
   const handleCreateSimulation = async (name: string) => {
     const sim = await api.createSimulation(name);
     await switchSimulation(sim.id);
@@ -420,6 +434,7 @@ export function App() {
           setShowMonteCarlo(true);
         }}
         onOpenMasterTeamStats={() => setShowMasterTeamStats(true)}
+        onClearSimulation={publicMode ? handleClearSimulation : undefined}
       />
 
       {toast && (
