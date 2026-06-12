@@ -7,6 +7,7 @@ import { SortableTh } from './SortableTh.js';
 
 interface Props {
   onClose: () => void;
+  predictionId?: number | null;
   allowRebuild?: boolean;
 }
 
@@ -25,7 +26,7 @@ const STATS_COMPARATORS: Record<StatsSortKey, (a: MasterTeamStatsRow, b: MasterT
     titles: (a, b) => a.championWins - b.championWins || a.teamName.localeCompare(b.teamName),
   };
 
-export function MasterTeamStatsModal({ onClose, allowRebuild = true }: Props) {
+export function MasterTeamStatsModal({ onClose, predictionId = null, allowRebuild = true }: Props) {
   const [stats, setStats] = useState<MasterTeamStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [rebuilding, setRebuilding] = useState(false);
@@ -41,8 +42,10 @@ export function MasterTeamStatsModal({ onClose, allowRebuild = true }: Props) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const next = await api.getMasterTeamStats();
+        const next = await api.getMasterTeamStats(predictionId ?? undefined);
         if (!cancelled) setStats(next);
       } catch (err) {
         if (!cancelled) {
@@ -55,13 +58,13 @@ export function MasterTeamStatsModal({ onClose, allowRebuild = true }: Props) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [predictionId]);
 
   const handleRebuild = async () => {
     setRebuilding(true);
     setError(null);
     try {
-      const next = await api.rebuildMasterTeamStats();
+      const next = await api.rebuildMasterTeamStats(predictionId ?? undefined);
       setStats(next);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to rebuild team stats');
@@ -76,8 +79,8 @@ export function MasterTeamStatsModal({ onClose, allowRebuild = true }: Props) {
         <h2>Team statistics</h2>
         <p className="muted master-team-stats-desc">
           {allowRebuild
-            ? 'Read from persisted database aggregates (updated as simulations change). Goals per simulation is the average total goals scored by each team in simulations where they played at least one match. Championships count finals won across completed simulations.'
-            : 'Aggregate statistics across all simulations. Goals per simulation is the average total goals scored by each team in simulations where they played at least one match. Championships count finals won across completed simulations.'}
+            ? 'Read from persisted database aggregates for the active prediction. Goals per simulation is the average total goals scored by each team in simulations where they played at least one match. Championships count finals won across completed simulations in the selection.'
+            : 'Aggregate statistics for the exported prediction. Goals per simulation is the average total goals scored by each team in simulations where they played at least one match. Championships count finals won across completed simulations.'}
         </p>
 
         {loading && <p className="muted">Loading…</p>}
@@ -87,7 +90,7 @@ export function MasterTeamStatsModal({ onClose, allowRebuild = true }: Props) {
           <>
             <p className="master-team-stats-summary">
               {stats.simulationCount.toLocaleString()} simulation
-              {stats.simulationCount === 1 ? '' : 's'} in database
+              {stats.simulationCount === 1 ? '' : 's'} in selection
               {stats.teams.length > 0 && (
                 <>
                   {' '}
@@ -100,7 +103,7 @@ export function MasterTeamStatsModal({ onClose, allowRebuild = true }: Props) {
               <p className="muted">
                 {stats.simulationCount > 0
                   ? 'No persisted team stats yet. Rebuild once from your existing simulation data.'
-                  : 'No simulations in the database yet.'}
+                  : 'No simulations in this prediction yet.'}
               </p>
             ) : (
               <div className="ratings-table-wrap">

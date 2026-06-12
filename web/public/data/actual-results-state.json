@@ -1,5 +1,27 @@
 {
-  "actualResults": [],
+  "actualResults": [
+    {
+      "matchNumber": 1,
+      "goalsHome": 2,
+      "goalsAway": 0,
+      "winnerTeamId": 18,
+      "recordedAt": "2026-06-12T22:43:35.587Z"
+    },
+    {
+      "matchNumber": 2,
+      "goalsHome": 2,
+      "goalsAway": 1,
+      "winnerTeamId": 32,
+      "recordedAt": "2026-06-12T22:43:43.217Z"
+    },
+    {
+      "matchNumber": 7,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-12T22:43:50.532Z"
+    }
+  ],
   "phase": "group",
   "groupStandings": [
     {
@@ -20,14 +42,14 @@
             "offensiveRating": 1.1271671963752086,
             "defensiveRating": 0.7338536503316928
           },
-          "played": 0,
-          "won": 0,
+          "played": 1,
+          "won": 1,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 0,
+          "goalsFor": 2,
           "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
+          "goalDifference": 2,
+          "points": 3,
           "position": 1
         },
         {
@@ -45,14 +67,14 @@
             "offensiveRating": 0.8518946409226156,
             "defensiveRating": 0.9709836426465159
           },
-          "played": 0,
-          "won": 0,
+          "played": 1,
+          "won": 1,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "goalDifference": 1,
+          "points": 3,
           "position": 2
         },
         {
@@ -70,13 +92,13 @@
             "offensiveRating": 0.8042923787979221,
             "defensiveRating": 1.0284515723378675
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
           "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
+          "lost": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 2,
+          "goalDifference": -1,
           "points": 0,
           "position": 3
         },
@@ -95,13 +117,13 @@
             "offensiveRating": 0.468699978142208,
             "defensiveRating": 1.7648299555565885
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
           "drawn": 0,
-          "lost": 0,
+          "lost": 1,
           "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
+          "goalsAgainst": 2,
+          "goalDifference": -2,
           "points": 0,
           "position": 4
         }
@@ -110,31 +132,6 @@
     {
       "groupLetter": "B",
       "rows": [
-        {
-          "teamId": 14,
-          "team": {
-            "id": 14,
-            "name": "Switzerland",
-            "countryCode": "CH",
-            "flag": "🇨🇭",
-            "rank": 15,
-            "rating": 1894,
-            "total": 896,
-            "goalsFor": 1339,
-            "goalsAgainst": 1483,
-            "offensiveRating": 1.2028666456016333,
-            "defensiveRating": 0.6876703786065674
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 1
-        },
         {
           "teamId": 24,
           "team": {
@@ -150,15 +147,15 @@
             "offensiveRating": 0.9136639719561283,
             "defensiveRating": 0.9053391476333772
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
           "goalDifference": 0,
-          "points": 0,
-          "position": 2
+          "points": 1,
+          "position": 1
         },
         {
           "teamId": 66,
@@ -174,6 +171,31 @@
             "goalsAgainst": 385,
             "offensiveRating": 0.5639484565881524,
             "defensiveRating": 1.466757736333637
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "points": 1,
+          "position": 2
+        },
+        {
+          "teamId": 14,
+          "team": {
+            "id": 14,
+            "name": "Switzerland",
+            "countryCode": "CH",
+            "flag": "🇨🇭",
+            "rank": 15,
+            "rating": 1894,
+            "total": 896,
+            "goalsFor": 1339,
+            "goalsAgainst": 1483,
+            "offensiveRating": 1.2028666456016333,
+            "defensiveRating": 0.6876703786065674
           },
           "played": 0,
           "won": 0,
@@ -1264,7 +1286,7 @@
     }
   ],
   "qualifyingThirdGroups": [
-    "A",
+    "B",
     "C",
     "D",
     "F",
@@ -1291,10 +1313,10 @@
         "matchNumber": 1,
         "teamHomeId": 18,
         "teamAwayId": 78,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 2,
+        "goalsAway": 0,
+        "winnerTeamId": 18,
+        "status": "played"
       },
       "homeTeam": {
         "id": 18,
@@ -1324,7 +1346,7 @@
       },
       "homeLabel": "Mexico",
       "awayLabel": "South Africa",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1343,10 +1365,10 @@
         "matchNumber": 2,
         "teamHomeId": 32,
         "teamAwayId": 36,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 2,
+        "goalsAway": 1,
+        "winnerTeamId": 32,
+        "status": "played"
       },
       "homeTeam": {
         "id": 32,
@@ -1376,7 +1398,7 @@
       },
       "homeLabel": "South Korea",
       "awayLabel": "Czechia",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1603,10 +1625,10 @@
         "matchNumber": 7,
         "teamHomeId": 24,
         "teamAwayId": 66,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 1,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 24,
@@ -1636,7 +1658,7 @@
       },
       "homeLabel": "Canada",
       "awayLabel": "Bosnia and Herzegovina",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5034,7 +5056,7 @@
       "result": {
         "matchNumber": 73,
         "teamHomeId": 32,
-        "teamAwayId": 24,
+        "teamAwayId": 66,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -5054,20 +5076,20 @@
         "defensiveRating": 0.9709836426465159
       },
       "awayTeam": {
-        "id": 24,
-        "name": "Canada",
-        "countryCode": "CA",
-        "flag": "🇨🇦",
-        "rank": 25,
-        "rating": 1784,
-        "total": 488,
-        "goalsFor": 626,
-        "goalsAgainst": 623,
-        "offensiveRating": 0.9136639719561283,
-        "defensiveRating": 0.9053391476333772
+        "id": 66,
+        "name": "Bosnia and Herzegovina",
+        "countryCode": "BA",
+        "flag": "🇧🇦",
+        "rank": 67,
+        "rating": 1591,
+        "total": 280,
+        "goalsFor": 393,
+        "goalsAgainst": 385,
+        "offensiveRating": 0.5639484565881524,
+        "defensiveRating": 1.466757736333637
       },
       "homeLabel": "South Korea",
-      "awayLabel": "Canada",
+      "awayLabel": "Bosnia and Herzegovina",
       "isLocked": false
     },
     {
@@ -5346,7 +5368,7 @@
       "result": {
         "matchNumber": 79,
         "teamHomeId": 18,
-        "teamAwayId": 36,
+        "teamAwayId": 14,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -5366,20 +5388,20 @@
         "defensiveRating": 0.7338536503316928
       },
       "awayTeam": {
-        "id": 36,
-        "name": "Czechia",
-        "countryCode": "CZ",
-        "flag": "🇨🇿",
-        "rank": 37,
-        "rating": 1733,
-        "total": 883,
-        "goalsFor": 1626,
-        "goalsAgainst": 1098,
-        "offensiveRating": 0.8042923787979221,
-        "defensiveRating": 1.0284515723378675
+        "id": 14,
+        "name": "Switzerland",
+        "countryCode": "CH",
+        "flag": "🇨🇭",
+        "rank": 15,
+        "rating": 1894,
+        "total": 896,
+        "goalsFor": 1339,
+        "goalsAgainst": 1483,
+        "offensiveRating": 1.2028666456016333,
+        "defensiveRating": 0.6876703786065674
       },
       "homeLabel": "Mexico",
-      "awayLabel": "Czechia",
+      "awayLabel": "Switzerland",
       "isLocked": false
     },
     {
@@ -5657,7 +5679,7 @@
       },
       "result": {
         "matchNumber": 85,
-        "teamHomeId": 14,
+        "teamHomeId": 24,
         "teamAwayId": 26,
         "goalsHome": null,
         "goalsAway": null,
@@ -5665,17 +5687,17 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 14,
-        "name": "Switzerland",
-        "countryCode": "CH",
-        "flag": "🇨🇭",
-        "rank": 15,
-        "rating": 1894,
-        "total": 896,
-        "goalsFor": 1339,
-        "goalsAgainst": 1483,
-        "offensiveRating": 1.2028666456016333,
-        "defensiveRating": 0.6876703786065674
+        "id": 24,
+        "name": "Canada",
+        "countryCode": "CA",
+        "flag": "🇨🇦",
+        "rank": 25,
+        "rating": 1784,
+        "total": 488,
+        "goalsFor": 626,
+        "goalsAgainst": 623,
+        "offensiveRating": 0.9136639719561283,
+        "defensiveRating": 0.9053391476333772
       },
       "awayTeam": {
         "id": 26,
@@ -5690,7 +5712,7 @@
         "offensiveRating": 0.8822388799602389,
         "defensiveRating": 0.9375870644369771
       },
-      "homeLabel": "Switzerland",
+      "homeLabel": "Canada",
       "awayLabel": "Scotland",
       "isLocked": false
     },

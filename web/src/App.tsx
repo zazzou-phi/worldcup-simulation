@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { isKnockoutStagePhase } from '@shared/engine/phase.js';
-import { api, isPublicMode, loadInitialSimulation } from './api/client.js';
+import { api, isPublicMode, loadInitialPrediction, loadInitialSimulation } from './api/client.js';
 import { loadPublicMeta } from './api/staticClient.js';
 import { clearStoredPrediction, persistLocalPrediction } from './lib/localPredictionStorage.js';
 import {
@@ -28,6 +27,7 @@ import type { AppView } from './lib/appView.js';
 import { DEFAULT_UPSET_VARIANCE } from './lib/upsetVariance.js';
 import { MOBILE_QUERY } from './lib/useMediaQuery.js';
 import { SimulationManagerModal } from './components/SimulationManagerModal.js';
+import { PredictionManagerModal } from './components/PredictionManagerModal.js';
 import { TeamRatingsModal } from './components/TeamRatingsModal.js';
 import { MasterTeamStatsModal } from './components/MasterTeamStatsModal.js';
 import type { MonteCarloResult } from './types.js';
@@ -41,6 +41,7 @@ export function App() {
   const [selectedMatchNumber, setSelectedMatchNumber] = useState<number | null>(null);
   const [editingMatchNumber, setEditingMatchNumber] = useState<number | null>(null);
   const [showSimulations, setShowSimulations] = useState(false);
+  const [showPredictions, setShowPredictions] = useState(false);
   const [showRatings, setShowRatings] = useState(false);
   const [showMonteCarlo, setShowMonteCarlo] = useState(false);
   const [monteCarloResult, setMonteCarloResult] = useState<MonteCarloResult | null>(null);
@@ -57,6 +58,8 @@ export function App() {
     () => typeof window !== 'undefined' && !window.matchMedia(MOBILE_QUERY).matches,
   );
   const [masterState, setMasterState] = useState<MasterGroupState | null>(null);
+  const [predictionId, setPredictionId] = useState<number | null>(null);
+  const [activePredictionLabel, setActivePredictionLabel] = useState<string | null>(null);
   const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
   const [loading, setLoading] = useState(true);
   const [simulating, setSimulating] = useState(false);
@@ -80,23 +83,32 @@ export function App() {
     return next;
   }, []);
 
-  const refreshMasterState = useCallback(async () => {
-    const next = await api.getMasterGroupState();
+  const refreshMasterState = useCallback(async (id?: number | null) => {
+    const pid = id ?? predictionId;
+    if (pid == null) {
+      setMasterState(null);
+      return null;
+    }
+    const next = await api.getMasterGroupState(pid);
     setMasterState(next);
     return next;
-  }, []);
+  }, [predictionId]);
 
   useEffect(() => {
     (async () => {
       try {
-        const [{ id, state: initialState }, master, meta] = await Promise.all([
+        const [{ id, state: initialState }, initialPrediction, meta] = await Promise.all([
           loadInitialSimulation(),
-          api.getMasterGroupState(),
+          loadInitialPrediction(),
           publicMode ? loadPublicMeta() : Promise.resolve(null),
         ]);
         setSimulationId(id);
         setState(initialState);
-        setMasterState(master);
+        setPredictionId(initialPrediction.id);
+        setActivePredictionLabel(initialPrediction.label);
+        if (initialPrediction.id != null) {
+          setMasterState(await api.getMasterGroupState(initialPrediction.id));
+        }
         if (publicMode && meta) {
           setPublicMeta(meta);
         } else if (!publicMode) {
@@ -110,18 +122,52 @@ export function App() {
     })();
   }, [publicMode]);
 
-  const phase = state?.simulation.phase ?? 'group';
-
-  useEffect(() => {
-    setViewKnockout(isKnockoutStagePhase(phase));
-  }, [phase, simulationId]);
-
   useEffect(() => {
     if (!publicMode || !state || !publicMeta) return;
     persistLocalPrediction(state, publicMeta);
   }, [publicMode, state, publicMeta]);
 
   const showGroupView = !viewKnockout;
+
+  const switchPrediction = async (id: number) => {
+    const prediction = await api.activatePrediction(id);
+    const page = await api.listPredictions(1, 100);
+    const entry = page.items.find((item) => item.id === id);
+    setPredictionId(id);
+    setActivePredictionLabel(
+      entry ? `${entry.name} (${entry.selectionLabel})` : prediction.name,
+    );
+    await refreshMasterState(id);
+    setShowPredictions(false);
+  };
+
+  const handleCreatePrediction = async (name: string, selection: string) => {
+    const prediction = await api.createPrediction(name, selection);
+    await switchPrediction(prediction.id);
+  };
+
+  const handleRenamePrediction = async (id: number, name: string) => {
+    await api.renamePrediction(id, name);
+    if (id === predictionId) {
+      const page = await api.listPredictions(1, 100);
+      const entry = page.items.find((item) => item.id === id);
+      if (entry) setActivePredictionLabel(`${entry.name} (${entry.selectionLabel})`);
+    }
+  };
+
+  const handleDeletePrediction = async (id: number) => {
+    await api.deletePrediction(id);
+    if (id === predictionId) {
+      const page = await api.listPredictions(1, 1);
+      if (page.total === 0) {
+        setPredictionId(null);
+        setActivePredictionLabel(null);
+        setMasterState(null);
+      } else {
+        await switchPrediction(page.items[0].id);
+      }
+    }
+  };
 
   const switchSimulation = async (id: number) => {
     await api.activateSimulation(id);
@@ -145,6 +191,7 @@ export function App() {
       } else {
         await api.setMatchScore(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId);
         await refreshState(simulationId);
+        if (appView === 'predictions') await refreshMasterState();
       }
       setEditingMatchNumber(null);
     } catch (err) {
@@ -164,6 +211,7 @@ export function App() {
       } else {
         await api.clearMatchScore(simulationId, matchNumber);
         await refreshState(simulationId);
+        if (appView === 'predictions') await refreshMasterState();
       }
       setEditingMatchNumber(null);
     } catch (err) {
@@ -185,6 +233,7 @@ export function App() {
       await api.setActualResult(matchNumber, goalsHome, goalsAway, winnerTeamId);
       await refreshActualState();
       if (simulationId != null) await refreshState(simulationId);
+      if (predictionId != null) await refreshMasterState();
       setEditingMatchNumber(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save actual result');
@@ -196,6 +245,7 @@ export function App() {
       await api.clearActualResult(matchNumber);
       await refreshActualState();
       if (simulationId != null) await refreshState(simulationId);
+      if (predictionId != null) await refreshMasterState();
       setEditingMatchNumber(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to clear actual result');
@@ -225,7 +275,6 @@ export function App() {
       setState(fresh);
       setSelectedMatchNumber(null);
       setEditingMatchNumber(null);
-      setViewKnockout(isKnockoutStagePhase(fresh.simulation.phase));
       setToast('Simulation cleared');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to clear simulation');
@@ -400,6 +449,7 @@ export function App() {
         knockoutBracketView={knockoutBracketView}
         publicMode={publicMode}
         masterConsensusMode={masterState?.consensusMode}
+        activePredictionLabel={activePredictionLabel}
         simulating={simulating}
         upsetVariance={upsetVariance}
         onAppViewChange={switchAppView}
@@ -416,6 +466,7 @@ export function App() {
           setShowMonteCarlo(true);
         }}
         onOpenMasterTeamStats={() => setShowMasterTeamStats(true)}
+        onOpenPredictions={() => setShowPredictions(true)}
         onClearSimulation={publicMode ? handleClearSimulation : undefined}
       />
 
@@ -432,8 +483,21 @@ export function App() {
       )}
 
       <main className="app-main">
-        {appView === 'predictions' && masterState ? (
-          <MasterGroupView masterState={masterState} layout={layout} />
+        {appView === 'predictions' && predictionId == null ? (
+          <div className="master-empty">
+            <p>No predictions configured yet.</p>
+            {!publicMode && (
+              <button type="button" className="btn" onClick={() => setShowPredictions(true)}>
+                Manage Predictions
+              </button>
+            )}
+          </div>
+        ) : appView === 'predictions' && masterState ? (
+          <MasterGroupView
+            masterState={masterState}
+            layout={layout}
+            actualResults={state?.actualResults ?? []}
+          />
         ) : appView === 'results' && actualState ? (
           <ActualResultsView
             actualState={actualState}
@@ -485,6 +549,17 @@ export function App() {
         </footer>
       )}
 
+      {showPredictions && (
+        <PredictionManagerModal
+          activePredictionId={predictionId}
+          onClose={() => setShowPredictions(false)}
+          onSwitch={switchPrediction}
+          onCreate={handleCreatePrediction}
+          onRename={handleRenamePrediction}
+          onDelete={handleDeletePrediction}
+        />
+      )}
+
       {showSimulations && (
         <SimulationManagerModal
           activeSimulationId={simulationId}
@@ -519,6 +594,7 @@ export function App() {
 
       {showMasterTeamStats && (
         <MasterTeamStatsModal
+          predictionId={predictionId}
           allowRebuild={!publicMode}
           onClose={() => setShowMasterTeamStats(false)}
         />

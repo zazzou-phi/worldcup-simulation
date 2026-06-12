@@ -1,4 +1,5 @@
 import type { Phase } from './phase.js';
+import type { SelectionSpec } from '../lib/simulationSelection.js';
 
 export type { Phase };
 export type MatchStatus = 'scheduled' | 'played';
@@ -152,4 +153,30 @@ export interface MasterTeamStatsRow {
 export interface MasterTeamStats {
   simulationCount: number;
   teams: MasterTeamStatsRow[];
+}
+
+export interface Prediction {
+  id: number;
+  name: string;
+  selectionSpec: SelectionSpec;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PredictionListEntry extends Prediction {
+  simulationCount: number;
+  selectionLabel: string;
+}
+
+export interface PredictionListPage {
+  items: PredictionListEntry[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface ValidateSelectionResult {
+  count: number;
+  minId: number | null;
+  maxId: number | null;
 }

@@ -8,6 +8,15 @@ import { Repository } from '../src/db/repository.js';
 import { buildPublicSnapshot, redactMasterGroupState } from '../src/export/publicSnapshot.js';
 import { parseKickoff } from '../src/engine/kickoff.js';
 
+function ensureTestPrediction(repo: Repository, maxId = 9999): number {
+  const existing = repo.getActivePrediction();
+  if (existing) return existing.id;
+  if (repo.listSimulations().length === 0) {
+    repo.createSimulation('Seed');
+  }
+  return repo.createPrediction('Test pool', `1-${maxId}`).id;
+}
+
 describe('publicSnapshot', () => {
   let repo: Repository;
 
@@ -20,6 +29,7 @@ describe('publicSnapshot', () => {
 
   it('redacts pre-kickoff master predictions', () => {
     const sim = repo.createSimulation('Test');
+    ensureTestPrediction(repo);
     repo.updateMatchResult(sim.id, 1, 2, 1, 18);
     repo.updateMatchResult(sim.id, 2, 1, 1, null);
 
@@ -44,6 +54,7 @@ describe('publicSnapshot', () => {
 
   it('includes full team stats regardless of kickoff', () => {
     const sim = repo.createSimulation('Test');
+    ensureTestPrediction(repo);
     repo.updateMatchResult(sim.id, 1, 3, 0, 18);
 
     const exportTime = new Date('2020-01-01T00:00:00.000Z');
@@ -57,6 +68,7 @@ describe('publicSnapshot', () => {
 
   it('recomputes standings from revealed matches only', () => {
     const sim = repo.createSimulation('Test');
+    const predictionId = ensureTestPrediction(repo);
     const fixtures = repo.getFixtures();
     const match1 = fixtures.find((f) => f.matchNumber === 1)!;
     const match2 = fixtures.find((f) => f.matchNumber === 2)!;
@@ -64,7 +76,7 @@ describe('publicSnapshot', () => {
     repo.updateMatchResult(sim.id, 2, 0, 3, match2.teamAwayId);
 
     const exportTime = new Date(parseKickoff('2026-06-11', '13:00 UTC-6').getTime() + 60_000);
-    const raw = repo.buildMasterGroupView();
+    const raw = repo.buildMasterGroupView(predictionId);
     const redacted = redactMasterGroupState(
       raw,
       exportTime,

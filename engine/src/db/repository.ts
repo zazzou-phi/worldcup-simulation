@@ -16,6 +16,10 @@ import type {
   MasterGroupState,
   MasterTeamStats,
   OutcomeDistribution,
+  Prediction,
+  PredictionListEntry,
+  PredictionListPage,
+  ValidateSelectionResult,
 } from '../engine/types.js';
 import { chooseConsensus, getConsensusMode } from '../engine/consensus.js';
 import { winnerFromGoals } from '../engine/matchSimulator.js';
@@ -44,17 +48,22 @@ import {
   KNOCKOUT_ELIGIBLE_PHASES,
 } from '../engine/phase.js';
 import {
-  readMasterTeamStats,
-  rebuildAllMasterTeamStats,
-  refreshSimulationTeamGoals,
-  removeSimulationFromMasterStats,
-} from './masterTeamStats.js';
+  deletePredictionAggregates,
+  readPredictionMatchDistributions,
+  readPredictionTeamStats,
+  rebuildAllPredictionAggregates,
+  rebuildPredictionAggregates,
+  refreshSimulationInPredictionAggregates,
+  removeSimulationFromPredictionAggregates,
+} from './predictionAggregates.js';
 import {
-  readMasterMatchDistributions,
-  rebuildAllMasterMatchAggregates,
-  refreshSimulationGroupMatchAggregates,
-  removeSimulationFromMasterMatchAggregates,
-} from './masterMatchAggregates.js';
+  formatSelectionSpec,
+  parseSelectionInput,
+  parseSelectionSpecJson,
+  serializeSelectionSpec,
+  simulationIdInSpec,
+  type SelectionSpec,
+} from '../lib/simulationSelection.js';
 
 function mapTeam(row: typeof schema.teams.$inferSelect): Team {
   return {
@@ -84,6 +93,16 @@ function mapFixture(row: typeof schema.fixtures.$inferSelect): Fixture {
     slotAway: row.slotAway,
     teamHomeId: row.teamHomeId,
     teamAwayId: row.teamAwayId,
+  };
+}
+
+function mapPrediction(row: typeof schema.predictions.$inferSelect): Prediction {
+  return {
+    id: row.id,
+    name: row.name,
+    selectionSpec: parseSelectionSpecJson(row.selectionSpec),
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
   };
 }
 
@@ -258,6 +277,164 @@ export class Repository {
     };
   }
 
+  listPredictions(): Prediction[] {
+    return this.db
+      .select()
+      .from(schema.predictions)
+      .orderBy(desc(schema.predictions.updatedAt))
+      .all()
+      .map(mapPrediction);
+  }
+
+  countSimulationsMatchingSpec(spec: SelectionSpec): number {
+    const rows = this.db.select({ id: schema.simulations.id }).from(schema.simulations).all();
+    return rows.filter((row) => simulationIdInSpec(row.id, spec)).length;
+  }
+
+  validateSelection(selection: string): ValidateSelectionResult | { error: string } {
+    const parsed = parseSelectionInput(selection);
+    if (!parsed.ok) return { error: parsed.error };
+    const matchingIds = this.db
+      .select({ id: schema.simulations.id })
+      .from(schema.simulations)
+      .all()
+      .map((row) => row.id)
+      .filter((id) => simulationIdInSpec(id, parsed.spec));
+    if (matchingIds.length === 0) {
+      return { error: 'No simulations match this selection' };
+    }
+    return {
+      count: matchingIds.length,
+      minId: Math.min(...matchingIds),
+      maxId: Math.max(...matchingIds),
+    };
+  }
+
+  listPredictionsPage(page: number, pageSize: number): PredictionListPage {
+    const total = Number(
+      this.db.select({ total: count() }).from(schema.predictions).get()?.total ?? 0,
+    );
+    const offset = (page - 1) * pageSize;
+    const rows = this.db
+      .select()
+      .from(schema.predictions)
+      .orderBy(desc(schema.predictions.updatedAt))
+      .limit(pageSize)
+      .offset(offset)
+      .all()
+      .map(mapPrediction);
+
+    return {
+      items: rows.map((prediction) => ({
+        ...prediction,
+        simulationCount: this.countSimulationsMatchingSpec(prediction.selectionSpec),
+        selectionLabel: formatSelectionSpec(prediction.selectionSpec),
+      })),
+      total,
+      page,
+      pageSize,
+    };
+  }
+
+  getPrediction(id: number): Prediction | null {
+    const row = this.db
+      .select()
+      .from(schema.predictions)
+      .where(eq(schema.predictions.id, id))
+      .get();
+    return row ? mapPrediction(row) : null;
+  }
+
+  getActivePrediction(): Prediction | null {
+    const row = this.db
+      .select()
+      .from(schema.predictions)
+      .orderBy(desc(schema.predictions.updatedAt))
+      .limit(1)
+      .get();
+    return row ? mapPrediction(row) : null;
+  }
+
+  resolvePredictionId(predictionId?: number): number | null {
+    if (predictionId != null) {
+      return this.getPrediction(predictionId)?.id ?? null;
+    }
+    return this.getActivePrediction()?.id ?? this.getPrediction(1)?.id ?? null;
+  }
+
+  createPrediction(name: string, selection: string): Prediction {
+    const parsed = parseSelectionInput(selection);
+    if (!parsed.ok) {
+      throw new Error(parsed.error);
+    }
+    const validation = this.validateSelection(selection);
+    if ('error' in validation) {
+      throw new Error(validation.error);
+    }
+
+    const trimmed = name.trim() || 'Prediction';
+    const now = new Date().toISOString();
+    const row = this.db
+      .insert(schema.predictions)
+      .values({
+        name: trimmed,
+        selectionSpec: serializeSelectionSpec(parsed.spec),
+        createdAt: now,
+        updatedAt: now,
+      })
+      .returning()
+      .get();
+
+    rebuildPredictionAggregates(this.db, row.id, parsed.spec);
+    return mapPrediction(row);
+  }
+
+  renamePrediction(id: number, name: string): Prediction | null {
+    const trimmed = name.trim();
+    if (!trimmed) return null;
+    const row = this.db
+      .update(schema.predictions)
+      .set({ name: trimmed, updatedAt: new Date().toISOString() })
+      .where(eq(schema.predictions.id, id))
+      .returning()
+      .get();
+    return row ? mapPrediction(row) : null;
+  }
+
+  deletePrediction(id: number): boolean {
+    const existing = this.getPrediction(id);
+    if (!existing) return false;
+    deletePredictionAggregates(this.db, id);
+    this.db.delete(schema.predictions).where(eq(schema.predictions.id, id)).run();
+    return true;
+  }
+
+  touchPrediction(id: number): Prediction | null {
+    const row = this.db
+      .update(schema.predictions)
+      .set({ updatedAt: new Date().toISOString() })
+      .where(eq(schema.predictions.id, id))
+      .returning()
+      .get();
+    return row ? mapPrediction(row) : null;
+  }
+
+  private refreshPredictionsForSimulation(simulationId: number): void {
+    for (const prediction of this.listPredictions()) {
+      if (simulationIdInSpec(simulationId, prediction.selectionSpec)) {
+        refreshSimulationInPredictionAggregates(this.db, prediction.id, simulationId);
+      }
+    }
+  }
+
+  private removeSimulationFromAllPredictions(simulationId: number): void {
+    for (const prediction of this.listPredictions()) {
+      if (simulationIdInSpec(simulationId, prediction.selectionSpec)) {
+        removeSimulationFromPredictionAggregates(this.db, prediction.id, simulationId);
+      }
+    }
+  }
+
   updateSimulationName(id: number, name: string): Simulation | null {
     const trimmed = name.trim();
     if (!trimmed) return null;
@@ -273,8 +450,7 @@ export class Repository {
   deleteSimulation(id: number): boolean {
     const existing = this.getSimulation(id);
     if (!existing) return false;
-    removeSimulationFromMasterStats(this.db, id);
-    removeSimulationFromMasterMatchAggregates(this.db, id);
+    this.removeSimulationFromAllPredictions(id);
     this.db
       .delete(schema.simulationMatches)
       .where(eq(schema.simulationMatches.simulationId, id))
@@ -504,8 +680,7 @@ export class Repository {
         refreshMasterStats: options.refreshMasterStats,
       });
     } else if (options.refreshMasterStats !== false) {
-      refreshSimulationTeamGoals(this.db, simulationId);
-      refreshSimulationGroupMatchAggregates(this.db, simulationId);
+      this.refreshPredictionsForSimulation(simulationId);
     }
   }
 
@@ -628,8 +803,7 @@ export class Repository {
     if (options.sync !== false) {
       this.syncResolvedParticipants(simulationId);
     } else {
-      refreshSimulationTeamGoals(this.db, simulationId);
-      refreshSimulationGroupMatchAggregates(this.db, simulationId);
+      this.refreshPredictionsForSimulation(simulationId);
     }
   }
 
@@ -841,32 +1015,29 @@ export class Repository {
       .run();
 
     if (options.refreshMasterStats !== false) {
-      refreshSimulationTeamGoals(this.db, simulationId);
-      refreshSimulationGroupMatchAggregates(this.db, simulationId);
+      this.refreshPredictionsForSimulation(simulationId);
     }
   }
 
-  rebuildAllMasterTeamStats(): void {
-    rebuildAllMasterTeamStats(this.db);
+  rebuildAllPredictionAggregates(): void {
+    const predictions = this.listPredictions().map((prediction) => ({
+      id: prediction.id,
+      selectionSpec: prediction.selectionSpec,
+    }));
+    rebuildAllPredictionAggregates(this.db, predictions);
   }
 
-  rebuildAllMasterMatchAggregates(): void {
-    rebuildAllMasterMatchAggregates(this.db);
-  }
-
-  rebuildAllMasterAggregates(): void {
-    rebuildAllMasterTeamStats(this.db);
-    rebuildAllMasterMatchAggregates(this.db);
-  }
-
-  buildMasterGroupView(): MasterGroupState {
+  buildMasterGroupView(predictionId: number): MasterGroupState {
     const teams = this.getTeams();
     const teamsById = new Map(teams.map((t) => [t.id, t]));
     const fixtures = this.getFixtures();
     const memberships = this.getGroupMemberships();
     const groupFixtures = fixtures.filter((f) => f.group != null);
 
-    const { outcomesByMatch, scorelinesByMatch } = readMasterMatchDistributions(this.db);
+    const { outcomesByMatch, scorelinesByMatch } = readPredictionMatchDistributions(
+      this.db,
+      predictionId,
+    );
 
     const consensusMatches: SimulationMatch[] = [];
     const distributions: Record<number, OutcomeDistribution> = {};
@@ -956,8 +1127,17 @@ export class Repository {
     };
   }
 
-  buildMasterTeamStats(): MasterTeamStats {
-    return readMasterTeamStats(this.db, this.getTeams());
+  buildMasterTeamStats(predictionId: number): MasterTeamStats {
+    const prediction = this.getPrediction(predictionId);
+    if (!prediction) {
+      return { simulationCount: 0, teams: [] };
+    }
+    return readPredictionTeamStats(
+      this.db,
+      predictionId,
+      prediction.selectionSpec,
+      this.getTeams(),
+    );
   }
 
   buildTournamentState(simulationId: number): TournamentState | null {

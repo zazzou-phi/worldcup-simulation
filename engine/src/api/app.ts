@@ -45,18 +45,111 @@ export function createApiApp(repo: Repository) {
   );
 
   app.get('/api/v1/master/group-state', (c) => {
-    const view = repo.buildMasterGroupView();
+    const predictionId = resolvePredictionIdParam(c.req.query('predictionId'), repo);
+    if (predictionId == null) {
+      throw new ApiError('No predictions configured', 404, 'prediction_not_found');
+    }
+    const view = repo.buildMasterGroupView(predictionId);
     return c.json(serializeMasterGroupState(view));
   });
 
   app.get('/api/v1/master/team-stats', (c) => {
-    const stats = repo.buildMasterTeamStats();
+    const predictionId = resolvePredictionIdParam(c.req.query('predictionId'), repo);
+    if (predictionId == null) {
+      throw new ApiError('No predictions configured', 404, 'prediction_not_found');
+    }
+    const stats = repo.buildMasterTeamStats(predictionId);
     return c.json(serializeMasterTeamStats(stats));
   });
 
   app.post('/api/v1/master/team-stats/rebuild', (c) => {
-    repo.rebuildAllMasterAggregates();
-    const stats = repo.buildMasterTeamStats();
+    const predictionId = resolvePredictionIdParam(c.req.query('predictionId'), repo);
+    repo.rebuildAllPredictionAggregates();
+    if (predictionId == null) {
+      throw new ApiError('No predictions configured', 404, 'prediction_not_found');
+    }
+    const stats = repo.buildMasterTeamStats(predictionId);
+    return c.json(serializeMasterTeamStats(stats));
+  });
+
+  app.get('/api/v1/predictions', (c) => {
+    const page = parsePositiveIntQuery(c.req.query('page'), 1);
+    const pageSize = Math.min(parsePositiveIntQuery(c.req.query('pageSize'), 50), 100);
+    return c.json(repo.listPredictionsPage(page, pageSize));
+  });
+
+  app.post('/api/v1/predictions/validate-selection', async (c) => {
+    const body = await c.req.json().catch(() => null);
+    const selection = typeof body?.selection === 'string' ? body.selection : '';
+    const result = repo.validateSelection(selection);
+    if ('error' in result) {
+      throw new ApiError(result.error, 400, 'invalid_selection');
+    }
+    return c.json(result);
+  });
+
+  app.post('/api/v1/predictions', async (c) => {
+    const body = await c.req.json().catch(() => null);
+    const name = typeof body?.name === 'string' ? body.name : 'Prediction';
+    const selection = typeof body?.selection === 'string' ? body.selection : '';
+    if (!selection.trim()) {
+      throw new ApiError('selection is required', 400, 'invalid_body');
+    }
+    try {
+      const prediction = repo.createPrediction(name, selection);
+      return c.json(serializePrediction(prediction), 201);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Invalid selection';
+      throw new ApiError(message, 400, 'invalid_selection');
+    }
+  });
+
+  app.patch('/api/v1/predictions/:id', async (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    const body = await c.req.json().catch(() => null);
+    const name = typeof body?.name === 'string' ? body.name : '';
+    if (!name.trim()) {
+      throw new ApiError('name is required', 400, 'invalid_body');
+    }
+    const prediction = repo.renamePrediction(id, name);
+    if (!prediction) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    return c.json(serializePrediction(prediction));
+  });
+
+  app.delete('/api/v1/predictions/:id', (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.deletePrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    return c.body(null, 204);
+  });
+
+  app.post('/api/v1/predictions/:id/activate', (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    const prediction = repo.touchPrediction(id);
+    if (!prediction) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    return c.json(serializePrediction(prediction));
+  });
+
+  app.get('/api/v1/predictions/:id/group-state', (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    const view = repo.buildMasterGroupView(id);
+    return c.json(serializeMasterGroupState(view));
+  });
+
+  app.get('/api/v1/predictions/:id/team-stats', (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    const stats = repo.buildMasterTeamStats(id);
     return c.json(serializeMasterTeamStats(stats));
   });
 
@@ -307,4 +400,28 @@ function parsePositiveIntQuery(value: string | undefined, fallback: number): num
     throw new ApiError('Invalid query parameter', 400, 'invalid_param');
   }
   return n;
+}
+
+function resolvePredictionIdParam(
+  value: string | undefined,
+  repo: Repository,
+): number | null {
+  if (value == null || value === '') {
+    return repo.resolvePredictionId();
+  }
+  const n = parseInt(value, 10);
+  if (!Number.isFinite(n) || n < 1) {
+    throw new ApiError('Invalid predictionId parameter', 400, 'invalid_param');
+  }
+  return repo.resolvePredictionId(n);
+}
+
+function serializePrediction(prediction: NonNullable<ReturnType<Repository['getPrediction']>>) {
+  return {
+    id: prediction.id,
+    name: prediction.name,
+    selectionSpec: prediction.selectionSpec,
+    createdAt: prediction.createdAt,
+    updatedAt: prediction.updatedAt,
+  };
 }

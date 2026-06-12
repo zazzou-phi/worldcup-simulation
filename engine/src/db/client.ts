@@ -1,10 +1,11 @@
 import Database from 'better-sqlite3';
 import { drizzle, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema.js';
-import { rebuildAllMasterMatchAggregates } from './masterMatchAggregates.js';
+import { rebuildPredictionAggregates } from './predictionAggregates.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdirSync } from 'node:fs';
+import type { SelectionSpec } from '../lib/simulationSelection.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -14,6 +15,13 @@ export function getProjectDataDir(): string {
 
 export function getDefaultDbPath(): string {
   return join(getProjectDataDir(), 'simulations.db');
+}
+
+function tableExists(sqlite: Database.Database, name: string): boolean {
+  const row = sqlite
+    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = ?")
+    .get(name);
+  return row != null;
 }
 
 export function initSchema(sqlite: Database.Database) {
@@ -57,38 +65,52 @@ export function initSchema(sqlite: Database.Database) {
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
-    CREATE TABLE IF NOT EXISTS simulation_team_goals (
-      simulation_id INTEGER NOT NULL REFERENCES simulations(id),
-      team_id INTEGER NOT NULL REFERENCES teams(id),
-      goals INTEGER NOT NULL,
-      PRIMARY KEY (simulation_id, team_id)
+    CREATE TABLE IF NOT EXISTS predictions (
+      id INTEGER PRIMARY KEY,
+      name TEXT NOT NULL,
+      selection_spec TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
     );
-    CREATE TABLE IF NOT EXISTS master_team_stats (
-      team_id INTEGER PRIMARY KEY REFERENCES teams(id),
-      total_goals INTEGER NOT NULL,
-      simulations_with_matches INTEGER NOT NULL,
-      champion_wins INTEGER NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS simulation_group_match_results (
+    CREATE TABLE IF NOT EXISTS prediction_group_match_results (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
       simulation_id INTEGER NOT NULL REFERENCES simulations(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
       goals_home INTEGER NOT NULL,
       goals_away INTEGER NOT NULL,
-      PRIMARY KEY (simulation_id, match_number)
+      PRIMARY KEY (prediction_id, simulation_id, match_number)
     );
-    CREATE TABLE IF NOT EXISTS master_match_outcomes (
-      match_number INTEGER PRIMARY KEY REFERENCES fixtures(match_number),
+    CREATE TABLE IF NOT EXISTS prediction_simulation_team_goals (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      simulation_id INTEGER NOT NULL REFERENCES simulations(id),
+      team_id INTEGER NOT NULL REFERENCES teams(id),
+      goals INTEGER NOT NULL,
+      PRIMARY KEY (prediction_id, simulation_id, team_id)
+    );
+    CREATE TABLE IF NOT EXISTS prediction_match_outcomes (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
       home_win INTEGER NOT NULL,
       draw INTEGER NOT NULL,
       away_win INTEGER NOT NULL,
-      total INTEGER NOT NULL
+      total INTEGER NOT NULL,
+      PRIMARY KEY (prediction_id, match_number)
     );
-    CREATE TABLE IF NOT EXISTS master_match_scorelines (
+    CREATE TABLE IF NOT EXISTS prediction_match_scorelines (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
       goals_home INTEGER NOT NULL,
       goals_away INTEGER NOT NULL,
       count INTEGER NOT NULL,
-      PRIMARY KEY (match_number, goals_home, goals_away)
+      PRIMARY KEY (prediction_id, match_number, goals_home, goals_away)
+    );
+    CREATE TABLE IF NOT EXISTS prediction_team_stats (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      team_id INTEGER NOT NULL REFERENCES teams(id),
+      total_goals INTEGER NOT NULL,
+      simulations_with_matches INTEGER NOT NULL,
+      champion_wins INTEGER NOT NULL,
+      PRIMARY KEY (prediction_id, team_id)
     );
     CREATE TABLE IF NOT EXISTS simulation_matches (
       simulation_id INTEGER NOT NULL REFERENCES simulations(id),
@@ -139,25 +161,113 @@ function migrateSchema(sqlite: Database.Database) {
     );
   }
 
-  const aggregateTable = sqlite
-    .prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'master_match_outcomes'")
-    .get();
-  if (aggregateTable) {
-    const aggregateCount = sqlite
-      .prepare('SELECT COUNT(*) AS n FROM master_match_outcomes')
-      .get() as { n: number };
-    const playedGroupCount = sqlite
-      .prepare(
-        `SELECT COUNT(*) AS n
-         FROM simulation_matches sm
-         INNER JOIN fixtures f ON f.match_number = sm.match_number
-         WHERE f."group" IS NOT NULL AND sm.status = 'played'`,
-      )
-      .get() as { n: number };
-    if (aggregateCount.n === 0 && playedGroupCount.n > 0) {
-      rebuildAllMasterMatchAggregates(drizzle(sqlite, { schema }));
+  migrateLegacyMasterAggregates(sqlite);
+  ensureDefaultPrediction(sqlite);
+}
+
+function migrateLegacyMasterAggregates(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'master_match_outcomes')) return;
+  if (tableExists(sqlite, 'predictions')) {
+    const existing = sqlite.prepare('SELECT COUNT(*) AS n FROM predictions').get() as { n: number };
+    if (existing.n > 0) {
+      dropLegacyMasterTables(sqlite);
+      return;
     }
   }
+
+  const maxSimRow = sqlite.prepare('SELECT MAX(id) AS maxId FROM simulations').get() as {
+    maxId: number | null;
+  };
+  const maxSimId = maxSimRow.maxId ?? 0;
+  if (maxSimId === 0) {
+    dropLegacyMasterTables(sqlite);
+    return;
+  }
+
+  const now = new Date().toISOString();
+  const selectionSpec = JSON.stringify({
+    type: 'ranges',
+    ranges: [[1, maxSimId]],
+  } satisfies SelectionSpec);
+
+  sqlite.exec('BEGIN');
+  try {
+    sqlite
+      .prepare(
+        `INSERT INTO predictions (id, name, selection_spec, created_at, updated_at)
+         VALUES (1, 'Default', ?, ?, ?)`,
+      )
+      .run(selectionSpec, now, now);
+
+    sqlite.exec(`
+      INSERT INTO prediction_match_outcomes (prediction_id, match_number, home_win, draw, away_win, total)
+      SELECT 1, match_number, home_win, draw, away_win, total FROM master_match_outcomes;
+
+      INSERT INTO prediction_match_scorelines (prediction_id, match_number, goals_home, goals_away, count)
+      SELECT 1, match_number, goals_home, goals_away, count FROM master_match_scorelines;
+
+      INSERT INTO prediction_team_stats (prediction_id, team_id, total_goals, simulations_with_matches, champion_wins)
+      SELECT 1, team_id, total_goals, simulations_with_matches, champion_wins FROM master_team_stats;
+    `);
+
+    if (tableExists(sqlite, 'simulation_group_match_results')) {
+      sqlite.exec(`
+        INSERT INTO prediction_group_match_results (prediction_id, simulation_id, match_number, goals_home, goals_away)
+        SELECT 1, simulation_id, match_number, goals_home, goals_away FROM simulation_group_match_results;
+      `);
+    }
+
+    if (tableExists(sqlite, 'simulation_team_goals')) {
+      sqlite.exec(`
+        INSERT INTO prediction_simulation_team_goals (prediction_id, simulation_id, team_id, goals)
+        SELECT 1, simulation_id, team_id, goals FROM simulation_team_goals;
+      `);
+    }
+
+    sqlite.exec('COMMIT');
+  } catch (error) {
+    sqlite.exec('ROLLBACK');
+    throw error;
+  }
+
+  dropLegacyMasterTables(sqlite);
+}
+
+function dropLegacyMasterTables(sqlite: Database.Database) {
+  sqlite.exec(`
+    DROP TABLE IF EXISTS master_match_outcomes;
+    DROP TABLE IF EXISTS master_match_scorelines;
+    DROP TABLE IF EXISTS master_team_stats;
+    DROP TABLE IF EXISTS simulation_group_match_results;
+    DROP TABLE IF EXISTS simulation_team_goals;
+  `);
+}
+
+function ensureDefaultPrediction(sqlite: Database.Database) {
+  const count = sqlite.prepare('SELECT COUNT(*) AS n FROM predictions').get() as { n: number };
+  if (count.n > 0) return;
+
+  const maxSimRow = sqlite.prepare('SELECT MAX(id) AS maxId FROM simulations').get() as {
+    maxId: number | null;
+  };
+  const maxSimId = maxSimRow.maxId ?? 0;
+  if (maxSimId === 0) return;
+
+  const now = new Date().toISOString();
+  const selectionSpec = JSON.stringify({
+    type: 'ranges',
+    ranges: [[1, maxSimId]],
+  } satisfies SelectionSpec);
+
+  sqlite
+    .prepare(
+      `INSERT INTO predictions (id, name, selection_spec, created_at, updated_at)
+       VALUES (1, 'Default', ?, ?, ?)`,
+    )
+    .run(selectionSpec, now, now);
+
+  const db = drizzle(sqlite, { schema });
+  rebuildPredictionAggregates(db, 1, { type: 'ranges', ranges: [[1, maxSimId]] });
 }
 
 export function openDatabase(dbPath = getDefaultDbPath()): {

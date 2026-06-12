@@ -150,14 +150,18 @@ export function buildPublicSnapshot(
 ): PublicSnapshot {
   const fixtures = repo.getFixtures();
   const groupMemberships = repo.getGroupMemberships();
-  const masterRaw = repo.buildMasterGroupView();
+  const predictionId = repo.resolvePredictionId(1) ?? repo.resolvePredictionId();
+  if (predictionId == null) {
+    throw new Error('No predictions configured for public export');
+  }
+  const masterRaw = repo.buildMasterGroupView(predictionId);
   const masterGroupState = redactMasterGroupState(
     masterRaw,
     exportTime,
     groupMemberships,
     fixtures,
   );
-  const masterTeamStats = repo.buildMasterTeamStats();
+  const masterTeamStats = repo.buildMasterTeamStats(predictionId);
   const actualView = repo.buildActualResultsView();
 
   const teams = repo.getTeams();

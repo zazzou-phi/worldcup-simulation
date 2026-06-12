@@ -13,7 +13,11 @@ import {
   type MatchResultRow,
 } from '@shared/engine/matchSimulator.js';
 import { SIMULATION_KNOCKOUT_ROUNDS } from '@shared/engine/simulationRounds.js';
-import { isGroupStageComplete } from '@shared/engine/phase.js';
+import {
+  canClearSimulationResult,
+  canModifySimulationResult,
+  isGroupStageComplete,
+} from '@shared/engine/phase.js';
 import {
   applyActualResultsToMatches,
   buildTournamentStateFromData,
@@ -108,6 +112,11 @@ export function setLocalMatchScore(
   if (resolved.isLocked) {
     throw new LocalSimulationError('Match is locked by an actual result');
   }
+  if (!canModifySimulationResult(matchNumber, state.matches, state.fixtures, lockedMatchNumbers(state))) {
+    throw new LocalSimulationError(
+      `Cannot change match ${matchNumber}: later tournament round results exist (clear those first)`,
+    );
+  }
 
   const winner = resolveWinnerTeamId(resolved, goalsHome, goalsAway, winnerTeamId);
   const matches = toEngineMatches(state).map((match) =>
@@ -132,6 +141,11 @@ export function clearLocalMatchScore(
   const resolved = findResolvedMatch(state, matchNumber);
   if (resolved.isLocked) {
     throw new LocalSimulationError('Match is locked by an actual result');
+  }
+  if (!canClearSimulationResult(matchNumber, state.matches, state.fixtures, lockedMatchNumbers(state))) {
+    throw new LocalSimulationError(
+      `Cannot change match ${matchNumber}: later tournament round results exist (clear those first)`,
+    );
   }
 
   const matches = toEngineMatches(state).map((match) =>

@@ -16,6 +16,7 @@ interface Props {
   knockoutBracketView: boolean;
   publicMode?: boolean;
   masterConsensusMode?: 'scoreline' | 'outcome' | 'expected';
+  activePredictionLabel?: string | null;
   simulating: boolean;
   upsetVariance: number;
   onAppViewChange: (view: AppView) => void;
@@ -29,6 +30,7 @@ interface Props {
   onSimulateKnockoutsThrough: (throughRound: string) => void;
   onOpenMonteCarlo: () => void;
   onOpenMasterTeamStats: () => void;
+  onOpenPredictions: () => void;
   onClearSimulation?: () => void;
 }
 
@@ -40,6 +42,7 @@ export function Header({
   knockoutBracketView,
   publicMode = false,
   masterConsensusMode,
+  activePredictionLabel,
   simulating,
   upsetVariance,
   onAppViewChange,
@@ -53,6 +56,7 @@ export function Header({
   onSimulateKnockoutsThrough,
   onOpenMonteCarlo,
   onOpenMasterTeamStats,
+  onOpenPredictions,
   onClearSimulation,
 }: Props) {
   const { simulation } = state;
@@ -63,6 +67,7 @@ export function Header({
 
   const meta = isPredictionsView ? (
     <span className="header-meta header-predictions">
+      {activePredictionLabel ? `${activePredictionLabel} · ` : ''}
       Consensus, {masterConsensusMode ?? 'expected'}
     </span>
   ) : isResultsView ? (
@@ -85,6 +90,7 @@ export function Header({
   const showUpsetSetting = isSimulationsView;
   const showBracketSetting = isSimulationsView && !showGroupView && !narrow;
   const showRatings = isSimulationsView && !publicMode;
+  const showManagePredictions = isPredictionsView && !publicMode;
   const showManageSimulations = isSimulationsView && !publicMode;
   const showClearSimulation = isSimulationsView && onClearSimulation != null;
 
@@ -93,6 +99,7 @@ export function Header({
     showStageSetting ||
     showLayoutSetting ||
     showBracketSetting ||
+    showManagePredictions ||
     showManageSimulations ||
     showClearSimulation;
 
@@ -125,9 +132,16 @@ export function Header({
         </button>
       )}
       {isPredictionsView && (
-        <button type="button" className="btn btn-ghost" onClick={onOpenMasterTeamStats}>
-          Team Stats
-        </button>
+        <>
+          <button type="button" className="btn btn-ghost" onClick={onOpenMasterTeamStats}>
+            Team Stats
+          </button>
+          {showManagePredictions && (
+            <button type="button" className="btn btn-ghost" onClick={onOpenPredictions}>
+              Manage Predictions
+            </button>
+          )}
+        </>
       )}
       {hasTopSection && hasBottomSection && (
         <div className="header-menu-divider" role="separator" />

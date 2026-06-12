@@ -2069,5 +2069,27 @@
       "teamId": 35
     }
   ],
-  "actualResults": []
+  "actualResults": [
+    {
+      "matchNumber": 1,
+      "goalsHome": 2,
+      "goalsAway": 0,
+      "winnerTeamId": 18,
+      "recordedAt": "2026-06-12T22:43:35.587Z"
+    },
+    {
+      "matchNumber": 2,
+      "goalsHome": 2,
+      "goalsAway": 1,
+      "winnerTeamId": 32,
+      "recordedAt": "2026-06-12T22:43:43.217Z"
+    },
+    {
+      "matchNumber": 7,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-12T22:43:50.532Z"
+    }
+  ]
 }

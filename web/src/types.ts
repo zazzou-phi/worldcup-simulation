@@ -143,6 +143,37 @@ export interface MasterTeamStats {
   teams: MasterTeamStatsRow[];
 }
 
+export interface SelectionSpec {
+  type: 'ranges';
+  ranges: [number, number][];
+}
+
+export interface Prediction {
+  id: number;
+  name: string;
+  selectionSpec: SelectionSpec;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PredictionListEntry extends Prediction {
+  simulationCount: number;
+  selectionLabel: string;
+}
+
+export interface PredictionListPage {
+  items: PredictionListEntry[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface ValidateSelectionResult {
+  count: number;
+  minId: number | null;
+  maxId: number | null;
+}
+
 export interface PublicMeta {
   exportedAt: string;
   revealPolicy: 'kickoff';

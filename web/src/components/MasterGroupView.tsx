@@ -5,7 +5,8 @@ import {
   MAX_DOUBLE_DOWN,
   pickDoubleDownMatches,
 } from '../lib/doubleDown.js';
-import type { MasterGroupState } from '../types.js';
+import { isPublicMode } from '../config/appMode.js';
+import type { ActualMatchResult, MasterGroupState } from '../types.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
 import { GroupPhaseLayout } from './GroupPhaseLayout.js';
@@ -14,9 +15,11 @@ import { MasterFixtureModal } from './MasterFixtureModal.js';
 interface Props {
   masterState: MasterGroupState;
   layout: 'horizontal' | 'vertical';
+  actualResults?: ActualMatchResult[];
 }
 
-export function MasterGroupView({ masterState, layout }: Props) {
+export function MasterGroupView({ masterState, layout, actualResults = [] }: Props) {
+  const publicMode = isPublicMode();
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
   const [selectedMatchNumber, setSelectedMatchNumber] = useState<number | null>(null);
   const [modalMatchNumber, setModalMatchNumber] = useState<number | null>(null);
@@ -57,8 +60,12 @@ export function MasterGroupView({ masterState, layout }: Props) {
   const hasAnyData = Object.values(masterState.distributions).some((d) => d.total > 0);
 
   const doubledMatchNumbers = useMemo(
-    () => pickDoubleDownMatches(masterState.distributions, doubleCount),
-    [masterState.distributions, doubleCount],
+    () =>
+      pickDoubleDownMatches(
+        masterState.distributions,
+        publicMode ? MAX_DOUBLE_DOWN : doubleCount,
+      ),
+    [masterState.distributions, publicMode, doubleCount],
   );
 
   const handleSelectTeam = (teamId: number) => {
@@ -106,11 +113,12 @@ export function MasterGroupView({ masterState, layout }: Props) {
             selectedMatchNumber={selectedMatchNumber}
             editingMatchNumber={null}
             filterTeamLabel={filterTeamLabel}
+            actualResults={actualResults}
             allowEdit={false}
             canClearMatch={() => false}
-            doubleCount={doubleCount}
-            maxDoubleCount={MAX_DOUBLE_DOWN}
-            onDoubleCountChange={setDoubleCount}
+            doubleCount={publicMode ? undefined : doubleCount}
+            maxDoubleCount={publicMode ? undefined : MAX_DOUBLE_DOWN}
+            onDoubleCountChange={publicMode ? undefined : setDoubleCount}
             doubledMatchNumbers={doubledMatchNumbers}
             onSelect={handleSelectMatch}
             onStartEdit={() => {}}

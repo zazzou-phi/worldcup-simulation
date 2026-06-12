@@ -6,6 +6,15 @@ import { initSchema } from '../src/db/client.js';
 import { seedDatabase } from '../src/db/seed.js';
 import { Repository } from '../src/db/repository.js';
 
+function ensureTestPrediction(repo: Repository, maxId = 9999): number {
+  const existing = repo.getActivePrediction();
+  if (existing) return existing.id;
+  if (repo.listSimulations().length === 0) {
+    repo.createSimulation('Seed');
+  }
+  return repo.createPrediction('Test pool', `1-${maxId}`).id;
+}
+
 describe('repository integration', () => {
   let repo: Repository;
   let sqlite: Database.Database;
@@ -219,7 +228,8 @@ describe('repository integration', () => {
     repo.updateMatchResult(sim1.id, 1, 2, 1, mexicoId);
     repo.updateMatchResult(sim2.id, 1, 3, 0, mexicoId);
 
-    const groupOnly = repo.buildMasterTeamStats();
+    const predictionId = ensureTestPrediction(repo);
+    const groupOnly = repo.buildMasterTeamStats(predictionId);
     const mexicoGroupOnly = groupOnly.teams.find((t) => t.teamId === mexicoId)!;
     expect(mexicoGroupOnly.totalGoals).toBe(5);
     expect(mexicoGroupOnly.simulationsWithMatches).toBe(2);
@@ -234,8 +244,8 @@ describe('repository integration', () => {
     const r32 = repo.getSimulationMatches(sim1.id).find((m) => m.matchNumber === 73)!;
     repo.updateMatchResult(sim1.id, 73, 2, 1, r32.teamHomeId);
 
-    const stats = repo.buildMasterTeamStats();
-    expect(stats.simulationCount).toBe(3);
+    const stats = repo.buildMasterTeamStats(predictionId);
+    expect(stats.simulationCount).toBe(repo.listSimulations().length);
 
     const mexico = stats.teams.find((t) => t.teamId === mexicoId)!;
     const southAfrica = stats.teams.find((t) => t.teamId === southAfricaId)!;
@@ -257,7 +267,8 @@ describe('repository integration', () => {
     repo.persistMatchResult(sim1.id, 104, 2, 1, mexicoId, { sync: false });
     repo.persistMatchResult(sim2.id, 104, 0, 1, spainId, { sync: false });
 
-    const stats = repo.buildMasterTeamStats();
+    const predictionId = ensureTestPrediction(repo);
+    const stats = repo.buildMasterTeamStats(predictionId);
     expect(stats.teams.find((t) => t.teamId === mexicoId)?.championWins).toBe(1);
     expect(stats.teams.find((t) => t.teamId === spainId)?.championWins).toBe(1);
   });
@@ -269,18 +280,19 @@ describe('repository integration', () => {
     repo.updateMatchResult(sim1.id, 1, 2, 1, 18);
     repo.updateMatchResult(sim2.id, 1, 1, 1, null);
 
-    let master = repo.buildMasterGroupView();
+    const predictionId = ensureTestPrediction(repo);
+    let master = repo.buildMasterGroupView(predictionId);
     expect(master.distributions[1].total).toBe(2);
     expect(master.distributions[1].homeWin).toBe(1);
     expect(master.distributions[1].draw).toBe(1);
 
     repo.clearMatchResult(sim1.id, 1);
-    master = repo.buildMasterGroupView();
+    master = repo.buildMasterGroupView(predictionId);
     expect(master.distributions[1].total).toBe(1);
     expect(master.distributions[1].draw).toBe(1);
 
     repo.deleteSimulation(sim2.id);
-    master = repo.buildMasterGroupView();
+    master = repo.buildMasterGroupView(predictionId);
     expect(master.distributions[1].total).toBe(0);
   });
 
@@ -289,12 +301,13 @@ describe('repository integration', () => {
     repo.updateMatchResult(sim.id, 1, 3, 0, 18);
     repo.updateMatchResult(sim.id, 2, 0, 2, 19);
 
-    sqlite.exec('DELETE FROM master_match_outcomes');
-    sqlite.exec('DELETE FROM master_match_scorelines');
-    sqlite.exec('DELETE FROM simulation_group_match_results');
+    const predictionId = ensureTestPrediction(repo);
+    sqlite.exec(`DELETE FROM prediction_match_outcomes WHERE prediction_id = ${predictionId}`);
+    sqlite.exec(`DELETE FROM prediction_match_scorelines WHERE prediction_id = ${predictionId}`);
+    sqlite.exec(`DELETE FROM prediction_group_match_results WHERE prediction_id = ${predictionId}`);
 
-    repo.rebuildAllMasterMatchAggregates();
-    const master = repo.buildMasterGroupView();
+    repo.rebuildAllPredictionAggregates();
+    const master = repo.buildMasterGroupView(predictionId);
 
     expect(master.distributions[1].total).toBe(1);
     expect(master.distributions[1].homeWin).toBe(1);

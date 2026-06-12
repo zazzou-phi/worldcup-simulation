@@ -216,7 +216,7 @@ export async function runMonteCarlo(
     }
   }
   const elapsedMs = performance.now() - started;
-  repo.rebuildAllMasterAggregates();
+  repo.rebuildAllPredictionAggregates();
 
   const champions = [...winCounts.entries()]
     .map(([teamId, wins]) => toTeamResult(teamId, wins, count, teamsById))

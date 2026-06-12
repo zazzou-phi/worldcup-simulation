@@ -7,6 +7,9 @@ import type {
   MasterGroupState,
   MasterTeamStats,
   MonteCarloResult,
+  Prediction,
+  PredictionListPage,
+  ValidateSelectionResult,
   SetScoreResult,
   SimulateGroupResult,
   SimulateKnockoutsResult,
@@ -87,12 +90,50 @@ const privateApi = {
 
   getActualResultsState: () => request<ActualResultsState>('/api/v1/actual-results/state'),
 
-  getMasterGroupState: () => request<MasterGroupState>('/api/v1/master/group-state'),
+  getMasterGroupState: (predictionId?: number) => {
+    const qs =
+      predictionId != null ? `?predictionId=${encodeURIComponent(String(predictionId))}` : '';
+    return request<MasterGroupState>(`/api/v1/master/group-state${qs}`);
+  },
 
-  getMasterTeamStats: () => request<MasterTeamStats>('/api/v1/master/team-stats'),
+  getMasterTeamStats: (predictionId?: number) => {
+    const qs =
+      predictionId != null ? `?predictionId=${encodeURIComponent(String(predictionId))}` : '';
+    return request<MasterTeamStats>(`/api/v1/master/team-stats${qs}`);
+  },
 
-  rebuildMasterTeamStats: () =>
-    request<MasterTeamStats>('/api/v1/master/team-stats/rebuild', { method: 'POST' }),
+  rebuildMasterTeamStats: (predictionId?: number) => {
+    const qs =
+      predictionId != null ? `?predictionId=${encodeURIComponent(String(predictionId))}` : '';
+    return request<MasterTeamStats>(`/api/v1/master/team-stats/rebuild${qs}`, { method: 'POST' });
+  },
+
+  listPredictions: (page = 1, pageSize = 50) =>
+    request<PredictionListPage>(`/api/v1/predictions?page=${page}&pageSize=${pageSize}`),
+
+  validateSelection: (selection: string) =>
+    request<ValidateSelectionResult>('/api/v1/predictions/validate-selection', {
+      method: 'POST',
+      body: JSON.stringify({ selection }),
+    }),
+
+  createPrediction: (name: string, selection: string) =>
+    request<Prediction>('/api/v1/predictions', {
+      method: 'POST',
+      body: JSON.stringify({ name, selection }),
+    }),
+
+  renamePrediction: (id: number, name: string) =>
+    request<Prediction>(`/api/v1/predictions/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ name }),
+    }),
+
+  deletePrediction: (id: number) =>
+    request<void>(`/api/v1/predictions/${id}`, { method: 'DELETE' }),
+
+  activatePrediction: (id: number) =>
+    request<Prediction>(`/api/v1/predictions/${id}/activate`, { method: 'POST' }),
 
   setActualResult: (
     matchNumber: number,
@@ -246,6 +287,27 @@ const publicApiStub = {
   rebuildMasterTeamStats: async (): Promise<MasterTeamStats> => {
     throw new Error('Not available in public mode');
   },
+  listPredictions: async (): Promise<PredictionListPage> => ({
+    items: [],
+    total: 0,
+    page: 1,
+    pageSize: 50,
+  }),
+  validateSelection: async (): Promise<ValidateSelectionResult> => {
+    throw new Error('Not available in public mode');
+  },
+  createPrediction: async (): Promise<Prediction> => {
+    throw new Error('Not available in public mode');
+  },
+  renamePrediction: async (): Promise<Prediction> => {
+    throw new Error('Not available in public mode');
+  },
+  deletePrediction: async (): Promise<void> => {
+    throw new Error('Not available in public mode');
+  },
+  activatePrediction: async (): Promise<Prediction> => {
+    throw new Error('Not available in public mode');
+  },
   setActualResult: async () => {
     throw new Error('Not available in public mode');
   },
@@ -267,6 +329,20 @@ const publicApiStub = {
 };
 
 export const api = isPublicMode() ? publicApiStub : privateApi;
+
+export function loadInitialPrediction(): Promise<{ id: number | null; label: string | null }> {
+  if (isPublicMode()) {
+    return Promise.resolve({ id: 1, label: null });
+  }
+
+  return (async () => {
+    const page = await api.listPredictions(1, 1);
+    if (page.total === 0) return { id: null, label: null };
+    const active = page.items[0];
+    await api.activatePrediction(active.id);
+    return { id: active.id, label: `${active.name} (${active.selectionLabel})` };
+  })();
+}
 
 let initialSimulationLoad: Promise<{ id: number; state: TournamentState }> | null = null;
 
