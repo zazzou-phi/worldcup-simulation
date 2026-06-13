@@ -20,6 +20,13 @@
       "goalsAway": 1,
       "winnerTeamId": null,
       "recordedAt": "2026-06-12T22:43:50.532Z"
+    },
+    {
+      "matchNumber": 19,
+      "goalsHome": 4,
+      "goalsAway": 1,
+      "winnerTeamId": 40,
+      "recordedAt": "2026-06-13T08:20:40.300Z"
     }
   ],
   "phase": "group",
@@ -343,6 +350,31 @@
       "groupLetter": "D",
       "rows": [
         {
+          "teamId": 40,
+          "team": {
+            "id": 40,
+            "name": "United States",
+            "countryCode": "US",
+            "flag": "🇺🇸",
+            "rank": 41,
+            "rating": 1721,
+            "total": 825,
+            "goalsFor": 1246,
+            "goalsAgainst": 1073,
+            "offensiveRating": 0.7805219466715484,
+            "defensiveRating": 1.0597725856671791
+          },
+          "played": 1,
+          "won": 1,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 4,
+          "goalsAgainst": 1,
+          "goalDifference": 3,
+          "points": 3,
+          "position": 1
+        },
+        {
           "teamId": 13,
           "team": {
             "id": 13,
@@ -356,31 +388,6 @@
             "goalsAgainst": 969,
             "offensiveRating": 1.227166163716275,
             "defensiveRating": 0.6740535927825116
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 1
-        },
-        {
-          "teamId": 21,
-          "team": {
-            "id": 21,
-            "name": "Paraguay",
-            "countryCode": "PY",
-            "flag": "🇵🇾",
-            "rank": 22,
-            "rating": 1833,
-            "total": 788,
-            "goalsFor": 1002,
-            "goalsAgainst": 1115,
-            "offensiveRating": 1.0327318568247768,
-            "defensiveRating": 0.800958889887749
           },
           "played": 0,
           "won": 0,
@@ -418,27 +425,27 @@
           "position": 3
         },
         {
-          "teamId": 40,
+          "teamId": 21,
           "team": {
-            "id": 40,
-            "name": "United States",
-            "countryCode": "US",
-            "flag": "🇺🇸",
-            "rank": 41,
-            "rating": 1721,
-            "total": 825,
-            "goalsFor": 1246,
-            "goalsAgainst": 1073,
-            "offensiveRating": 0.7805219466715484,
-            "defensiveRating": 1.0597725856671791
+            "id": 21,
+            "name": "Paraguay",
+            "countryCode": "PY",
+            "flag": "🇵🇾",
+            "rank": 22,
+            "rating": 1833,
+            "total": 788,
+            "goalsFor": 1002,
+            "goalsAgainst": 1115,
+            "offensiveRating": 1.0327318568247768,
+            "defensiveRating": 0.800958889887749
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
           "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
+          "lost": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 4,
+          "goalDifference": -3,
           "points": 0,
           "position": 4
         }
@@ -2249,10 +2256,10 @@
         "matchNumber": 19,
         "teamHomeId": 40,
         "teamAwayId": 21,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 4,
+        "goalsAway": 1,
+        "winnerTeamId": 40,
+        "status": "played"
       },
       "homeTeam": {
         "id": 40,
@@ -2282,7 +2289,7 @@
       },
       "homeLabel": "United States",
       "awayLabel": "Paraguay",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5471,7 +5478,7 @@
       },
       "result": {
         "matchNumber": 81,
-        "teamHomeId": 13,
+        "teamHomeId": 40,
         "teamAwayId": 25,
         "goalsHome": null,
         "goalsAway": null,
@@ -5479,17 +5486,17 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 13,
-        "name": "Turkey",
-        "countryCode": "TR",
-        "flag": "🇹🇷",
-        "rank": 14,
-        "rating": 1902,
-        "total": 669,
-        "goalsFor": 947,
-        "goalsAgainst": 969,
-        "offensiveRating": 1.227166163716275,
-        "defensiveRating": 0.6740535927825116
+        "id": 40,
+        "name": "United States",
+        "countryCode": "US",
+        "flag": "🇺🇸",
+        "rank": 41,
+        "rating": 1721,
+        "total": 825,
+        "goalsFor": 1246,
+        "goalsAgainst": 1073,
+        "offensiveRating": 0.7805219466715484,
+        "defensiveRating": 1.0597725856671791
       },
       "awayTeam": {
         "id": 25,
@@ -5504,7 +5511,7 @@
         "offensiveRating": 0.8933360789590822,
         "defensiveRating": 0.9259401708681849
       },
-      "homeLabel": "Turkey",
+      "homeLabel": "United States",
       "awayLabel": "Australia",
       "isLocked": false
     },
@@ -5835,7 +5842,7 @@
       },
       "result": {
         "matchNumber": 88,
-        "teamHomeId": 21,
+        "teamHomeId": 13,
         "teamAwayId": 31,
         "goalsHome": null,
         "goalsAway": null,
@@ -5843,17 +5850,17 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 21,
-        "name": "Paraguay",
-        "countryCode": "PY",
-        "flag": "🇵🇾",
-        "rank": 22,
-        "rating": 1833,
-        "total": 788,
-        "goalsFor": 1002,
-        "goalsAgainst": 1115,
-        "offensiveRating": 1.0327318568247768,
-        "defensiveRating": 0.800958889887749
+        "id": 13,
+        "name": "Turkey",
+        "countryCode": "TR",
+        "flag": "🇹🇷",
+        "rank": 14,
+        "rating": 1902,
+        "total": 669,
+        "goalsFor": 947,
+        "goalsAgainst": 969,
+        "offensiveRating": 1.227166163716275,
+        "defensiveRating": 0.6740535927825116
       },
       "awayTeam": {
         "id": 31,
@@ -5868,7 +5875,7 @@
         "offensiveRating": 0.8691040542308645,
         "defensiveRating": 0.9517568783246754
       },
-      "homeLabel": "Paraguay",
+      "homeLabel": "Turkey",
       "awayLabel": "Iran",
       "isLocked": false
     },
