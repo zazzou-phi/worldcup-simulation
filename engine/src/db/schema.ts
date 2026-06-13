@@ -159,6 +159,25 @@ export const predictionTeamStats = sqliteTable(
   (t) => [primaryKey({ columns: [t.predictionId, t.teamId] })],
 );
 
+export const predictionFrozenMatches = sqliteTable(
+  'prediction_frozen_matches',
+  {
+    predictionId: integer('prediction_id')
+      .notNull()
+      .references(() => predictions.id),
+    matchNumber: integer('match_number')
+      .notNull()
+      .references(() => fixtures.matchNumber),
+    homeWin: integer('home_win').notNull(),
+    draw: integer('draw').notNull(),
+    awayWin: integer('away_win').notNull(),
+    total: integer('total').notNull(),
+    scorelinesJson: text('scorelines_json').notNull(),
+    frozenAt: text('frozen_at').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.predictionId, t.matchNumber] })],
+);
+
 export const simulationMatches = sqliteTable(
   'simulation_matches',
   {

@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { drizzle, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema.js';
 import { rebuildPredictionAggregates } from './predictionAggregates.js';
+import { migrateExistingFrozenMatches } from './predictionFrozenMatches.js';
 import { computeNormalizedTeamRatings, computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -123,6 +124,17 @@ export function initSchema(sqlite: Database.Database) {
       champion_wins INTEGER NOT NULL,
       PRIMARY KEY (prediction_id, team_id)
     );
+    CREATE TABLE IF NOT EXISTS prediction_frozen_matches (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+      home_win INTEGER NOT NULL,
+      draw INTEGER NOT NULL,
+      away_win INTEGER NOT NULL,
+      total INTEGER NOT NULL,
+      scorelines_json TEXT NOT NULL,
+      frozen_at TEXT NOT NULL,
+      PRIMARY KEY (prediction_id, match_number)
+    );
     CREATE TABLE IF NOT EXISTS simulation_matches (
       simulation_id INTEGER NOT NULL REFERENCES simulations(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
@@ -178,6 +190,7 @@ function migrateSchema(sqlite: Database.Database) {
   migratePredictionConsensusMode(sqlite);
   migrateLegacyMasterAggregates(sqlite);
   ensureDefaultPrediction(sqlite);
+  migratePredictionFrozenMatches(sqlite);
 }
 
 function migratePredictionConsensusMode(sqlite: Database.Database) {
@@ -410,6 +423,48 @@ function dropLegacyMasterTables(sqlite: Database.Database) {
     DROP TABLE IF EXISTS simulation_group_match_results;
     DROP TABLE IF EXISTS simulation_team_goals;
   `);
+}
+
+function migratePredictionFrozenMatches(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'prediction_frozen_matches')) {
+    sqlite.exec(`
+      CREATE TABLE prediction_frozen_matches (
+        prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+        match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+        home_win INTEGER NOT NULL,
+        draw INTEGER NOT NULL,
+        away_win INTEGER NOT NULL,
+        total INTEGER NOT NULL,
+        scorelines_json TEXT NOT NULL,
+        frozen_at TEXT NOT NULL,
+        PRIMARY KEY (prediction_id, match_number)
+      )
+    `);
+  }
+
+  if (!tableExists(sqlite, 'schema_flags')) {
+    sqlite.exec(`
+      CREATE TABLE schema_flags (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      )
+    `);
+  }
+
+  if (!tableExists(sqlite, 'predictions') || !tableExists(sqlite, 'actual_match_results')) {
+    return;
+  }
+
+  const migrated = sqlite
+    .prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'frozen_from_default_v1'")
+    .get();
+  if (migrated) return;
+
+  const db = drizzle(sqlite, { schema });
+  migrateExistingFrozenMatches(db);
+  sqlite
+    .prepare("INSERT INTO schema_flags (key, value) VALUES ('frozen_from_default_v1', '1')")
+    .run();
 }
 
 function ensureDefaultPrediction(sqlite: Database.Database) {

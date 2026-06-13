@@ -1,5 +1,5 @@
 import type Database from 'better-sqlite3';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import type { Db } from './client.js';
 import * as schema from './schema.js';
 import type { MasterTeamStats, MasterTeamStatsRow, Team } from '../engine/types.js';
@@ -29,6 +29,9 @@ function getSqlite(db: Db): Database.Database {
   }
   return client;
 }
+
+/** Exclude matches with entered actual results from live prediction aggregates. */
+const UNLOCKED_GROUP_MATCH_SQL = `sm.match_number NOT IN (SELECT match_number FROM actual_match_results)`;
 
 function outcomeDeltas(
   goalsHome: number,
@@ -260,7 +263,8 @@ function readCurrentGroupMatchResults(
          AND f."group" IS NOT NULL
          AND sm.status = 'played'
          AND sm.goals_home IS NOT NULL
-         AND sm.goals_away IS NOT NULL`,
+         AND sm.goals_away IS NOT NULL
+         AND ${UNLOCKED_GROUP_MATCH_SQL}`,
     )
     .all(simulationId) as Array<{ matchNumber: number; goalsHome: number; goalsAway: number }>;
 
@@ -488,7 +492,12 @@ export function removeSimulationFromPredictionAggregates(
 
 export function deletePredictionAggregates(db: Db, predictionId: number): void {
   db.delete(schema.predictionGroupMatchResults)
-    .where(eq(schema.predictionGroupMatchResults.predictionId, predictionId))
+    .where(
+      and(
+        eq(schema.predictionGroupMatchResults.predictionId, predictionId),
+        sql`${schema.predictionGroupMatchResults.matchNumber} NOT IN (SELECT match_number FROM actual_match_results)`,
+      ),
+    )
     .run();
   db.delete(schema.predictionSimulationTeamGoals)
     .where(eq(schema.predictionSimulationTeamGoals.predictionId, predictionId))
@@ -501,6 +510,29 @@ export function deletePredictionAggregates(db: Db, predictionId: number): void {
     .run();
   db.delete(schema.predictionTeamStats)
     .where(eq(schema.predictionTeamStats.predictionId, predictionId))
+    .run();
+}
+
+export function removeLiveMatchFromAggregates(
+  db: Db,
+  predictionId: number,
+  matchNumber: number,
+): void {
+  db.delete(schema.predictionMatchOutcomes)
+    .where(
+      and(
+        eq(schema.predictionMatchOutcomes.predictionId, predictionId),
+        eq(schema.predictionMatchOutcomes.matchNumber, matchNumber),
+      ),
+    )
+    .run();
+  db.delete(schema.predictionMatchScorelines)
+    .where(
+      and(
+        eq(schema.predictionMatchScorelines.predictionId, predictionId),
+        eq(schema.predictionMatchScorelines.matchNumber, matchNumber),
+      ),
+    )
     .run();
 }
 
@@ -529,6 +561,7 @@ export function rebuildPredictionAggregates(
       AND sm.status = 'played'
       AND sm.goals_home IS NOT NULL
       AND sm.goals_away IS NOT NULL
+      AND ${UNLOCKED_GROUP_MATCH_SQL}
       AND ${simFilter}
     GROUP BY sm.match_number;
 
@@ -540,6 +573,7 @@ export function rebuildPredictionAggregates(
       AND sm.status = 'played'
       AND sm.goals_home IS NOT NULL
       AND sm.goals_away IS NOT NULL
+      AND ${UNLOCKED_GROUP_MATCH_SQL}
       AND ${simFilter}
     GROUP BY sm.match_number, sm.goals_home, sm.goals_away;
 
@@ -551,6 +585,7 @@ export function rebuildPredictionAggregates(
       AND sm.status = 'played'
       AND sm.goals_home IS NOT NULL
       AND sm.goals_away IS NOT NULL
+      AND ${UNLOCKED_GROUP_MATCH_SQL}
       AND ${simFilter};
 
     INSERT INTO prediction_simulation_team_goals (prediction_id, simulation_id, team_id, goals)

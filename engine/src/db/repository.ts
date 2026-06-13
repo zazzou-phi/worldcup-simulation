@@ -60,6 +60,12 @@ import {
   removeSimulationFromPredictionAggregates,
 } from './predictionAggregates.js';
 import {
+  backfillFrozenMatchesForPrediction,
+  clearFrozenMatch,
+  freezeMatchForAllPredictions,
+  readFrozenMatchDistributions,
+} from './predictionFrozenMatches.js';
+import {
   formatSelectionSpec,
   parseSelectionInput,
   parseSelectionSpecJson,
@@ -422,6 +428,7 @@ export class Repository {
       .get();
 
     rebuildPredictionAggregates(this.db, row.id, parsed.spec);
+    backfillFrozenMatchesForPrediction(this.db, row.id, parsed.spec);
     return mapPrediction(row);
   }
 
@@ -450,6 +457,10 @@ export class Repository {
   deletePrediction(id: number): boolean {
     const existing = this.getPrediction(id);
     if (!existing) return false;
+    this.db
+      .delete(schema.predictionFrozenMatches)
+      .where(eq(schema.predictionFrozenMatches.predictionId, id))
+      .run();
     deletePredictionAggregates(this.db, id);
     this.db.delete(schema.predictions).where(eq(schema.predictions.id, id)).run();
     return true;
@@ -674,6 +685,7 @@ export class Repository {
         .insert(schema.actualMatchResults)
         .values({ matchNumber, goalsHome, goalsAway, winnerTeamId, recordedAt: now })
         .run();
+      freezeMatchForAllPredictions(this.db, matchNumber, now);
     }
     return this.getActualResult(matchNumber)!;
   }
@@ -695,6 +707,11 @@ export class Repository {
       .delete(schema.actualMatchResults)
       .where(eq(schema.actualMatchResults.matchNumber, matchNumber))
       .run();
+
+    clearFrozenMatch(this.db, matchNumber);
+    for (const prediction of this.listPredictions()) {
+      rebuildPredictionAggregates(this.db, prediction.id, prediction.selectionSpec);
+    }
   }
 
   applyActualResultsToSimulation(
@@ -1086,20 +1103,27 @@ export class Repository {
       this.db,
       predictionId,
     );
+    const frozen = readFrozenMatchDistributions(this.db, predictionId);
 
     const consensusMatches: SimulationMatch[] = [];
     const distributions: Record<number, OutcomeDistribution> = {};
 
     for (const fixture of groupFixtures) {
-      const outcomeCounts = outcomesByMatch.get(fixture.matchNumber) ?? {
-        homeWin: 0,
-        draw: 0,
-        awayWin: 0,
-        total: 0,
-      };
+      const locked = this.isMatchLocked(fixture.matchNumber);
+      const frozenOutcomes = locked ? frozen.outcomesByMatch.get(fixture.matchNumber) : undefined;
+      const outcomeCounts = frozenOutcomes ??
+        outcomesByMatch.get(fixture.matchNumber) ?? {
+          homeWin: 0,
+          draw: 0,
+          awayWin: 0,
+          total: 0,
+        };
+      const matchScorelines = locked
+        ? (frozen.scorelinesByMatch.get(fixture.matchNumber) ?? [])
+        : (scorelinesByMatch.get(fixture.matchNumber) ?? []);
       distributions[fixture.matchNumber] = {
         ...outcomeCounts,
-        scorelines: scorelinesByMatch.get(fixture.matchNumber) ?? [],
+        scorelines: matchScorelines,
       };
       const dist = distributions[fixture.matchNumber];
 
@@ -1117,7 +1141,7 @@ export class Repository {
         const scoreline = chooseConsensus({
           mode: consensusMode,
           outcomeCounts: dist,
-          scorelines: scorelinesByMatch.get(fixture.matchNumber) ?? [],
+          scorelines: matchScorelines,
           homeOffensive: homeTeam.eloOffensiveRating,
           awayOffensive: awayTeam.eloOffensiveRating,
         });

@@ -627,13 +627,13 @@ export function App() {
             actualState={actualState}
             layout={layout}
             selectedMatchNumber={selectedMatchNumber}
-            editingMatchNumber={editingMatchNumber}
+            editingMatchNumber={publicMode ? null : editingMatchNumber}
             readOnly={publicMode}
             onSelectMatch={setSelectedMatchNumber}
-            onStartEdit={setEditingMatchNumber}
-            onSaveScore={handleSaveActualScore}
+            onStartEdit={publicMode ? () => {} : setEditingMatchNumber}
+            onSaveScore={publicMode ? () => {} : handleSaveActualScore}
             onCancelEdit={() => setEditingMatchNumber(null)}
-            onClearScore={handleClearActualScore}
+            onClearScore={publicMode ? () => {} : handleClearActualScore}
           />
         ) : showGroupView ? (
           <GroupPhaseView
