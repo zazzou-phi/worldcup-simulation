@@ -11,7 +11,7 @@ import {
 } from '@shared/lib/bracket-linear.js';
 import { matchSideCode, matchWinnerSide } from '@shared/lib/matchDisplay.js';
 import { MOBILE_QUERY, useMediaQuery } from '../lib/useMediaQuery.js';
-import type { ResolvedMatch } from '../types.js';
+import type { ActualMatchResult, ResolvedMatch } from '../types.js';
 import { BracketConnectors } from './BracketConnectors.js';
 import { FixtureList } from './FixtureList.js';
 import { ScoreDisplay, ScoreEditor } from './ScoreEditor.js';
@@ -34,6 +34,8 @@ interface Props {
   onClear: (matchNumber: number) => void;
   canClearMatch?: (matchNumber: number) => boolean;
   canModifyMatch?: (matchNumber: number) => boolean;
+  actualResults?: ActualMatchResult[];
+  hidePredictedWhenLocked?: boolean;
 }
 
 function teamClassName(match: ResolvedMatch, side: 'home' | 'away'): string {
@@ -55,6 +57,8 @@ function MatchNode({
   onSimulate,
   onSave,
   onCancelEdit,
+  actual,
+  hidePredicted = false,
 }: {
   match: ResolvedMatch;
   selected: boolean;
@@ -67,6 +71,8 @@ function MatchNode({
   onSimulate?: () => void;
   onSave: (h: number, a: number, w: number | null) => void;
   onCancelEdit: () => void;
+  actual?: ActualMatchResult;
+  hidePredicted?: boolean;
 }) {
   const played = match.result.status === 'played';
   const locked = match.isLocked;
@@ -102,6 +108,8 @@ function MatchNode({
           goalsAway={match.result.goalsAway}
           played={played}
           pen={pen}
+          actual={actual}
+          hidePredicted={hidePredicted}
           canSimulate={canSimulate}
           simulating={simulating}
           onClick={() => {
@@ -133,8 +141,11 @@ export function KnockoutBracket({
   onCancelEdit,
   onClear,
   canModifyMatch,
+  actualResults = [],
+  hidePredictedWhenLocked = false,
 }: Props) {
   const byNumber = new Map(matches.map((m) => [m.fixture.matchNumber, m]));
+  const actualByMatch = new Map(actualResults.map((r) => [r.matchNumber, r]));
   const rows = computeBracketRows();
   const mobile = useMediaQuery(MOBILE_QUERY);
   const dims = bracketDimsForViewport(mobile);
@@ -164,6 +175,8 @@ export function KnockoutBracket({
                 const large = num === FINAL_MATCH_NUMBER;
                 const editable =
                   !m.isLocked && (canModifyMatch == null || canModifyMatch(num));
+                const actual = actualByMatch.get(num);
+                const hidePredicted = hidePredictedWhenLocked && m.isLocked && actual != null;
                 return (
                   <div
                     key={num}
@@ -184,6 +197,8 @@ export function KnockoutBracket({
                       }
                       onSave={(h, a, w) => onSave(num, h, a, w)}
                       onCancelEdit={onCancelEdit}
+                      actual={actual}
+                      hidePredicted={hidePredicted}
                     />
                   </div>
                 );
@@ -209,6 +224,8 @@ export function KnockoutList({
   onClear,
   canClearMatch,
   canModifyMatch,
+  actualResults = [],
+  hidePredictedWhenLocked = false,
 }: Props) {
   const knockout = matches.filter((m) => m.fixture.group == null);
 
@@ -219,6 +236,8 @@ export function KnockoutList({
         matches={knockout}
         selectedMatchNumber={selectedMatchNumber}
         editingMatchNumber={editingMatchNumber}
+        actualResults={actualResults}
+        hidePredictedWhenLocked={hidePredictedWhenLocked}
         simulating={simulating}
         onSelect={onSelect}
         onStartEdit={onStartEdit}

@@ -47,6 +47,8 @@ export function KnockoutView(props: Props) {
     selectedMatchNumber: props.selectedMatchNumber,
     editingMatchNumber: props.editingMatchNumber,
     simulating: props.simulating,
+    actualResults: state.actualResults,
+    hidePredictedWhenLocked: true,
     onSelect: props.onSelectMatch,
     onStartEdit: props.onStartEdit,
     onSimulateMatch: props.onSimulateMatch,

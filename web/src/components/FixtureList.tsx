@@ -12,6 +12,7 @@ interface Props {
   canClearMatch?: (matchNumber: number) => boolean;
   canModifyMatch?: (matchNumber: number) => boolean;
   actualResults?: ActualMatchResult[];
+  hidePredictedWhenLocked?: boolean;
   simulating?: boolean;
   doubleCount?: number;
   maxDoubleCount?: number;
@@ -53,6 +54,7 @@ export function FixtureList({
   canClearMatch,
   canModifyMatch,
   actualResults = [],
+  hidePredictedWhenLocked = false,
   simulating = false,
   doubleCount,
   maxDoubleCount = 10,
@@ -126,7 +128,8 @@ export function FixtureList({
             m.result.goalsHome === m.result.goalsAway &&
             m.result.winnerTeamId != null;
           const actual = actualByMatch.get(num);
-          const showDouble = showDoubleMarks && played && doubledMatchNumbers!.has(num);
+          const hidePredicted = hidePredictedWhenLocked && locked && actual != null;
+          const showDouble = showDoubleMarks && played && !hidePredicted && doubledMatchNumbers!.has(num);
 
           return (
             <div
@@ -161,6 +164,7 @@ export function FixtureList({
                     played={played}
                     pen={pen}
                     actual={actual}
+                    hidePredicted={hidePredicted}
                     canSimulate={canSimulate}
                     simulating={simulating}
                     onClick={() => {

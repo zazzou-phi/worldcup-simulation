@@ -114,6 +114,7 @@ interface ScoreDisplayProps {
   played: boolean;
   pen?: boolean;
   actual?: { goalsHome: number; goalsAway: number };
+  hidePredicted?: boolean;
   canSimulate?: boolean;
   simulating?: boolean;
   onClick?: () => void;
@@ -131,11 +132,20 @@ export function ScoreDisplay({
   played,
   pen,
   actual,
+  hidePredicted = false,
   canSimulate = false,
   simulating = false,
   onClick,
   onDoubleClick,
 }: ScoreDisplayProps) {
+  if (actual && hidePredicted) {
+    return (
+      <div className="score-display score-actual-only" title="Actual result">
+        {actual.goalsHome} - {actual.goalsAway}
+      </div>
+    );
+  }
+
   if (actual) {
     const interactive = canSimulate || (played && onClick != null);
     const className = `score-display score-with-actual${interactive ? ' score-interactive' : ''}${

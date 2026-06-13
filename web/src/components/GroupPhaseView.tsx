@@ -111,6 +111,7 @@ export function GroupPhaseView({
           editingMatchNumber={editingMatchNumber}
           filterTeamLabel={filterTeamLabel}
           actualResults={state.actualResults}
+          hidePredictedWhenLocked
           canClearMatch={canClearMatch}
           canModifyMatch={canModifyMatch}
           simulating={simulating}

@@ -771,6 +771,13 @@ button {
   white-space: nowrap;
 }
 
+.score-display.score-actual-only {
+  color: var(--yellow, #f5c542);
+  font-weight: 700;
+  border-style: solid;
+  cursor: default;
+}
+
 .score-editor {
   display: flex;
   align-items: center;
