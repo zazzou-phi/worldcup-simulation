@@ -69,7 +69,7 @@ export function FixtureList({
   const showDoubleMarks = doubledMatchNumbers != null;
 
   return (
-    <div className="fixture-list">
+    <div className={`fixture-list${showDoubleMarks ? ' fixture-list-doubles' : ''}`}>
       <div className="fixture-list-header">
         <span>
           Fixtures ({matches.length})
@@ -131,7 +131,7 @@ export function FixtureList({
           return (
             <div
               key={num}
-              className={`fixture-row ${selected ? 'selected' : ''} ${locked ? 'fixture-locked' : ''}${showDouble ? ' fixture-row-double' : ''}`}
+              className={`fixture-row ${selected ? 'selected' : ''} ${locked ? 'fixture-locked' : ''}`}
               onClick={() => onSelect(selected ? null : num)}
               onDoubleClick={() => canEdit && onStartEdit(num)}
             >
