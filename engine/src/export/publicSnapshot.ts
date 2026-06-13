@@ -33,6 +33,8 @@ export interface PublicBootstrap {
 export interface PublicMeta {
   exportedAt: string;
   revealPolicy: 'kickoff';
+  predictionId: number;
+  predictionName: string;
 }
 
 export interface PublicSnapshot {
@@ -150,18 +152,19 @@ export function buildPublicSnapshot(
 ): PublicSnapshot {
   const fixtures = repo.getFixtures();
   const groupMemberships = repo.getGroupMemberships();
-  const predictionId = repo.resolvePredictionId(1) ?? repo.resolvePredictionId();
-  if (predictionId == null) {
+  const predictionId = repo.resolvePredictionId();
+  const prediction = predictionId != null ? repo.getPrediction(predictionId) : null;
+  if (prediction == null) {
     throw new Error('No predictions configured for public export');
   }
-  const masterRaw = repo.buildMasterGroupView(predictionId);
+  const masterRaw = repo.buildMasterGroupView(prediction.id);
   const masterGroupState = redactMasterGroupState(
     masterRaw,
     exportTime,
     groupMemberships,
     fixtures,
   );
-  const masterTeamStats = repo.buildMasterTeamStats(predictionId);
+  const masterTeamStats = repo.buildMasterTeamStats(prediction.id);
   const actualView = repo.buildActualResultsView();
 
   const teams = repo.getTeams();
@@ -186,6 +189,8 @@ export function buildPublicSnapshot(
     meta: {
       exportedAt: exportTime.toISOString(),
       revealPolicy: 'kickoff',
+      predictionId: prediction.id,
+      predictionName: prediction.name,
     },
   };
 }

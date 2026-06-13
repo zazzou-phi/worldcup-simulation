@@ -24,7 +24,9 @@ import {
   createEmptyMatches,
 } from '@shared/engine/tournamentState.js';
 import type { PublicBootstrap } from '@shared/export/publicSnapshot.js';
-import type { Simulation, SimulationMatch, TournamentState } from '../types.js';
+import { teamForSimulation } from '@shared/engine/teamRatings.js';
+import { normalizeBootstrapTeams } from './normalizeTeam.js';
+import type { Simulation, SimulationMatch, Team, TournamentState } from '../types.js';
 
 const LOCAL_SIMULATION: Simulation = {
   id: 0,
@@ -42,7 +44,7 @@ export function createInitialLocalState(bootstrap: PublicBootstrap): TournamentS
 
   const raw = buildTournamentStateFromData({
     simulation: LOCAL_SIMULATION,
-    teams: bootstrap.teams,
+    teams: normalizeBootstrapTeams(bootstrap.teams as Team[]),
     fixtures: bootstrap.fixtures,
     matches,
     groupMemberships: bootstrap.groupMemberships,
@@ -163,6 +165,10 @@ export function clearLocalMatchScore(
   return fromEngineMatches(state, matches);
 }
 
+function getSimTeam(state: TournamentState, teamId: number) {
+  return teamForSimulation(getTeam(state, teamId));
+}
+
 export function simulateLocalMatch(
   state: TournamentState,
   matchNumber: number,
@@ -180,9 +186,12 @@ export function simulateLocalMatch(
   }
 
   const isKnockout = resolved.fixture.group == null;
-  const outcome = simulateMatchOutcome(resolved.homeTeam, resolved.awayTeam, isKnockout, {
-    upsetVariance,
-  });
+  const outcome = simulateMatchOutcome(
+    teamForSimulation(resolved.homeTeam),
+    teamForSimulation(resolved.awayTeam),
+    isKnockout,
+    { upsetVariance },
+  );
   const winnerTeamId = isKnockout
     ? (outcome.winnerId ?? null)
     : winnerFromGoals(
@@ -242,8 +251,8 @@ export function simulateLocalGroupPhase(
       throw new LocalSimulationError(`Group fixture ${matchNumber} is missing team ids`);
     }
 
-    const home = getTeam(state, fixture.teamHomeId);
-    const away = getTeam(state, fixture.teamAwayId);
+    const home = getSimTeam(state, fixture.teamHomeId);
+    const away = getSimTeam(state, fixture.teamAwayId);
     const outcome = simulateMatchOutcome(home, away, false, { upsetVariance });
     const winnerTeamId = winnerFromGoals(outcome.goals1, outcome.goals2, home.id, away.id);
 
@@ -323,8 +332,8 @@ export function simulateLocalKnockouts(
         throw new LocalSimulationError(`Knockout fixture ${matchNumber} has unresolved participants`);
       }
 
-      const home = getTeam(currentState, match.teamHomeId);
-      const away = getTeam(currentState, match.teamAwayId);
+      const home = getSimTeam(currentState, match.teamHomeId);
+      const away = getSimTeam(currentState, match.teamAwayId);
       const outcome = simulateMatchOutcome(home, away, true, { upsetVariance });
       const winnerTeamId = outcome.winnerId ?? null;
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { MonteCarloResult } from '../types.js';
 import { TEAM_CODES } from '@shared/lib/teamCodes.js';
+import { RatingEloWeightControl } from './RatingEloWeightControl.js';
 import { UpsetFactorControl } from './UpsetFactorControl.js';
 
 interface Props {
@@ -9,7 +10,9 @@ interface Props {
   result: MonteCarloResult | null;
   error: string | null;
   upsetVariance: number;
+  ratingEloWeight: number;
   onUpsetVarianceChange: (value: number) => void;
+  onRatingEloWeightChange: (value: number) => void;
   onClose: () => void;
   onRun: (count: number) => void;
 }
@@ -28,7 +31,9 @@ export function MonteCarloModal({
   result,
   error,
   upsetVariance,
+  ratingEloWeight,
   onUpsetVarianceChange,
+  onRatingEloWeightChange,
   onClose,
   onRun,
 }: Props) {
@@ -72,6 +77,14 @@ export function MonteCarloModal({
           value={countInput}
           disabled={running}
           onChange={(e) => setCountInput(e.target.value)}
+        />
+
+        <RatingEloWeightControl
+          id="monte-carlo-rating-elo-weight"
+          variant="full"
+          value={ratingEloWeight}
+          disabled={running}
+          onChange={onRatingEloWeightChange}
         />
 
         <UpsetFactorControl

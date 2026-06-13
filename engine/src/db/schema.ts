@@ -8,11 +8,21 @@ export const teams = sqliteTable('teams', {
   flag: text('flag').notNull(),
   rank: integer('rank').notNull(),
   rating: integer('rating').notNull(),
+  elo: integer('elo').notNull(),
   total: integer('total').notNull(),
   goalsFor: integer('goals_for').notNull(),
   goalsAgainst: integer('goals_against').notNull(),
-  offensiveRating: real('offensive_rating').notNull(),
-  defensiveRating: real('defensive_rating').notNull(),
+  eloOffensiveRating: real('elo_offensive_rating').notNull(),
+  eloDefensiveRating: real('elo_defensive_rating').notNull(),
+  goalOffensiveRating: real('goal_offensive_rating').notNull(),
+  goalDefensiveRating: real('goal_defensive_rating').notNull(),
+  blendOffensiveRating: real('blend_offensive_rating').notNull(),
+  blendDefensiveRating: real('blend_defensive_rating').notNull(),
+});
+
+export const appSettings = sqliteTable('app_settings', {
+  id: integer('id').primaryKey(),
+  ratingEloWeight: real('rating_elo_weight').notNull(),
 });
 
 export const groupMemberships = sqliteTable(
@@ -53,6 +63,10 @@ export const predictions = sqliteTable('predictions', {
   id: integer('id').primaryKey(),
   name: text('name').notNull(),
   selectionSpec: text('selection_spec').notNull(),
+  consensusMode: text('consensus_mode')
+    .notNull()
+    .$type<'scoreline' | 'outcome' | 'expected' | 'rounded'>()
+    .default('expected'),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
 });

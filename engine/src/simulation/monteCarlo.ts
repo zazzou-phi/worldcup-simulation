@@ -14,6 +14,7 @@ import {
   defaultRandomSource,
   DEFAULT_UPSET_VARIANCE,
 } from '../engine/matchSimulator.js';
+import { teamForSimulation } from '../engine/teamRatings.js';
 import { SIMULATION_KNOCKOUT_ROUNDS, FINAL_MATCH_NUMBER } from '../engine/simulationRounds.js';
 
 export const MONTE_CARLO_MAX_COUNT = 100_000;
@@ -57,7 +58,10 @@ function shouldReportProgress(completed: number, total: number): boolean {
   return completed % step === 0;
 }
 
-function buildEngine(repo: Repository, upsetVariance: number = DEFAULT_UPSET_VARIANCE): MonteCarloEngine {
+function buildEngine(
+  repo: Repository,
+  upsetVariance: number = DEFAULT_UPSET_VARIANCE,
+): MonteCarloEngine {
   const teams = repo.getTeams();
   const teamsById = new Map(teams.map((t) => [t.id, t]));
   const fixtures = repo.getFixtures();
@@ -103,8 +107,8 @@ function buildEngine(repo: Repository, upsetVariance: number = DEFAULT_UPSET_VAR
       throw new Error(`Match ${matchNumber} has unresolved participants`);
     }
 
-    const home = teamsById.get(homeId)!;
-    const away = teamsById.get(awayId)!;
+    const home = teamForSimulation(teamsById.get(homeId)!);
+    const away = teamForSimulation(teamsById.get(awayId)!);
     const outcome = simulateMatchOutcome(home, away, knockout, { rng, upsetVariance });
     const winnerTeamId = knockout
       ? (outcome.winnerId ?? null)

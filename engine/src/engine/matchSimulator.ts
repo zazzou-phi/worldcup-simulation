@@ -101,8 +101,14 @@ export function simulateMatchOutcome(
   const rng = options.rng ?? defaultRandomSource;
   const upsetVariance = options.upsetVariance ?? DEFAULT_UPSET_VARIANCE;
 
-  let lambda1 = gpg * home.offensiveRating * away.defensiveRating;
-  let lambda2 = gpg * away.offensiveRating * home.defensiveRating;
+  let lambda1 =
+    gpg *
+    (home.offensiveRating ?? home.eloOffensiveRating) *
+    (away.defensiveRating ?? away.eloDefensiveRating);
+  let lambda2 =
+    gpg *
+    (away.offensiveRating ?? away.eloOffensiveRating) *
+    (home.defensiveRating ?? home.eloDefensiveRating);
 
   if (upsetVariance > 0) {
     const homeForm = sampleLogNormalMean1(rng, upsetVariance);

@@ -1,12 +1,29 @@
 export type MatchOutcome = 'homeWin' | 'draw' | 'awayWin';
 
 /** How master-view consensus picks a result. Default: expected. */
-export type ConsensusMode = 'scoreline' | 'outcome' | 'expected';
+export type ConsensusMode = 'scoreline' | 'outcome' | 'expected' | 'rounded';
+
+export const DEFAULT_CONSENSUS_MODE: ConsensusMode = 'expected';
+
+export function parseConsensusMode(value: unknown): ConsensusMode {
+  if (typeof value === 'string') {
+    const raw = value.trim().toLowerCase();
+    if (raw === 'outcome' || raw === 'scoreline' || raw === 'expected' || raw === 'rounded') {
+      return raw;
+    }
+  }
+  return DEFAULT_CONSENSUS_MODE;
+}
+
+/** Default for new predictions; env override when set. */
+export function getDefaultConsensusMode(): ConsensusMode {
+  return getConsensusMode();
+}
 
 export function getConsensusMode(): ConsensusMode {
   const raw = process.env.CONSENSUS_MODE?.trim().toLowerCase();
-  if (raw === 'outcome' || raw === 'scoreline') return raw;
-  return 'expected';
+  if (raw === 'outcome' || raw === 'scoreline' || raw === 'rounded') return raw;
+  return DEFAULT_CONSENSUS_MODE;
 }
 
 export interface OutcomeCounts {
@@ -126,8 +143,8 @@ export function chooseRepresentativeScoreline(
   return { goalsHome: best.goalsHome, goalsAway: best.goalsAway };
 }
 
-/** Floored mean goals across simulations. */
-export function computeFlooredExpectedGoals(
+/** Mean goals across simulations (fractional). */
+export function computeMeanExpectedGoals(
   scorelines: ScorelineCount[],
 ): { goalsHome: number; goalsAway: number } | null {
   if (scorelines.length === 0) return null;
@@ -143,8 +160,34 @@ export function computeFlooredExpectedGoals(
   if (total === 0) return null;
 
   return {
-    goalsHome: Math.floor(sumHome / total),
-    goalsAway: Math.floor(sumAway / total),
+    goalsHome: sumHome / total,
+    goalsAway: sumAway / total,
+  };
+}
+
+/** Floored mean goals across simulations. */
+export function computeFlooredExpectedGoals(
+  scorelines: ScorelineCount[],
+): { goalsHome: number; goalsAway: number } | null {
+  const mean = computeMeanExpectedGoals(scorelines);
+  if (!mean) return null;
+
+  return {
+    goalsHome: Math.floor(mean.goalsHome),
+    goalsAway: Math.floor(mean.goalsAway),
+  };
+}
+
+/** Rounded mean goals across simulations. */
+export function computeRoundedExpectedGoals(
+  scorelines: ScorelineCount[],
+): { goalsHome: number; goalsAway: number } | null {
+  const mean = computeMeanExpectedGoals(scorelines);
+  if (!mean) return null;
+
+  return {
+    goalsHome: Math.round(mean.goalsHome),
+    goalsAway: Math.round(mean.goalsAway),
   };
 }
 
@@ -184,7 +227,7 @@ export interface ChooseConsensusInput {
   awayOffensive: number;
 }
 
-/** Pick master-view consensus using scoreline, expected, or outcome mode. */
+/** Pick master-view consensus using scoreline, expected, rounded, or outcome mode. */
 export function chooseConsensus(input: ChooseConsensusInput): {
   goalsHome: number;
   goalsAway: number;
@@ -199,6 +242,9 @@ export function chooseConsensus(input: ChooseConsensusInput): {
   }
   if (mode === 'expected') {
     return chooseExpectedGoalsScoreline(input.scorelines);
+  }
+  if (mode === 'rounded') {
+    return computeRoundedExpectedGoals(input.scorelines);
   }
 
   const outcome = chooseOutcome(

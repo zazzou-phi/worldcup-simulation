@@ -2,10 +2,14 @@ import type { TournamentState } from '../types.js';
 import { isGroupStagePhase, phaseLabel } from '@shared/engine/phase.js';
 import type { AppView } from '../lib/appView.js';
 import { DEFAULT_UPSET_VARIANCE } from '../lib/upsetVariance.js';
+import type { ConsensusMode } from '../lib/consensusMode.js';
+import { formatConsensusMode } from '../lib/consensusMode.js';
 import { MOBILE_QUERY, useMediaQuery } from '../lib/useMediaQuery.js';
 import { SimulateMenu } from './SimulateMenu.js';
 import { HeaderDropdownMenu } from './HeaderDropdownMenu.js';
 import { UpsetFactorControl } from './UpsetFactorControl.js';
+import { ConsensusModeControl } from './ConsensusModeControl.js';
+import { RatingEloWeightControl, DEFAULT_RATING_ELO_WEIGHT } from './RatingEloWeightControl.js';
 import { ViewSwitcher } from './ViewSwitcher.js';
 
 interface Props {
@@ -15,12 +19,18 @@ interface Props {
   showGroupView: boolean;
   knockoutBracketView: boolean;
   publicMode?: boolean;
-  masterConsensusMode?: 'scoreline' | 'outcome' | 'expected';
+  consensusMode?: ConsensusMode;
+  consensusModeDirty?: boolean;
+  savingConsensusMode?: boolean;
   activePredictionLabel?: string | null;
   simulating: boolean;
   upsetVariance: number;
+  ratingEloWeight: number;
   onAppViewChange: (view: AppView) => void;
   onUpsetVarianceChange: (value: number) => void;
+  onRatingEloWeightChange: (value: number) => void;
+  onConsensusModeChange: (mode: ConsensusMode) => void;
+  onSaveConsensusMode: () => void;
   onLayoutChange: (layout: 'horizontal' | 'vertical') => void;
   onKnockoutBracketViewChange: (useBracket: boolean) => void;
   onToggleStageView: () => void;
@@ -30,6 +40,7 @@ interface Props {
   onSimulateKnockoutsThrough: (throughRound: string) => void;
   onOpenMonteCarlo: () => void;
   onOpenMasterTeamStats: () => void;
+  onOpenTournamentStats: () => void;
   onOpenPredictions: () => void;
   onClearSimulation?: () => void;
 }
@@ -41,12 +52,18 @@ export function Header({
   showGroupView,
   knockoutBracketView,
   publicMode = false,
-  masterConsensusMode,
+  consensusMode,
+  consensusModeDirty = false,
+  savingConsensusMode = false,
   activePredictionLabel,
   simulating,
   upsetVariance,
+  ratingEloWeight,
   onAppViewChange,
   onUpsetVarianceChange,
+  onRatingEloWeightChange,
+  onConsensusModeChange,
+  onSaveConsensusMode,
   onLayoutChange,
   onKnockoutBracketViewChange,
   onToggleStageView,
@@ -56,6 +73,7 @@ export function Header({
   onSimulateKnockoutsThrough,
   onOpenMonteCarlo,
   onOpenMasterTeamStats,
+  onOpenTournamentStats,
   onOpenPredictions,
   onClearSimulation,
 }: Props) {
@@ -68,7 +86,8 @@ export function Header({
   const meta = isPredictionsView ? (
     <span className="header-meta header-predictions">
       {activePredictionLabel ? `${activePredictionLabel} · ` : ''}
-      Consensus, {masterConsensusMode ?? 'expected'}
+      Consensus, {formatConsensusMode(consensusMode ?? 'expected')}
+      {consensusModeDirty ? ' · unsaved' : ''}
     </span>
   ) : isResultsView ? (
     <span className="header-meta header-results">Recorded match results</span>
@@ -89,7 +108,7 @@ export function Header({
       (isSimulationsView && isGroupStagePhase(simulation.phase) && showGroupView));
   const showUpsetSetting = isSimulationsView;
   const showBracketSetting = isSimulationsView && !showGroupView && !narrow;
-  const showRatings = isSimulationsView && !publicMode;
+  const showRatings = isSimulationsView;
   const showManagePredictions = isPredictionsView && !publicMode;
   const showManageSimulations = isSimulationsView && !publicMode;
   const showClearSimulation = isSimulationsView && onClearSimulation != null;
@@ -105,6 +124,8 @@ export function Header({
 
   const menuActive =
     (showUpsetSetting && upsetVariance !== DEFAULT_UPSET_VARIANCE) ||
+    (showUpsetSetting && ratingEloWeight !== DEFAULT_RATING_ELO_WEIGHT) ||
+    (isPredictionsView && consensusModeDirty) ||
     (showLayoutSetting && layout !== 'vertical');
 
   const hasMenu = hasTopSection || hasBottomSection;
@@ -118,21 +139,46 @@ export function Header({
       active={menuActive}
     >
       {showUpsetSetting && (
-        <UpsetFactorControl
-          value={upsetVariance}
-          disabled={simulating}
-          variant="compact"
-          id="header-upset-factor"
-          onChange={onUpsetVarianceChange}
-        />
+        <>
+          <RatingEloWeightControl
+            value={ratingEloWeight}
+            disabled={simulating}
+            onChange={onRatingEloWeightChange}
+          />
+          <UpsetFactorControl
+            value={upsetVariance}
+            disabled={simulating}
+            variant="compact"
+            id="header-upset-factor"
+            onChange={onUpsetVarianceChange}
+          />
+        </>
       )}
       {showRatings && (
-        <button type="button" className="btn btn-ghost" onClick={onOpenRatings}>
-          Ratings
-        </button>
+        <>
+          <button type="button" className="btn btn-ghost" onClick={onOpenRatings}>
+            Ratings
+          </button>
+          <button type="button" className="btn btn-ghost" onClick={onOpenTournamentStats}>
+            Tournament Stats
+          </button>
+        </>
+      )}
+      {isPredictionsView && consensusMode != null && (
+        <ConsensusModeControl
+          value={consensusMode}
+          dirty={consensusModeDirty}
+          saving={savingConsensusMode}
+          canSave={!publicMode}
+          onChange={onConsensusModeChange}
+          onSave={onSaveConsensusMode}
+        />
       )}
       {isPredictionsView && (
         <>
+          <button type="button" className="btn btn-ghost" onClick={onOpenTournamentStats}>
+            Tournament Stats
+          </button>
           <button type="button" className="btn btn-ghost" onClick={onOpenMasterTeamStats}>
             Team Stats
           </button>
@@ -233,17 +279,17 @@ export function Header({
     </HeaderDropdownMenu>
   ) : null;
 
-  const simulateMenu =
-    isSimulationsView && simulation.phase !== 'complete' ? (
-      <SimulateMenu
-        state={state}
-        simulating={simulating}
-        publicMode={publicMode}
-        onSimulateGroup={onSimulateGroupGames}
-        onSimulateKnockouts={onSimulateKnockoutsThrough}
-        onBulk={onOpenMonteCarlo}
-      />
-    ) : null;
+  const simulateMenu = isSimulationsView ? (
+    <SimulateMenu
+      state={state}
+      simulating={simulating}
+      publicMode={publicMode}
+      simulationComplete={simulation.phase === 'complete'}
+      onSimulateGroup={onSimulateGroupGames}
+      onSimulateKnockouts={onSimulateKnockoutsThrough}
+      onBulk={onOpenMonteCarlo}
+    />
+  ) : null;
 
   const actions = (
     <>

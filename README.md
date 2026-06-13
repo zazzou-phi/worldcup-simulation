@@ -48,7 +48,7 @@ To update what visitors see on the public site, export a fresh snapshot from you
 
 ### Prerequisites
 
-1. A populated `data/simulations.db` with at least one **prediction** configured (the export uses prediction id `1` if it exists, otherwise the most recently updated prediction). Create and manage predictions in the private app under the Predictions view.
+1. A populated `data/simulations.db` with at least one **prediction** configured. The export uses the **active prediction** from Manage Predictions (the most recently opened/updated one; falls back to prediction id `1` if none has been activated). Create and manage predictions in the private app under the Predictions view.
 2. Up-to-date simulation aggregates and actual results in the database — whatever you want reflected in the master view and actual-results tab.
 
 ### Run the export
@@ -68,7 +68,7 @@ This writes five JSON files to `web/public/data/`:
 | `master-group-state.json` | Consensus master group view (predictions redacted per reveal policy) |
 | `master-team-stats.json` | Aggregated team statistics across the prediction pool |
 | `actual-results-state.json` | Actual results with standings and resolved matches |
-| `meta.json` | Export timestamp and reveal policy |
+| `meta.json` | Export timestamp, reveal policy, and exported prediction id/name |
 
 Optional flags:
 

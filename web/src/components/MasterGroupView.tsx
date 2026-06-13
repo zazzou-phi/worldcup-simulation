@@ -59,13 +59,16 @@ export function MasterGroupView({ masterState, layout, actualResults = [] }: Pro
 
   const hasAnyData = Object.values(masterState.distributions).some((d) => d.total > 0);
 
-  const doubledMatchNumbers = useMemo(
-    () =>
-      publicMode
-        ? undefined
-        : pickDoubleDownMatches(masterState.distributions, doubleCount),
-    [masterState.distributions, publicMode, doubleCount],
-  );
+  const doubledMatchNumbers = useMemo(() => {
+    if (publicMode) return undefined;
+    const actualEntered = new Set(actualResults.map((r) => r.matchNumber));
+    const eligible = new Set(
+      Object.keys(masterState.distributions)
+        .map(Number)
+        .filter((matchNumber) => !actualEntered.has(matchNumber)),
+    );
+    return pickDoubleDownMatches(masterState.distributions, doubleCount, eligible);
+  }, [masterState.distributions, publicMode, doubleCount, actualResults]);
 
   const handleSelectTeam = (teamId: number) => {
     setSelectedTeamId((prev) => (prev === teamId ? null : teamId));

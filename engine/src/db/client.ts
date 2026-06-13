@@ -2,6 +2,7 @@ import Database from 'better-sqlite3';
 import { drizzle, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema.js';
 import { rebuildPredictionAggregates } from './predictionAggregates.js';
+import { computeNormalizedTeamRatings, computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdirSync } from 'node:fs';
@@ -33,11 +34,20 @@ export function initSchema(sqlite: Database.Database) {
       flag TEXT NOT NULL,
       rank INTEGER NOT NULL,
       rating INTEGER NOT NULL,
+      elo INTEGER NOT NULL,
       total INTEGER NOT NULL,
       goals_for INTEGER NOT NULL,
       goals_against INTEGER NOT NULL,
-      offensive_rating REAL NOT NULL,
-      defensive_rating REAL NOT NULL
+      elo_offensive_rating REAL NOT NULL,
+      elo_defensive_rating REAL NOT NULL,
+      goal_offensive_rating REAL NOT NULL,
+      goal_defensive_rating REAL NOT NULL,
+      blend_offensive_rating REAL NOT NULL,
+      blend_defensive_rating REAL NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS app_settings (
+      id INTEGER PRIMARY KEY,
+      rating_elo_weight REAL NOT NULL
     );
     CREATE TABLE IF NOT EXISTS group_memberships (
       group_letter TEXT NOT NULL,
@@ -69,6 +79,7 @@ export function initSchema(sqlite: Database.Database) {
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
       selection_spec TEXT NOT NULL,
+      consensus_mode TEXT NOT NULL DEFAULT 'expected',
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
@@ -161,8 +172,166 @@ function migrateSchema(sqlite: Database.Database) {
     );
   }
 
+  migrateTeamsElo(sqlite);
+  migrateTeamRatingMethods(sqlite);
+  migrateBlendRatings(sqlite);
+  migratePredictionConsensusMode(sqlite);
   migrateLegacyMasterAggregates(sqlite);
   ensureDefaultPrediction(sqlite);
+}
+
+function migratePredictionConsensusMode(sqlite: Database.Database) {
+  const columns = sqlite.prepare('PRAGMA table_info(predictions)').all() as Array<{ name: string }>;
+  const names = new Set(columns.map((column) => column.name));
+  if (!names.has('consensus_mode')) {
+    sqlite.exec(
+      "ALTER TABLE predictions ADD COLUMN consensus_mode TEXT NOT NULL DEFAULT 'expected'",
+    );
+  }
+  sqlite.exec("UPDATE predictions SET consensus_mode = 'expected' WHERE consensus_mode IS NULL");
+}
+
+function migrateTeamsElo(sqlite: Database.Database) {
+  const teamColumns = sqlite.prepare('PRAGMA table_info(teams)').all() as Array<{
+    name: string;
+  }>;
+  const teamColumnNames = new Set(teamColumns.map((column) => column.name));
+  if (!teamColumnNames.has('elo')) {
+    sqlite.exec('ALTER TABLE teams ADD COLUMN elo INTEGER');
+    sqlite.exec('UPDATE teams SET elo = rating');
+  }
+}
+
+function migrateTeamRatingMethods(sqlite: Database.Database) {
+  const teamColumns = sqlite.prepare('PRAGMA table_info(teams)').all() as Array<{
+    name: string;
+  }>;
+  const teamColumnNames = new Set(teamColumns.map((column) => column.name));
+  if (teamColumnNames.has('elo_offensive_rating')) return;
+
+  sqlite.exec('ALTER TABLE teams ADD COLUMN elo_offensive_rating REAL');
+  sqlite.exec('ALTER TABLE teams ADD COLUMN elo_defensive_rating REAL');
+  sqlite.exec('ALTER TABLE teams ADD COLUMN goal_offensive_rating REAL');
+  sqlite.exec('ALTER TABLE teams ADD COLUMN goal_defensive_rating REAL');
+
+  if (teamColumnNames.has('offensive_rating')) {
+    sqlite.exec(`
+      UPDATE teams
+      SET elo_offensive_rating = offensive_rating,
+          elo_defensive_rating = defensive_rating
+      WHERE elo_offensive_rating IS NULL
+    `);
+  }
+
+  const rows = sqlite
+    .prepare('SELECT id, elo, rating, goals_for, goals_against, total FROM teams')
+    .all() as Array<{
+    id: number;
+    elo: number | null;
+    rating: number;
+    goals_for: number;
+    goals_against: number;
+    total: number;
+  }>;
+  if (rows.length === 0) return;
+
+  const computed = computeNormalizedTeamRatings(
+    rows.map((row) => ({
+      elo: row.elo ?? row.rating,
+      goalsFor: row.goals_for,
+      goalsAgainst: row.goals_against,
+      total: row.total,
+    })),
+  );
+
+  const update = sqlite.prepare(`
+    UPDATE teams
+    SET elo_offensive_rating = ?,
+        elo_defensive_rating = ?,
+        goal_offensive_rating = ?,
+        goal_defensive_rating = ?
+    WHERE id = ?
+  `);
+  const apply = sqlite.transaction((items: typeof computed) => {
+    for (const [index, row] of items.entries()) {
+      update.run(
+        row.eloOffensiveRating,
+        row.eloDefensiveRating,
+        row.goalOffensiveRating,
+        row.goalDefensiveRating,
+        rows[index]!.id,
+      );
+    }
+  });
+  apply(computed);
+}
+
+function migrateBlendRatings(sqlite: Database.Database) {
+  const teamColumns = sqlite.prepare('PRAGMA table_info(teams)').all() as Array<{
+    name: string;
+  }>;
+  const teamColumnNames = new Set(teamColumns.map((column) => column.name));
+  if (!teamColumnNames.has('blend_offensive_rating')) {
+    sqlite.exec('ALTER TABLE teams ADD COLUMN blend_offensive_rating REAL');
+    sqlite.exec('ALTER TABLE teams ADD COLUMN blend_defensive_rating REAL');
+  }
+
+  if (!tableExists(sqlite, 'app_settings')) {
+    sqlite.exec(`
+      CREATE TABLE app_settings (
+        id INTEGER PRIMARY KEY,
+        rating_elo_weight REAL NOT NULL
+      )
+    `);
+  }
+
+  const settingsCount = (
+    sqlite.prepare('SELECT COUNT(*) as c FROM app_settings').get() as { c: number }
+  ).c;
+  if (settingsCount === 0) {
+    sqlite.prepare('INSERT INTO app_settings (id, rating_elo_weight) VALUES (1, 1)').run();
+  }
+
+  const eloWeight = (
+    sqlite.prepare('SELECT rating_elo_weight as w FROM app_settings WHERE id = 1').get() as
+      | { w: number }
+      | undefined
+  )?.w ?? 1;
+
+  const rows = sqlite
+    .prepare('SELECT id, elo, rating, goals_for, goals_against, total FROM teams')
+    .all() as Array<{
+    id: number;
+    elo: number | null;
+    rating: number;
+    goals_for: number;
+    goals_against: number;
+    total: number;
+  }>;
+  if (rows.length === 0) return;
+
+  const blended = computeBlendedNormalizedRatings(
+    rows.map((row) => ({
+      elo: row.elo ?? row.rating,
+      goalsFor: row.goals_for,
+      goalsAgainst: row.goals_against,
+      total: row.total,
+    })),
+    eloWeight,
+  );
+
+  const update = sqlite.prepare(`
+    UPDATE teams
+    SET blend_offensive_rating = ?,
+        blend_defensive_rating = ?
+    WHERE id = ?
+  `);
+  const apply = sqlite.transaction((items: typeof blended) => {
+    for (const [index, [off, def]] of items.entries()) {
+      update.run(off, def, rows[index]!.id);
+    }
+  });
+  apply(blended);
 }
 
 function migrateLegacyMasterAggregates(sqlite: Database.Database) {
@@ -194,8 +363,8 @@ function migrateLegacyMasterAggregates(sqlite: Database.Database) {
   try {
     sqlite
       .prepare(
-        `INSERT INTO predictions (id, name, selection_spec, created_at, updated_at)
-         VALUES (1, 'Default', ?, ?, ?)`,
+        `INSERT INTO predictions (id, name, selection_spec, consensus_mode, created_at, updated_at)
+         VALUES (1, 'Default', ?, 'expected', ?, ?)`,
       )
       .run(selectionSpec, now, now);
 
@@ -261,8 +430,8 @@ function ensureDefaultPrediction(sqlite: Database.Database) {
 
   sqlite
     .prepare(
-      `INSERT INTO predictions (id, name, selection_spec, created_at, updated_at)
-       VALUES (1, 'Default', ?, ?, ?)`,
+      `INSERT INTO predictions (id, name, selection_spec, consensus_mode, created_at, updated_at)
+       VALUES (1, 'Default', ?, 'expected', ?, ?)`,
     )
     .run(selectionSpec, now, now);
 

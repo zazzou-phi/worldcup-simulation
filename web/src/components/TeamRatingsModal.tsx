@@ -1,169 +1,158 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { Team } from '../types.js';
 import { teamCode } from '@shared/lib/teamCodes.js';
 import { useSortableTable } from '../lib/useSortableTable.js';
 import { SortableTh } from './SortableTh.js';
+import { formatRatingEloWeight } from '../lib/ratingEloWeight.js';
 
 interface Props {
   teams: Team[];
+  ratingEloWeight: number;
   onClose: () => void;
-  onSave: (teamId: number, offensiveRating: number, defensiveRating: number) => void;
 }
 
-type RatingsSortKey = 'rank' | 'code' | 'team' | 'offensive' | 'defensive';
+type RatingsSortKey =
+  | 'rank'
+  | 'code'
+  | 'team'
+  | 'eloOff'
+  | 'eloDef'
+  | 'goalOff'
+  | 'goalDef'
+  | 'blendOff'
+  | 'blendDef';
 
-export function TeamRatingsModal({ teams, onClose, onSave }: Props) {
+export function TeamRatingsModal({ teams, ratingEloWeight, onClose }: Props) {
   const comparators = useMemo<Record<RatingsSortKey, (a: Team, b: Team) => number>>(
     () => ({
       rank: (a, b) => a.rank - b.rank || a.name.localeCompare(b.name),
       code: (a, b) => teamCode(a).localeCompare(teamCode(b)) || a.name.localeCompare(b.name),
       team: (a, b) => a.name.localeCompare(b.name),
-      offensive: (a, b) =>
-        a.offensiveRating - b.offensiveRating || a.name.localeCompare(b.name),
-      defensive: (a, b) =>
-        a.defensiveRating - b.defensiveRating || a.name.localeCompare(b.name),
+      eloOff: (a, b) =>
+        a.eloOffensiveRating - b.eloOffensiveRating || a.name.localeCompare(b.name),
+      eloDef: (a, b) =>
+        a.eloDefensiveRating - b.eloDefensiveRating || a.name.localeCompare(b.name),
+      goalOff: (a, b) =>
+        a.goalOffensiveRating - b.goalOffensiveRating || a.name.localeCompare(b.name),
+      goalDef: (a, b) =>
+        a.goalDefensiveRating - b.goalDefensiveRating || a.name.localeCompare(b.name),
+      blendOff: (a, b) =>
+        a.blendOffensiveRating - b.blendOffensiveRating || a.name.localeCompare(b.name),
+      blendDef: (a, b) =>
+        a.blendDefensiveRating - b.blendDefensiveRating || a.name.localeCompare(b.name),
     }),
     [],
   );
 
   const { sortedItems, sort, toggleSort } = useSortableTable(
     teams,
-    { key: 'rank', direction: 'asc' },
+    { key: 'blendOff', direction: 'desc' },
     comparators,
   );
-
-  const [selectedId, setSelectedId] = useState(sortedItems[0]?.id ?? 0);
-  const [editing, setEditing] = useState(false);
-  const [offensive, setOffensive] = useState('');
-  const [defensive, setDefensive] = useState('');
-
-  const selected = sortedItems.find((t) => t.id === selectedId);
-
-  const startEdit = () => {
-    if (!selected) return;
-    setOffensive(selected.offensiveRating.toFixed(3));
-    setDefensive(selected.defensiveRating.toFixed(3));
-    setEditing(true);
-  };
-
-  const saveEdit = () => {
-    const o = parseFloat(offensive);
-    const d = parseFloat(defensive);
-    if (!Number.isFinite(o) || !Number.isFinite(d) || o < 0 || d < 0) return;
-    onSave(selectedId, o, d);
-    setEditing(false);
-  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
         <h2>Team ratings</h2>
+        <p className="muted ratings-modal-hint">
+          Simulations use blended ratings at {formatRatingEloWeight(ratingEloWeight)}. Elo and
+          goal columns are reference only.
+        </p>
 
-        {!editing ? (
-          <>
-            <div className="ratings-table-wrap">
-              <table className="ratings-table">
-                <thead>
-                  <tr>
-                    <SortableTh
-                      label="#"
-                      sortKey="rank"
-                      activeKey={sort.key}
-                      direction={sort.direction}
-                      onSort={toggleSort}
-                    />
-                    <SortableTh
-                      label="Code"
-                      sortKey="code"
-                      activeKey={sort.key}
-                      direction={sort.direction}
-                      onSort={toggleSort}
-                    />
-                    <SortableTh
-                      label="Team"
-                      sortKey="team"
-                      activeKey={sort.key}
-                      direction={sort.direction}
-                      onSort={toggleSort}
-                    />
-                    <SortableTh
-                      label="Off"
-                      sortKey="offensive"
-                      activeKey={sort.key}
-                      direction={sort.direction}
-                      onSort={toggleSort}
-                    />
-                    <SortableTh
-                      label="Def"
-                      sortKey="defensive"
-                      activeKey={sort.key}
-                      direction={sort.direction}
-                      onSort={toggleSort}
-                    />
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedItems.map((team) => (
-                    <tr
-                      key={team.id}
-                      className={team.id === selectedId ? 'selected' : undefined}
-                      onClick={() => setSelectedId(team.id)}
-                      onDoubleClick={startEdit}
-                    >
-                      <td>{team.rank}</td>
-                      <td>{teamCode(team)}</td>
-                      <td>{team.flag} {team.name}</td>
-                      <td>{team.offensiveRating.toFixed(3)}</td>
-                      <td>{team.defensiveRating.toFixed(3)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="modal-actions">
-              <button type="button" className="btn" onClick={startEdit}>
-                Edit selected
-              </button>
-              <button type="button" className="btn btn-ghost" onClick={onClose}>
-                Close
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <p>{selected?.name}</p>
-            <div className="ratings-edit">
-              <label>
-                Offensive
-                <input
-                  type="number"
-                  step="0.001"
-                  min={0}
-                  value={offensive}
-                  onChange={(e) => setOffensive(e.target.value)}
+        <div className="ratings-table-wrap">
+          <table className="ratings-table">
+            <thead>
+              <tr>
+                <SortableTh
+                  label="#"
+                  sortKey="rank"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
                 />
-              </label>
-              <label>
-                Defensive
-                <input
-                  type="number"
-                  step="0.001"
-                  min={0}
-                  value={defensive}
-                  onChange={(e) => setDefensive(e.target.value)}
+                <SortableTh
+                  label="Code"
+                  sortKey="code"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
                 />
-              </label>
-            </div>
-            <div className="modal-actions">
-              <button type="button" className="btn" onClick={saveEdit}>
-                Save
-              </button>
-              <button type="button" className="btn btn-ghost" onClick={() => setEditing(false)}>
-                Cancel
-              </button>
-            </div>
-          </>
-        )}
+                <SortableTh
+                  label="Team"
+                  sortKey="team"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
+                />
+                <SortableTh
+                  label="Blend Off"
+                  sortKey="blendOff"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
+                />
+                <SortableTh
+                  label="Blend Def"
+                  sortKey="blendDef"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
+                />
+                <SortableTh
+                  label="Elo Off"
+                  sortKey="eloOff"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
+                />
+                <SortableTh
+                  label="Elo Def"
+                  sortKey="eloDef"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
+                />
+                <SortableTh
+                  label="Goal Off"
+                  sortKey="goalOff"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
+                />
+                <SortableTh
+                  label="Goal Def"
+                  sortKey="goalDef"
+                  activeKey={sort.key}
+                  direction={sort.direction}
+                  onSort={toggleSort}
+                />
+              </tr>
+            </thead>
+            <tbody>
+              {sortedItems.map((team) => (
+                <tr key={team.id}>
+                  <td>{team.rank}</td>
+                  <td>{teamCode(team)}</td>
+                  <td>
+                    {team.flag} {team.name}
+                  </td>
+                  <td className="ratings-active-col">{team.blendOffensiveRating.toFixed(3)}</td>
+                  <td className="ratings-active-col">{team.blendDefensiveRating.toFixed(3)}</td>
+                  <td>{team.eloOffensiveRating.toFixed(3)}</td>
+                  <td>{team.eloDefensiveRating.toFixed(3)}</td>
+                  <td>{team.goalOffensiveRating.toFixed(3)}</td>
+                  <td>{team.goalDefensiveRating.toFixed(3)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="modal-actions">
+          <button type="button" className="btn btn-ghost" onClick={onClose}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );

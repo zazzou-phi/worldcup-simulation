@@ -26,6 +26,7 @@ interface Props {
   state: TournamentState;
   simulating: boolean;
   publicMode?: boolean;
+  simulationComplete?: boolean;
   onSimulateGroup: (games: 1 | 2 | 3) => void;
   onSimulateKnockouts: (throughRound: string) => void;
   onBulk: () => void;
@@ -55,6 +56,7 @@ export function SimulateMenu({
   state,
   simulating,
   publicMode = false,
+  simulationComplete = false,
   onSimulateGroup,
   onSimulateKnockouts,
   onBulk,
@@ -62,10 +64,19 @@ export function SimulateMenu({
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const items = useMemo(() => buildItems(publicMode), [publicMode]);
-  const disabledKeys = useMemo(
-    () => getDisabledSimulateMenuKeys({ fixtures: state.fixtures, matches: state.matches }),
-    [state.fixtures, state.matches],
-  );
+  const disabledKeys = useMemo(() => {
+    const disabled = new Set(
+      getDisabledSimulateMenuKeys({ fixtures: state.fixtures, matches: state.matches }),
+    );
+    if (simulationComplete) {
+      for (const entry of items) {
+        if (entry.kind === 'item' && entry.key !== 'bulk') {
+          disabled.add(entry.key);
+        }
+      }
+    }
+    return disabled;
+  }, [state.fixtures, state.matches, simulationComplete, items]);
 
   useEffect(() => {
     if (!open) return;

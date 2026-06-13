@@ -35,4 +35,12 @@ for (const [filename, data] of Object.entries(files)) {
   writeFileSync(join(outDir, filename), `${JSON.stringify(data, null, 2)}\n`);
 }
 
-console.log(JSON.stringify({ ok: true, outDir, exportedAt: snapshot.meta.exportedAt }));
+console.log(
+  JSON.stringify({
+    ok: true,
+    outDir,
+    exportedAt: snapshot.meta.exportedAt,
+    predictionId: snapshot.meta.predictionId,
+    predictionName: snapshot.meta.predictionName,
+  }),
+);

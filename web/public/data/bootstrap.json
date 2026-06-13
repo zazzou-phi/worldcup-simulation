@@ -7,11 +7,16 @@
       "flag": "🇪🇸",
       "rank": 1,
       "rating": 2165,
+      "elo": 2165,
       "total": 780,
       "goalsFor": 1591,
       "goalsAgainst": 697,
-      "offensiveRating": 2.368383320924088,
-      "defensiveRating": 0.3492575523084423
+      "eloOffensiveRating": 2.3683833209240883,
+      "eloDefensiveRating": 0.34925755230844235,
+      "goalOffensiveRating": 1.232650558276307,
+      "goalDefensiveRating": 0.7482859538114454,
+      "blendOffensiveRating": 2.0437453483191628,
+      "blendDefensiveRating": 0.5655883846394144
     },
     {
       "id": 1,
@@ -20,11 +25,16 @@
       "flag": "🇦🇷",
       "rank": 2,
       "rating": 2113,
+      "elo": 2113,
       "total": 1109,
       "goalsFor": 2112,
       "goalsAgainst": 1136,
-      "offensiveRating": 2.079666572771907,
-      "defensiveRating": 0.39774441365933794
+      "eloOffensiveRating": 2.0796665727719073,
+      "eloDefensiveRating": 0.39774441365933794,
+      "goalOffensiveRating": 1.1508713200674314,
+      "goalDefensiveRating": 0.8577805666604725,
+      "blendOffensiveRating": 1.8141796398246626,
+      "blendDefensiveRating": 0.6471502291507069
     },
     {
       "id": 2,
@@ -33,11 +43,16 @@
       "flag": "🇫🇷",
       "rank": 3,
       "rating": 2081,
+      "elo": 2081,
       "total": 938,
       "goalsFor": 1706,
       "goalsAgainst": 1272,
-      "offensiveRating": 1.919774208359619,
-      "defensiveRating": 0.43087137955712
+      "eloOffensiveRating": 1.9197742083596192,
+      "eloDefensiveRating": 0.43087137955712,
+      "goalOffensiveRating": 1.0991085549761628,
+      "goalDefensiveRating": 1.1355694247560573,
+      "blendOffensiveRating": 1.6851950514813874,
+      "blendDefensiveRating": 0.8129191588271568
     },
     {
       "id": 3,
@@ -46,11 +61,16 @@
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "rank": 4,
       "rating": 2020,
+      "elo": 2020,
       "total": 1160,
       "goalsFor": 2719,
       "goalsAgainst": 1118,
-      "offensiveRating": 1.6482392209752479,
-      "defensiveRating": 0.5018541914714629
+      "eloOffensiveRating": 1.648239220975248,
+      "eloDefensiveRating": 0.5018541914714629,
+      "goalOffensiveRating": 1.4164968665356628,
+      "goalDefensiveRating": 0.8070737683195627,
+      "blendOffensiveRating": 1.581997961951808,
+      "blendDefensiveRating": 0.6673271373934829
     },
     {
       "id": 4,
@@ -59,11 +79,16 @@
       "flag": "🇧🇷",
       "rank": 5,
       "rating": 1984,
+      "elo": 1984,
       "total": 1065,
       "goalsFor": 2294,
       "goalsAgainst": 954,
-      "offensiveRating": 1.506377224836434,
-      "defensiveRating": 0.5491159504777455
+      "eloOffensiveRating": 1.5063772248364342,
+      "eloDefensiveRating": 0.5491159504777455,
+      "goalOffensiveRating": 1.3016919095587338,
+      "goalDefensiveRating": 0.7501155777613956,
+      "blendOffensiveRating": 1.447869952739398,
+      "blendDefensiveRating": 0.6580866816455118
     },
     {
       "id": 5,
@@ -72,11 +97,16 @@
       "flag": "🇵🇹",
       "rank": 5,
       "rating": 1984,
+      "elo": 1984,
       "total": 694,
       "goalsFor": 1222,
       "goalsAgainst": 779,
-      "offensiveRating": 1.506377224836434,
-      "defensiveRating": 0.5491159504777455
+      "eloOffensiveRating": 1.5063772248364342,
+      "eloDefensiveRating": 0.5491159504777455,
+      "goalOffensiveRating": 1.0640845444807925,
+      "goalDefensiveRating": 0.9399557412684879,
+      "blendOffensiveRating": 1.3799522384567968,
+      "blendDefensiveRating": 0.7610073770813427
     },
     {
       "id": 6,
@@ -85,11 +115,16 @@
       "flag": "🇨🇴",
       "rank": 7,
       "rating": 1975,
+      "elo": 1975,
       "total": 648,
       "goalsFor": 842,
       "goalsAgainst": 741,
-      "offensiveRating": 1.4728621952636878,
-      "defensiveRating": 0.5616111026911087
+      "eloOffensiveRating": 1.4728621952636882,
+      "eloDefensiveRating": 0.5616111026911087,
+      "goalOffensiveRating": 0.7852383203489802,
+      "goalDefensiveRating": 0.9575746045307473,
+      "blendOffensiveRating": 1.2763117143683138,
+      "blendDefensiveRating": 0.7762803182231534
     },
     {
       "id": 7,
@@ -98,11 +133,16 @@
       "flag": "🇳🇱",
       "rank": 8,
       "rating": 1961,
+      "elo": 1961,
       "total": 901,
       "goalsFor": 1892,
       "goalsAgainst": 1142,
-      "offensiveRating": 1.4222037131476268,
-      "defensiveRating": 0.5816155266276013
+      "eloOffensiveRating": 1.422203713147627,
+      "eloDefensiveRating": 0.5816155266276013,
+      "goalOffensiveRating": 1.2689974250845264,
+      "goalDefensiveRating": 1.0613795865538898,
+      "blendOffensiveRating": 1.3784112116165643,
+      "blendDefensiveRating": 0.8417167074342994
     },
     {
       "id": 8,
@@ -111,11 +151,16 @@
       "flag": "🇪🇨",
       "rank": 9,
       "rating": 1935,
+      "elo": 1935,
       "total": 599,
       "goalsFor": 721,
       "goalsAgainst": 904,
-      "offensiveRating": 1.3327008258851707,
-      "defensiveRating": 0.6206762579626095
+      "eloOffensiveRating": 1.332700825885171,
+      "eloDefensiveRating": 0.6206762579626095,
+      "goalOffensiveRating": 0.7273992385837171,
+      "goalDefensiveRating": 1.2637786836298812,
+      "blendOffensiveRating": 1.159681356359638,
+      "blendDefensiveRating": 0.9693303449765659
     },
     {
       "id": 9,
@@ -124,11 +169,16 @@
       "flag": "🇭🇷",
       "rank": 10,
       "rating": 1930,
+      "elo": 1930,
       "total": 398,
       "goalsFor": 694,
       "goalsAgainst": 401,
-      "offensiveRating": 1.3161457503440561,
-      "defensiveRating": 0.6284834041958145
+      "eloOffensiveRating": 1.3161457503440563,
+      "eloDefensiveRating": 0.6284834041958145,
+      "goalOffensiveRating": 1.0537577899019461,
+      "goalDefensiveRating": 0.8437051852993226,
+      "blendOffensiveRating": 1.241144748070175,
+      "blendDefensiveRating": 0.7451645899623016
     },
     {
       "id": 10,
@@ -137,11 +187,16 @@
       "flag": "🇩🇪",
       "rank": 11,
       "rating": 1923,
+      "elo": 1923,
       "total": 1045,
       "goalsFor": 2352,
       "goalsAgainst": 1232,
-      "offensiveRating": 1.2933135640366722,
-      "defensiveRating": 0.6395786641348735
+      "eloOffensiveRating": 1.2933135640366724,
+      "eloDefensiveRating": 0.6395786641348735,
+      "goalOffensiveRating": 1.3601456808130554,
+      "goalDefensiveRating": 0.9872424816879538,
+      "blendOffensiveRating": 1.312416863341519,
+      "blendDefensiveRating": 0.8280624982161803
     },
     {
       "id": 11,
@@ -150,11 +205,16 @@
       "flag": "🇳🇴",
       "rank": 12,
       "rating": 1912,
+      "elo": 1912,
       "total": 886,
       "goalsFor": 1373,
       "goalsAgainst": 1443,
-      "offensiveRating": 1.2582320230542534,
-      "defensiveRating": 0.6574111502790929
+      "eloOffensiveRating": 1.2582320230542536,
+      "eloDefensiveRating": 0.6574111502790929,
+      "goalOffensiveRating": 0.9364858401309484,
+      "goalDefensiveRating": 1.3638356135338718,
+      "blendOffensiveRating": 1.166264060208765,
+      "blendDefensiveRating": 1.0403948966471226
     },
     {
       "id": 12,
@@ -163,11 +223,16 @@
       "flag": "🇯🇵",
       "rank": 13,
       "rating": 1906,
+      "elo": 1906,
       "total": 836,
       "goalsFor": 1518,
       "goalsAgainst": 985,
-      "offensiveRating": 1.239499388701661,
-      "defensiveRating": 0.6673466474723551
+      "eloOffensiveRating": 1.2394993887016612,
+      "eloDefensiveRating": 0.6673466474723551,
+      "goalOffensiveRating": 1.097311407033492,
+      "goalDefensiveRating": 0.9866414818005627,
+      "blendOffensiveRating": 1.1988563610320826,
+      "blendDefensiveRating": 0.8404504090317467
     },
     {
       "id": 13,
@@ -176,11 +241,16 @@
       "flag": "🇹🇷",
       "rank": 14,
       "rating": 1902,
+      "elo": 1902,
       "total": 669,
       "goalsFor": 947,
       "goalsAgainst": 969,
-      "offensiveRating": 1.227166163716275,
-      "defensiveRating": 0.6740535927825116
+      "eloOffensiveRating": 1.2271661637162752,
+      "eloDefensiveRating": 0.6740535927825116,
+      "goalOffensiveRating": 0.8554374535540226,
+      "goalDefensiveRating": 1.2129058116029334,
+      "blendOffensiveRating": 1.1209111900156155,
+      "blendDefensiveRating": 0.9661890612397253
     },
     {
       "id": 14,
@@ -189,11 +259,16 @@
       "flag": "🇨🇭",
       "rank": 15,
       "rating": 1894,
+      "elo": 1894,
       "total": 896,
       "goalsFor": 1339,
       "goalsAgainst": 1483,
-      "offensiveRating": 1.2028666456016333,
-      "defensiveRating": 0.6876703786065674
+      "eloOffensiveRating": 1.2028666456016333,
+      "eloDefensiveRating": 0.6876703786065674,
+      "goalOffensiveRating": 0.9031023391025836,
+      "goalDefensiveRating": 1.385997857866384,
+      "blendOffensiveRating": 1.1171819846305977,
+      "blendDefensiveRating": 1.0662643941173375
     },
     {
       "id": 15,
@@ -202,11 +277,16 @@
       "flag": "🇺🇾",
       "rank": 16,
       "rating": 1892,
+      "elo": 1892,
       "total": 1019,
       "goalsFor": 1610,
       "goalsAgainst": 1254,
-      "offensiveRating": 1.1968673231782665,
-      "defensiveRating": 0.6911173407237252
+      "eloOffensiveRating": 1.196867323178267,
+      "eloDefensiveRating": 0.6911173407237252,
+      "goalOffensiveRating": 0.9548080937877292,
+      "goalDefensiveRating": 1.0305113280131601,
+      "blendOffensiveRating": 1.127677087531235,
+      "blendDefensiveRating": 0.8751177363895418
     },
     {
       "id": 16,
@@ -215,11 +295,16 @@
       "flag": "🇸🇳",
       "rank": 17,
       "rating": 1878,
+      "elo": 1878,
       "total": 704,
       "goalsFor": 967,
       "goalsAgainst": 669,
-      "offensiveRating": 1.1557015698026294,
-      "defensiveRating": 0.7157347391466743
+      "eloOffensiveRating": 1.1557015698026296,
+      "eloDefensiveRating": 0.7157347391466743,
+      "goalOffensiveRating": 0.8300766831944312,
+      "goalDefensiveRating": 0.7957614133989183,
+      "blendOffensiveRating": 1.062624917886956,
+      "blendDefensiveRating": 0.7591207161459516
     },
     {
       "id": 18,
@@ -228,11 +313,16 @@
       "flag": "🇲🇽",
       "rank": 19,
       "rating": 1868,
+      "elo": 1868,
       "total": 1029,
       "goalsFor": 1824,
       "goalsAgainst": 1055,
-      "offensiveRating": 1.1271671963752086,
-      "defensiveRating": 0.7338536503316928
+      "eloOffensiveRating": 1.1271671963752088,
+      "eloDefensiveRating": 0.7338536503316929,
+      "goalOffensiveRating": 1.0712081272701144,
+      "goalDefensiveRating": 0.8585517989654933,
+      "blendOffensiveRating": 1.1111718501629673,
+      "blendDefensiveRating": 0.8014579967453114
     },
     {
       "id": 19,
@@ -241,11 +331,16 @@
       "flag": "🇧🇪",
       "rank": 20,
       "rating": 1867,
+      "elo": 1867,
       "total": 876,
       "goalsFor": 1599,
       "goalsAgainst": 1359,
-      "offensiveRating": 1.1243527978482617,
-      "defensiveRating": 0.7356905796624518
+      "eloOffensiveRating": 1.124352797848262,
+      "eloDefensiveRating": 0.7356905796624518,
+      "goalOffensiveRating": 1.1030844370685102,
+      "goalDefensiveRating": 1.2991065374095248,
+      "blendOffensiveRating": 1.1182734473608535,
+      "blendDefensiveRating": 1.041143130480589
     },
     {
       "id": 21,
@@ -254,11 +349,16 @@
       "flag": "🇵🇾",
       "rank": 22,
       "rating": 1833,
+      "elo": 1833,
       "total": 788,
       "goalsFor": 1002,
       "goalsAgainst": 1115,
-      "offensiveRating": 1.0327318568247768,
-      "defensiveRating": 0.800958889887749
+      "eloOffensiveRating": 1.032731856824777,
+      "eloDefensiveRating": 0.800958889887749,
+      "goalOffensiveRating": 0.7684328171523438,
+      "goalDefensiveRating": 1.184890091017002,
+      "blendOffensiveRating": 0.9571845914622328,
+      "blendDefensiveRating": 1.009104866427958
     },
     {
       "id": 22,
@@ -267,11 +367,16 @@
       "flag": "🇦🇹",
       "rank": 23,
       "rating": 1827,
+      "elo": 1827,
       "total": 865,
       "goalsFor": 1560,
       "goalsAgainst": 1321,
-      "offensiveRating": 1.0173564825665282,
-      "defensiveRating": 0.8130638333451571
+      "eloOffensiveRating": 1.0173564825665284,
+      "eloDefensiveRating": 0.8130638333451571,
+      "goalOffensiveRating": 1.0898654638342196,
+      "goalDefensiveRating": 1.2788397526778466,
+      "blendOffensiveRating": 1.0380824574160292,
+      "blendDefensiveRating": 1.065581428407137
     },
     {
       "id": 23,
@@ -280,11 +385,16 @@
       "flag": "🇲🇦",
       "rank": 24,
       "rating": 1822,
+      "elo": 1822,
       "total": 728,
       "goalsFor": 1103,
       "goalsAgainst": 614,
-      "offensiveRating": 1.0047186773712438,
-      "defensiveRating": 0.8232909173723315
+      "eloOffensiveRating": 1.004718677371244,
+      "eloDefensiveRating": 0.8232909173723315,
+      "goalOffensiveRating": 0.9156057953973916,
+      "goalDefensiveRating": 0.7062629262762258,
+      "blendOffensiveRating": 0.9792466417935004,
+      "blendDefensiveRating": 0.7598449004359872
     },
     {
       "id": 24,
@@ -293,11 +403,16 @@
       "flag": "🇨🇦",
       "rank": 25,
       "rating": 1784,
+      "elo": 1784,
       "total": 488,
       "goalsFor": 626,
       "goalsAgainst": 623,
-      "offensiveRating": 0.9136639719561283,
-      "defensiveRating": 0.9053391476333772
+      "eloOffensiveRating": 0.9136639719561284,
+      "eloDefensiveRating": 0.9053391476333772,
+      "goalOffensiveRating": 0.7752091871736964,
+      "goalDefensiveRating": 1.0690490756495452,
+      "blendOffensiveRating": 0.8740880416779251,
+      "blendDefensiveRating": 0.9940934940788514
     },
     {
       "id": 25,
@@ -306,11 +421,16 @@
       "flag": "🇦🇺",
       "rank": 26,
       "rating": 1775,
+      "elo": 1775,
       "total": 636,
       "goalsFor": 1289,
       "goalsAgainst": 715,
-      "offensiveRating": 0.8933360789590822,
-      "defensiveRating": 0.9259401708681849
+      "eloOffensiveRating": 0.8933360789590824,
+      "eloDefensiveRating": 0.9259401708681849,
+      "goalOffensiveRating": 1.224785966167954,
+      "goalDefensiveRating": 0.941408995516822,
+      "blendOffensiveRating": 0.9880777496605284,
+      "blendDefensiveRating": 0.9343265005099272
     },
     {
       "id": 26,
@@ -319,11 +439,16 @@
       "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
       "rank": 27,
       "rating": 1770,
+      "elo": 1770,
       "total": 868,
       "goalsFor": 1499,
       "goalsAgainst": 1076,
-      "offensiveRating": 0.8822388799602389,
-      "defensiveRating": 0.9375870644369771
+      "eloOffensiveRating": 0.8822388799602389,
+      "eloDefensiveRating": 0.9375870644369771,
+      "goalOffensiveRating": 1.0436294057209938,
+      "goalDefensiveRating": 1.0380588223969578,
+      "blendOffensiveRating": 0.928370764857587,
+      "blendDefensiveRating": 0.9920572198027856
     },
     {
       "id": 31,
@@ -332,11 +457,16 @@
       "flag": "🇮🇷",
       "rank": 32,
       "rating": 1764,
+      "elo": 1764,
       "total": 669,
       "goalsFor": 1273,
       "goalsAgainst": 525,
-      "offensiveRating": 0.8691040542308645,
-      "defensiveRating": 0.9517568783246754
+      "eloOffensiveRating": 0.8691040542308646,
+      "eloDefensiveRating": 0.9517568783246754,
+      "goalOffensiveRating": 1.1499175062030316,
+      "goalDefensiveRating": 0.657147111549577,
+      "blendOffensiveRating": 0.9493718009461249,
+      "blendDefensiveRating": 0.7920359767065716
     },
     {
       "id": 32,
@@ -345,11 +475,16 @@
       "flag": "🇰🇷",
       "rank": 33,
       "rating": 1756,
+      "elo": 1756,
       "total": 1051,
       "goalsFor": 1912,
       "goalsAgainst": 964,
-      "offensiveRating": 0.8518946409226156,
-      "defensiveRating": 0.9709836426465159
+      "eloOffensiveRating": 0.8518946409226158,
+      "eloDefensiveRating": 0.9709836426465159,
+      "goalOffensiveRating": 1.0993844039413863,
+      "goalDefensiveRating": 0.7680751875168447,
+      "blendOffensiveRating": 0.9226371408744325,
+      "blendDefensiveRating": 0.8609780520172412
     },
     {
       "id": 34,
@@ -358,11 +493,16 @@
       "flag": "🇩🇿",
       "rank": 35,
       "rating": 1743,
+      "elo": 1743,
       "total": 688,
       "goalsFor": 1052,
       "goalsAgainst": 703,
-      "offensiveRating": 0.8246531373040711,
-      "defensiveRating": 1.0030590125422463
+      "eloOffensiveRating": 0.8246531373040713,
+      "eloDefensiveRating": 1.0030590125422463,
+      "goalOffensiveRating": 0.9240419785888707,
+      "goalDefensiveRating": 0.8556502951039503,
+      "blendOffensiveRating": 0.8530624541745546,
+      "blendDefensiveRating": 0.9231422687311482
     },
     {
       "id": 35,
@@ -371,11 +511,16 @@
       "flag": "🇵🇦",
       "rank": 36,
       "rating": 1737,
+      "elo": 1737,
       "total": 591,
       "goalsFor": 736,
       "goalsAgainst": 906,
-      "offensiveRating": 0.8123756515893643,
-      "defensiveRating": 1.0182183082121763
+      "eloOffensiveRating": 0.8123756515893644,
+      "eloDefensiveRating": 1.0182183082121763,
+      "goalOffensiveRating": 0.7525835707573187,
+      "goalDefensiveRating": 1.2837194887430836,
+      "blendOffensiveRating": 0.7952846769010127,
+      "blendDefensiveRating": 1.1621581660086764
     },
     {
       "id": 36,
@@ -384,11 +529,16 @@
       "flag": "🇨🇿",
       "rank": 37,
       "rating": 1733,
+      "elo": 1733,
       "total": 883,
       "goalsFor": 1626,
       "goalsAgainst": 1098,
-      "offensiveRating": 0.8042923787979221,
-      "defensiveRating": 1.0284515723378675
+      "eloOffensiveRating": 0.8042923787979223,
+      "eloDefensiveRating": 1.0284515723378675,
+      "goalOffensiveRating": 1.1128182450766557,
+      "goalDefensiveRating": 1.0412884572163734,
+      "blendOffensiveRating": 0.8924814449400322,
+      "blendDefensiveRating": 1.0354110117658486
     },
     {
       "id": 38,
@@ -397,11 +547,16 @@
       "flag": "🇺🇿",
       "rank": 39,
       "rating": 1727,
+      "elo": 1727,
       "total": 365,
       "goalsFor": 635,
       "goalsAgainst": 398,
-      "offensiveRating": 0.7923180252855823,
-      "defensiveRating": 1.0439946274047476
+      "eloOffensiveRating": 0.7923180252855825,
+      "eloDefensiveRating": 1.0439946274047476,
+      "goalOffensiveRating": 1.0513450169433456,
+      "goalDefensiveRating": 0.9131026964926989,
+      "blendOffensiveRating": 0.866358327887831,
+      "blendDefensiveRating": 0.973032359423434
     },
     {
       "id": 40,
@@ -410,11 +565,16 @@
       "flag": "🇺🇸",
       "rank": 41,
       "rating": 1721,
+      "elo": 1721,
       "total": 825,
       "goalsFor": 1246,
       "goalsAgainst": 1073,
-      "offensiveRating": 0.7805219466715484,
-      "defensiveRating": 1.0597725856671791
+      "eloOffensiveRating": 0.7805219466715485,
+      "eloDefensiveRating": 1.0597725856671791,
+      "goalOffensiveRating": 0.9127009310535226,
+      "goalDefensiveRating": 1.0891186403772897,
+      "blendOffensiveRating": 0.8183040015016863,
+      "blendDefensiveRating": 1.075682371580052
     },
     {
       "id": 41,
@@ -423,11 +583,16 @@
       "flag": "🇸🇪",
       "rank": 42,
       "rating": 1719,
+      "elo": 1719,
       "total": 1118,
       "goalsFor": 2226,
       "goalsAgainst": 1482,
-      "offensiveRating": 0.776629077221956,
-      "defensiveRating": 1.0650847178590572
+      "eloOffensiveRating": 0.7766290772219561,
+      "eloDefensiveRating": 1.0650847178590572,
+      "goalOffensiveRating": 1.2032275193558504,
+      "goalDefensiveRating": 1.1100328152699896,
+      "blendOffensiveRating": 0.8985680208937928,
+      "blendDefensiveRating": 1.08945305677422
     },
     {
       "id": 45,
@@ -436,11 +601,16 @@
       "flag": "🇪🇬",
       "rank": 46,
       "rating": 1699,
+      "elo": 1699,
       "total": 884,
       "goalsFor": 1545,
       "goalsAgainst": 921,
-      "offensiveRating": 0.7387524301763617,
-      "defensiveRating": 1.1196927790770395
+      "eloOffensiveRating": 0.7387524301763619,
+      "eloDefensiveRating": 1.1196927790770395,
+      "goalOffensiveRating": 1.056186515622931,
+      "goalDefensiveRating": 0.8724424383412202,
+      "blendOffensiveRating": 0.8294878226245165,
+      "blendDefensiveRating": 0.9856475035928245
     },
     {
       "id": 50,
@@ -449,11 +619,16 @@
       "flag": "🇯🇴",
       "rank": 51,
       "rating": 1685,
+      "elo": 1685,
       "total": 583,
       "goalsFor": 728,
       "goalsAgainst": 714,
-      "offensiveRating": 0.7133433478517346,
-      "defensiveRating": 1.1595759098128045
+      "eloOffensiveRating": 0.7133433478517347,
+      "eloDefensiveRating": 1.1595759098128045,
+      "goalOffensiveRating": 0.7546181113226071,
+      "goalDefensiveRating": 1.0255552795407668,
+      "blendOffensiveRating": 0.7251413305934613,
+      "blendDefensiveRating": 1.086917436413254
     },
     {
       "id": 51,
@@ -462,11 +637,16 @@
       "flag": "🇨🇮",
       "rank": 52,
       "rating": 1676,
+      "elo": 1676,
       "total": 692,
       "goalsFor": 1130,
       "goalsAgainst": 695,
-      "offensiveRating": 0.69747234090567,
-      "defensiveRating": 1.1859620992568634
+      "eloOffensiveRating": 0.6974723409056701,
+      "eloDefensiveRating": 1.1859620992568631,
+      "goalOffensiveRating": 0.986817286965279,
+      "goalDefensiveRating": 0.8410234936706126,
+      "blendOffensiveRating": 0.7801787307902806,
+      "blendDefensiveRating": 0.9989557223461294
     },
     {
       "id": 53,
@@ -475,11 +655,16 @@
       "flag": "🇨🇩",
       "rank": 54,
       "rating": 1655,
+      "elo": 1655,
       "total": 547,
       "goalsFor": 835,
       "goalsAgainst": 641,
-      "offensiveRating": 0.6617996444852499,
-      "defensiveRating": 1.2498884949348488
+      "eloOffensiveRating": 0.6617996444852501,
+      "eloDefensiveRating": 1.2498884949348488,
+      "goalOffensiveRating": 0.9224939974345626,
+      "goalDefensiveRating": 0.9812962085790669,
+      "blendOffensiveRating": 0.7363165458148493,
+      "blendDefensiveRating": 1.1042728128276003
     },
     {
       "id": 57,
@@ -488,11 +673,16 @@
       "flag": "🇹🇳",
       "rank": 58,
       "rating": 1636,
+      "elo": 1636,
       "total": 775,
       "goalsFor": 1105,
       "goalsAgainst": 839,
-      "offensiveRating": 0.631099072096583,
-      "defensiveRating": 1.3106908220386297
+      "eloOffensiveRating": 0.6310990720965832,
+      "eloDefensiveRating": 1.31069082203863,
+      "goalOffensiveRating": 0.8616382605205484,
+      "goalDefensiveRating": 0.9065456451951424,
+      "blendOffensiveRating": 0.6969964180192801,
+      "blendDefensiveRating": 1.091585960931541
     },
     {
       "id": 62,
@@ -501,11 +691,16 @@
       "flag": "🇮🇶",
       "rank": 63,
       "rating": 1608,
+      "elo": 1608,
       "total": 760,
       "goalsFor": 1203,
       "goalsAgainst": 707,
-      "offensiveRating": 0.5884328745712324,
-      "defensiveRating": 1.4057266297312447
+      "eloOffensiveRating": 0.5884328745712326,
+      "eloDefensiveRating": 1.4057266297312447,
+      "goalOffensiveRating": 0.956569291783544,
+      "goalDefensiveRating": 0.7789960207069011,
+      "blendOffensiveRating": 0.6936610268763794,
+      "blendDefensiveRating": 1.0659484240024164
     },
     {
       "id": 66,
@@ -514,11 +709,16 @@
       "flag": "🇧🇦",
       "rank": 67,
       "rating": 1591,
+      "elo": 1591,
       "total": 280,
       "goalsFor": 393,
       "goalsAgainst": 385,
-      "offensiveRating": 0.5639484565881524,
-      "defensiveRating": 1.466757736333637
+      "eloOffensiveRating": 0.5639484565881525,
+      "eloDefensiveRating": 1.4667577363336373,
+      "goalOffensiveRating": 0.8482012708404848,
+      "goalDefensiveRating": 1.1514156175936516,
+      "blendOffensiveRating": 0.6451993109801551,
+      "blendDefensiveRating": 1.2957969156023852
     },
     {
       "id": 67,
@@ -527,11 +727,16 @@
       "flag": "🇳🇿",
       "rank": 68,
       "rating": 1585,
+      "elo": 1585,
       "total": 439,
       "goalsFor": 767,
       "goalsAgainst": 645,
-      "offensiveRating": 0.5555523579057084,
-      "defensiveRating": 1.488924940778453
+      "eloOffensiveRating": 0.5555523579057086,
+      "eloDefensiveRating": 1.4889249407784533,
+      "goalOffensiveRating": 1.0558330286024942,
+      "goalDefensiveRating": 1.230338493846188,
+      "blendOffensiveRating": 0.6985526375575903,
+      "blendDefensiveRating": 1.348733863943677
     },
     {
       "id": 70,
@@ -540,11 +745,16 @@
       "flag": "🇸🇦",
       "rank": 71,
       "rating": 1566,
+      "elo": 1566,
       "total": 836,
       "goalsFor": 1282,
       "goalsAgainst": 894,
-      "offensiveRating": 0.5297805468724088,
-      "defensiveRating": 1.5613554829020595
+      "eloOffensiveRating": 0.5297805468724089,
+      "eloDefensiveRating": 1.5613554829020593,
+      "goalOffensiveRating": 0.9267149037002217,
+      "goalDefensiveRating": 0.8954898322128965,
+      "blendOffensiveRating": 0.6432403052731481,
+      "blendDefensiveRating": 1.2003604512411203
     },
     {
       "id": 71,
@@ -553,11 +763,16 @@
       "flag": "🇨🇻",
       "rank": 72,
       "rating": 1549,
+      "elo": 1549,
       "total": 251,
       "goalsFor": 267,
       "goalsAgainst": 278,
-      "offensiveRating": 0.5077366249409897,
-      "defensiveRating": 1.6291433805670867
+      "eloOffensiveRating": 0.5077366249409898,
+      "eloDefensiveRating": 1.6291433805670867,
+      "goalOffensiveRating": 0.6428385897431611,
+      "goalDefensiveRating": 0.9274713268845639,
+      "blendOffensiveRating": 0.5463541848025792,
+      "blendDefensiveRating": 1.2487361242796422
     },
     {
       "id": 75,
@@ -566,11 +781,16 @@
       "flag": "🇭🇹",
       "rank": 76,
       "rating": 1532,
+      "elo": 1532,
       "total": 561,
       "goalsFor": 957,
       "goalsAgainst": 759,
-      "offensiveRating": 0.4866099403392296,
-      "defensiveRating": 1.6998743614185918
+      "eloOffensiveRating": 0.48660994033922966,
+      "eloDefensiveRating": 1.6998743614185918,
+      "goalOffensiveRating": 1.030892728517398,
+      "goalDefensiveRating": 1.13294370929001,
+      "blendOffensiveRating": 0.6421877898907218,
+      "blendDefensiveRating": 1.3925163403179475
     },
     {
       "id": 78,
@@ -579,11 +799,16 @@
       "flag": "🇿🇦",
       "rank": 79,
       "rating": 1517,
+      "elo": 1517,
       "total": 525,
       "goalsFor": 719,
       "goalsAgainst": 542,
-      "offensiveRating": 0.468699978142208,
-      "defensiveRating": 1.7648299555565885
+      "eloOffensiveRating": 0.4686999781422081,
+      "eloDefensiveRating": 1.7648299555565885,
+      "goalOffensiveRating": 0.8276257353476623,
+      "goalDefensiveRating": 0.8645087650019174,
+      "blendOffensiveRating": 0.5712953544200011,
+      "blendDefensiveRating": 1.2767262722491302
     },
     {
       "id": 81,
@@ -592,11 +817,16 @@
       "flag": "🇬🇭",
       "rank": 82,
       "rating": 1503,
+      "elo": 1503,
       "total": 778,
       "goalsFor": 1247,
       "goalsAgainst": 822,
-      "offensiveRating": 0.45257923749391904,
-      "defensiveRating": 1.8276926846543662
+      "eloOffensiveRating": 0.45257923749391915,
+      "eloDefensiveRating": 1.8276926846543662,
+      "goalOffensiveRating": 0.9686151472316427,
+      "goalDefensiveRating": 0.8847521735564211,
+      "blendOffensiveRating": 0.6000829963341902,
+      "blendDefensiveRating": 1.3164831947131472
     },
     {
       "id": 90,
@@ -605,11 +835,16 @@
       "flag": "🇨🇼",
       "rank": 91,
       "rating": 1433,
+      "elo": 1433,
       "total": 499,
       "goalsFor": 880,
       "goalsAgainst": 771,
-      "offensiveRating": 0.37992081836864483,
-      "defensiveRating": 2.1772319957245974
+      "eloOffensiveRating": 0.37992081836864494,
+      "eloDefensiveRating": 2.1772319957245974,
+      "goalOffensiveRating": 1.065728368365716,
+      "goalDefensiveRating": 1.293847974005765,
+      "blendOffensiveRating": 0.5759521207580841,
+      "blendDefensiveRating": 1.698310695971257
     },
     {
       "id": 96,
@@ -618,11 +853,16 @@
       "flag": "🇶🇦",
       "rank": 96,
       "rating": 1423,
+      "elo": 1423,
       "total": 698,
       "goalsFor": 993,
       "goalsAgainst": 826,
-      "offensiveRating": 0.3705405399408552,
-      "defensiveRating": 2.232348886106008
+      "eloOffensiveRating": 0.37054053994085523,
+      "eloDefensiveRating": 2.232348886106008,
+      "goalOffensiveRating": 0.8597223668660309,
+      "goalDefensiveRating": 0.9909552489006056,
+      "blendOffensiveRating": 0.5103683249190127,
+      "blendDefensiveRating": 1.559334840550668
     }
   ],
   "fixtures": [
@@ -2090,6 +2330,13 @@
       "goalsAway": 1,
       "winnerTeamId": null,
       "recordedAt": "2026-06-12T22:43:50.532Z"
+    },
+    {
+      "matchNumber": 8,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-13T21:06:36.859Z"
     },
     {
       "matchNumber": 19,

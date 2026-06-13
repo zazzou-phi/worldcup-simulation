@@ -66,6 +66,20 @@ describe('publicSnapshot', () => {
     expect(snapshot.bootstrap.fixtures.length).toBe(104);
   });
 
+  it('exports the active prediction from manage predictions', () => {
+    const sim1 = repo.createSimulation('Sim 1');
+    const sim2 = repo.createSimulation('Sim 2');
+    repo.createPrediction('Pool A', String(sim1.id));
+    const poolB = repo.createPrediction('Pool B', String(sim2.id));
+    repo.touchPrediction(poolB.id);
+
+    const snapshot = buildPublicSnapshot(repo);
+
+    expect(snapshot.meta.predictionId).toBe(poolB.id);
+    expect(snapshot.meta.predictionName).toBe('Pool B');
+    expect(snapshot.masterTeamStats.simulationCount).toBe(1);
+  });
+
   it('recomputes standings from revealed matches only', () => {
     const sim = repo.createSimulation('Test');
     const predictionId = ensureTestPrediction(repo);

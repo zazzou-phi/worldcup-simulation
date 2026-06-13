@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api, isPublicMode, loadInitialPrediction, loadInitialSimulation } from './api/client.js';
 import { loadPublicMeta } from './api/staticClient.js';
 import { clearStoredPrediction, persistLocalPrediction } from './lib/localPredictionStorage.js';
@@ -25,11 +25,22 @@ import { MasterGroupView } from './components/MasterGroupView.js';
 import { MonteCarloModal } from './components/MonteCarloModal.js';
 import type { AppView } from './lib/appView.js';
 import { DEFAULT_UPSET_VARIANCE } from './lib/upsetVariance.js';
+import { DEFAULT_RATING_ELO_WEIGHT, loadStoredRatingEloWeight, storeRatingEloWeight } from './lib/ratingEloWeight.js';
+import {
+  DEFAULT_CONSENSUS_MODE,
+  loadStoredConsensusMode,
+  storeConsensusMode,
+  type ConsensusMode,
+} from './lib/consensusMode.js';
+import { applyConsensusMode } from './lib/applyConsensusMode.js';
+import { applyRatingEloWeightToStateTeams } from './lib/normalizeTeam.js';
+import { applyBlendRatingsToTeams } from '@shared/engine/teamRatings.js';
 import { MOBILE_QUERY } from './lib/useMediaQuery.js';
 import { SimulationManagerModal } from './components/SimulationManagerModal.js';
 import { PredictionManagerModal } from './components/PredictionManagerModal.js';
 import { TeamRatingsModal } from './components/TeamRatingsModal.js';
 import { MasterTeamStatsModal } from './components/MasterTeamStatsModal.js';
+import { TournamentStatsModal } from './components/TournamentStatsModal.js';
 import type { MonteCarloResult } from './types.js';
 
 export function App() {
@@ -57,16 +68,23 @@ export function App() {
   const [knockoutBracketView, setKnockoutBracketView] = useState(
     () => typeof window !== 'undefined' && !window.matchMedia(MOBILE_QUERY).matches,
   );
-  const [masterState, setMasterState] = useState<MasterGroupState | null>(null);
+  const [masterStateBase, setMasterStateBase] = useState<MasterGroupState | null>(null);
+  const [consensusModeDraft, setConsensusModeDraft] = useState<ConsensusMode>(DEFAULT_CONSENSUS_MODE);
+  const [consensusModeSaved, setConsensusModeSaved] = useState<ConsensusMode>(DEFAULT_CONSENSUS_MODE);
+  const [savingConsensusMode, setSavingConsensusMode] = useState(false);
   const [predictionId, setPredictionId] = useState<number | null>(null);
   const [activePredictionLabel, setActivePredictionLabel] = useState<string | null>(null);
   const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
+  const [showTournamentStats, setShowTournamentStats] = useState(false);
   const [loading, setLoading] = useState(true);
   const [simulating, setSimulating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [publicMeta, setPublicMeta] = useState<PublicMeta | null>(null);
   const [upsetVariance, setUpsetVariance] = useState(DEFAULT_UPSET_VARIANCE);
+  const [ratingEloWeight, setRatingEloWeight] = useState(
+    publicMode ? loadStoredRatingEloWeight() : DEFAULT_RATING_ELO_WEIGHT,
+  );
 
   const refreshState = useCallback(
     async (id: number) => {
@@ -86,31 +104,64 @@ export function App() {
   const refreshMasterState = useCallback(async (id?: number | null) => {
     const pid = id ?? predictionId;
     if (pid == null) {
-      setMasterState(null);
+      setMasterStateBase(null);
       return null;
     }
     const next = await api.getMasterGroupState(pid);
-    setMasterState(next);
+    setMasterStateBase(next);
+    const saved = next.consensusMode;
+    setConsensusModeSaved(saved);
+    const stored = publicMode ? loadStoredConsensusMode(pid) : null;
+    setConsensusModeDraft(stored ?? saved);
     return next;
-  }, [predictionId]);
+  }, [predictionId, publicMode]);
+
+  const masterState = useMemo(() => {
+    if (!masterStateBase || !state) return masterStateBase;
+    if (consensusModeDraft === masterStateBase.consensusMode) return masterStateBase;
+    return applyConsensusMode(
+      masterStateBase,
+      consensusModeDraft,
+      state.fixtures,
+      state.groupMemberships,
+    );
+  }, [masterStateBase, consensusModeDraft, state]);
 
   useEffect(() => {
     (async () => {
       try {
-        const [{ id, state: initialState }, initialPrediction, meta] = await Promise.all([
+        const [simulationLoad, initialPrediction, meta, settings] = await Promise.all([
           loadInitialSimulation(),
           loadInitialPrediction(),
           publicMode ? loadPublicMeta() : Promise.resolve(null),
+          publicMode ? Promise.resolve(null) : api.getRatingEloWeight(),
         ]);
+        const { id, state: initialState } = simulationLoad;
+        const weight = publicMode
+          ? loadStoredRatingEloWeight()
+          : (settings?.ratingEloWeight ?? DEFAULT_RATING_ELO_WEIGHT);
+        setRatingEloWeight(weight);
+        const blendedState = {
+          ...initialState,
+          teams: applyRatingEloWeightToStateTeams(initialState.teams, weight),
+        };
         setSimulationId(id);
-        setState(initialState);
+        setState(blendedState);
         setPredictionId(initialPrediction.id);
         setActivePredictionLabel(initialPrediction.label);
         if (initialPrediction.id != null) {
-          setMasterState(await api.getMasterGroupState(initialPrediction.id));
+          const loaded = await api.getMasterGroupState(initialPrediction.id);
+          setMasterStateBase(loaded);
+          const saved = loaded.consensusMode;
+          setConsensusModeSaved(saved);
+          const stored = publicMode
+            ? loadStoredConsensusMode(initialPrediction.id)
+            : null;
+          setConsensusModeDraft(stored ?? saved);
         }
         if (publicMode && meta) {
           setPublicMeta(meta);
+          setTeams(Object.values(blendedState.teams));
         } else if (!publicMode) {
           setTeams(await api.listTeams());
         }
@@ -162,7 +213,7 @@ export function App() {
       if (page.total === 0) {
         setPredictionId(null);
         setActivePredictionLabel(null);
-        setMasterState(null);
+        setMasterStateBase(null);
       } else {
         await switchPrediction(page.items[0].id);
       }
@@ -304,15 +355,49 @@ export function App() {
     }
   };
 
-  const handleUpdateTeamRatings = async (
-    teamId: number,
-    offensiveRating: number,
-    defensiveRating: number,
-  ) => {
-    await api.updateTeamRatings(teamId, offensiveRating, defensiveRating);
+  const handleRatingEloWeightChange = async (value: number) => {
+    setRatingEloWeight(value);
+    if (publicMode) {
+      storeRatingEloWeight(value);
+      const sourceTeams = teams.length > 0 ? teams : Object.values(state?.teams ?? {});
+      const nextTeams = applyBlendRatingsToTeams(sourceTeams, value);
+      setTeams(nextTeams);
+      if (state) {
+        setState({
+          ...state,
+          teams: applyRatingEloWeightToStateTeams(state.teams, value),
+        });
+      }
+      return;
+    }
+    await api.setRatingEloWeight(value);
     setTeams(await api.listTeams());
     if (simulationId != null) await refreshState(simulationId);
   };
+
+  const handleConsensusModeChange = (mode: ConsensusMode) => {
+    setConsensusModeDraft(mode);
+    if (publicMode && predictionId != null) {
+      storeConsensusMode(predictionId, mode);
+    }
+  };
+
+  const handleSaveConsensusMode = async () => {
+    if (predictionId == null || publicMode) return;
+    setSavingConsensusMode(true);
+    setError(null);
+    try {
+      await api.updatePredictionConsensusMode(predictionId, consensusModeDraft);
+      await refreshMasterState(predictionId);
+      setToast('Consensus mode saved');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save consensus mode');
+    } finally {
+      setSavingConsensusMode(false);
+    }
+  };
+
+  const consensusModeDirty = consensusModeDraft !== consensusModeSaved;
 
   const handleSimulateGroup = async (games: 1 | 2 | 3) => {
     if (simulationId == null || !state) return;
@@ -320,13 +405,21 @@ export function App() {
     setError(null);
     try {
       if (publicMode) {
-        const { state: nextState, result } = simulateLocalGroupPhase(state, games, upsetVariance);
+        const { state: nextState, result } = simulateLocalGroupPhase(
+          state,
+          games,
+          upsetVariance,
+        );
         setState(nextState);
         setToast(
           `Round ${games}: simulated ${result.matchesPlayed} group matches (${result.matchesSkipped} skipped)`,
         );
       } else {
-        const result = await api.simulateGroupPhase(simulationId, games, upsetVariance);
+        const result = await api.simulateGroupPhase(
+          simulationId,
+          games,
+          upsetVariance,
+        );
         await refreshState(simulationId);
         if (appView === 'predictions') await refreshMasterState();
         setToast(
@@ -360,7 +453,11 @@ export function App() {
           `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
         );
       } else {
-        const result = await api.simulateKnockouts(simulationId, throughRound, upsetVariance);
+        const result = await api.simulateKnockouts(
+          simulationId,
+          throughRound,
+          upsetVariance,
+        );
         await refreshState(simulationId);
         setToast(
           `Simulated ${result.matchesPlayed} knockout matches across ${result.roundsPlayed} rounds`,
@@ -383,13 +480,25 @@ export function App() {
     setMonteCarloResult(null);
     setMonteCarloProgress({ completed: 0, total: count });
     try {
-      const result = await api.simulateMonteCarlo(count, upsetVariance, (completed, total) => {
-        setMonteCarloProgress({ completed, total });
-      });
+      const result = await api.simulateMonteCarlo(
+        count,
+        upsetVariance,
+        (completed, total) => {
+          setMonteCarloProgress({ completed, total });
+        },
+      );
       setMonteCarloResult(result);
-      if (appView === 'predictions') await refreshMasterState();
+      const selection =
+        result.firstSimulationId === result.lastSimulationId
+          ? String(result.firstSimulationId)
+          : `${result.firstSimulationId}-${result.lastSimulationId}`;
+      await handleCreatePrediction(result.batchName, selection);
+      if (appView !== 'predictions') {
+        await switchAppView('predictions');
+      }
+      setShowMonteCarlo(false);
       setToast(
-        `Bulk simulate: saved ${result.count.toLocaleString()} simulations (#${result.firstSimulationId}–${result.lastSimulationId})`,
+        `Created prediction "${result.batchName}" from ${result.count.toLocaleString()} simulations`,
       );
     } catch (err) {
       setMonteCarloError(err instanceof Error ? err.message : 'Failed to run bulk simulation');
@@ -405,12 +514,20 @@ export function App() {
     setError(null);
     try {
       if (publicMode) {
-        const { state: nextState, result } = simulateLocalMatch(state, matchNumber, upsetVariance);
+        const { state: nextState, result } = simulateLocalMatch(
+          state,
+          matchNumber,
+          upsetVariance,
+        );
         setState(nextState);
         setEditingMatchNumber(null);
         setToast(`Match #${result.matchNumber}: ${result.goalsHome}–${result.goalsAway}`);
       } else {
-        const result = await api.simulateMatch(simulationId, matchNumber, upsetVariance);
+        const result = await api.simulateMatch(
+          simulationId,
+          matchNumber,
+          upsetVariance,
+        );
         await refreshState(simulationId);
         if (appView === 'predictions') await refreshMasterState();
         setEditingMatchNumber(null);
@@ -448,12 +565,18 @@ export function App() {
         showGroupView={showGroupView}
         knockoutBracketView={knockoutBracketView}
         publicMode={publicMode}
-        masterConsensusMode={masterState?.consensusMode}
+        consensusMode={consensusModeDraft}
+        consensusModeDirty={consensusModeDirty}
+        savingConsensusMode={savingConsensusMode}
         activePredictionLabel={activePredictionLabel}
         simulating={simulating}
         upsetVariance={upsetVariance}
+        ratingEloWeight={ratingEloWeight}
         onAppViewChange={switchAppView}
         onUpsetVarianceChange={setUpsetVariance}
+        onRatingEloWeightChange={handleRatingEloWeightChange}
+        onConsensusModeChange={handleConsensusModeChange}
+        onSaveConsensusMode={handleSaveConsensusMode}
         onLayoutChange={setLayout}
         onKnockoutBracketViewChange={setKnockoutBracketView}
         onToggleStageView={() => setViewKnockout((v) => !v)}
@@ -466,6 +589,7 @@ export function App() {
           setShowMonteCarlo(true);
         }}
         onOpenMasterTeamStats={() => setShowMasterTeamStats(true)}
+        onOpenTournamentStats={() => setShowTournamentStats(true)}
         onOpenPredictions={() => setShowPredictions(true)}
         onClearSimulation={publicMode ? handleClearSimulation : undefined}
       />
@@ -573,9 +697,9 @@ export function App() {
 
       {showRatings && (
         <TeamRatingsModal
-          teams={teams}
+          teams={teams.length > 0 ? teams : Object.values(state.teams)}
+          ratingEloWeight={ratingEloWeight}
           onClose={() => setShowRatings(false)}
-          onSave={handleUpdateTeamRatings}
         />
       )}
 
@@ -586,7 +710,9 @@ export function App() {
           result={monteCarloResult}
           error={monteCarloError}
           upsetVariance={upsetVariance}
+          ratingEloWeight={ratingEloWeight}
           onUpsetVarianceChange={setUpsetVariance}
+          onRatingEloWeightChange={handleRatingEloWeightChange}
           onClose={() => setShowMonteCarlo(false)}
           onRun={handleMonteCarlo}
         />
@@ -597,6 +723,22 @@ export function App() {
           predictionId={predictionId}
           allowRebuild={!publicMode}
           onClose={() => setShowMasterTeamStats(false)}
+        />
+      )}
+
+      {showTournamentStats && state && (
+        <TournamentStatsModal
+          source={
+            appView === 'predictions' && masterState
+              ? {
+                  kind: 'prediction',
+                  masterState,
+                  fixtures: state.fixtures,
+                  consensusMode: consensusModeDraft,
+                }
+              : { kind: 'simulation', state }
+          }
+          onClose={() => setShowTournamentStats(false)}
         />
       )}
     </div>

@@ -15,11 +15,16 @@ function makeTeam(id: number, name: string, rank: number): Team {
     flag: '🏳',
     rank,
     rating: 1500,
+    elo: 1500,
     total: 100,
     goalsFor: 0,
     goalsAgainst: 0,
-    offensiveRating: 1,
-    defensiveRating: 1,
+    eloOffensiveRating: 1,
+    eloDefensiveRating: 1,
+    goalOffensiveRating: 1,
+    goalDefensiveRating: 1,
+    blendOffensiveRating: 1,
+    blendDefensiveRating: 1,
   };
 }
 

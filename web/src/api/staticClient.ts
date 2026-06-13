@@ -7,6 +7,7 @@ import type {
   TournamentState,
 } from '../types.js';
 import type { PublicBootstrap } from '@shared/export/publicSnapshot.js';
+import { normalizeBootstrapTeams } from '../lib/normalizeTeam.js';
 
 const DATA_BASE = `${import.meta.env.BASE_URL}data`;
 
@@ -44,7 +45,7 @@ export const staticApi = {
 
   listTeams: async (): Promise<Team[]> => {
     const bootstrap = await loadBootstrap();
-    return bootstrap.teams;
+    return normalizeBootstrapTeams(bootstrap.teams as Team[]);
   },
 
   getState: async (_simulationId: number): Promise<TournamentState> => {

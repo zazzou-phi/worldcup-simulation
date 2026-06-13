@@ -64,13 +64,7 @@ curl -X POST http://localhost:3000/api/v1/simulations/1/simulate/knockouts
 
 Locked actual results are never re-simulated.
 
-Master (consensus) view mode is set with `CONSENSUS_MODE`:
-
-- `expected` (default) — floored mean goals for the outcome; modal scoreline within that outcome for wins
-- `scoreline` — modal scoreline within each outcome (e.g. 1-0 vs 1-1 vs 0-1), pick the highest
-- `outcome` — modal home/draw/away, then modal scoreline within that outcome
-
-The active mode is shown in the Master header.
+Master (consensus) view mode is set per prediction in the Predictions view (Expected / Outcome / Scoreline). New predictions default from `CONSENSUS_MODE` when set, otherwise `expected`.
 
 ## Stack
 

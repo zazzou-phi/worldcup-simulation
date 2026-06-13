@@ -1,4 +1,5 @@
 import type { Repository } from '../db/repository.js';
+import { teamForSimulation } from '../engine/teamRatings.js';
 import {
   DEFAULT_UPSET_VARIANCE,
   simulateMatchOutcome,
@@ -33,16 +34,20 @@ export class SimulationRunner {
     private upsetVariance: number = DEFAULT_UPSET_VARIANCE,
   ) {}
 
+  private simTeam(team1: number | string) {
+    const team = this.repo.getTeamByIdOrName(team1);
+    if (!team) throw new SimulationError(`Team not found: ${team1}`);
+    return teamForSimulation(team);
+  }
+
   simulateMatch(
     team1: number | string,
     team2: number | string,
     knockout: boolean,
     gpg?: number,
   ): SimulatedMatchOutcome {
-    const home = this.repo.getTeamByIdOrName(team1);
-    const away = this.repo.getTeamByIdOrName(team2);
-    if (!home) throw new SimulationError(`Team not found: ${team1}`);
-    if (!away) throw new SimulationError(`Team not found: ${team2}`);
+    const home = this.simTeam(team1);
+    const away = this.simTeam(team2);
     return simulateMatchOutcome(home, away, knockout, {
       gpg,
       rng: this.rng,
@@ -93,8 +98,8 @@ export class SimulationRunner {
         throw new SimulationError(`Group fixture ${matchNumber} is missing team ids`);
       }
 
-      const home = this.repo.getTeamByIdOrName(homeId)!;
-      const away = this.repo.getTeamByIdOrName(awayId)!;
+      const home = teamForSimulation(this.repo.getTeamByIdOrName(homeId)!);
+      const away = teamForSimulation(this.repo.getTeamByIdOrName(awayId)!);
       const match = simulateMatchOutcome(home, away, false, {
         rng: this.rng,
         upsetVariance: this.upsetVariance,
@@ -290,8 +295,8 @@ export class SimulationRunner {
         throw new SimulationError(`Knockout fixture ${matchNumber} has unresolved participants`);
       }
 
-      const home = this.repo.getTeamByIdOrName(homeId)!;
-      const away = this.repo.getTeamByIdOrName(awayId)!;
+      const home = teamForSimulation(this.repo.getTeamByIdOrName(homeId)!);
+      const away = teamForSimulation(this.repo.getTeamByIdOrName(awayId)!);
       const match = simulateMatchOutcome(home, away, true, {
         rng: this.rng,
         upsetVariance: this.upsetVariance,

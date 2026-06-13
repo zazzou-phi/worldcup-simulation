@@ -20,9 +20,12 @@ import type {
   PredictionListEntry,
   PredictionListPage,
   ValidateSelectionResult,
+  RatingEloWeight,
 } from '../engine/types.js';
-import { chooseConsensus, getConsensusMode } from '../engine/consensus.js';
+import { chooseConsensus, getDefaultConsensusMode, parseConsensusMode } from '../engine/consensus.js';
 import { winnerFromGoals } from '../engine/matchSimulator.js';
+import { computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
+import { DEFAULT_RATING_ELO_WEIGHT } from '../api/ratingEloWeight.js';
 import { MatchLockedError, MatchClearBlockedError, ActualResultError } from './errors.js';
 import {
   collectPlayedGroupMatches,
@@ -73,11 +76,16 @@ function mapTeam(row: typeof schema.teams.$inferSelect): Team {
     flag: row.flag,
     rank: row.rank,
     rating: row.rating,
+    elo: row.elo,
     total: row.total,
     goalsFor: row.goalsFor,
     goalsAgainst: row.goalsAgainst,
-    offensiveRating: row.offensiveRating,
-    defensiveRating: row.defensiveRating,
+    eloOffensiveRating: row.eloOffensiveRating,
+    eloDefensiveRating: row.eloDefensiveRating,
+    goalOffensiveRating: row.goalOffensiveRating,
+    goalDefensiveRating: row.goalDefensiveRating,
+    blendOffensiveRating: row.blendOffensiveRating,
+    blendDefensiveRating: row.blendDefensiveRating,
   };
 }
 
@@ -101,6 +109,7 @@ function mapPrediction(row: typeof schema.predictions.$inferSelect): Prediction 
     id: row.id,
     name: row.name,
     selectionSpec: parseSelectionSpecJson(row.selectionSpec),
+    consensusMode: parseConsensusMode(row.consensusMode),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -154,26 +163,52 @@ export class Repository {
     return this.db.select().from(schema.teams).all().map(mapTeam);
   }
 
-  updateTeamRatings(
-    teamId: number,
-    offensiveRating: number,
-    defensiveRating: number,
-  ): Team | null {
-    if (
-      !Number.isFinite(offensiveRating) ||
-      !Number.isFinite(defensiveRating) ||
-      offensiveRating < 0 ||
-      defensiveRating < 0
-    ) {
-      return null;
-    }
+  getRatingEloWeight(): RatingEloWeight {
     const row = this.db
-      .update(schema.teams)
-      .set({ offensiveRating, defensiveRating })
-      .where(eq(schema.teams.id, teamId))
-      .returning()
+      .select({ ratingEloWeight: schema.appSettings.ratingEloWeight })
+      .from(schema.appSettings)
+      .where(eq(schema.appSettings.id, 1))
       .get();
-    return row ? mapTeam(row) : null;
+    return row?.ratingEloWeight ?? DEFAULT_RATING_ELO_WEIGHT;
+  }
+
+  setRatingEloWeight(eloWeight: RatingEloWeight): RatingEloWeight {
+    this.db
+      .insert(schema.appSettings)
+      .values({ id: 1, ratingEloWeight: eloWeight })
+      .onConflictDoUpdate({
+        target: schema.appSettings.id,
+        set: { ratingEloWeight: eloWeight },
+      })
+      .run();
+    this.recomputeBlendRatings(eloWeight);
+    return eloWeight;
+  }
+
+  recomputeBlendRatings(eloWeight: RatingEloWeight = this.getRatingEloWeight()): void {
+    const rows = this.db.select().from(schema.teams).all();
+    if (rows.length === 0) return;
+
+    const blended = computeBlendedNormalizedRatings(
+      rows.map((row) => ({
+        elo: row.elo ?? row.rating,
+        goalsFor: row.goalsFor,
+        goalsAgainst: row.goalsAgainst,
+        total: row.total,
+      })),
+      eloWeight,
+    );
+
+    for (const [index, [offensive, defensive]] of blended.entries()) {
+      this.db
+        .update(schema.teams)
+        .set({
+          blendOffensiveRating: offensive,
+          blendDefensiveRating: defensive,
+        })
+        .where(eq(schema.teams.id, rows[index]!.id))
+        .run();
+    }
   }
 
   getFixtures(): Fixture[] {
@@ -379,6 +414,7 @@ export class Repository {
       .values({
         name: trimmed,
         selectionSpec: serializeSelectionSpec(parsed.spec),
+        consensusMode: getDefaultConsensusMode(),
         createdAt: now,
         updatedAt: now,
       })
@@ -395,6 +431,16 @@ export class Repository {
     const row = this.db
       .update(schema.predictions)
       .set({ name: trimmed, updatedAt: new Date().toISOString() })
+      .where(eq(schema.predictions.id, id))
+      .returning()
+      .get();
+    return row ? mapPrediction(row) : null;
+  }
+
+  setPredictionConsensusMode(id: number, mode: Prediction['consensusMode']): Prediction | null {
+    const row = this.db
+      .update(schema.predictions)
+      .set({ consensusMode: mode, updatedAt: new Date().toISOString() })
       .where(eq(schema.predictions.id, id))
       .returning()
       .get();
@@ -1028,6 +1074,8 @@ export class Repository {
   }
 
   buildMasterGroupView(predictionId: number): MasterGroupState {
+    const prediction = this.getPrediction(predictionId);
+    const consensusMode = prediction?.consensusMode ?? getDefaultConsensusMode();
     const teams = this.getTeams();
     const teamsById = new Map(teams.map((t) => [t.id, t]));
     const fixtures = this.getFixtures();
@@ -1067,10 +1115,11 @@ export class Repository {
 
       if (dist.total > 0 && homeTeam && awayTeam) {
         const scoreline = chooseConsensus({
+          mode: consensusMode,
           outcomeCounts: dist,
           scorelines: scorelinesByMatch.get(fixture.matchNumber) ?? [],
-          homeOffensive: homeTeam.offensiveRating,
-          awayOffensive: awayTeam.offensiveRating,
+          homeOffensive: homeTeam.eloOffensiveRating,
+          awayOffensive: awayTeam.eloOffensiveRating,
         });
         if (scoreline) {
           goalsHome = scoreline.goalsHome;
@@ -1119,7 +1168,7 @@ export class Repository {
     });
 
     return {
-      consensusMode: getConsensusMode(),
+      consensusMode,
       resolvedMatches,
       groupStandings,
       qualifyingThirdGroups,

@@ -26,14 +26,13 @@ describe('repository integration', () => {
     repo = new Repository(drizzle(sqlite, { schema }));
   });
 
-  it('updates team offensive and defensive ratings', () => {
+  it('updates blend ratings when rating elo weight changes', () => {
     const spain = repo.getTeams().find((t) => t.name === 'Spain')!;
-    const updated = repo.updateTeamRatings(spain.id, 2.5, 0.75);
-    expect(updated?.offensiveRating).toBe(2.5);
-    expect(updated?.defensiveRating).toBe(0.75);
+    const before = spain.blendOffensiveRating;
+    repo.setRatingEloWeight(0);
     const reloaded = repo.getTeams().find((t) => t.id === spain.id)!;
-    expect(reloaded.offensiveRating).toBe(2.5);
-    expect(reloaded.defensiveRating).toBe(0.75);
+    expect(reloaded.blendOffensiveRating).not.toBe(before);
+    expect(repo.getRatingEloWeight()).toBe(0);
   });
 
   it('creates simulation with 104 match rows', () => {

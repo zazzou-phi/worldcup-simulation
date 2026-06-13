@@ -308,19 +308,42 @@ describe('HTTP API', () => {
     expect(teams.length).toBeGreaterThan(0);
   });
 
-  it('PATCH /teams/:id updates ratings', async () => {
+  it('PUT /settings/rating-elo-weight updates blend ratings', async () => {
     const teams = repo.getTeams();
     const team = teams[0];
+    const before = team.blendOffensiveRating;
 
-    const res = await app.request(`/api/v1/teams/${team.id}`, {
-      method: 'PATCH',
+    const res = await app.request('/api/v1/settings/rating-elo-weight', {
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ offensiveRating: 1.5, defensiveRating: 0.8 }),
+      body: JSON.stringify({ ratingEloWeight: 0 }),
     });
     expect(res.status).toBe(200);
-    const body = await json<{ offensiveRating: number; defensiveRating: number }>(res);
-    expect(body.offensiveRating).toBe(1.5);
-    expect(body.defensiveRating).toBe(0.8);
+    const body = await json<{ ratingEloWeight: number }>(res);
+    expect(body.ratingEloWeight).toBe(0);
+
+    const updated = repo.getTeams().find((t) => t.id === team.id)!;
+    expect(updated.blendOffensiveRating).not.toBe(before);
+  });
+
+  it('PATCH /predictions/:id updates consensus mode', async () => {
+    const sim = repo.createSimulation('Consensus test');
+    repo.updateMatchResult(sim.id, 1, 2, 1, null);
+    const prediction = repo.createPrediction('Mode test', `${sim.id}-${sim.id}`);
+
+    const res = await app.request(`/api/v1/predictions/${prediction.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ consensusMode: 'outcome' }),
+    });
+    expect(res.status).toBe(200);
+    const body = await json<{ consensusMode: string }>(res);
+    expect(body.consensusMode).toBe('outcome');
+
+    const master = await json<{ consensusMode: string }>(
+      await app.request(`/api/v1/master/group-state?predictionId=${prediction.id}`),
+    );
+    expect(master.consensusMode).toBe('outcome');
   });
 
   function playAllGroupMatches(simulationId: number) {

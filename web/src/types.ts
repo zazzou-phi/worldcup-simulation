@@ -1,5 +1,6 @@
 export type { Phase } from '@shared/engine/phase.js';
 export type MatchStatus = 'scheduled' | 'played';
+export type RatingEloWeight = number;
 
 export interface Team {
   id: number;
@@ -8,11 +9,16 @@ export interface Team {
   flag: string;
   rank: number;
   rating: number;
+  elo: number;
   total: number;
   goalsFor: number;
   goalsAgainst: number;
-  offensiveRating: number;
-  defensiveRating: number;
+  eloOffensiveRating: number;
+  eloDefensiveRating: number;
+  goalOffensiveRating: number;
+  goalDefensiveRating: number;
+  blendOffensiveRating: number;
+  blendDefensiveRating: number;
 }
 
 export interface Fixture {
@@ -120,7 +126,7 @@ export interface OutcomeDistribution {
 }
 
 export interface MasterGroupState {
-  consensusMode: 'scoreline' | 'outcome' | 'expected';
+  consensusMode: 'scoreline' | 'outcome' | 'expected' | 'rounded';
   resolvedMatches: ResolvedMatch[];
   groupStandings: GroupStandings[];
   qualifyingThirdGroups: string[];
@@ -152,6 +158,7 @@ export interface Prediction {
   id: number;
   name: string;
   selectionSpec: SelectionSpec;
+  consensusMode: 'scoreline' | 'outcome' | 'expected' | 'rounded';
   createdAt: string;
   updatedAt: string;
 }
@@ -177,6 +184,8 @@ export interface ValidateSelectionResult {
 export interface PublicMeta {
   exportedAt: string;
   revealPolicy: 'kickoff';
+  predictionId?: number;
+  predictionName?: string;
 }
 
 export interface SimulationListEntry extends Simulation {

@@ -10,6 +10,8 @@ import {
   parseUpsetVarianceQuery,
   simulateMonteCarlo,
 } from './monteCarlo.js';
+import { parseRatingEloWeight } from './ratingEloWeight.js';
+import { parseConsensusModeBody } from './consensusMode.js';
 import {
   parseGroupGamesParam,
   parseThroughRoundParam,
@@ -107,14 +109,34 @@ export function createApiApp(repo: Repository) {
   app.patch('/api/v1/predictions/:id', async (c) => {
     const id = parseIntParam(c.req.param('id'));
     const body = await c.req.json().catch(() => null);
-    const name = typeof body?.name === 'string' ? body.name : '';
-    if (!name.trim()) {
-      throw new ApiError('name is required', 400, 'invalid_body');
+    const hasName = typeof body?.name === 'string';
+    const hasConsensusMode = body?.consensusMode != null;
+    if (!hasName && !hasConsensusMode) {
+      throw new ApiError('name or consensusMode is required', 400, 'invalid_body');
     }
-    const prediction = repo.renamePrediction(id, name);
+
+    let prediction = repo.getPrediction(id);
     if (!prediction) {
       throw new ApiError('Prediction not found', 404, 'prediction_not_found');
     }
+
+    if (hasName) {
+      const renamed = repo.renamePrediction(id, body.name);
+      if (!renamed) {
+        throw new ApiError('name is required', 400, 'invalid_body');
+      }
+      prediction = renamed;
+    }
+
+    if (hasConsensusMode) {
+      const mode = parseConsensusModeBody(body.consensusMode);
+      const updated = repo.setPredictionConsensusMode(id, mode);
+      if (!updated) {
+        throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+      }
+      prediction = updated;
+    }
+
     return c.json(serializePrediction(prediction));
   });
 
@@ -247,22 +269,20 @@ export function createApiApp(repo: Repository) {
     return c.json(repo.getTeams().map(serializeTeam));
   });
 
-  app.patch('/api/v1/teams/:id', async (c) => {
-    const id = parseIntParam(c.req.param('id'), true);
+  app.get('/api/v1/settings/rating-elo-weight', (c) => {
+    return c.json({ ratingEloWeight: repo.getRatingEloWeight() });
+  });
+
+  app.put('/api/v1/settings/rating-elo-weight', async (c) => {
     const body = await c.req.json().catch(() => null);
     if (!body || typeof body !== 'object') {
       throw new ApiError('Request body must be JSON', 400, 'invalid_body');
     }
-    const offensiveRating = (body as { offensiveRating: unknown }).offensiveRating;
-    const defensiveRating = (body as { defensiveRating: unknown }).defensiveRating;
-    if (typeof offensiveRating !== 'number' || typeof defensiveRating !== 'number') {
-      throw new ApiError('offensiveRating and defensiveRating must be numbers', 400, 'invalid_body');
-    }
-    const team = repo.updateTeamRatings(id, offensiveRating, defensiveRating);
-    if (!team) {
-      throw new ApiError('Team not found or invalid ratings', 404, 'team_not_found');
-    }
-    return c.json(serializeTeam(team));
+    const ratingEloWeight = parseRatingEloWeight(
+      (body as { ratingEloWeight: unknown }).ratingEloWeight,
+    );
+    repo.setRatingEloWeight(ratingEloWeight);
+    return c.json({ ratingEloWeight });
   });
 
   app.get('/api/v1/simulations/:id', (c) => {
@@ -421,6 +441,7 @@ function serializePrediction(prediction: NonNullable<ReturnType<Repository['getP
     id: prediction.id,
     name: prediction.name,
     selectionSpec: prediction.selectionSpec,
+    consensusMode: prediction.consensusMode,
     createdAt: prediction.createdAt,
     updatedAt: prediction.updatedAt,
   };

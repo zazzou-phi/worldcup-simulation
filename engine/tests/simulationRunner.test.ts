@@ -16,9 +16,13 @@ describe('SimulationRunner', () => {
     sqlite = new Database(':memory:');
     initSchema(sqlite);
     sqlite.exec(`
-      INSERT INTO teams (id, name, country_code, flag, rank, rating, total, goals_for, goals_against, offensive_rating, defensive_rating)
-      VALUES (1, 'Home', NULL, '', 1, 1500, 10, 10, 10, 1.0, 1.0),
-             (2, 'Away', NULL, '', 2, 1500, 10, 10, 10, 1.0, 1.0);
+      INSERT INTO teams (
+        id, name, country_code, flag, rank, rating, elo, total, goals_for, goals_against,
+        elo_offensive_rating, elo_defensive_rating, goal_offensive_rating, goal_defensive_rating,
+        blend_offensive_rating, blend_defensive_rating
+      )
+      VALUES (1, 'Home', NULL, '', 1, 1500, 1500, 10, 10, 10, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0),
+             (2, 'Away', NULL, '', 2, 1500, 1500, 10, 10, 10, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
 
       INSERT INTO fixtures (
         match_number, round, date, time, venue, "group",

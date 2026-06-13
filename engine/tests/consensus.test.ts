@@ -7,6 +7,7 @@ import {
   chooseRepresentativeScoreline,
   chooseScoreline,
   computeFlooredExpectedGoals,
+  computeRoundedExpectedGoals,
   getConsensusMode,
 } from '../src/engine/consensus.js';
 
@@ -112,6 +113,29 @@ describe('computeFlooredExpectedGoals', () => {
   });
 });
 
+describe('computeRoundedExpectedGoals', () => {
+  it('rounds mean goals across scoreline counts', () => {
+    const scorelines = [
+      { goalsHome: 2, goalsAway: 0, n: 3 },
+      { goalsHome: 0, goalsAway: 0, n: 1 },
+    ];
+    expect(computeRoundedExpectedGoals(scorelines)).toEqual({ goalsHome: 2, goalsAway: 0 });
+  });
+
+  it('rounds fractional means without modal scoreline adjustment', () => {
+    const scorelines = [
+      { goalsHome: 1, goalsAway: 0, n: 4 },
+      { goalsHome: 3, goalsAway: 0, n: 4 },
+    ];
+    expect(computeRoundedExpectedGoals(scorelines)).toEqual({ goalsHome: 2, goalsAway: 0 });
+    expect(chooseExpectedGoalsScoreline(scorelines)).toEqual({ goalsHome: 3, goalsAway: 0 });
+  });
+
+  it('returns null when no scorelines', () => {
+    expect(computeRoundedExpectedGoals([])).toBeNull();
+  });
+});
+
 describe('chooseExpectedGoalsScoreline', () => {
   it('uses floored scoreline for draws', () => {
     const scorelines = [
@@ -180,6 +204,21 @@ describe('chooseConsensus', () => {
         awayOffensive: 1,
       }),
     ).toEqual({ goalsHome: 2, goalsAway: 0 });
+  });
+
+  it('uses rounded mean goals in rounded mode', () => {
+    expect(
+      chooseConsensus({
+        mode: 'rounded',
+        outcomeCounts,
+        scorelines: [
+          { goalsHome: 2, goalsAway: 0, n: 3 },
+          { goalsHome: 0, goalsAway: 1, n: 3 },
+        ],
+        homeOffensive: 1,
+        awayOffensive: 1,
+      }),
+    ).toEqual({ goalsHome: 1, goalsAway: 1 });
   });
 });
 

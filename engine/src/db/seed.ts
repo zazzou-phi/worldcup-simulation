@@ -7,6 +7,7 @@ import type Database from 'better-sqlite3';
 import { initSchema } from './client.js';
 import * as schema from './schema.js';
 import { Repository } from './repository.js';
+import { computeNormalizedTeamRatings } from '../engine/teamRatings.js';
 import {
   flagForTeamName,
   normalizeTeamName,
@@ -50,17 +51,30 @@ export function seedDatabase(sqlite: Database.Database) {
   const teamsRows = readCsv('teams.csv');
   const nameToId = new Map<string, number>();
 
+  const ratingInputs = teamsRows.map((row) => ({
+    elo: parseInt(row.rating, 10),
+    goalsFor: parseInt(row.goals_for, 10),
+    goalsAgainst: parseInt(row.goals_against, 10),
+    total: parseInt(row.total, 10),
+  }));
+  const computedRatings = computeNormalizedTeamRatings(ratingInputs);
+
   const insertTeam = sqlite.prepare(`
-    INSERT OR REPLACE INTO teams (id, name, country_code, flag, rank, rating, total, goals_for, goals_against, offensive_rating, defensive_rating)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT OR REPLACE INTO teams (
+      id, name, country_code, flag, rank, rating, elo, total, goals_for, goals_against,
+      elo_offensive_rating, elo_defensive_rating, goal_offensive_rating, goal_defensive_rating,
+      blend_offensive_rating, blend_defensive_rating
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  for (const row of teamsRows) {
+  for (const [index, row] of teamsRows.entries()) {
     const keys = Object.keys(row);
     const idKey = keys.find((k) => k === '' || k === '0') ?? keys[0];
     const id = parseInt(row[idKey], 10);
     const name = row.team;
     nameToId.set(name, id);
+    const ratings = computedRatings[index]!;
     insertTeam.run(
       id,
       name,
@@ -68,11 +82,16 @@ export function seedDatabase(sqlite: Database.Database) {
       teamFlag(name),
       parseInt(row.rank, 10),
       parseInt(row.rating, 10),
+      parseInt(row.rating, 10),
       parseInt(row.total, 10),
       parseInt(row.goals_for, 10),
       parseInt(row.goals_against, 10),
-      parseFloat(row.offensive_rating),
-      parseFloat(row.defensive_rating),
+      ratings.eloOffensiveRating,
+      ratings.eloDefensiveRating,
+      ratings.goalOffensiveRating,
+      ratings.goalDefensiveRating,
+      ratings.blendOffensiveRating,
+      ratings.blendDefensiveRating,
     );
   }
 

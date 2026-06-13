@@ -82,10 +82,13 @@ const privateApi = {
 
   listTeams: () => request<Team[]>('/api/v1/teams'),
 
-  updateTeamRatings: (teamId: number, offensiveRating: number, defensiveRating: number) =>
-    request<Team>(`/api/v1/teams/${teamId}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ offensiveRating, defensiveRating }),
+  getRatingEloWeight: () =>
+    request<{ ratingEloWeight: number }>('/api/v1/settings/rating-elo-weight'),
+
+  setRatingEloWeight: (ratingEloWeight: number) =>
+    request<{ ratingEloWeight: number }>('/api/v1/settings/rating-elo-weight', {
+      method: 'PUT',
+      body: JSON.stringify({ ratingEloWeight }),
     }),
 
   getActualResultsState: () => request<ActualResultsState>('/api/v1/actual-results/state'),
@@ -129,6 +132,15 @@ const privateApi = {
       body: JSON.stringify({ name }),
     }),
 
+  updatePredictionConsensusMode: (
+    id: number,
+    consensusMode: Prediction['consensusMode'],
+  ) =>
+    request<Prediction>(`/api/v1/predictions/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ consensusMode }),
+    }),
+
   deletePrediction: (id: number) =>
     request<void>(`/api/v1/predictions/${id}`, { method: 'DELETE' }),
 
@@ -149,7 +161,11 @@ const privateApi = {
   clearActualResult: (matchNumber: number) =>
     request<void>(`/api/v1/actual-results/${matchNumber}`, { method: 'DELETE' }),
 
-  simulateGroupPhase: (simulationId: number, games?: 1 | 2 | 3, upsetVariance?: number) => {
+  simulateGroupPhase: (
+    simulationId: number,
+    games?: 1 | 2 | 3,
+    upsetVariance?: number,
+  ) => {
     const params = new URLSearchParams();
     if (games != null) params.set('games', String(games));
     if (upsetVariance != null) params.set('upsetVariance', String(upsetVariance));
@@ -175,9 +191,14 @@ const privateApi = {
     );
   },
 
-  simulateMatch: (simulationId: number, matchNumber: number, upsetVariance?: number) => {
-    const qs =
-      upsetVariance != null ? `?upsetVariance=${encodeURIComponent(String(upsetVariance))}` : '';
+  simulateMatch: (
+    simulationId: number,
+    matchNumber: number,
+    upsetVariance?: number,
+  ) => {
+    const params = new URLSearchParams();
+    if (upsetVariance != null) params.set('upsetVariance', String(upsetVariance));
+    const qs = params.size > 0 ? `?${params}` : '';
     return request<SimulateMatchResult>(
       `/api/v1/simulations/${simulationId}/matches/${matchNumber}/simulate${qs}`,
       { method: 'POST' },
@@ -278,9 +299,8 @@ const publicApiStub = {
     throw new Error('Use local simulation in public mode');
   },
   listTeams: staticApi.listTeams,
-  updateTeamRatings: async (): Promise<Team> => {
-    throw new Error('Not available in public mode');
-  },
+  getRatingEloWeight: async () => ({ ratingEloWeight: 1 }),
+  setRatingEloWeight: async (ratingEloWeight: number) => ({ ratingEloWeight }),
   getActualResultsState: staticApi.getActualResultsState,
   getMasterGroupState: staticApi.getMasterGroupState,
   getMasterTeamStats: staticApi.getMasterTeamStats,
@@ -302,6 +322,17 @@ const publicApiStub = {
   renamePrediction: async (): Promise<Prediction> => {
     throw new Error('Not available in public mode');
   },
+  updatePredictionConsensusMode: async (
+    id: number,
+    consensusMode: Prediction['consensusMode'],
+  ): Promise<Prediction> => ({
+    id,
+    name: 'Public',
+    selectionSpec: { type: 'ranges', ranges: [[1, 1]] },
+    consensusMode,
+    createdAt: '',
+    updatedAt: '',
+  }),
   deletePrediction: async (): Promise<void> => {
     throw new Error('Not available in public mode');
   },
@@ -332,7 +363,10 @@ export const api = isPublicMode() ? publicApiStub : privateApi;
 
 export function loadInitialPrediction(): Promise<{ id: number | null; label: string | null }> {
   if (isPublicMode()) {
-    return Promise.resolve({ id: 1, label: null });
+    return loadPublicMeta().then((meta) => ({
+      id: meta.predictionId ?? 1,
+      label: meta.predictionName ?? null,
+    }));
   }
 
   return (async () => {

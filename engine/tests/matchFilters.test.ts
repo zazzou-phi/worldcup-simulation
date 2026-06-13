@@ -10,8 +10,16 @@ function team(id: number, name: string): Team {
     flag: '',
     rank: 1,
     rating: 1500,
-    offensiveRating: 1500,
-    defensiveRating: 1500,
+    elo: 1500,
+    total: 0,
+    goalsFor: 0,
+    goalsAgainst: 0,
+    eloOffensiveRating: 1,
+    eloDefensiveRating: 1,
+    goalOffensiveRating: 1,
+    goalDefensiveRating: 1,
+    blendOffensiveRating: 1,
+    blendDefensiveRating: 1,
   };
 }
 
