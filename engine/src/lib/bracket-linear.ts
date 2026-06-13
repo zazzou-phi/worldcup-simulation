@@ -36,6 +36,22 @@ export const WEB_LINEAR_DIMS: LinearBracketDims = {
   finalNodeHeightExtra: 40,
 };
 
+/** Larger nodes for narrow viewports so team labels and scores are not clipped. */
+export const MOBILE_LINEAR_DIMS: LinearBracketDims = {
+  colWidth: 196,
+  colGap: 24,
+  rowUnit: 118,
+  nodeHeight: 104,
+  headerHeight: 28,
+  padding: 12,
+  finalColWidthExtra: 48,
+  finalNodeHeightExtra: 48,
+};
+
+export function bracketDimsForViewport(mobile: boolean): LinearBracketDims {
+  return mobile ? MOBILE_LINEAR_DIMS : WEB_LINEAR_DIMS;
+}
+
 export const TUI_LINEAR_DIMS: LinearBracketDims = {
   colWidth: 12,
   colGap: 4,

@@ -61,10 +61,9 @@ export function MasterGroupView({ masterState, layout, actualResults = [] }: Pro
 
   const doubledMatchNumbers = useMemo(
     () =>
-      pickDoubleDownMatches(
-        masterState.distributions,
-        publicMode ? MAX_DOUBLE_DOWN : doubleCount,
-      ),
+      publicMode
+        ? undefined
+        : pickDoubleDownMatches(masterState.distributions, doubleCount),
     [masterState.distributions, publicMode, doubleCount],
   );
 

@@ -1,5 +1,6 @@
 import { FINAL_MATCH_NUMBER, KNOCKOUT_ROUNDS } from '@shared/lib/bracket-layout.js';
 import {
+  bracketDimsForViewport,
   canvasHeight,
   canvasWidth,
   columnLeft,
@@ -7,9 +8,9 @@ import {
   matchNodeHeight,
   matchTop,
   roundColumnWidth,
-  WEB_LINEAR_DIMS,
 } from '@shared/lib/bracket-linear.js';
 import { matchSideCode, matchWinnerSide } from '@shared/lib/matchDisplay.js';
+import { MOBILE_QUERY, useMediaQuery } from '../lib/useMediaQuery.js';
 import type { ResolvedMatch } from '../types.js';
 import { BracketConnectors } from './BracketConnectors.js';
 import { FixtureList } from './FixtureList.js';
@@ -135,7 +136,8 @@ export function KnockoutBracket({
 }: Props) {
   const byNumber = new Map(matches.map((m) => [m.fixture.matchNumber, m]));
   const rows = computeBracketRows();
-  const dims = WEB_LINEAR_DIMS;
+  const mobile = useMediaQuery(MOBILE_QUERY);
+  const dims = bracketDimsForViewport(mobile);
   const width = canvasWidth(dims);
   const height = canvasHeight(rows, dims);
 
@@ -144,7 +146,7 @@ export function KnockoutBracket({
       <h2 className="section-title">Knockout Stage</h2>
       <div className="bracket-scroll">
         <div className="bracket-canvas" style={{ width, height }}>
-          <BracketConnectors />
+          <BracketConnectors dims={dims} />
           {KNOCKOUT_ROUNDS.map((round, ri) => (
             <div
               key={round.name}

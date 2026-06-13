@@ -12,6 +12,7 @@ export function outcomeConfidence(dist: OutcomeDistribution): number {
 export function pickDoubleDownMatches(
   distributions: Record<string, OutcomeDistribution>,
   count: number,
+  eligibleMatchNumbers?: ReadonlySet<number>,
 ): Set<number> {
   const limit = Math.max(0, Math.min(count, MAX_DOUBLE_DOWN));
   const ranked = Object.entries(distributions)
@@ -19,7 +20,11 @@ export function pickDoubleDownMatches(
       matchNumber: Number(matchNumber),
       confidence: outcomeConfidence(dist),
     }))
-    .filter((entry) => entry.confidence > 0)
+    .filter(
+      (entry) =>
+        entry.confidence > 0 &&
+        (eligibleMatchNumbers == null || eligibleMatchNumbers.has(entry.matchNumber)),
+    )
     .sort((a, b) => b.confidence - a.confidence || a.matchNumber - b.matchNumber);
 
   return new Set(ranked.slice(0, limit).map((entry) => entry.matchNumber));

@@ -66,11 +66,10 @@ export function FixtureList({
   onClear,
 }: Props) {
   const actualByMatch = new Map(actualResults.map((r) => [r.matchNumber, r]));
+  const showDoubleMarks = doubledMatchNumbers != null;
 
   return (
-    <div
-      className={`fixture-list${doubledMatchNumbers != null ? ' fixture-list-doubles' : ''}`}
-    >
+    <div className="fixture-list">
       <div className="fixture-list-header">
         <span>
           Fixtures ({matches.length})
@@ -127,11 +126,12 @@ export function FixtureList({
             m.result.goalsHome === m.result.goalsAway &&
             m.result.winnerTeamId != null;
           const actual = actualByMatch.get(num);
+          const showDouble = showDoubleMarks && played && doubledMatchNumbers!.has(num);
 
           return (
             <div
               key={num}
-              className={`fixture-row ${selected ? 'selected' : ''} ${locked ? 'fixture-locked' : ''}`}
+              className={`fixture-row ${selected ? 'selected' : ''} ${locked ? 'fixture-locked' : ''}${showDouble ? ' fixture-row-double' : ''}`}
               onClick={() => onSelect(selected ? null : num)}
               onDoubleClick={() => canEdit && onStartEdit(num)}
             >
@@ -194,13 +194,9 @@ export function FixtureList({
                   </button>
                 )}
               </span>
-              {doubledMatchNumbers != null && (
-                <span
-                  className="fixture-double-mark"
-                  title={doubledMatchNumbers.has(num) ? 'Double down' : undefined}
-                  aria-hidden={!doubledMatchNumbers.has(num)}
-                >
-                  {doubledMatchNumbers.has(num) ? 'D' : '\u00a0'}
+              {showDouble && (
+                <span className="fixture-double-mark" title="Double down">
+                  D
                 </span>
               )}
             </div>

@@ -1,3 +1,4 @@
+import type { LinearBracketDims } from '@shared/lib/bracket-linear.js';
 import {
   buildConnectorSegments,
   canvasHeight,
@@ -7,9 +8,12 @@ import {
   WEB_LINEAR_DIMS,
 } from '@shared/lib/bracket-linear.js';
 
-export function BracketConnectors() {
+interface Props {
+  dims?: LinearBracketDims;
+}
+
+export function BracketConnectors({ dims = WEB_LINEAR_DIMS }: Props) {
   const rows = computeBracketRows();
-  const dims = WEB_LINEAR_DIMS;
   const width = canvasWidth(dims);
   const height = canvasHeight(rows, dims);
   const segments = buildConnectorSegments(rows, dims);
