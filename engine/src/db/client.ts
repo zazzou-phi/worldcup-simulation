@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import { drizzle, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema.js';
 import { rebuildPredictionAggregates } from './predictionAggregates.js';
-import { migrateExistingFrozenMatches } from './predictionFrozenMatches.js';
+import { migrateExistingFrozenMatches, copyMissingFrozenMatchesFromDefault } from './predictionFrozenMatches.js';
 import { computeNormalizedTeamRatings, computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -132,6 +132,7 @@ export function initSchema(sqlite: Database.Database) {
       away_win INTEGER NOT NULL,
       total INTEGER NOT NULL,
       scorelines_json TEXT NOT NULL,
+      consensus_mode TEXT NOT NULL DEFAULT 'expected',
       frozen_at TEXT NOT NULL,
       PRIMARY KEY (prediction_id, match_number)
     );
@@ -444,6 +445,63 @@ function dropLegacyMasterTables(sqlite: Database.Database) {
   `);
 }
 
+function migrateFrozenMatchConsensusMode(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'prediction_frozen_matches')) return;
+
+  const columns = sqlite.prepare('PRAGMA table_info(prediction_frozen_matches)').all() as Array<{
+    name: string;
+  }>;
+  const names = new Set(columns.map((column) => column.name));
+  if (!names.has('consensus_mode')) {
+    sqlite.exec(
+      "ALTER TABLE prediction_frozen_matches ADD COLUMN consensus_mode TEXT NOT NULL DEFAULT 'expected'",
+    );
+  }
+
+  const migrated = tableExists(sqlite, 'schema_flags')
+    ? sqlite.prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'frozen_consensus_mode_v1'").get()
+    : null;
+  if (migrated) return;
+
+  sqlite.exec(`
+    UPDATE prediction_frozen_matches
+    SET consensus_mode = (
+      SELECT p.consensus_mode
+      FROM predictions p
+      WHERE p.id = prediction_frozen_matches.prediction_id
+    )
+    WHERE consensus_mode IS NULL OR consensus_mode = 'expected'
+  `);
+
+  sqlite.exec(`
+    UPDATE prediction_frozen_matches AS target
+    SET consensus_mode = (
+      SELECT source.consensus_mode
+      FROM prediction_frozen_matches AS source
+      WHERE source.prediction_id = 1
+        AND source.match_number = target.match_number
+    )
+    WHERE target.prediction_id != 1
+      AND EXISTS (
+        SELECT 1
+        FROM actual_match_results ar
+        WHERE ar.match_number = target.match_number
+      )
+      AND EXISTS (
+        SELECT 1
+        FROM prediction_frozen_matches AS source
+        WHERE source.prediction_id = 1
+          AND source.match_number = target.match_number
+      )
+  `);
+
+  if (tableExists(sqlite, 'schema_flags')) {
+    sqlite
+      .prepare("INSERT INTO schema_flags (key, value) VALUES ('frozen_consensus_mode_v1', '1')")
+      .run();
+  }
+}
+
 function migratePredictionFrozenMatches(sqlite: Database.Database) {
   if (!tableExists(sqlite, 'prediction_frozen_matches')) {
     sqlite.exec(`
@@ -455,6 +513,7 @@ function migratePredictionFrozenMatches(sqlite: Database.Database) {
         away_win INTEGER NOT NULL,
         total INTEGER NOT NULL,
         scorelines_json TEXT NOT NULL,
+        consensus_mode TEXT NOT NULL DEFAULT 'expected',
         frozen_at TEXT NOT NULL,
         PRIMARY KEY (prediction_id, match_number)
       )
@@ -470,6 +529,8 @@ function migratePredictionFrozenMatches(sqlite: Database.Database) {
     `);
   }
 
+  migrateFrozenMatchConsensusMode(sqlite);
+
   if (!tableExists(sqlite, 'predictions') || !tableExists(sqlite, 'actual_match_results')) {
     return;
   }
@@ -477,13 +538,27 @@ function migratePredictionFrozenMatches(sqlite: Database.Database) {
   const migrated = sqlite
     .prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'frozen_from_default_v1'")
     .get();
-  if (migrated) return;
+  if (!migrated) {
+    const db = drizzle(sqlite, { schema });
+    migrateExistingFrozenMatches(db);
+    sqlite
+      .prepare("INSERT INTO schema_flags (key, value) VALUES ('frozen_from_default_v1', '1')")
+      .run();
+  }
 
-  const db = drizzle(sqlite, { schema });
-  migrateExistingFrozenMatches(db);
-  sqlite
-    .prepare("INSERT INTO schema_flags (key, value) VALUES ('frozen_from_default_v1', '1')")
-    .run();
+  const missingCopied = sqlite
+    .prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'frozen_missing_from_default_v1'")
+    .get();
+  if (!missingCopied) {
+    const db = drizzle(sqlite, { schema });
+    const predictions = sqlite.prepare('SELECT id FROM predictions').all() as Array<{ id: number }>;
+    for (const prediction of predictions) {
+      copyMissingFrozenMatchesFromDefault(db, prediction.id);
+    }
+    sqlite
+      .prepare("INSERT INTO schema_flags (key, value) VALUES ('frozen_missing_from_default_v1', '1')")
+      .run();
+  }
 }
 
 function ensureDefaultPrediction(sqlite: Database.Database) {

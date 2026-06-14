@@ -29,7 +29,6 @@ import { DEFAULT_RATING_ELO_WEIGHT, loadStoredRatingEloWeight, storeRatingEloWei
 import {
   DEFAULT_CONSENSUS_MODE,
   loadStoredConsensusMode,
-  storeConsensusMode,
   type ConsensusMode,
 } from './lib/consensusMode.js';
 import { applyConsensusMode } from './lib/applyConsensusMode.js';
@@ -72,6 +71,7 @@ export function App() {
   const [consensusModeDraft, setConsensusModeDraft] = useState<ConsensusMode>(DEFAULT_CONSENSUS_MODE);
   const [consensusModeSaved, setConsensusModeSaved] = useState<ConsensusMode>(DEFAULT_CONSENSUS_MODE);
   const [savingConsensusMode, setSavingConsensusMode] = useState(false);
+  const [savingFrozenConsensus, setSavingFrozenConsensus] = useState(false);
   const [predictionId, setPredictionId] = useState<number | null>(null);
   const [activePredictionLabel, setActivePredictionLabel] = useState<string | null>(null);
   const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
@@ -111,21 +111,21 @@ export function App() {
     setMasterStateBase(next);
     const saved = next.consensusMode;
     setConsensusModeSaved(saved);
-    const stored = publicMode ? loadStoredConsensusMode(pid) : null;
+    const stored = !publicMode ? loadStoredConsensusMode(pid) : null;
     setConsensusModeDraft(stored ?? saved);
     return next;
   }, [predictionId, publicMode]);
 
   const masterState = useMemo(() => {
     if (!masterStateBase || !state) return masterStateBase;
-    if (consensusModeDraft === masterStateBase.consensusMode) return masterStateBase;
+    if (publicMode || consensusModeDraft === masterStateBase.consensusMode) return masterStateBase;
     return applyConsensusMode(
       masterStateBase,
       consensusModeDraft,
       state.fixtures,
       state.groupMemberships,
     );
-  }, [masterStateBase, consensusModeDraft, state]);
+  }, [masterStateBase, consensusModeDraft, state, publicMode]);
 
   useEffect(() => {
     (async () => {
@@ -154,7 +154,7 @@ export function App() {
           setMasterStateBase(loaded);
           const saved = loaded.consensusMode;
           setConsensusModeSaved(saved);
-          const stored = publicMode
+          const stored = !publicMode
             ? loadStoredConsensusMode(initialPrediction.id)
             : null;
           setConsensusModeDraft(stored ?? saved);
@@ -376,10 +376,8 @@ export function App() {
   };
 
   const handleConsensusModeChange = (mode: ConsensusMode) => {
+    if (publicMode) return;
     setConsensusModeDraft(mode);
-    if (publicMode && predictionId != null) {
-      storeConsensusMode(predictionId, mode);
-    }
   };
 
   const handleSaveConsensusMode = async () => {
@@ -394,6 +392,20 @@ export function App() {
       setError(err instanceof Error ? err.message : 'Failed to save consensus mode');
     } finally {
       setSavingConsensusMode(false);
+    }
+  };
+
+  const handleFrozenConsensusModeChange = async (matchNumber: number, mode: ConsensusMode) => {
+    if (predictionId == null || publicMode) return;
+    setSavingFrozenConsensus(true);
+    setError(null);
+    try {
+      const next = await api.setFrozenMatchConsensusMode(predictionId, matchNumber, mode);
+      setMasterStateBase(next);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update locked consensus');
+    } finally {
+      setSavingFrozenConsensus(false);
     }
   };
 
@@ -624,6 +636,9 @@ export function App() {
             masterState={masterState}
             layout={layout}
             actualResults={state?.actualResults ?? []}
+            canEditFrozenConsensus={!publicMode}
+            savingFrozenConsensus={savingFrozenConsensus}
+            onFrozenConsensusModeChange={handleFrozenConsensusModeChange}
           />
         ) : appView === 'results' && actualState ? (
           <ActualResultsView
@@ -737,7 +752,7 @@ export function App() {
                   kind: 'prediction',
                   masterState,
                   fixtures: state.fixtures,
-                  consensusMode: consensusModeDraft,
+                  consensusMode: publicMode ? masterState.consensusMode : consensusModeDraft,
                 }
               : { kind: 'simulation', state }
           }

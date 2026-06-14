@@ -20,3 +20,10 @@ export class ActualResultError extends Error {
     this.name = 'ActualResultError';
   }
 }
+
+export class FrozenMatchError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'FrozenMatchError';
+  }
+}

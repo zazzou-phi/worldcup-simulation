@@ -346,6 +346,35 @@ describe('HTTP API', () => {
     expect(master.consensusMode).toBe('outcome');
   });
 
+  it('PATCH /predictions/:id/frozen-matches/:matchNumber/consensus-mode updates locked match', async () => {
+    const sim = repo.createSimulation('Locked consensus');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    const prediction = repo.createPrediction('Locked pool', `${sim.id}-${sim.id}`);
+    repo.setPredictionConsensusMode(prediction.id, 'expected');
+
+    await app.request('/api/v1/actual-results/1', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goalsHome: 2, goalsAway: 0 }),
+    });
+
+    const res = await app.request(
+      `/api/v1/predictions/${prediction.id}/frozen-matches/1/consensus-mode`,
+      {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consensusMode: 'scoreline' }),
+      },
+    );
+    expect(res.status).toBe(200);
+    const master = await json<{
+      distributions: Record<string, { consensusMode?: string }>;
+      resolvedMatches: Array<{ fixture: { matchNumber: number }; result: { goalsHome: number | null } }>;
+    }>(res);
+    expect(master.distributions['1']?.consensusMode).toBe('scoreline');
+    expect(master.resolvedMatches.find((m) => m.fixture.matchNumber === 1)?.result.goalsHome).not.toBeNull();
+  });
+
   function playAllGroupMatches(simulationId: number) {
     const fixtures = repo.getFixtures().filter((f) => f.group);
     for (const f of fixtures) {

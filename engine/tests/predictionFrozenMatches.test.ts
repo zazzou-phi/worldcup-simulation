@@ -89,6 +89,68 @@ describe('predictionFrozenMatches', () => {
     );
   });
 
+  it('updates frozen consensus mode for a locked match', () => {
+    const sim = repo.createSimulation('Frozen consensus API');
+    const prediction = repo.createPrediction('Pool', `${sim.id}-${sim.id}`);
+    repo.setPredictionConsensusMode(prediction.id, 'expected');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    repo.setActualResult(1, 2, 0, 18);
+
+    repo.setFrozenMatchConsensusMode(prediction.id, 1, 'scoreline');
+    let master = repo.buildMasterGroupView(prediction.id);
+    expect(master.distributions[1].consensusMode).toBe('scoreline');
+
+    repo.setFrozenMatchConsensusMode(prediction.id, 1, 'rounded');
+    master = repo.buildMasterGroupView(prediction.id);
+    expect(master.distributions[1].consensusMode).toBe('rounded');
+  });
+
+  it('freezes consensus mode when an actual result is entered', () => {
+    const sim = repo.createSimulation('Consensus freeze');
+    const predictionId = ensureTestPrediction(repo);
+    repo.setPredictionConsensusMode(predictionId, 'scoreline');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    repo.updateMatchResult(sim.id, 2, 3, 3, null);
+
+    repo.setActualResult(1, 2, 0, 18);
+
+    repo.setPredictionConsensusMode(predictionId, 'expected');
+    const master = repo.buildMasterGroupView(predictionId);
+    expect(master.distributions[1].consensusMode).toBe('scoreline');
+    expect(master.resolvedMatches.find((m) => m.fixture.matchNumber === 1)?.result.goalsHome).toBe(
+      2,
+    );
+
+    const unlocked = master.resolvedMatches.find((m) => m.fixture.matchNumber === 2);
+    expect(unlocked?.result.status).toBe('played');
+    expect(master.distributions[2]?.consensusMode).toBeUndefined();
+  });
+
+  it('backfills locked predictions from Default for pools with only post-result simulations', () => {
+    const defaultSim = repo.createSimulation('Default pool');
+    const defaultId = repo.createPrediction('Default', `${defaultSim.id}-${defaultSim.id}`).id;
+    repo.updateMatchResult(defaultSim.id, 1, 2, 1, 18);
+    repo.updateMatchResult(defaultSim.id, 2, 1, 1, null);
+    repo.setActualResult(1, 2, 0, 18);
+    const fixture2 = repo.getFixtures().find((f) => f.matchNumber === 2)!;
+    repo.setActualResult(2, 2, 1, fixture2.teamHomeId!);
+
+    const postLockSim = repo.createSimulation('Post-lock pool');
+    repo.updateMatchResult(postLockSim.id, 3, 1, 0, 18);
+    const newId = repo.createPrediction('Post-lock', `${postLockSim.id}-${postLockSim.id}`).id;
+
+    const master = repo.buildMasterGroupView(newId);
+    expect(master.distributions[1].total).toBeGreaterThan(0);
+    expect(master.distributions[2].total).toBeGreaterThan(0);
+    expect(master.resolvedMatches.find((m) => m.fixture.matchNumber === 1)?.result.status).toBe(
+      'played',
+    );
+    expect(master.resolvedMatches.find((m) => m.fixture.matchNumber === 2)?.result.status).toBe(
+      'played',
+    );
+    expect(master.distributions[3].total).toBe(1);
+  });
+
   it('copies Default frozen stats to all predictions for locked matches', () => {
     const defaultSim = repo.createSimulation('Default pool');
     const otherSim = repo.createSimulation('Other pool');

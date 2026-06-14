@@ -27,6 +27,8 @@ export function applyConsensusMode(
   groupMemberships: GroupMembership[],
 ): MasterGroupState {
   const resolvedMatches = state.resolvedMatches.map((match) => {
+    if (match.isLocked) return match;
+
     const dist = distributionForMatch(state.distributions, match.fixture.matchNumber);
     if (!dist || dist.total === 0 || !match.homeTeam || !match.awayTeam) {
       return {

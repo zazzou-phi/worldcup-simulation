@@ -164,7 +164,7 @@ export function Header({
           </button>
         </>
       )}
-      {isPredictionsView && consensusMode != null && (
+      {isPredictionsView && !publicMode && consensusMode != null && (
         <ConsensusModeControl
           value={consensusMode}
           dirty={consensusModeDirty}

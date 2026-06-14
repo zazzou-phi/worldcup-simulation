@@ -1,5 +1,11 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
+import type { ConsensusMode } from '../lib/consensusMode.js';
+import {
+  CONSENSUS_MODE_HINT,
+  CONSENSUS_MODE_OPTIONS,
+  formatConsensusMode,
+} from '../lib/consensusMode.js';
 import type { OutcomeDistribution, ResolvedMatch, ScorelineCount } from '../types.js';
 import { matchTeamName } from '@shared/lib/matchDisplay.js';
 
@@ -36,6 +42,10 @@ function clampTooltipPosition(
 interface Props {
   match: ResolvedMatch;
   distribution: OutcomeDistribution | undefined;
+  defaultConsensusMode: ConsensusMode;
+  canEditFrozenConsensus?: boolean;
+  savingFrozenConsensus?: boolean;
+  onFrozenConsensusModeChange?: (matchNumber: number, mode: ConsensusMode) => void;
   onClose: () => void;
 }
 
@@ -216,18 +226,30 @@ function OutcomeBar({
   );
 }
 
-export function MasterFixtureModal({ match, distribution, onClose }: Props) {
+export function MasterFixtureModal({
+  match,
+  distribution,
+  defaultConsensusMode,
+  canEditFrozenConsensus = false,
+  savingFrozenConsensus = false,
+  onFrozenConsensusModeChange,
+  onClose,
+}: Props) {
   const homeName = matchTeamName(match, 'home');
   const awayName = matchTeamName(match, 'away');
   const played = match.result.status === 'played';
   const total = distribution?.total ?? 0;
   const scorelines = distribution?.scorelines ?? [];
+  const frozenConsensusMode = distribution?.consensusMode ?? defaultConsensusMode;
+  const showFrozenConsensusControl =
+    match.isLocked && canEditFrozenConsensus && total > 0 && onFrozenConsensusModeChange != null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal modal-wide master-fixture-modal" onClick={(e) => e.stopPropagation()}>
         <h2>
           Match #{match.fixture.matchNumber} · {match.fixture.group}
+          {match.isLocked ? ' 🔒' : ''}
         </h2>
         <p className="master-fixture-teams">
           {homeName} vs {awayName}
@@ -235,9 +257,42 @@ export function MasterFixtureModal({ match, distribution, onClose }: Props) {
         {played ? (
           <p className="master-fixture-consensus">
             Consensus: {match.result.goalsHome}–{match.result.goalsAway}
+            {match.isLocked && distribution?.consensusMode ? (
+              <span className="master-fixture-consensus-mode-label">
+                {' '}
+                · {formatConsensusMode(frozenConsensusMode)}
+              </span>
+            ) : null}
           </p>
         ) : (
           <p className="muted master-fixture-consensus">No consensus yet</p>
+        )}
+
+        {showFrozenConsensusControl && (
+          <div className="master-fixture-consensus-mode" title={CONSENSUS_MODE_HINT}>
+            <span className="master-fixture-consensus-mode-title">Locked consensus strategy</span>
+            <div className="master-fixture-consensus-mode-buttons">
+              {CONSENSUS_MODE_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`btn btn-small btn-ghost ${
+                    frozenConsensusMode === option.value ? 'active' : ''
+                  }`}
+                  title={CONSENSUS_MODE_HINT}
+                  disabled={savingFrozenConsensus || frozenConsensusMode === option.value}
+                  onClick={() =>
+                    onFrozenConsensusModeChange!(match.fixture.matchNumber, option.value)
+                  }
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+            {savingFrozenConsensus && (
+              <span className="muted master-fixture-consensus-mode-saving">Updating…</span>
+            )}
+          </div>
         )}
 
         {total > 0 && distribution ? (

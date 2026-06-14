@@ -140,6 +140,8 @@ export interface OutcomeDistribution {
   awayWin: number;
   total: number;
   scorelines: ScorelineCount[];
+  /** Frozen consensus strategy for locked matches. */
+  consensusMode?: MasterGroupState['consensusMode'];
 }
 
 export interface MasterGroupState {

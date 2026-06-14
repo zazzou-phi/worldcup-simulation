@@ -36,11 +36,25 @@
       "recordedAt": "2026-06-14T00:05:53.583Z"
     },
     {
+      "matchNumber": 14,
+      "goalsHome": 0,
+      "goalsAway": 1,
+      "winnerTeamId": 26,
+      "recordedAt": "2026-06-14T12:41:01.945Z"
+    },
+    {
       "matchNumber": 19,
       "goalsHome": 4,
       "goalsAway": 1,
       "winnerTeamId": 40,
       "recordedAt": "2026-06-13T08:20:40.300Z"
+    },
+    {
+      "matchNumber": 20,
+      "goalsHome": 2,
+      "goalsAway": 0,
+      "winnerTeamId": 25,
+      "recordedAt": "2026-06-14T12:41:06.344Z"
     }
   ],
   "phase": "group",
@@ -299,6 +313,36 @@
       "groupLetter": "C",
       "rows": [
         {
+          "teamId": 26,
+          "team": {
+            "id": 26,
+            "name": "Scotland",
+            "countryCode": null,
+            "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+            "rank": 27,
+            "rating": 1770,
+            "elo": 1770,
+            "total": 868,
+            "goalsFor": 1499,
+            "goalsAgainst": 1076,
+            "eloOffensiveRating": 0.8822388799602389,
+            "eloDefensiveRating": 0.9375870644369771,
+            "goalOffensiveRating": 1.0436294057209938,
+            "goalDefensiveRating": 1.0380588223969578,
+            "blendOffensiveRating": 0.928370764857587,
+            "blendDefensiveRating": 0.9920572198027856
+          },
+          "played": 1,
+          "won": 1,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "goalDifference": 1,
+          "points": 3,
+          "position": 1
+        },
+        {
           "teamId": 4,
           "team": {
             "id": 4,
@@ -326,7 +370,7 @@
           "goalsAgainst": 1,
           "goalDifference": 0,
           "points": 1,
-          "position": 1
+          "position": 2
         },
         {
           "teamId": 23,
@@ -356,36 +400,6 @@
           "goalsAgainst": 1,
           "goalDifference": 0,
           "points": 1,
-          "position": 2
-        },
-        {
-          "teamId": 26,
-          "team": {
-            "id": 26,
-            "name": "Scotland",
-            "countryCode": null,
-            "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-            "rank": 27,
-            "rating": 1770,
-            "elo": 1770,
-            "total": 868,
-            "goalsFor": 1499,
-            "goalsAgainst": 1076,
-            "eloOffensiveRating": 0.8822388799602389,
-            "eloDefensiveRating": 0.9375870644369771,
-            "goalOffensiveRating": 1.0436294057209938,
-            "goalDefensiveRating": 1.0380588223969578,
-            "blendOffensiveRating": 0.928370764857587,
-            "blendDefensiveRating": 0.9920572198027856
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
           "position": 3
         },
         {
@@ -408,13 +422,13 @@
             "blendOffensiveRating": 0.6421877898907218,
             "blendDefensiveRating": 1.3925163403179475
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
           "drawn": 0,
-          "lost": 0,
+          "lost": 1,
           "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
+          "goalsAgainst": 1,
+          "goalDifference": -1,
           "points": 0,
           "position": 4
         }
@@ -454,36 +468,6 @@
           "position": 1
         },
         {
-          "teamId": 13,
-          "team": {
-            "id": 13,
-            "name": "Turkey",
-            "countryCode": "TR",
-            "flag": "🇹🇷",
-            "rank": 14,
-            "rating": 1902,
-            "elo": 1902,
-            "total": 669,
-            "goalsFor": 947,
-            "goalsAgainst": 969,
-            "eloOffensiveRating": 1.2271661637162752,
-            "eloDefensiveRating": 0.6740535927825116,
-            "goalOffensiveRating": 0.8554374535540226,
-            "goalDefensiveRating": 1.2129058116029334,
-            "blendOffensiveRating": 1.1209111900156155,
-            "blendDefensiveRating": 0.9661890612397253
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 2
-        },
-        {
           "teamId": 25,
           "team": {
             "id": 25,
@@ -503,13 +487,43 @@
             "blendOffensiveRating": 0.9880777496605284,
             "blendDefensiveRating": 0.9343265005099272
           },
-          "played": 0,
-          "won": 0,
+          "played": 1,
+          "won": 1,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 0,
+          "goalsFor": 2,
           "goalsAgainst": 0,
-          "goalDifference": 0,
+          "goalDifference": 2,
+          "points": 3,
+          "position": 2
+        },
+        {
+          "teamId": 13,
+          "team": {
+            "id": 13,
+            "name": "Turkey",
+            "countryCode": "TR",
+            "flag": "🇹🇷",
+            "rank": 14,
+            "rating": 1902,
+            "elo": 1902,
+            "total": 669,
+            "goalsFor": 947,
+            "goalsAgainst": 969,
+            "eloOffensiveRating": 1.2271661637162752,
+            "eloDefensiveRating": 0.6740535927825116,
+            "goalOffensiveRating": 0.8554374535540226,
+            "goalDefensiveRating": 1.2129058116029334,
+            "blendOffensiveRating": 1.1209111900156155,
+            "blendDefensiveRating": 0.9661890612397253
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 0,
+          "lost": 1,
+          "goalsFor": 0,
+          "goalsAgainst": 2,
+          "goalDifference": -2,
           "points": 0,
           "position": 3
         },
@@ -1549,8 +1563,8 @@
   "qualifyingThirdGroups": [
     "B",
     "C",
-    "D",
     "F",
+    "G",
     "I",
     "J",
     "K",
@@ -2380,10 +2394,10 @@
         "matchNumber": 14,
         "teamHomeId": 75,
         "teamAwayId": 26,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 0,
+        "goalsAway": 1,
+        "winnerTeamId": 26,
+        "status": "played"
       },
       "homeTeam": {
         "id": 75,
@@ -2423,7 +2437,7 @@
       },
       "homeLabel": "Haiti",
       "awayLabel": "Scotland",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -2752,10 +2766,10 @@
         "matchNumber": 20,
         "teamHomeId": 25,
         "teamAwayId": 13,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 2,
+        "goalsAway": 0,
+        "winnerTeamId": 25,
+        "status": "played"
       },
       "homeTeam": {
         "id": 25,
@@ -2795,7 +2809,7 @@
       },
       "homeLabel": "Australia",
       "awayLabel": "Turkey",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6099,7 +6113,7 @@
       "result": {
         "matchNumber": 74,
         "teamHomeId": 8,
-        "teamAwayId": 41,
+        "teamAwayId": 45,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6124,25 +6138,25 @@
         "blendDefensiveRating": 0.9693303449765659
       },
       "awayTeam": {
-        "id": 41,
-        "name": "Sweden",
-        "countryCode": "SE",
-        "flag": "🇸🇪",
-        "rank": 42,
-        "rating": 1719,
-        "elo": 1719,
-        "total": 1118,
-        "goalsFor": 2226,
-        "goalsAgainst": 1482,
-        "eloOffensiveRating": 0.7766290772219561,
-        "eloDefensiveRating": 1.0650847178590572,
-        "goalOffensiveRating": 1.2032275193558504,
-        "goalDefensiveRating": 1.1100328152699896,
-        "blendOffensiveRating": 0.8985680208937928,
-        "blendDefensiveRating": 1.08945305677422
+        "id": 45,
+        "name": "Egypt",
+        "countryCode": "EG",
+        "flag": "🇪🇬",
+        "rank": 46,
+        "rating": 1699,
+        "elo": 1699,
+        "total": 884,
+        "goalsFor": 1545,
+        "goalsAgainst": 921,
+        "eloOffensiveRating": 0.7387524301763619,
+        "eloDefensiveRating": 1.1196927790770395,
+        "goalOffensiveRating": 1.056186515622931,
+        "goalDefensiveRating": 0.8724424383412202,
+        "blendOffensiveRating": 0.8294878226245165,
+        "blendDefensiveRating": 0.9856475035928245
       },
       "homeLabel": "Ecuador",
-      "awayLabel": "Sweden",
+      "awayLabel": "Egypt",
       "isLocked": false
     },
     {
@@ -6161,7 +6175,7 @@
       "result": {
         "matchNumber": 75,
         "teamHomeId": 7,
-        "teamAwayId": 23,
+        "teamAwayId": 4,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6186,25 +6200,25 @@
         "blendDefensiveRating": 0.8417167074342994
       },
       "awayTeam": {
-        "id": 23,
-        "name": "Morocco",
-        "countryCode": "MA",
-        "flag": "🇲🇦",
-        "rank": 24,
-        "rating": 1822,
-        "elo": 1822,
-        "total": 728,
-        "goalsFor": 1103,
-        "goalsAgainst": 614,
-        "eloOffensiveRating": 1.004718677371244,
-        "eloDefensiveRating": 0.8232909173723315,
-        "goalOffensiveRating": 0.9156057953973916,
-        "goalDefensiveRating": 0.7062629262762258,
-        "blendOffensiveRating": 0.9792466417935004,
-        "blendDefensiveRating": 0.7598449004359872
+        "id": 4,
+        "name": "Brazil",
+        "countryCode": "BR",
+        "flag": "🇧🇷",
+        "rank": 5,
+        "rating": 1984,
+        "elo": 1984,
+        "total": 1065,
+        "goalsFor": 2294,
+        "goalsAgainst": 954,
+        "eloOffensiveRating": 1.5063772248364342,
+        "eloDefensiveRating": 0.5491159504777455,
+        "goalOffensiveRating": 1.3016919095587338,
+        "goalDefensiveRating": 0.7501155777613956,
+        "blendOffensiveRating": 1.447869952739398,
+        "blendDefensiveRating": 0.6580866816455118
       },
       "homeLabel": "Netherlands",
-      "awayLabel": "Morocco",
+      "awayLabel": "Brazil",
       "isLocked": false
     },
     {
@@ -6222,7 +6236,7 @@
       },
       "result": {
         "matchNumber": 76,
-        "teamHomeId": 4,
+        "teamHomeId": 26,
         "teamAwayId": 12,
         "goalsHome": null,
         "goalsAway": null,
@@ -6230,22 +6244,22 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 4,
-        "name": "Brazil",
-        "countryCode": "BR",
-        "flag": "🇧🇷",
-        "rank": 5,
-        "rating": 1984,
-        "elo": 1984,
-        "total": 1065,
-        "goalsFor": 2294,
-        "goalsAgainst": 954,
-        "eloOffensiveRating": 1.5063772248364342,
-        "eloDefensiveRating": 0.5491159504777455,
-        "goalOffensiveRating": 1.3016919095587338,
-        "goalDefensiveRating": 0.7501155777613956,
-        "blendOffensiveRating": 1.447869952739398,
-        "blendDefensiveRating": 0.6580866816455118
+        "id": 26,
+        "name": "Scotland",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "rank": 27,
+        "rating": 1770,
+        "elo": 1770,
+        "total": 868,
+        "goalsFor": 1499,
+        "goalsAgainst": 1076,
+        "eloOffensiveRating": 0.8822388799602389,
+        "eloDefensiveRating": 0.9375870644369771,
+        "goalOffensiveRating": 1.0436294057209938,
+        "goalDefensiveRating": 1.0380588223969578,
+        "blendOffensiveRating": 0.928370764857587,
+        "blendDefensiveRating": 0.9920572198027856
       },
       "awayTeam": {
         "id": 12,
@@ -6265,7 +6279,7 @@
         "blendOffensiveRating": 1.1988563610320826,
         "blendDefensiveRating": 0.8404504090317467
       },
-      "homeLabel": "Brazil",
+      "homeLabel": "Scotland",
       "awayLabel": "Japan",
       "isLocked": false
     },
@@ -6533,7 +6547,7 @@
       "result": {
         "matchNumber": 81,
         "teamHomeId": 40,
-        "teamAwayId": 25,
+        "teamAwayId": 41,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6558,25 +6572,25 @@
         "blendDefensiveRating": 1.075682371580052
       },
       "awayTeam": {
-        "id": 25,
-        "name": "Australia",
-        "countryCode": "AU",
-        "flag": "🇦🇺",
-        "rank": 26,
-        "rating": 1775,
-        "elo": 1775,
-        "total": 636,
-        "goalsFor": 1289,
-        "goalsAgainst": 715,
-        "eloOffensiveRating": 0.8933360789590824,
-        "eloDefensiveRating": 0.9259401708681849,
-        "goalOffensiveRating": 1.224785966167954,
-        "goalDefensiveRating": 0.941408995516822,
-        "blendOffensiveRating": 0.9880777496605284,
-        "blendDefensiveRating": 0.9343265005099272
+        "id": 41,
+        "name": "Sweden",
+        "countryCode": "SE",
+        "flag": "🇸🇪",
+        "rank": 42,
+        "rating": 1719,
+        "elo": 1719,
+        "total": 1118,
+        "goalsFor": 2226,
+        "goalsAgainst": 1482,
+        "eloOffensiveRating": 0.7766290772219561,
+        "eloDefensiveRating": 1.0650847178590572,
+        "goalOffensiveRating": 1.2032275193558504,
+        "goalDefensiveRating": 1.1100328152699896,
+        "blendOffensiveRating": 0.8985680208937928,
+        "blendDefensiveRating": 1.08945305677422
       },
       "homeLabel": "United States",
-      "awayLabel": "Australia",
+      "awayLabel": "Sweden",
       "isLocked": false
     },
     {
@@ -6781,7 +6795,7 @@
       "result": {
         "matchNumber": 85,
         "teamHomeId": 14,
-        "teamAwayId": 26,
+        "teamAwayId": 23,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6806,25 +6820,25 @@
         "blendDefensiveRating": 1.0662643941173375
       },
       "awayTeam": {
-        "id": 26,
-        "name": "Scotland",
-        "countryCode": null,
-        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-        "rank": 27,
-        "rating": 1770,
-        "elo": 1770,
-        "total": 868,
-        "goalsFor": 1499,
-        "goalsAgainst": 1076,
-        "eloOffensiveRating": 0.8822388799602389,
-        "eloDefensiveRating": 0.9375870644369771,
-        "goalOffensiveRating": 1.0436294057209938,
-        "goalDefensiveRating": 1.0380588223969578,
-        "blendOffensiveRating": 0.928370764857587,
-        "blendDefensiveRating": 0.9920572198027856
+        "id": 23,
+        "name": "Morocco",
+        "countryCode": "MA",
+        "flag": "🇲🇦",
+        "rank": 24,
+        "rating": 1822,
+        "elo": 1822,
+        "total": 728,
+        "goalsFor": 1103,
+        "goalsAgainst": 614,
+        "eloOffensiveRating": 1.004718677371244,
+        "eloDefensiveRating": 0.8232909173723315,
+        "goalOffensiveRating": 0.9156057953973916,
+        "goalDefensiveRating": 0.7062629262762258,
+        "blendOffensiveRating": 0.9792466417935004,
+        "blendDefensiveRating": 0.7598449004359872
       },
       "homeLabel": "Switzerland",
-      "awayLabel": "Scotland",
+      "awayLabel": "Morocco",
       "isLocked": false
     },
     {
@@ -6966,7 +6980,7 @@
       },
       "result": {
         "matchNumber": 88,
-        "teamHomeId": 13,
+        "teamHomeId": 25,
         "teamAwayId": 31,
         "goalsHome": null,
         "goalsAway": null,
@@ -6974,22 +6988,22 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 13,
-        "name": "Turkey",
-        "countryCode": "TR",
-        "flag": "🇹🇷",
-        "rank": 14,
-        "rating": 1902,
-        "elo": 1902,
-        "total": 669,
-        "goalsFor": 947,
-        "goalsAgainst": 969,
-        "eloOffensiveRating": 1.2271661637162752,
-        "eloDefensiveRating": 0.6740535927825116,
-        "goalOffensiveRating": 0.8554374535540226,
-        "goalDefensiveRating": 1.2129058116029334,
-        "blendOffensiveRating": 1.1209111900156155,
-        "blendDefensiveRating": 0.9661890612397253
+        "id": 25,
+        "name": "Australia",
+        "countryCode": "AU",
+        "flag": "🇦🇺",
+        "rank": 26,
+        "rating": 1775,
+        "elo": 1775,
+        "total": 636,
+        "goalsFor": 1289,
+        "goalsAgainst": 715,
+        "eloOffensiveRating": 0.8933360789590824,
+        "eloDefensiveRating": 0.9259401708681849,
+        "goalOffensiveRating": 1.224785966167954,
+        "goalDefensiveRating": 0.941408995516822,
+        "blendOffensiveRating": 0.9880777496605284,
+        "blendDefensiveRating": 0.9343265005099272
       },
       "awayTeam": {
         "id": 31,
@@ -7009,7 +7023,7 @@
         "blendOffensiveRating": 0.9493718009461249,
         "blendDefensiveRating": 0.7920359767065716
       },
-      "homeLabel": "Turkey",
+      "homeLabel": "Australia",
       "awayLabel": "Iran",
       "isLocked": false
     },

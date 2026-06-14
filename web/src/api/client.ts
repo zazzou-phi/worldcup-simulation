@@ -141,6 +141,19 @@ const privateApi = {
       body: JSON.stringify({ consensusMode }),
     }),
 
+  setFrozenMatchConsensusMode: (
+    predictionId: number,
+    matchNumber: number,
+    consensusMode: Prediction['consensusMode'],
+  ) =>
+    request<MasterGroupState>(
+      `/api/v1/predictions/${predictionId}/frozen-matches/${matchNumber}/consensus-mode`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify({ consensusMode }),
+      },
+    ),
+
   deletePrediction: (id: number) =>
     request<void>(`/api/v1/predictions/${id}`, { method: 'DELETE' }),
 
@@ -333,6 +346,9 @@ const publicApiStub = {
     createdAt: '',
     updatedAt: '',
   }),
+  setFrozenMatchConsensusMode: async (): Promise<MasterGroupState> => {
+    throw new Error('Not available in public mode');
+  },
   deletePrediction: async (): Promise<void> => {
     throw new Error('Not available in public mode');
   },

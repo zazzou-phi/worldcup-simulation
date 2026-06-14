@@ -2346,11 +2346,25 @@
       "recordedAt": "2026-06-14T00:05:53.583Z"
     },
     {
+      "matchNumber": 14,
+      "goalsHome": 0,
+      "goalsAway": 1,
+      "winnerTeamId": 26,
+      "recordedAt": "2026-06-14T12:41:01.945Z"
+    },
+    {
       "matchNumber": 19,
       "goalsHome": 4,
       "goalsAway": 1,
       "winnerTeamId": 40,
       "recordedAt": "2026-06-13T08:20:40.300Z"
+    },
+    {
+      "matchNumber": 20,
+      "goalsHome": 2,
+      "goalsAway": 0,
+      "winnerTeamId": 25,
+      "recordedAt": "2026-06-14T12:41:06.344Z"
     }
   ]
 }

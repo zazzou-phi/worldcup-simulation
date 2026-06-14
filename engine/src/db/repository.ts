@@ -31,7 +31,7 @@ import {
   type SimulationRatings,
 } from '../engine/tournamentElo.js';
 import { DEFAULT_RATING_ELO_WEIGHT } from '../api/ratingEloWeight.js';
-import { MatchLockedError, MatchClearBlockedError, ActualResultError } from './errors.js';
+import { MatchLockedError, MatchClearBlockedError, ActualResultError, FrozenMatchError } from './errors.js';
 import {
   collectPlayedGroupMatches,
   computeAllGroupStandings,
@@ -67,8 +67,10 @@ import {
 import {
   backfillFrozenMatchesForPrediction,
   clearFrozenMatch,
+  copyMissingFrozenMatchesFromDefault,
   freezeMatchForAllPredictions,
-  readFrozenMatchDistributions,
+  readEffectiveFrozenMatchDistributions,
+  setFrozenMatchConsensusMode,
 } from './predictionFrozenMatches.js';
 import {
   formatSelectionSpec,
@@ -489,6 +491,7 @@ export class Repository {
 
     rebuildPredictionAggregates(this.db, row.id, parsed.spec);
     backfillFrozenMatchesForPrediction(this.db, row.id, parsed.spec);
+    copyMissingFrozenMatchesFromDefault(this.db, row.id);
     return mapPrediction(row);
   }
 
@@ -512,6 +515,22 @@ export class Repository {
       .returning()
       .get();
     return row ? mapPrediction(row) : null;
+  }
+
+  setFrozenMatchConsensusMode(
+    predictionId: number,
+    matchNumber: number,
+    consensusMode: Prediction['consensusMode'],
+  ): MasterGroupState {
+    if (!this.getPrediction(predictionId)) {
+      throw new FrozenMatchError(`Prediction not found: ${predictionId}`);
+    }
+    try {
+      setFrozenMatchConsensusMode(this.db, predictionId, matchNumber, consensusMode);
+    } catch (err) {
+      throw new FrozenMatchError(err instanceof Error ? err.message : 'Failed to update frozen match');
+    }
+    return this.buildMasterGroupView(predictionId);
   }
 
   deletePrediction(id: number): boolean {
@@ -1171,7 +1190,7 @@ export class Repository {
       this.db,
       predictionId,
     );
-    const frozen = readFrozenMatchDistributions(this.db, predictionId);
+    const frozen = readEffectiveFrozenMatchDistributions(this.db, predictionId);
 
     const consensusMatches: SimulationMatch[] = [];
     const distributions: Record<number, OutcomeDistribution> = {};
@@ -1189,9 +1208,13 @@ export class Repository {
       const matchScorelines = locked
         ? (frozen.scorelinesByMatch.get(fixture.matchNumber) ?? [])
         : (scorelinesByMatch.get(fixture.matchNumber) ?? []);
+      const frozenConsensusMode = locked
+        ? frozen.consensusModesByMatch.get(fixture.matchNumber)
+        : undefined;
       distributions[fixture.matchNumber] = {
         ...outcomeCounts,
         scorelines: matchScorelines,
+        ...(frozenConsensusMode ? { consensusMode: frozenConsensusMode } : {}),
       };
       const dist = distributions[fixture.matchNumber];
 
@@ -1207,7 +1230,7 @@ export class Repository {
 
       if (dist.total > 0 && homeTeam && awayTeam) {
         const scoreline = chooseConsensus({
-          mode: consensusMode,
+          mode: frozenConsensusMode ?? consensusMode,
           outcomeCounts: dist,
           scorelines: matchScorelines,
           homeOffensive: homeTeam.eloOffensiveRating,

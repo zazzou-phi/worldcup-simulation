@@ -125,6 +125,7 @@ export interface OutcomeDistribution {
   awayWin: number;
   total: number;
   scorelines: ScorelineCount[];
+  consensusMode?: MasterGroupState['consensusMode'];
 }
 
 export interface MasterGroupState {

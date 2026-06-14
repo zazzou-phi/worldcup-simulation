@@ -6,6 +6,7 @@ import {
   pickDoubleDownMatches,
 } from '../lib/doubleDown.js';
 import { isPublicMode } from '../config/appMode.js';
+import type { ConsensusMode } from '../lib/consensusMode.js';
 import type { ActualMatchResult, MasterGroupState } from '../types.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
@@ -16,9 +17,19 @@ interface Props {
   masterState: MasterGroupState;
   layout: 'horizontal' | 'vertical';
   actualResults?: ActualMatchResult[];
+  canEditFrozenConsensus?: boolean;
+  savingFrozenConsensus?: boolean;
+  onFrozenConsensusModeChange?: (matchNumber: number, mode: ConsensusMode) => void;
 }
 
-export function MasterGroupView({ masterState, layout, actualResults = [] }: Props) {
+export function MasterGroupView({
+  masterState,
+  layout,
+  actualResults = [],
+  canEditFrozenConsensus = false,
+  savingFrozenConsensus = false,
+  onFrozenConsensusModeChange,
+}: Props) {
   const publicMode = isPublicMode();
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
   const [selectedMatchNumber, setSelectedMatchNumber] = useState<number | null>(null);
@@ -135,6 +146,10 @@ export function MasterGroupView({ masterState, layout, actualResults = [] }: Pro
         <MasterFixtureModal
           match={modalMatch}
           distribution={masterState.distributions[String(modalMatch.fixture.matchNumber)]}
+          defaultConsensusMode={masterState.consensusMode}
+          canEditFrozenConsensus={canEditFrozenConsensus}
+          savingFrozenConsensus={savingFrozenConsensus}
+          onFrozenConsensusModeChange={onFrozenConsensusModeChange}
           onClose={() => setModalMatchNumber(null)}
         />
       )}

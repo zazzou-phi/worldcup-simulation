@@ -173,6 +173,10 @@ export const predictionFrozenMatches = sqliteTable(
     awayWin: integer('away_win').notNull(),
     total: integer('total').notNull(),
     scorelinesJson: text('scorelines_json').notNull(),
+    consensusMode: text('consensus_mode')
+      .notNull()
+      .$type<'scoreline' | 'outcome' | 'expected' | 'rounded'>()
+      .default('expected'),
     frozenAt: text('frozen_at').notNull(),
   },
   (t) => [primaryKey({ columns: [t.predictionId, t.matchNumber] })],

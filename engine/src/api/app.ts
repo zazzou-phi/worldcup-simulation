@@ -1,3 +1,4 @@
+import { FrozenMatchError } from '../db/errors.js';
 import { Hono } from 'hono';
 import type { Repository } from '../db/repository.js';
 import { clearActualMatchResult, setActualMatchResult } from './actual-results.js';
@@ -164,6 +165,25 @@ export function createApiApp(repo: Repository) {
     }
     const view = repo.buildMasterGroupView(id);
     return c.json(serializeMasterGroupState(view));
+  });
+
+  app.patch('/api/v1/predictions/:id/frozen-matches/:matchNumber/consensus-mode', async (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    const matchNumber = parseIntParam(c.req.param('matchNumber'));
+    const body = await c.req.json().catch(() => null);
+    if (!body || body.consensusMode == null) {
+      throw new ApiError('consensusMode is required', 400, 'invalid_body');
+    }
+    const mode = parseConsensusModeBody(body.consensusMode);
+    try {
+      const view = repo.setFrozenMatchConsensusMode(id, matchNumber, mode);
+      return c.json(serializeMasterGroupState(view));
+    } catch (err) {
+      if (err instanceof FrozenMatchError) {
+        throw new ApiError(err.message, 409, 'frozen_match_error');
+      }
+      throw err;
+    }
   });
 
   app.get('/api/v1/predictions/:id/team-stats', (c) => {
