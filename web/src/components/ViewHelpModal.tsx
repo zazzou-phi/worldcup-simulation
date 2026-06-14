@@ -33,7 +33,7 @@ function HelpSections({ sections }: { sections: HelpSection[] }) {
 }
 
 export function ViewHelpModal({ view, publicMode, onClose }: Props) {
-  const [tab, setTab] = useState<Tab>('about');
+  const [tab, setTab] = useState<Tab>('howTo');
   const help = getViewHelp(view, publicMode);
 
   useEffect(() => {
@@ -52,27 +52,27 @@ export function ViewHelpModal({ view, publicMode, onClose }: Props) {
           <button
             type="button"
             role="tab"
-            aria-selected={tab === 'about'}
-            className={`help-modal-tab${tab === 'about' ? ' active' : ''}`}
-            onClick={() => setTab('about')}
-          >
-            About
-          </button>
-          <button
-            type="button"
-            role="tab"
             aria-selected={tab === 'howTo'}
             className={`help-modal-tab${tab === 'howTo' ? ' active' : ''}`}
             onClick={() => setTab('howTo')}
           >
             How to use
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'about'}
+            className={`help-modal-tab${tab === 'about' ? ' active' : ''}`}
+            onClick={() => setTab('about')}
+          >
+            About
+          </button>
         </div>
         <div className="help-modal-body" role="tabpanel">
-          {tab === 'about' ? (
-            <HelpSections sections={help.about} />
-          ) : (
+          {tab === 'howTo' ? (
             <HelpSections sections={help.howTo} />
+          ) : (
+            <HelpSections sections={help.about} />
           )}
         </div>
         <div className="modal-actions">
