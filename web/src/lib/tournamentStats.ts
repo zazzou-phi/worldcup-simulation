@@ -47,6 +47,11 @@ export interface TeamScoringRow {
   won: number;
   drawn: number;
   lost: number;
+  /** Simulation only: baseline Elo at kickoff. */
+  startingElo?: number;
+  /** Simulation only: effective Elo after tournament form updates. */
+  endingElo?: number;
+  eloDelta?: number;
 }
 
 export interface TournamentStats {
@@ -356,8 +361,52 @@ export function computeTournamentStatsFromMatches(
   };
 }
 
+function playedTeamIds(resolvedMatches: ResolvedMatch[]): Set<number> {
+  const ids = new Set<number>();
+  for (const match of resolvedMatches) {
+    if (match.result.status !== 'played') continue;
+    if (match.result.teamHomeId != null) ids.add(match.result.teamHomeId);
+    if (match.result.teamAwayId != null) ids.add(match.result.teamAwayId);
+  }
+  return ids;
+}
+
+function formatEloDelta(delta: number): string {
+  if (delta === 0) return '0';
+  const rounded = Math.round(delta);
+  return rounded > 0 ? `+${rounded}` : String(rounded);
+}
+
+function computeTeamEloById(state: TournamentState): Map<number, Pick<TeamScoringRow, 'startingElo' | 'endingElo' | 'eloDelta'>> {
+  const participants = playedTeamIds(state.resolvedMatches);
+  const byId = new Map<number, Pick<TeamScoringRow, 'startingElo' | 'endingElo' | 'eloDelta'>>();
+
+  for (const team of Object.values(state.teams)) {
+    if (!participants.has(team.id)) continue;
+    const deltaRaw = state.eloDeltas?.[String(team.id)] ?? 0;
+    const startingElo = team.elo;
+    const endingElo = Math.round(startingElo + deltaRaw);
+    byId.set(team.id, {
+      startingElo,
+      endingElo,
+      eloDelta: endingElo - startingElo,
+    });
+  }
+
+  return byId;
+}
+
 export function computeTournamentStats(state: TournamentState): TournamentStats {
-  return computeTournamentStatsFromMatches(state.resolvedMatches, state.fixtures);
+  const base = computeTournamentStatsFromMatches(state.resolvedMatches, state.fixtures);
+  const eloByTeam = computeTeamEloById(state);
+
+  return {
+    ...base,
+    topScorers: base.topScorers.map((row) => ({
+      ...row,
+      ...eloByTeam.get(row.teamId),
+    })),
+  };
 }
 
 function distributionForMatch(
@@ -456,5 +505,7 @@ export function formatOutcomeSummary(outcomes: MatchOutcomeCounts): string {
   ];
   return parts.join(' · ');
 }
+
+export { formatEloDelta };
 
 export { GROUP_GAMES_MATCHDAY_CUTOFF };

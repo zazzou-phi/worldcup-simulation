@@ -140,4 +140,26 @@ describe('SimulationRunner (seeded)', () => {
     expect(after.goalsHome).toBe(before.goalsHome);
     expect(after.goalsAway).toBe(before.goalsAway);
   });
+
+  it('updates tournament elo deltas after group round 1 before round 2', () => {
+    const sim = repo.createSimulation('G1 Elo');
+    runner.simulateGroupPhaseUpTo(sim.id, 1);
+    const deltas = repo.getTournamentEloDeltas(sim.id);
+    const winners = [...deltas.entries()].filter(([, delta]) => delta > 0);
+    const losers = [...deltas.entries()].filter(([, delta]) => delta < 0);
+    expect(winners.length).toBeGreaterThan(0);
+    expect(losers.length).toBeGreaterThan(0);
+  });
+
+  it('updates tournament elo deltas after knockout rounds', () => {
+    const sim = repo.createSimulation('KO Elo');
+    runner.simulateGroupPhaseUpTo(sim.id, 3);
+    const beforeKnockout = repo.getTournamentEloDeltas(sim.id);
+    runner.simulateKnockoutsUpTo(sim.id, 'round_of_32');
+    const afterKnockout = repo.getTournamentEloDeltas(sim.id);
+    const changed = [...afterKnockout.entries()].some(([teamId, delta]) => {
+      return Math.abs(delta - (beforeKnockout.get(teamId) ?? 0)) > 1e-6;
+    });
+    expect(changed).toBe(true);
+  });
 });

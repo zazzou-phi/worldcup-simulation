@@ -146,6 +146,12 @@ export function initSchema(sqlite: Database.Database) {
       status TEXT NOT NULL,
       PRIMARY KEY (simulation_id, match_number)
     );
+    CREATE TABLE IF NOT EXISTS simulation_team_elo_delta (
+      simulation_id INTEGER NOT NULL REFERENCES simulations(id),
+      team_id INTEGER NOT NULL REFERENCES teams(id),
+      elo_delta REAL NOT NULL DEFAULT 0,
+      PRIMARY KEY (simulation_id, team_id)
+    );
     CREATE TABLE IF NOT EXISTS actual_match_results (
       match_number INTEGER PRIMARY KEY REFERENCES fixtures(match_number),
       goals_home INTEGER NOT NULL,
@@ -187,10 +193,23 @@ function migrateSchema(sqlite: Database.Database) {
   migrateTeamsElo(sqlite);
   migrateTeamRatingMethods(sqlite);
   migrateBlendRatings(sqlite);
+  migrateSimulationTeamEloDelta(sqlite);
   migratePredictionConsensusMode(sqlite);
   migrateLegacyMasterAggregates(sqlite);
   ensureDefaultPrediction(sqlite);
   migratePredictionFrozenMatches(sqlite);
+}
+
+function migrateSimulationTeamEloDelta(sqlite: Database.Database) {
+  if (tableExists(sqlite, 'simulation_team_elo_delta')) return;
+  sqlite.exec(`
+    CREATE TABLE simulation_team_elo_delta (
+      simulation_id INTEGER NOT NULL REFERENCES simulations(id),
+      team_id INTEGER NOT NULL REFERENCES teams(id),
+      elo_delta REAL NOT NULL DEFAULT 0,
+      PRIMARY KEY (simulation_id, team_id)
+    )
+  `);
 }
 
 function migratePredictionConsensusMode(sqlite: Database.Database) {

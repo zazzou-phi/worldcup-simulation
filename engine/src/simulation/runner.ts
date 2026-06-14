@@ -1,5 +1,6 @@
 import type { Repository } from '../db/repository.js';
 import { teamForSimulation } from '../engine/teamRatings.js';
+import type { SimulationRatings } from '../engine/tournamentElo.js';
 import {
   DEFAULT_UPSET_VARIANCE,
   simulateMatchOutcome,
@@ -34,10 +35,26 @@ export class SimulationRunner {
     private upsetVariance: number = DEFAULT_UPSET_VARIANCE,
   ) {}
 
-  private simTeam(team1: number | string) {
+  private simTeam(team1: number | string, simulationId?: number) {
     const team = this.repo.getTeamByIdOrName(team1);
     if (!team) throw new SimulationError(`Team not found: ${team1}`);
+    if (simulationId != null) {
+      return this.repo.getTeamForSimulation(simulationId, team.id);
+    }
     return teamForSimulation(team);
+  }
+
+  private prepareSimulationRatings(simulationId: number): Map<number, SimulationRatings> {
+    return this.repo.getSimulationRatingsMap(simulationId);
+  }
+
+  private simTeamWithRatings(
+    teamId: number,
+    ratings: Map<number, SimulationRatings>,
+  ) {
+    const team = this.repo.getTeamByIdOrName(teamId);
+    if (!team) throw new SimulationError(`Team not found: ${teamId}`);
+    return teamForSimulation(team, ratings.get(team.id));
   }
 
   simulateMatch(
@@ -98,8 +115,9 @@ export class SimulationRunner {
         throw new SimulationError(`Group fixture ${matchNumber} is missing team ids`);
       }
 
-      const home = teamForSimulation(this.repo.getTeamByIdOrName(homeId)!);
-      const away = teamForSimulation(this.repo.getTeamByIdOrName(awayId)!);
+      const ratings = this.prepareSimulationRatings(resolvedId);
+      const home = this.simTeamWithRatings(homeId, ratings);
+      const away = this.simTeamWithRatings(awayId, ratings);
       const match = simulateMatchOutcome(home, away, false, {
         rng: this.rng,
         upsetVariance: this.upsetVariance,
@@ -176,8 +194,9 @@ export class SimulationRunner {
       throw new SimulationError(`Match ${matchNumber} has unresolved participants`);
     }
 
-    const home = this.repo.getTeamByIdOrName(homeId)!;
-    const away = this.repo.getTeamByIdOrName(awayId)!;
+    const ratings = this.prepareSimulationRatings(simulationId);
+    const home = this.simTeamWithRatings(homeId, ratings);
+    const away = this.simTeamWithRatings(awayId, ratings);
     const match = simulateMatchOutcome(home, away, isKnockout, {
       rng: this.rng,
       upsetVariance: this.upsetVariance,
@@ -295,8 +314,9 @@ export class SimulationRunner {
         throw new SimulationError(`Knockout fixture ${matchNumber} has unresolved participants`);
       }
 
-      const home = teamForSimulation(this.repo.getTeamByIdOrName(homeId)!);
-      const away = teamForSimulation(this.repo.getTeamByIdOrName(awayId)!);
+      const ratings = this.prepareSimulationRatings(simulationId);
+      const home = this.simTeamWithRatings(homeId, ratings);
+      const away = this.simTeamWithRatings(awayId, ratings);
       const match = simulateMatchOutcome(home, away, true, {
         rng: this.rng,
         upsetVariance: this.upsetVariance,

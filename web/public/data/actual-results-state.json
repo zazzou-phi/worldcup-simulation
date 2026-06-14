@@ -29,6 +29,13 @@
       "recordedAt": "2026-06-13T21:06:36.859Z"
     },
     {
+      "matchNumber": 13,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-14T00:05:53.583Z"
+    },
+    {
       "matchNumber": 19,
       "goalsHome": 4,
       "goalsAway": 1,
@@ -311,14 +318,14 @@
             "blendOffensiveRating": 1.447869952739398,
             "blendDefensiveRating": 0.6580866816455118
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
           "goalDifference": 0,
-          "points": 0,
+          "points": 1,
           "position": 1
         },
         {
@@ -341,14 +348,14 @@
             "blendOffensiveRating": 0.9792466417935004,
             "blendDefensiveRating": 0.7598449004359872
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
           "goalDifference": 0,
-          "points": 0,
+          "points": 1,
           "position": 2
         },
         {
@@ -2311,10 +2318,10 @@
         "matchNumber": 13,
         "teamHomeId": 4,
         "teamAwayId": 23,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 1,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 4,
@@ -2354,7 +2361,7 @@
       },
       "homeLabel": "Brazil",
       "awayLabel": "Morocco",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {

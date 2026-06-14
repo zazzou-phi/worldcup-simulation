@@ -124,6 +124,8 @@ export interface TournamentState {
   annexCCombinationId: number | null;
   resolvedMatches: ResolvedMatch[];
   actualResults: ActualMatchResult[];
+  /** Per-team tournament Elo adjustment for this simulation branch. */
+  eloDeltas: Map<number, number>;
 }
 
 export interface ScorelineCount {

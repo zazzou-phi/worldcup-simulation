@@ -8,6 +8,7 @@ import {
   computeTournamentStatsFromMatches,
   formatOutcomeSummary,
   formatPoolOutcomeSummary,
+  formatEloDelta,
   GROUP_GAMES_MATCHDAY_CUTOFF,
   type PoolTournamentStats,
   type RoundGoalStats,
@@ -98,6 +99,7 @@ function TournamentStatsBody({ stats }: { stats: TournamentStats }) {
   const knockoutMatchesPlayed = stats.rounds
     .filter((round) => round.stage === 'knockout')
     .reduce((sum, round) => sum + round.matchesPlayed, 0);
+  const showElo = stats.topScorers.some((row) => row.startingElo != null);
 
   if (stats.matchesPlayed === 0) {
     return null;
@@ -186,6 +188,13 @@ function TournamentStatsBody({ stats }: { stats: TournamentStats }) {
                   <th>GF</th>
                   <th>GA</th>
                   <th>GD</th>
+                  {showElo && (
+                    <>
+                      <th>Elo start</th>
+                      <th>Elo end</th>
+                      <th>Elo Δ</th>
+                    </>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -203,6 +212,15 @@ function TournamentStatsBody({ stats }: { stats: TournamentStats }) {
                     <td>
                       {row.goalDifference >= 0 ? `+${row.goalDifference}` : row.goalDifference}
                     </td>
+                    {showElo && (
+                      <>
+                        <td>{row.startingElo?.toLocaleString() ?? '—'}</td>
+                        <td>{row.endingElo?.toLocaleString() ?? '—'}</td>
+                        <td>
+                          {row.eloDelta != null ? formatEloDelta(row.eloDelta) : '—'}
+                        </td>
+                      </>
+                    )}
                   </tr>
                 ))}
               </tbody>

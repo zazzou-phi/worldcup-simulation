@@ -15,6 +15,11 @@ import {
   DEFAULT_UPSET_VARIANCE,
 } from '../engine/matchSimulator.js';
 import { teamForSimulation } from '../engine/teamRatings.js';
+import {
+  computeSimulationRatings,
+  recomputeEloDeltasFromSimulationState,
+  type SimulationRatings,
+} from '../engine/tournamentElo.js';
 import { SIMULATION_KNOCKOUT_ROUNDS, FINAL_MATCH_NUMBER } from '../engine/simulationRounds.js';
 
 export const MONTE_CARLO_MAX_COUNT = 100_000;
@@ -64,6 +69,7 @@ function buildEngine(
 ): MonteCarloEngine {
   const teams = repo.getTeams();
   const teamsById = new Map(teams.map((t) => [t.id, t]));
+  const eloWeight = repo.getRatingEloWeight();
   const fixtures = repo.getFixtures();
   const memberships = repo.getGroupMemberships();
   const actualResults = repo.getActualResults();
@@ -75,12 +81,25 @@ function buildEngine(
 
   const initialMatches = createInitialMatches(fixtures, actualResults);
   const matches = new Map<number, SimulationMatch>();
+  let simulationRatings = new Map<number, SimulationRatings>();
 
   function resetMatches(): void {
     matches.clear();
     for (const match of initialMatches) {
       matches.set(match.matchNumber, { ...match });
     }
+    refreshSimulationRatings();
+  }
+
+  function refreshSimulationRatings(): void {
+    const matchList = [...matches.values()];
+    const deltas = recomputeEloDeltasFromSimulationState(teams, fixtures, matchList);
+    simulationRatings = computeSimulationRatings(teams, deltas, eloWeight);
+  }
+
+  function simTeam(teamId: number): Team {
+    const team = teamsById.get(teamId)!;
+    return teamForSimulation(team, simulationRatings.get(teamId));
   }
 
   function syncParticipants(): void {
@@ -100,6 +119,7 @@ function buildEngine(
   }
 
   function playMatch(matchNumber: number, knockout: boolean, rng: RandomSource): void {
+    refreshSimulationRatings();
     const match = matches.get(matchNumber)!;
     const homeId = match.teamHomeId;
     const awayId = match.teamAwayId;
@@ -107,8 +127,8 @@ function buildEngine(
       throw new Error(`Match ${matchNumber} has unresolved participants`);
     }
 
-    const home = teamForSimulation(teamsById.get(homeId)!);
-    const away = teamForSimulation(teamsById.get(awayId)!);
+    const home = simTeam(homeId);
+    const away = simTeam(awayId);
     const outcome = simulateMatchOutcome(home, away, knockout, { rng, upsetVariance });
     const winnerTeamId = knockout
       ? (outcome.winnerId ?? null)

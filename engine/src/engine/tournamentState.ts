@@ -20,6 +20,7 @@ import type {
   Team,
   TournamentState,
 } from './types.js';
+import { recomputeEloDeltasFromSimulationState } from './tournamentElo.js';
 
 export interface SyncResolvedParticipantsResult {
   matches: SimulationMatch[];
@@ -132,6 +133,11 @@ export function buildTournamentStateFromData(
     annexCCombinationId: synced.annexCCombinationId,
     resolvedMatches,
     actualResults: input.actualResults,
+    eloDeltas: recomputeEloDeltasFromSimulationState(
+      [...teamsById.values()],
+      input.fixtures,
+      matches,
+    ),
   };
 }
 

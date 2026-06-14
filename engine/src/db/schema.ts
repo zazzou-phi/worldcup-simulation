@@ -197,6 +197,20 @@ export const simulationMatches = sqliteTable(
   (t) => [primaryKey({ columns: [t.simulationId, t.matchNumber] })],
 );
 
+export const simulationTeamEloDelta = sqliteTable(
+  'simulation_team_elo_delta',
+  {
+    simulationId: integer('simulation_id')
+      .notNull()
+      .references(() => simulations.id),
+    teamId: integer('team_id')
+      .notNull()
+      .references(() => teams.id),
+    eloDelta: real('elo_delta').notNull().default(0),
+  },
+  (t) => [primaryKey({ columns: [t.simulationId, t.teamId] })],
+);
+
 export const actualMatchResults = sqliteTable('actual_match_results', {
   matchNumber: integer('match_number')
     .primaryKey()

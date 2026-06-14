@@ -66,5 +66,8 @@ export function serializeTournamentState(state: TournamentState) {
     annexCCombinationId: state.annexCCombinationId,
     resolvedMatches: state.resolvedMatches.map(serializeResolvedMatch),
     actualResults: state.actualResults.map(serializeActualResult),
+    eloDeltas: Object.fromEntries(
+      [...state.eloDeltas.entries()].map(([teamId, delta]) => [String(teamId), delta]),
+    ),
   };
 }

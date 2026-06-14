@@ -25,6 +25,12 @@ import {
 } from '@shared/engine/tournamentState.js';
 import type { PublicBootstrap } from '@shared/export/publicSnapshot.js';
 import { teamForSimulation } from '@shared/engine/teamRatings.js';
+import {
+  computeSimulationRatings,
+  recomputeEloDeltasFromSimulationState,
+  type SimulationRatings,
+} from '@shared/engine/tournamentElo.js';
+import { DEFAULT_RATING_ELO_WEIGHT } from '../lib/ratingEloWeight.js';
 import { normalizeBootstrapTeams } from './normalizeTeam.js';
 import type { Simulation, SimulationMatch, Team, TournamentState } from '../types.js';
 
@@ -36,6 +42,17 @@ const LOCAL_SIMULATION: Simulation = {
   createdAt: new Date(0).toISOString(),
   updatedAt: new Date(0).toISOString(),
 };
+
+function serializeLocalState(raw: ReturnType<typeof buildTournamentStateFromData>): TournamentState {
+  return {
+    ...raw,
+    teams: Object.fromEntries([...raw.teams.entries()].map(([id, team]) => [String(id), team])),
+    matches: raw.matches.map(({ simulationId: _sid, ...rest }) => rest),
+    eloDeltas: Object.fromEntries(
+      [...raw.eloDeltas.entries()].map(([id, delta]) => [String(id), delta]),
+    ),
+  };
+}
 
 export function createInitialLocalState(bootstrap: PublicBootstrap): TournamentState {
   const locked = new Set(bootstrap.actualResults.map((r) => r.matchNumber));
@@ -52,11 +69,7 @@ export function createInitialLocalState(bootstrap: PublicBootstrap): TournamentS
     lockedMatchNumbers: locked,
   });
 
-  return {
-    ...raw,
-    teams: Object.fromEntries([...raw.teams.entries()].map(([id, team]) => [String(id), team])),
-    matches: raw.matches.map(({ simulationId: _sid, ...rest }) => rest),
-  };
+  return serializeLocalState(raw);
 }
 
 export class LocalSimulationError extends Error {}
@@ -88,11 +101,20 @@ function fromEngineMatches(state: TournamentState, matches: SimulationMatch[]): 
     lockedMatchNumbers: lockedMatchNumbers(state),
   });
 
-  return {
-    ...raw,
-    teams: Object.fromEntries([...raw.teams.entries()].map(([id, team]) => [String(id), team])),
-    matches: raw.matches.map(({ simulationId: _sid, ...rest }) => rest),
-  };
+  return serializeLocalState(raw);
+}
+
+function getSimulationRatingsForState(
+  state: TournamentState,
+  ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
+): Map<number, SimulationRatings> {
+  const teams = Object.values(state.teams);
+  const deltas = recomputeEloDeltasFromSimulationState(
+    teams,
+    state.fixtures,
+    toEngineMatches(state),
+  );
+  return computeSimulationRatings(teams, deltas, ratingEloWeight);
 }
 
 function getTeam(state: TournamentState, teamId: number) {
@@ -165,14 +187,11 @@ export function clearLocalMatchScore(
   return fromEngineMatches(state, matches);
 }
 
-function getSimTeam(state: TournamentState, teamId: number) {
-  return teamForSimulation(getTeam(state, teamId));
-}
-
 export function simulateLocalMatch(
   state: TournamentState,
   matchNumber: number,
   upsetVariance?: number,
+  ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
 ): { state: TournamentState; result: MatchResultRow } {
   const resolved = findResolvedMatch(state, matchNumber);
   if (resolved.isLocked) {
@@ -186,9 +205,10 @@ export function simulateLocalMatch(
   }
 
   const isKnockout = resolved.fixture.group == null;
+  const ratings = getSimulationRatingsForState(state, ratingEloWeight);
   const outcome = simulateMatchOutcome(
-    teamForSimulation(resolved.homeTeam),
-    teamForSimulation(resolved.awayTeam),
+    teamForSimulation(resolved.homeTeam, ratings.get(resolved.homeTeam.id)),
+    teamForSimulation(resolved.awayTeam, ratings.get(resolved.awayTeam.id)),
     isKnockout,
     { upsetVariance },
   );
@@ -224,6 +244,7 @@ export function simulateLocalGroupPhase(
   state: TournamentState,
   gamesTarget: GroupGamesTarget,
   upsetVariance?: number,
+  ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
 ): { state: TournamentState; result: GroupPhaseResult } {
   const fixtures = state.fixtures
     .filter((f) => f.group != null && isGroupFixtureWithinGamesTarget(f, gamesTarget))
@@ -251,8 +272,12 @@ export function simulateLocalGroupPhase(
       throw new LocalSimulationError(`Group fixture ${matchNumber} is missing team ids`);
     }
 
-    const home = getSimTeam(state, fixture.teamHomeId);
-    const away = getSimTeam(state, fixture.teamAwayId);
+    const ratings = getSimulationRatingsForState(
+      fromEngineMatches(state, matches),
+      ratingEloWeight,
+    );
+    const home = teamForSimulation(getTeam(state, fixture.teamHomeId), ratings.get(fixture.teamHomeId));
+    const away = teamForSimulation(getTeam(state, fixture.teamAwayId), ratings.get(fixture.teamAwayId));
     const outcome = simulateMatchOutcome(home, away, false, { upsetVariance });
     const winnerTeamId = winnerFromGoals(outcome.goals1, outcome.goals2, home.id, away.id);
 
@@ -291,6 +316,7 @@ export function simulateLocalKnockouts(
   state: TournamentState,
   throughRoundName?: string,
   upsetVariance?: number,
+  ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
 ): { state: TournamentState; result: KnockoutsResult } {
   const throughName =
     throughRoundName ?? SIMULATION_KNOCKOUT_ROUNDS[SIMULATION_KNOCKOUT_ROUNDS.length - 1]!.name;
@@ -301,7 +327,7 @@ export function simulateLocalKnockouts(
 
   let currentState = state;
   if (!isGroupStageComplete(toEngineMatches(currentState), currentState.fixtures)) {
-    currentState = simulateLocalGroupPhase(currentState, 3, upsetVariance).state;
+    currentState = simulateLocalGroupPhase(currentState, 3, upsetVariance, ratingEloWeight).state;
   }
 
   const roundResults: KnockoutRoundResult[] = [];
@@ -332,8 +358,12 @@ export function simulateLocalKnockouts(
         throw new LocalSimulationError(`Knockout fixture ${matchNumber} has unresolved participants`);
       }
 
-      const home = getSimTeam(currentState, match.teamHomeId);
-      const away = getSimTeam(currentState, match.teamAwayId);
+      const ratings = getSimulationRatingsForState(
+        fromEngineMatches(currentState, matches),
+        ratingEloWeight,
+      );
+      const home = teamForSimulation(getTeam(currentState, match.teamHomeId), ratings.get(match.teamHomeId));
+      const away = teamForSimulation(getTeam(currentState, match.teamAwayId), ratings.get(match.teamAwayId));
       const outcome = simulateMatchOutcome(home, away, true, { upsetVariance });
       const winnerTeamId = outcome.winnerId ?? null;
 

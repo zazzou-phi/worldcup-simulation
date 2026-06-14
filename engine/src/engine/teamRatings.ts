@@ -86,7 +86,17 @@ export function computeNormalizedTeamRatings(inputs: TeamRatingInput[]): Array<{
   }));
 }
 
-export function teamForSimulation(team: Team): Team {
+export function teamForSimulation(
+  team: Team,
+  ratings?: { offensiveRating: number; defensiveRating: number },
+): Team {
+  if (ratings) {
+    return {
+      ...team,
+      offensiveRating: ratings.offensiveRating,
+      defensiveRating: ratings.defensiveRating,
+    };
+  }
   return {
     ...team,
     offensiveRating: team.blendOffensiveRating,

@@ -409,6 +409,7 @@ export function App() {
           state,
           games,
           upsetVariance,
+          ratingEloWeight,
         );
         setState(nextState);
         setToast(
@@ -447,6 +448,7 @@ export function App() {
           state,
           throughRound,
           upsetVariance,
+          ratingEloWeight,
         );
         setState(nextState);
         setToast(
@@ -518,6 +520,7 @@ export function App() {
           state,
           matchNumber,
           upsetVariance,
+          ratingEloWeight,
         );
         setState(nextState);
         setEditingMatchNumber(null);

@@ -24,7 +24,12 @@ import type {
 } from '../engine/types.js';
 import { chooseConsensus, getDefaultConsensusMode, parseConsensusMode } from '../engine/consensus.js';
 import { winnerFromGoals } from '../engine/matchSimulator.js';
-import { computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
+import { computeBlendedNormalizedRatings, teamForSimulation } from '../engine/teamRatings.js';
+import {
+  computeSimulationRatings,
+  recomputeEloDeltasFromSimulationState,
+  type SimulationRatings,
+} from '../engine/tournamentElo.js';
 import { DEFAULT_RATING_ELO_WEIGHT } from '../api/ratingEloWeight.js';
 import { MatchLockedError, MatchClearBlockedError, ActualResultError } from './errors.js';
 import {
@@ -213,6 +218,61 @@ export class Repository {
           blendDefensiveRating: defensive,
         })
         .where(eq(schema.teams.id, rows[index]!.id))
+        .run();
+    }
+  }
+
+  getTournamentEloDeltas(simulationId: number): Map<number, number> {
+    const rows = this.db
+      .select()
+      .from(schema.simulationTeamEloDelta)
+      .where(eq(schema.simulationTeamEloDelta.simulationId, simulationId))
+      .all();
+    return new Map(rows.map((row) => [row.teamId, row.eloDelta]));
+  }
+
+  getSimulationRatingsMap(simulationId: number): Map<number, SimulationRatings> {
+    const teams = this.getTeams();
+    const deltas = this.getTournamentEloDeltas(simulationId);
+    return computeSimulationRatings(teams, deltas, this.getRatingEloWeight());
+  }
+
+  getTeamForSimulation(simulationId: number, teamId: number): Team {
+    const team = this.getTeamByIdOrName(teamId);
+    if (!team) {
+      throw new Error(`Team not found: ${teamId}`);
+    }
+    const ratings = this.getSimulationRatingsMap(simulationId).get(team.id);
+    return teamForSimulation(team, ratings);
+  }
+
+  getTeamsForSimulation(simulationId: number): Team[] {
+    const teams = this.getTeams();
+    const ratings = this.getSimulationRatingsMap(simulationId);
+    return teams.map((team) => teamForSimulation(team, ratings.get(team.id)));
+  }
+
+  recomputeTournamentEloDeltas(simulationId: number): void {
+    const teams = this.getTeams();
+    if (teams.length === 0) return;
+
+    const fixtures = this.getFixtures();
+    const matches = this.getSimulationMatches(simulationId);
+    const deltas = recomputeEloDeltasFromSimulationState(teams, fixtures, matches);
+
+    this.db
+      .delete(schema.simulationTeamEloDelta)
+      .where(eq(schema.simulationTeamEloDelta.simulationId, simulationId))
+      .run();
+
+    for (const [teamId, eloDelta] of deltas) {
+      this.db
+        .insert(schema.simulationTeamEloDelta)
+        .values({
+          simulationId,
+          teamId,
+          eloDelta,
+        })
         .run();
     }
   }
@@ -512,6 +572,10 @@ export class Repository {
       .delete(schema.simulationMatches)
       .where(eq(schema.simulationMatches.simulationId, id))
       .run();
+    this.db
+      .delete(schema.simulationTeamEloDelta)
+      .where(eq(schema.simulationTeamEloDelta.simulationId, id))
+      .run();
     this.db.delete(schema.simulations).where(eq(schema.simulations.id, id)).run();
     return true;
   }
@@ -589,6 +653,7 @@ export class Repository {
     this.syncResolvedParticipants(simulationId, {
       refreshMasterStats: !options.deferMasterStats,
     });
+    this.recomputeTournamentEloDeltas(simulationId);
     return this.getSimulation(simulationId)!;
   }
 
@@ -745,6 +810,7 @@ export class Repository {
     } else if (options.refreshMasterStats !== false) {
       this.refreshPredictionsForSimulation(simulationId);
     }
+    this.recomputeTournamentEloDeltas(simulationId);
   }
 
   getTeamByIdOrName(idOrName: number | string): Team | null {
@@ -868,6 +934,7 @@ export class Repository {
     } else {
       this.refreshPredictionsForSimulation(simulationId);
     }
+    this.recomputeTournamentEloDeltas(simulationId);
   }
 
   buildActualResultsView(): {
@@ -1027,6 +1094,7 @@ export class Repository {
       )
       .run();
     this.syncResolvedParticipants(simulationId);
+    this.recomputeTournamentEloDeltas(simulationId);
   }
 
   syncResolvedParticipants(

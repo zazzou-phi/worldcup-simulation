@@ -218,6 +218,31 @@ describe('repository integration', () => {
     expect(repo.getActualResult(1)?.goalsHome).toBe(2);
   });
 
+  it('stores tournament elo deltas only for teams that played', () => {
+    const sim = repo.createSimulation('Elo');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    const deltas = repo.getTournamentEloDeltas(sim.id);
+    expect(deltas.size).toBe(2);
+    expect((deltas.get(18) ?? 0) > 0).toBe(true);
+    expect((deltas.get(78) ?? 0) < 0).toBe(true);
+  });
+
+  it('rolls back tournament elo deltas when a match is cleared', () => {
+    const sim = repo.createSimulation('Elo clear');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    expect((repo.getTournamentEloDeltas(sim.id).get(18) ?? 0) > 0).toBe(true);
+    repo.clearMatchResult(sim.id, 1);
+    expect(repo.getTournamentEloDeltas(sim.id).size).toBe(0);
+  });
+
+  it('includes locked actual results in tournament elo deltas', () => {
+    repo.setActualResult(1, 2, 1, 18);
+    const sim = repo.createSimulation('Actual Elo');
+    const deltas = repo.getTournamentEloDeltas(sim.id);
+    expect((deltas.get(18) ?? 0) > 0).toBe(true);
+    expect((deltas.get(78) ?? 0) < 0).toBe(true);
+  });
+
   it('aggregates team goals across simulations including knockouts', () => {
     const sim1 = repo.createSimulation('One');
     const sim2 = repo.createSimulation('Two');
