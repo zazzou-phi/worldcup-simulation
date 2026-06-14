@@ -121,12 +121,8 @@ button {
   z-index: 30;
 }
 
-.header-icon-btn {
-  min-height: 2.75rem;
-  min-width: 2.75rem;
-  padding-inline: 0.5rem;
-  font-size: 1.1rem;
-  line-height: 1;
+.header-help-btn {
+  font-weight: 700;
 }
 
 .header-dropdown-panel {
@@ -344,6 +340,28 @@ button {
 .btn-ghost.active {
   border-color: var(--cyan);
   color: var(--cyan);
+}
+
+.btn.header-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border-width: 2px;
+  border-color: currentColor;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  line-height: 1;
+  aspect-ratio: 1;
+}
+
+.btn.header-icon-btn.header-options-btn {
+  font-size: 1.4rem;
 }
 
 .btn-simulate {
@@ -1040,6 +1058,89 @@ button {
   font-size: 1rem;
 }
 
+.help-modal {
+  display: flex;
+  flex-direction: column;
+  max-width: min(36rem, 90vw);
+  max-height: 85vh;
+  overflow: hidden;
+}
+
+.help-modal-tab-bar {
+  display: flex;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  margin-bottom: 0.75rem;
+}
+
+.help-modal-tab {
+  flex: 1;
+  min-height: 2.5rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.help-modal-tab.active {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--accent-dim);
+}
+
+.help-modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 0.25rem;
+}
+
+.help-section {
+  margin-bottom: 1rem;
+}
+
+.help-section:last-child {
+  margin-bottom: 0;
+}
+
+.help-section h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.help-section p {
+  margin: 0 0 0.5rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.help-section p:last-child {
+  margin-bottom: 0;
+}
+
+.help-section ul {
+  margin: 0.35rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.help-section li + li {
+  margin-top: 0.35rem;
+}
+
+.help-modal .modal-actions {
+  flex-shrink: 0;
+  margin-top: 0.75rem;
+}
+
 .modal-label {
   display: block;
   margin-bottom: 0.5rem;
@@ -1668,6 +1769,15 @@ button {
   .btn {
     min-height: 2.75rem;
     padding: 0.45rem 0.75rem;
+  }
+
+  .btn.header-icon-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0;
+    border-radius: 50%;
   }
 
   .btn-small {

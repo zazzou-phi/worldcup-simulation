@@ -11,6 +11,7 @@ import { UpsetFactorControl } from './UpsetFactorControl.js';
 import { ConsensusModeControl } from './ConsensusModeControl.js';
 import { RatingEloWeightControl, DEFAULT_RATING_ELO_WEIGHT } from './RatingEloWeightControl.js';
 import { ViewSwitcher } from './ViewSwitcher.js';
+import { ViewHelpButton } from './ViewHelpButton.js';
 
 interface Props {
   state: TournamentState;
@@ -114,7 +115,7 @@ export function Header({
   const optionsMenu = hasMenu ? (
     <HeaderDropdownMenu
       buttonLabel="⋮"
-      buttonClassName="btn btn-ghost header-icon-btn"
+      buttonClassName="btn btn-ghost header-icon-btn header-options-btn"
       menuClassName="header-options-panel"
       ariaLabel="Options"
       active={menuActive}
@@ -223,6 +224,7 @@ export function Header({
     <>
       {simulateMenu}
       {optionsMenu}
+      <ViewHelpButton appView={appView} publicMode={publicMode} />
     </>
   );
 
