@@ -78,10 +78,12 @@ function MatchNode({
   const locked = match.isLocked;
   const editable = canEdit && !locked;
   const canSimulate = editable && !played && onSimulate != null;
-  const pen =
+  const penWinnerSide =
     played &&
     match.result.goalsHome === match.result.goalsAway &&
-    match.result.winnerTeamId != null;
+    match.result.winnerTeamId != null
+      ? matchWinnerSide(match)
+      : null;
   const num = match.fixture.matchNumber;
 
   return (
@@ -107,7 +109,7 @@ function MatchNode({
           goalsHome={match.result.goalsHome}
           goalsAway={match.result.goalsAway}
           played={played}
-          pen={pen}
+          penWinnerSide={penWinnerSide}
           actual={actual}
           hidePredicted={hidePredicted}
           canSimulate={canSimulate}

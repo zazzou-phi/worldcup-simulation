@@ -123,10 +123,12 @@ export function FixtureList({
               : clearLockedOnly
                 ? locked
                 : !locked);
-          const pen =
+          const penWinnerSide =
             played &&
             m.result.goalsHome === m.result.goalsAway &&
-            m.result.winnerTeamId != null;
+            m.result.winnerTeamId != null
+              ? matchWinnerSide(m)
+              : null;
           const actual = actualByMatch.get(num);
           const hidePredicted = hidePredictedWhenLocked && locked && actual != null;
           const showDouble = showDoubleMarks && played && !hidePredicted && doubledMatchNumbers!.has(num);
@@ -162,7 +164,7 @@ export function FixtureList({
                     goalsHome={m.result.goalsHome}
                     goalsAway={m.result.goalsAway}
                     played={played}
-                    pen={pen}
+                    penWinnerSide={penWinnerSide}
                     actual={actual}
                     hidePredicted={hidePredicted}
                     canSimulate={canSimulate}

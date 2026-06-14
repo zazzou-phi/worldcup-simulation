@@ -112,7 +112,7 @@ interface ScoreDisplayProps {
   goalsHome: number | null;
   goalsAway: number | null;
   played: boolean;
-  pen?: boolean;
+  penWinnerSide?: 'home' | 'away' | null;
   actual?: { goalsHome: number; goalsAway: number };
   hidePredicted?: boolean;
   canSimulate?: boolean;
@@ -130,7 +130,7 @@ export function ScoreDisplay({
   goalsHome,
   goalsAway,
   played,
-  pen,
+  penWinnerSide,
   actual,
   hidePredicted = false,
   canSimulate = false,
@@ -215,8 +215,9 @@ export function ScoreDisplay({
         onClick?.();
       }}
     >
-      {pen ? '(p) ' : ''}
+      {penWinnerSide === 'home' ? '(p) ' : ''}
       {goalsHome} - {goalsAway}
+      {penWinnerSide === 'away' ? ' (p)' : ''}
     </button>
   );
 }
