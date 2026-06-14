@@ -11,7 +11,7 @@ export const defaultRandomSource: RandomSource = {
 export const DEFAULT_GPG = 1.25;
 
 /** Log-normal sigma for per-team match form; 0 disables upset variance. */
-export const DEFAULT_UPSET_VARIANCE = 0.6;
+export const DEFAULT_UPSET_VARIANCE = 0.2;
 
 export interface SimulatedMatchOutcome {
   team1Id: number;
