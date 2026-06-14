@@ -1,5 +1,5 @@
 import type { TournamentState } from '../types.js';
-import { isGroupStagePhase, phaseLabel } from '@shared/engine/phase.js';
+import { phaseLabel } from '@shared/engine/phase.js';
 import type { AppView } from '../lib/appView.js';
 import { DEFAULT_UPSET_VARIANCE } from '../lib/upsetVariance.js';
 import type { ConsensusMode } from '../lib/consensusMode.js';
@@ -15,9 +15,7 @@ import { ViewSwitcher } from './ViewSwitcher.js';
 interface Props {
   state: TournamentState;
   appView: AppView;
-  layout: 'horizontal' | 'vertical';
   showGroupView: boolean;
-  knockoutBracketView: boolean;
   publicMode?: boolean;
   consensusMode?: ConsensusMode;
   consensusModeDirty?: boolean;
@@ -31,8 +29,6 @@ interface Props {
   onRatingEloWeightChange: (value: number) => void;
   onConsensusModeChange: (mode: ConsensusMode) => void;
   onSaveConsensusMode: () => void;
-  onLayoutChange: (layout: 'horizontal' | 'vertical') => void;
-  onKnockoutBracketViewChange: (useBracket: boolean) => void;
   onToggleStageView: () => void;
   onOpenSimulations: () => void;
   onOpenRatings: () => void;
@@ -48,9 +44,7 @@ interface Props {
 export function Header({
   state,
   appView,
-  layout,
   showGroupView,
-  knockoutBracketView,
   publicMode = false,
   consensusMode,
   consensusModeDirty = false,
@@ -64,8 +58,6 @@ export function Header({
   onRatingEloWeightChange,
   onConsensusModeChange,
   onSaveConsensusMode,
-  onLayoutChange,
-  onKnockoutBracketViewChange,
   onToggleStageView,
   onOpenSimulations,
   onOpenRatings,
@@ -101,32 +93,21 @@ export function Header({
   );
 
   const showStageSetting = isSimulationsView;
-  const showLayoutSetting =
-    !narrow &&
-    (isPredictionsView ||
-      isResultsView ||
-      (isSimulationsView && isGroupStagePhase(simulation.phase) && showGroupView));
   const showUpsetSetting = isSimulationsView;
-  const showBracketSetting = isSimulationsView && !showGroupView && !narrow;
   const showRatings = isSimulationsView;
   const showManagePredictions = isPredictionsView && !publicMode;
   const showManageSimulations = isSimulationsView && !publicMode;
-  const showClearSimulation = isSimulationsView && onClearSimulation != null;
 
   const hasTopSection = showUpsetSetting || showRatings || isPredictionsView;
   const hasBottomSection =
     showStageSetting ||
-    showLayoutSetting ||
-    showBracketSetting ||
     showManagePredictions ||
-    showManageSimulations ||
-    showClearSimulation;
+    showManageSimulations;
 
   const menuActive =
     (showUpsetSetting && upsetVariance !== DEFAULT_UPSET_VARIANCE) ||
     (showUpsetSetting && ratingEloWeight !== DEFAULT_RATING_ELO_WEIGHT) ||
-    (isPredictionsView && consensusModeDirty) ||
-    (showLayoutSetting && layout !== 'vertical');
+    (isPredictionsView && consensusModeDirty);
 
   const hasMenu = hasTopSection || hasBottomSection;
 
@@ -157,7 +138,7 @@ export function Header({
       {showRatings && (
         <>
           <button type="button" className="btn btn-ghost" onClick={onOpenRatings}>
-            Ratings
+            Country Ratings
           </button>
           <button type="button" className="btn btn-ghost" onClick={onOpenTournamentStats}>
             Tournament Stats
@@ -217,64 +198,10 @@ export function Header({
           </div>
         </div>
       )}
-      {showLayoutSetting && (
-        <div className="header-settings-segment">
-          <span className="header-settings-segment-label">Layout</span>
-          <div className="header-settings-segment-buttons">
-            <button
-              type="button"
-              className={`btn btn-ghost ${layout === 'horizontal' ? 'active' : ''}`}
-              onClick={() => onLayoutChange('horizontal')}
-            >
-              Horizontal
-            </button>
-            <button
-              type="button"
-              className={`btn btn-ghost ${layout === 'vertical' ? 'active' : ''}`}
-              onClick={() => onLayoutChange('vertical')}
-            >
-              Vertical
-            </button>
-          </div>
-        </div>
-      )}
-      {showBracketSetting && (
-        <div className="header-settings-segment">
-          <span className="header-settings-segment-label">Knockout display</span>
-          <div className="header-settings-segment-buttons">
-            <button
-              type="button"
-              className={`btn btn-ghost ${knockoutBracketView ? 'active' : ''}`}
-              onClick={() => onKnockoutBracketViewChange(true)}
-            >
-              Bracket
-            </button>
-            <button
-              type="button"
-              className={`btn btn-ghost ${!knockoutBracketView ? 'active' : ''}`}
-              onClick={() => onKnockoutBracketViewChange(false)}
-            >
-              Fixtures
-            </button>
-          </div>
-        </div>
-      )}
       {showManageSimulations && (
         <button type="button" className="btn btn-ghost" onClick={onOpenSimulations}>
           Manage Simulations
         </button>
-      )}
-      {showClearSimulation && (
-        <>
-          {(hasTopSection ||
-            showStageSetting ||
-            showLayoutSetting ||
-            showBracketSetting ||
-            showManageSimulations) && <div className="header-menu-divider" role="separator" />}
-          <button type="button" className="btn btn-ghost btn-danger" onClick={onClearSimulation}>
-            Clear simulation
-          </button>
-        </>
       )}
     </HeaderDropdownMenu>
   ) : null;
@@ -288,6 +215,7 @@ export function Header({
       onSimulateGroup={onSimulateGroupGames}
       onSimulateKnockouts={onSimulateKnockoutsThrough}
       onBulk={onOpenMonteCarlo}
+      onClear={onClearSimulation}
     />
   ) : null;
 
@@ -303,7 +231,11 @@ export function Header({
       <header className="header header-mobile">
         <div className="header-row">
           <div className="header-left">
-            <ViewSwitcher appView={appView} onAppViewChange={onAppViewChange} />
+            <ViewSwitcher
+              appView={appView}
+              publicMode={publicMode}
+              onAppViewChange={onAppViewChange}
+            />
             <h1 className="header-title">WC 2026</h1>
           </div>
           <div className="header-actions">{actions}</div>
@@ -316,7 +248,11 @@ export function Header({
   return (
     <header className="header">
       <div className="header-left">
-        <ViewSwitcher appView={appView} onAppViewChange={onAppViewChange} />
+        <ViewSwitcher
+          appView={appView}
+          publicMode={publicMode}
+          onAppViewChange={onAppViewChange}
+        />
         <h1 className="header-title">WC 2026 Simulator</h1>
         {meta}
       </div>

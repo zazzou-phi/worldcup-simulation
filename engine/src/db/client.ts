@@ -4,6 +4,7 @@ import * as schema from './schema.js';
 import { rebuildPredictionAggregates } from './predictionAggregates.js';
 import { migrateExistingFrozenMatches, copyMissingFrozenMatchesFromDefault } from './predictionFrozenMatches.js';
 import { computeNormalizedTeamRatings, computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
+import { DEFAULT_RATING_ELO_WEIGHT } from '../api/ratingEloWeight.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdirSync } from 'node:fs';
@@ -322,14 +323,16 @@ function migrateBlendRatings(sqlite: Database.Database) {
     sqlite.prepare('SELECT COUNT(*) as c FROM app_settings').get() as { c: number }
   ).c;
   if (settingsCount === 0) {
-    sqlite.prepare('INSERT INTO app_settings (id, rating_elo_weight) VALUES (1, 1)').run();
+    sqlite.prepare('INSERT INTO app_settings (id, rating_elo_weight) VALUES (1, ?)').run(
+      DEFAULT_RATING_ELO_WEIGHT,
+    );
   }
 
   const eloWeight = (
     sqlite.prepare('SELECT rating_elo_weight as w FROM app_settings WHERE id = 1').get() as
       | { w: number }
       | undefined
-  )?.w ?? 1;
+  )?.w ?? DEFAULT_RATING_ELO_WEIGHT;
 
   const rows = sqlite
     .prepare('SELECT id, elo, rating, goals_for, goals_against, total FROM teams')

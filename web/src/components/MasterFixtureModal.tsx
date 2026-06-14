@@ -1,5 +1,6 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
+import { computeMeanExpectedGoals } from '@shared/engine/consensus.js';
 import type { ConsensusMode } from '../lib/consensusMode.js';
 import {
   CONSENSUS_MODE_HINT,
@@ -54,6 +55,10 @@ type MatchOutcome = 'homeWin' | 'draw' | 'awayWin';
 function formatPct(count: number, total: number): string {
   if (total === 0) return '0%';
   return `${((count / total) * 100).toFixed(1)}%`;
+}
+
+function formatExpectedGoal(value: number): string {
+  return value.toFixed(2);
 }
 
 function outcomeFromScoreline(s: Pick<ScorelineCount, 'goalsHome' | 'goalsAway'>): MatchOutcome {
@@ -240,6 +245,10 @@ export function MasterFixtureModal({
   const played = match.result.status === 'played';
   const total = distribution?.total ?? 0;
   const scorelines = distribution?.scorelines ?? [];
+  const expectedGoals = useMemo(
+    () => (total > 0 ? computeMeanExpectedGoals(scorelines) : null),
+    [scorelines, total],
+  );
   const frozenConsensusMode = distribution?.consensusMode ?? defaultConsensusMode;
   const showFrozenConsensusControl =
     match.isLocked && canEditFrozenConsensus && total > 0 && onFrozenConsensusModeChange != null;
@@ -254,6 +263,12 @@ export function MasterFixtureModal({
         <p className="master-fixture-teams">
           {homeName} vs {awayName}
         </p>
+        {expectedGoals && (
+          <p className="master-fixture-expected-goals">
+            Expected goals: {formatExpectedGoal(expectedGoals.goalsHome)}–
+            {formatExpectedGoal(expectedGoals.goalsAway)}
+          </p>
+        )}
         {played ? (
           <p className="master-fixture-consensus">
             Consensus: {match.result.goalsHome}–{match.result.goalsAway}

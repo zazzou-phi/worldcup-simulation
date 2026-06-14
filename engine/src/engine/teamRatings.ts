@@ -3,7 +3,7 @@ import type { Team } from './types.js';
 export const ELO_BASE = 1500;
 export const ELO_SCALE = 400;
 
-export const DEFAULT_RATING_ELO_WEIGHT = 1;
+export const DEFAULT_RATING_ELO_WEIGHT = 0.65;
 
 export interface TeamRatingInput {
   elo: number;

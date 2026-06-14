@@ -25,7 +25,7 @@ export function RatingEloWeightControl({
     return (
       <div className="upset-factor upset-factor-compact" title={RATING_ELO_WEIGHT_HINT}>
         <label className="upset-factor-label" htmlFor={id} title={RATING_ELO_WEIGHT_HINT}>
-          Ratings <span className="upset-factor-value">{displayValue}</span>
+          Country Ratings <span className="upset-factor-value">{displayValue}</span>
         </label>
         <input
           id={id}
@@ -46,7 +46,7 @@ export function RatingEloWeightControl({
   return (
     <div className="upset-factor upset-factor-full">
       <label className="modal-label" htmlFor={id} title={RATING_ELO_WEIGHT_HINT}>
-        Ratings blend <span className="muted upset-factor-value">{displayValue}</span>
+        Country Ratings blend <span className="muted upset-factor-value">{displayValue}</span>
       </label>
       <input
         id={id}

@@ -1,5 +1,6 @@
 import { isPublicMode } from '../config/appMode.js';
 import { hydrateLocalState } from '../lib/localPredictionStorage.js';
+import { DEFAULT_RATING_ELO_WEIGHT } from '../lib/ratingEloWeight.js';
 import { staticApi, loadBootstrap, loadPublicMeta } from './staticClient.js';
 import type {
   ActualResultsState,
@@ -312,7 +313,7 @@ const publicApiStub = {
     throw new Error('Use local simulation in public mode');
   },
   listTeams: staticApi.listTeams,
-  getRatingEloWeight: async () => ({ ratingEloWeight: 1 }),
+  getRatingEloWeight: async () => ({ ratingEloWeight: DEFAULT_RATING_ELO_WEIGHT }),
   setRatingEloWeight: async (ratingEloWeight: number) => ({ ratingEloWeight }),
   getActualResultsState: staticApi.getActualResultsState,
   getMasterGroupState: staticApi.getMasterGroupState,

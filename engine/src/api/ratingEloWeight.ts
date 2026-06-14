@@ -1,7 +1,7 @@
 import type { RatingEloWeight } from '../engine/types.js';
 import { ApiError } from './errors.js';
 
-export const DEFAULT_RATING_ELO_WEIGHT: RatingEloWeight = 1;
+export const DEFAULT_RATING_ELO_WEIGHT: RatingEloWeight = 0.65;
 
 export function parseRatingEloWeight(value: unknown): RatingEloWeight {
   if (value == null || value === '') return DEFAULT_RATING_ELO_WEIGHT;

@@ -419,6 +419,10 @@ button {
   color: var(--text-muted);
 }
 
+.simulate-menu-item-danger {
+  color: var(--red);
+}
+
 .btn-small {
   padding: 0.1rem 0.4rem;
   font-size: 0.85em;
@@ -443,15 +447,7 @@ button {
   height: 100%;
   min-height: 0;
   overflow: hidden;
-}
-
-.group-phase.layout-vertical {
   grid-template-columns: 1fr 1fr;
-}
-
-.group-phase.layout-horizontal {
-  grid-template-columns: 1fr;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .group-phase-tab-bar {
@@ -525,7 +521,7 @@ button {
 
 .group-tables {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
   flex: 1;
   min-height: 0;
@@ -533,17 +529,12 @@ button {
   align-content: start;
 }
 
-/* Vertical split: 3 columns × 4 rows — wider tables, larger type */
-.group-phase.layout-vertical .group-tables {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.group-phase.layout-vertical .group-table {
+.group-phase .group-table {
   font-size: 1em;
 }
 
-.group-phase.layout-vertical .group-table th,
-.group-phase.layout-vertical .group-table td {
+.group-phase .group-table th,
+.group-phase .group-table td {
   padding: 0.15rem 0.35rem;
 }
 
@@ -800,12 +791,27 @@ button {
 }
 
 .knockout-view {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  display: grid;
+  gap: 0.75rem;
   height: 100%;
   min-height: 0;
   overflow: hidden;
+}
+
+.knockout-phase-split {
+  grid-template-columns: 1fr 1fr;
+}
+
+.knockout-phase-split .knockout-phase-bracket,
+.knockout-phase-split .knockout-phase-fixtures {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  background: var(--bg-elevated);
 }
 
 .knockout-phase-mobile {
@@ -1441,6 +1447,12 @@ button {
   font-size: 0.95rem;
 }
 
+.master-fixture-expected-goals {
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .master-fixture-consensus {
   margin: 0 0 1rem;
   color: var(--cyan);
@@ -1582,13 +1594,14 @@ button {
 }
 
 @media (max-width: 900px) {
-  .group-phase.layout-vertical {
+  .group-phase {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .group-phase.layout-vertical .group-tables {
-    grid-template-columns: repeat(2, 1fr);
+  .knockout-phase-split {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   }
 
   .group-tables {
@@ -1682,8 +1695,7 @@ button {
     white-space: nowrap;
   }
 
-  .group-tables,
-  .group-phase.layout-vertical .group-tables {
+  .group-tables {
     grid-template-columns: 1fr;
   }
 

@@ -19,7 +19,7 @@ const GROUP_ITEMS = [
 ] as const;
 
 type MenuEntry =
-  | { kind: 'item'; key: string; label: string; subtitle?: string }
+  | { kind: 'item'; key: string; label: string; subtitle?: string; danger?: boolean }
   | { kind: 'divider' };
 
 interface Props {
@@ -30,6 +30,7 @@ interface Props {
   onSimulateGroup: (games: 1 | 2 | 3) => void;
   onSimulateKnockouts: (throughRound: string) => void;
   onBulk: () => void;
+  onClear?: () => void;
 }
 
 function buildItems(publicMode: boolean): MenuEntry[] {
@@ -60,10 +61,19 @@ export function SimulateMenu({
   onSimulateGroup,
   onSimulateKnockouts,
   onBulk,
+  onClear,
 }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const items = useMemo(() => buildItems(publicMode), [publicMode]);
+  const items = useMemo(() => {
+    const base = buildItems(publicMode);
+    if (!onClear) return base;
+    return [
+      ...base,
+      { kind: 'divider' as const },
+      { kind: 'item' as const, key: 'clear', label: 'Clear', danger: true },
+    ];
+  }, [publicMode, onClear]);
   const disabledKeys = useMemo(() => {
     const disabled = new Set(
       getDisabledSimulateMenuKeys({ fixtures: state.fixtures, matches: state.matches }),
@@ -99,6 +109,10 @@ export function SimulateMenu({
   const handleSelect = (key: string) => {
     if (disabledKeys.has(key)) return;
     setOpen(false);
+    if (key === 'clear') {
+      onClear?.();
+      return;
+    }
     if (key === 'bulk') {
       onBulk();
       return;
@@ -131,7 +145,7 @@ export function SimulateMenu({
               <button
                 key={entry.key}
                 type="button"
-                className="simulate-menu-item"
+                className={`simulate-menu-item${entry.danger ? ' simulate-menu-item-danger' : ''}`}
                 role="menuitem"
                 disabled={disabledKeys.has(entry.key)}
                 onClick={() => handleSelect(entry.key)}

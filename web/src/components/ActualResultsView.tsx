@@ -9,7 +9,6 @@ import { GroupPhaseLayout } from './GroupPhaseLayout.js';
 
 interface Props {
   actualState: ActualResultsState;
-  layout: 'horizontal' | 'vertical';
   selectedMatchNumber: number | null;
   editingMatchNumber: number | null;
   readOnly?: boolean;
@@ -27,7 +26,6 @@ interface Props {
 
 export function ActualResultsView({
   actualState,
-  layout,
   selectedMatchNumber,
   editingMatchNumber,
   readOnly = false,
@@ -89,7 +87,6 @@ export function ActualResultsView({
 
   return (
     <GroupPhaseLayout
-      layout={layout}
       standings={
         <>
           {actualState.qualifyingThirdGroups.length > 0 && (

@@ -55,6 +55,13 @@
       "goalsAway": 0,
       "winnerTeamId": 25,
       "recordedAt": "2026-06-14T12:41:06.344Z"
+    },
+    {
+      "matchNumber": 25,
+      "goalsHome": 7,
+      "goalsAway": 1,
+      "winnerTeamId": 10,
+      "recordedAt": "2026-06-14T19:54:30.786Z"
     }
   ],
   "phase": "group",
@@ -563,36 +570,6 @@
       "groupLetter": "E",
       "rows": [
         {
-          "teamId": 8,
-          "team": {
-            "id": 8,
-            "name": "Ecuador",
-            "countryCode": "EC",
-            "flag": "🇪🇨",
-            "rank": 9,
-            "rating": 1935,
-            "elo": 1935,
-            "total": 599,
-            "goalsFor": 721,
-            "goalsAgainst": 904,
-            "eloOffensiveRating": 1.332700825885171,
-            "eloDefensiveRating": 0.6206762579626095,
-            "goalOffensiveRating": 0.7273992385837171,
-            "goalDefensiveRating": 1.2637786836298812,
-            "blendOffensiveRating": 1.159681356359638,
-            "blendDefensiveRating": 0.9693303449765659
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 1
-        },
-        {
           "teamId": 10,
           "team": {
             "id": 10,
@@ -611,6 +588,36 @@
             "goalDefensiveRating": 0.9872424816879538,
             "blendOffensiveRating": 1.312416863341519,
             "blendDefensiveRating": 0.8280624982161803
+          },
+          "played": 1,
+          "won": 1,
+          "drawn": 0,
+          "lost": 0,
+          "goalsFor": 7,
+          "goalsAgainst": 1,
+          "goalDifference": 6,
+          "points": 3,
+          "position": 1
+        },
+        {
+          "teamId": 8,
+          "team": {
+            "id": 8,
+            "name": "Ecuador",
+            "countryCode": "EC",
+            "flag": "🇪🇨",
+            "rank": 9,
+            "rating": 1935,
+            "elo": 1935,
+            "total": 599,
+            "goalsFor": 721,
+            "goalsAgainst": 904,
+            "eloOffensiveRating": 1.332700825885171,
+            "eloDefensiveRating": 0.6206762579626095,
+            "goalOffensiveRating": 0.7273992385837171,
+            "goalDefensiveRating": 1.2637786836298812,
+            "blendOffensiveRating": 1.159681356359638,
+            "blendDefensiveRating": 0.9693303449765659
           },
           "played": 0,
           "won": 0,
@@ -672,13 +679,13 @@
             "blendOffensiveRating": 0.5759521207580841,
             "blendDefensiveRating": 1.698310695971257
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
           "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
+          "lost": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 7,
+          "goalDifference": -6,
           "points": 0,
           "position": 4
         }
@@ -3076,10 +3083,10 @@
         "matchNumber": 25,
         "teamHomeId": 10,
         "teamAwayId": 90,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 7,
+        "goalsAway": 1,
+        "winnerTeamId": 10,
+        "status": "played"
       },
       "homeTeam": {
         "id": 10,
@@ -3119,7 +3126,7 @@
       },
       "homeLabel": "Germany",
       "awayLabel": "Curaçao",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6112,7 +6119,7 @@
       },
       "result": {
         "matchNumber": 74,
-        "teamHomeId": 8,
+        "teamHomeId": 10,
         "teamAwayId": 45,
         "goalsHome": null,
         "goalsAway": null,
@@ -6120,22 +6127,22 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 8,
-        "name": "Ecuador",
-        "countryCode": "EC",
-        "flag": "🇪🇨",
-        "rank": 9,
-        "rating": 1935,
-        "elo": 1935,
-        "total": 599,
-        "goalsFor": 721,
-        "goalsAgainst": 904,
-        "eloOffensiveRating": 1.332700825885171,
-        "eloDefensiveRating": 0.6206762579626095,
-        "goalOffensiveRating": 0.7273992385837171,
-        "goalDefensiveRating": 1.2637786836298812,
-        "blendOffensiveRating": 1.159681356359638,
-        "blendDefensiveRating": 0.9693303449765659
+        "id": 10,
+        "name": "Germany",
+        "countryCode": "DE",
+        "flag": "🇩🇪",
+        "rank": 11,
+        "rating": 1923,
+        "elo": 1923,
+        "total": 1045,
+        "goalsFor": 2352,
+        "goalsAgainst": 1232,
+        "eloOffensiveRating": 1.2933135640366724,
+        "eloDefensiveRating": 0.6395786641348735,
+        "goalOffensiveRating": 1.3601456808130554,
+        "goalDefensiveRating": 0.9872424816879538,
+        "blendOffensiveRating": 1.312416863341519,
+        "blendDefensiveRating": 0.8280624982161803
       },
       "awayTeam": {
         "id": 45,
@@ -6155,7 +6162,7 @@
         "blendOffensiveRating": 0.8294878226245165,
         "blendDefensiveRating": 0.9856475035928245
       },
-      "homeLabel": "Ecuador",
+      "homeLabel": "Germany",
       "awayLabel": "Egypt",
       "isLocked": false
     },
@@ -6360,7 +6367,7 @@
       },
       "result": {
         "matchNumber": 78,
-        "teamHomeId": 10,
+        "teamHomeId": 8,
         "teamAwayId": 11,
         "goalsHome": null,
         "goalsAway": null,
@@ -6368,22 +6375,22 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 10,
-        "name": "Germany",
-        "countryCode": "DE",
-        "flag": "🇩🇪",
-        "rank": 11,
-        "rating": 1923,
-        "elo": 1923,
-        "total": 1045,
-        "goalsFor": 2352,
-        "goalsAgainst": 1232,
-        "eloOffensiveRating": 1.2933135640366724,
-        "eloDefensiveRating": 0.6395786641348735,
-        "goalOffensiveRating": 1.3601456808130554,
-        "goalDefensiveRating": 0.9872424816879538,
-        "blendOffensiveRating": 1.312416863341519,
-        "blendDefensiveRating": 0.8280624982161803
+        "id": 8,
+        "name": "Ecuador",
+        "countryCode": "EC",
+        "flag": "🇪🇨",
+        "rank": 9,
+        "rating": 1935,
+        "elo": 1935,
+        "total": 599,
+        "goalsFor": 721,
+        "goalsAgainst": 904,
+        "eloOffensiveRating": 1.332700825885171,
+        "eloDefensiveRating": 0.6206762579626095,
+        "goalOffensiveRating": 0.7273992385837171,
+        "goalDefensiveRating": 1.2637786836298812,
+        "blendOffensiveRating": 1.159681356359638,
+        "blendDefensiveRating": 0.9693303449765659
       },
       "awayTeam": {
         "id": 11,
@@ -6403,7 +6410,7 @@
         "blendOffensiveRating": 1.166264060208765,
         "blendDefensiveRating": 1.0403948966471226
       },
-      "homeLabel": "Germany",
+      "homeLabel": "Ecuador",
       "awayLabel": "Norway",
       "isLocked": false
     },

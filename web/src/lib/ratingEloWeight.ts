@@ -1,4 +1,4 @@
-export const DEFAULT_RATING_ELO_WEIGHT = 1;
+export const DEFAULT_RATING_ELO_WEIGHT = 0.65;
 
 const STORAGE_KEY = 'wc2026-rating-elo-weight';
 

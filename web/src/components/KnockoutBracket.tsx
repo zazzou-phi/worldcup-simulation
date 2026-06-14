@@ -156,7 +156,7 @@ export function KnockoutBracket({
 
   return (
     <div className="knockout-bracket">
-      <h2 className="section-title">Knockout Stage</h2>
+      <h2 className="section-title">Bracket</h2>
       <div className="bracket-scroll">
         <div className="bracket-canvas" style={{ width, height }}>
           <BracketConnectors dims={dims} />
@@ -233,7 +233,7 @@ export function KnockoutList({
 
   return (
     <div className="knockout-list">
-      <h2 className="section-title">Knockout Stage</h2>
+      <h2 className="section-title">Fixtures</h2>
       <FixtureList
         matches={knockout}
         selectedMatchNumber={selectedMatchNumber}

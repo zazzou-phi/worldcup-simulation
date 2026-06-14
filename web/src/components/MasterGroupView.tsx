@@ -18,7 +18,6 @@ interface Props {
   masterState: MasterGroupState;
   fixtures: Fixture[];
   groupMemberships: Array<{ groupLetter: string; teamId: number }>;
-  layout: 'horizontal' | 'vertical';
   actualResults?: ActualMatchResult[];
   canEditFrozenConsensus?: boolean;
   savingFrozenConsensus?: boolean;
@@ -29,7 +28,6 @@ export function MasterGroupView({
   masterState,
   fixtures,
   groupMemberships,
-  layout,
   actualResults = [],
   canEditFrozenConsensus = false,
   savingFrozenConsensus = false,
@@ -108,7 +106,6 @@ export function MasterGroupView({
   return (
     <>
       <GroupPhaseLayout
-        layout={layout}
         standings={
           <>
             {!hasAnyData && (

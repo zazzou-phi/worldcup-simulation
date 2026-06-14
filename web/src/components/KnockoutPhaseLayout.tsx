@@ -16,10 +16,13 @@ export function KnockoutPhaseLayout({
 }: Props) {
   const narrow = useMediaQuery(MOBILE_QUERY);
 
-  const bracketContent = useBracketView ? bracket : fixtures;
-
   if (!narrow) {
-    return <div className="knockout-view">{bracketContent}</div>;
+    return (
+      <div className="knockout-view knockout-phase-split">
+        <div className="knockout-phase-bracket">{bracket}</div>
+        <div className="knockout-phase-fixtures">{fixtures}</div>
+      </div>
+    );
   }
 
   const classes = [

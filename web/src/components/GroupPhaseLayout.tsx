@@ -4,18 +4,16 @@ import { MOBILE_QUERY, useMediaQuery } from '../lib/useMediaQuery.js';
 type Tab = 'standings' | 'fixtures';
 
 interface Props {
-  layout: 'horizontal' | 'vertical';
   standings: ReactNode;
   fixtures: ReactNode;
 }
 
-export function GroupPhaseLayout({ layout, standings, fixtures }: Props) {
+export function GroupPhaseLayout({ standings, fixtures }: Props) {
   const narrow = useMediaQuery(MOBILE_QUERY);
   const [tab, setTab] = useState<Tab>('standings');
 
   const classes = [
     'group-phase',
-    `layout-${layout}`,
     narrow ? 'group-phase-mobile' : '',
     narrow && tab === 'fixtures' ? 'group-phase-show-fixtures' : '',
   ]

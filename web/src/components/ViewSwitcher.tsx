@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { APP_VIEW_LABELS, APP_VIEWS, type AppView } from '../lib/appView.js';
+import { APP_VIEW_LABELS, getAppViews, type AppView } from '../lib/appView.js';
 
 interface Props {
   appView: AppView;
+  publicMode?: boolean;
   onAppViewChange: (view: AppView) => void;
 }
 
-export function ViewSwitcher({ appView, onAppViewChange }: Props) {
+export function ViewSwitcher({ appView, publicMode = false, onAppViewChange }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const otherViews = APP_VIEWS.filter((view) => view !== appView);
+  const otherViews = getAppViews(publicMode).filter((view) => view !== appView);
 
   useEffect(() => {
     if (!open) return;

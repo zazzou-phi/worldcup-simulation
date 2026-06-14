@@ -10,7 +10,6 @@ import { GroupPhaseLayout } from './GroupPhaseLayout.js';
 
 interface Props {
   state: TournamentState;
-  layout: 'horizontal' | 'vertical';
   selectedMatchNumber: number | null;
   editingMatchNumber: number | null;
   simulating?: boolean;
@@ -29,7 +28,6 @@ interface Props {
 
 export function GroupPhaseView({
   state,
-  layout,
   selectedMatchNumber,
   editingMatchNumber,
   simulating = false,
@@ -88,7 +86,6 @@ export function GroupPhaseView({
 
   return (
     <GroupPhaseLayout
-      layout={layout}
       standings={
         <>
           {qualifyingThirdGroups.length > 0 && (

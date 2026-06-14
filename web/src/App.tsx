@@ -47,7 +47,6 @@ export function App() {
   const [simulationId, setSimulationId] = useState<number | null>(null);
   const [state, setState] = useState<TournamentState | null>(null);
   const [teams, setTeams] = useState<Team[]>([]);
-  const [layout, setLayout] = useState<'horizontal' | 'vertical'>('vertical');
   const [selectedMatchNumber, setSelectedMatchNumber] = useState<number | null>(null);
   const [editingMatchNumber, setEditingMatchNumber] = useState<number | null>(null);
   const [showSimulations, setShowSimulations] = useState(false);
@@ -305,7 +304,7 @@ export function App() {
   };
 
   const switchAppView = async (view: AppView) => {
-    if (view === appView) return;
+    if (view === appView || (publicMode && view === 'results')) return;
     setSelectedMatchNumber(null);
     setEditingMatchNumber(null);
     try {
@@ -577,9 +576,7 @@ export function App() {
       <Header
         state={state}
         appView={appView}
-        layout={layout}
         showGroupView={showGroupView}
-        knockoutBracketView={knockoutBracketView}
         publicMode={publicMode}
         consensusMode={consensusModeDraft}
         consensusModeDirty={consensusModeDirty}
@@ -593,8 +590,6 @@ export function App() {
         onRatingEloWeightChange={handleRatingEloWeightChange}
         onConsensusModeChange={handleConsensusModeChange}
         onSaveConsensusMode={handleSaveConsensusMode}
-        onLayoutChange={setLayout}
-        onKnockoutBracketViewChange={setKnockoutBracketView}
         onToggleStageView={() => setViewKnockout((v) => !v)}
         onOpenSimulations={() => setShowSimulations(true)}
         onOpenRatings={() => setShowRatings(true)}
@@ -637,29 +632,25 @@ export function App() {
             masterState={masterState}
             fixtures={state.fixtures}
             groupMemberships={state.groupMemberships}
-            layout={layout}
             actualResults={state?.actualResults ?? []}
             canEditFrozenConsensus={!publicMode}
             savingFrozenConsensus={savingFrozenConsensus}
             onFrozenConsensusModeChange={handleFrozenConsensusModeChange}
           />
-        ) : appView === 'results' && actualState ? (
+        ) : appView === 'results' && !publicMode && actualState ? (
           <ActualResultsView
             actualState={actualState}
-            layout={layout}
             selectedMatchNumber={selectedMatchNumber}
-            editingMatchNumber={publicMode ? null : editingMatchNumber}
-            readOnly={publicMode}
+            editingMatchNumber={editingMatchNumber}
             onSelectMatch={setSelectedMatchNumber}
-            onStartEdit={publicMode ? () => {} : setEditingMatchNumber}
-            onSaveScore={publicMode ? () => {} : handleSaveActualScore}
+            onStartEdit={setEditingMatchNumber}
+            onSaveScore={handleSaveActualScore}
             onCancelEdit={() => setEditingMatchNumber(null)}
-            onClearScore={publicMode ? () => {} : handleClearActualScore}
+            onClearScore={handleClearActualScore}
           />
         ) : showGroupView ? (
           <GroupPhaseView
             state={state}
-            layout={layout}
             selectedMatchNumber={selectedMatchNumber}
             editingMatchNumber={editingMatchNumber}
             simulating={simulating}
