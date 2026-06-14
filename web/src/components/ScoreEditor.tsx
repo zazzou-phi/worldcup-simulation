@@ -215,8 +215,8 @@ export function ScoreDisplay({
         onClick?.();
       }}
     >
+      {pen ? '(p) ' : ''}
       {goalsHome} - {goalsAway}
-      {pen ? ' (p)' : ''}
     </button>
   );
 }
