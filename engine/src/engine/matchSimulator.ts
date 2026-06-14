@@ -1,3 +1,4 @@
+import { teamForSimulation } from './teamRatings.js';
 import type { Team } from './types.js';
 
 export interface RandomSource {
@@ -91,6 +92,23 @@ export function winnerFromGoals(
   return null;
 }
 
+export function computeMatchLambdas(
+  home: Team,
+  away: Team,
+  gpg: number = DEFAULT_GPG,
+): { lambdaHome: number; lambdaAway: number } {
+  const homeSim = teamForSimulation(home);
+  const awaySim = teamForSimulation(away);
+  const homeOff = homeSim.offensiveRating ?? homeSim.blendOffensiveRating;
+  const homeDef = homeSim.defensiveRating ?? homeSim.blendDefensiveRating;
+  const awayOff = awaySim.offensiveRating ?? awaySim.blendOffensiveRating;
+  const awayDef = awaySim.defensiveRating ?? awaySim.blendDefensiveRating;
+  return {
+    lambdaHome: gpg * homeOff * awayDef,
+    lambdaAway: gpg * awayOff * homeDef,
+  };
+}
+
 export function simulateMatchOutcome(
   home: Team,
   away: Team,
@@ -101,14 +119,7 @@ export function simulateMatchOutcome(
   const rng = options.rng ?? defaultRandomSource;
   const upsetVariance = options.upsetVariance ?? DEFAULT_UPSET_VARIANCE;
 
-  let lambda1 =
-    gpg *
-    (home.offensiveRating ?? home.eloOffensiveRating) *
-    (away.defensiveRating ?? away.eloDefensiveRating);
-  let lambda2 =
-    gpg *
-    (away.offensiveRating ?? away.eloOffensiveRating) *
-    (home.defensiveRating ?? home.eloDefensiveRating);
+  let { lambdaHome: lambda1, lambdaAway: lambda2 } = computeMatchLambdas(home, away, gpg);
 
   if (upsetVariance > 0) {
     const homeForm = sampleLogNormalMean1(rng, upsetVariance);

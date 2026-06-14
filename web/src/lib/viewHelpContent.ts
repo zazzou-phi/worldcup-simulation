@@ -119,7 +119,8 @@ function predictionsHelp(publicMode: boolean): ViewHelp {
   }
 
   const howToBullets = [
-    'Click a fixture that has simulation data to open its distribution modal — outcome probabilities, top scorelines, and expected goals.',
+    'Click a fixture that has simulation data to open its distribution modal — outcome probabilities, top scorelines, and expected goals' +
+      (publicMode ? '.' : ', and rating λ.'),
     'Click a team in the standings to filter the fixture list.',
     'In the ⋮ options menu, change the consensus mode, open Tournament Stats or Team Stats.',
     'On mobile, use the Standings and Fixtures tabs to switch panels.',

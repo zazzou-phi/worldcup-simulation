@@ -1921,7 +1921,7 @@
       },
       "homeLabel": "Netherlands",
       "awayLabel": "Japan",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5116,14 +5116,44 @@
             "blendDefensiveRating": 0.8417167074342994
           },
           "played": 1,
-          "won": 1,
-          "drawn": 0,
+          "won": 0,
+          "drawn": 1,
           "lost": 0,
           "goalsFor": 2,
-          "goalsAgainst": 1,
-          "goalDifference": 1,
-          "points": 3,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "points": 1,
           "position": 1
+        },
+        {
+          "teamId": 12,
+          "team": {
+            "id": 12,
+            "name": "Japan",
+            "countryCode": "JP",
+            "flag": "🇯🇵",
+            "rank": 13,
+            "rating": 1906,
+            "elo": 1906,
+            "total": 836,
+            "goalsFor": 1518,
+            "goalsAgainst": 985,
+            "eloOffensiveRating": 1.2394993887016612,
+            "eloDefensiveRating": 0.6673466474723551,
+            "goalOffensiveRating": 1.097311407033492,
+            "goalDefensiveRating": 0.9866414818005627,
+            "blendOffensiveRating": 1.1988563610320826,
+            "blendDefensiveRating": 0.8404504090317467
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "points": 1,
+          "position": 2
         },
         {
           "teamId": 41,
@@ -5153,7 +5183,7 @@
           "goalsAgainst": 0,
           "goalDifference": 0,
           "points": 0,
-          "position": 2
+          "position": 3
         },
         {
           "teamId": 57,
@@ -5182,36 +5212,6 @@
           "goalsFor": 0,
           "goalsAgainst": 0,
           "goalDifference": 0,
-          "points": 0,
-          "position": 3
-        },
-        {
-          "teamId": 12,
-          "team": {
-            "id": 12,
-            "name": "Japan",
-            "countryCode": "JP",
-            "flag": "🇯🇵",
-            "rank": 13,
-            "rating": 1906,
-            "elo": 1906,
-            "total": 836,
-            "goalsFor": 1518,
-            "goalsAgainst": 985,
-            "eloOffensiveRating": 1.2394993887016612,
-            "eloDefensiveRating": 0.6673466474723551,
-            "goalOffensiveRating": 1.097311407033492,
-            "goalDefensiveRating": 0.9866414818005627,
-            "blendOffensiveRating": 1.1988563610320826,
-            "blendDefensiveRating": 0.8404504090317467
-          },
-          "played": 1,
-          "won": 0,
-          "drawn": 0,
-          "lost": 1,
-          "goalsFor": 1,
-          "goalsAgainst": 2,
-          "goalDifference": -1,
           "points": 0,
           "position": 4
         }
@@ -5971,7 +5971,7 @@
   "qualifyingThirdGroups": [
     "B",
     "C",
-    "E",
+    "F",
     "G",
     "I",
     "J",
@@ -11333,7 +11333,8 @@
           "goalsAway": 1,
           "n": 1
         }
-      ]
+      ],
+      "consensusMode": "rounded"
     },
     "32": {
       "homeWin": 0,

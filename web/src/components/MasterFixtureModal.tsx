@@ -1,6 +1,7 @@
 import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { createPortal } from 'react-dom';
 import { computeMeanExpectedGoals } from '@shared/engine/consensus.js';
+import { computeMatchLambdas } from '@shared/engine/matchSimulator.js';
 import type { ConsensusMode } from '../lib/consensusMode.js';
 import {
   CONSENSUS_MODE_HINT,
@@ -8,6 +9,7 @@ import {
   formatConsensusMode,
 } from '../lib/consensusMode.js';
 import type { OutcomeDistribution, ResolvedMatch, ScorelineCount } from '../types.js';
+import { isPublicMode } from '../config/appMode.js';
 import { matchTeamName } from '@shared/lib/matchDisplay.js';
 
 const TOP_SCORELINES = 3;
@@ -245,10 +247,15 @@ export function MasterFixtureModal({
   const played = match.result.status === 'played';
   const total = distribution?.total ?? 0;
   const scorelines = distribution?.scorelines ?? [];
+  const publicMode = isPublicMode();
   const expectedGoals = useMemo(
     () => (total > 0 ? computeMeanExpectedGoals(scorelines) : null),
     [scorelines, total],
   );
+  const matchLambdas = useMemo(() => {
+    if (publicMode || !match.homeTeam || !match.awayTeam) return null;
+    return computeMatchLambdas(match.homeTeam, match.awayTeam);
+  }, [publicMode, match.homeTeam, match.awayTeam]);
   const frozenConsensusMode = distribution?.consensusMode ?? defaultConsensusMode;
   const showFrozenConsensusControl =
     match.isLocked && canEditFrozenConsensus && total > 0 && onFrozenConsensusModeChange != null;
@@ -263,6 +270,12 @@ export function MasterFixtureModal({
         <p className="master-fixture-teams">
           {homeName} vs {awayName}
         </p>
+        {matchLambdas && (
+          <p className="master-fixture-expected-goals">
+            Lambda (λ): {formatExpectedGoal(matchLambdas.lambdaHome)}–
+            {formatExpectedGoal(matchLambdas.lambdaAway)}
+          </p>
+        )}
         {expectedGoals && (
           <p className="master-fixture-expected-goals">
             Expected goals: {formatExpectedGoal(expectedGoals.goalsHome)}–

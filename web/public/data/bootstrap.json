@@ -2372,6 +2372,13 @@
       "goalsAway": 1,
       "winnerTeamId": 10,
       "recordedAt": "2026-06-14T19:54:30.786Z"
+    },
+    {
+      "matchNumber": 31,
+      "goalsHome": 2,
+      "goalsAway": 2,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-14T21:57:18.349Z"
     }
   ]
 }

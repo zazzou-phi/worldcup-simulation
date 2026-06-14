@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+  computeMatchLambdas,
   sampleLogNormalMean1,
   samplePoisson,
   simulateMatchOutcome,
@@ -41,6 +42,15 @@ describe('matchSimulator', () => {
   it('returns zero goals for zero lambda', () => {
     const rng: RandomSource = { random: () => 0.5 };
     expect(samplePoisson(0, rng)).toBe(0);
+  });
+
+  it('computes base match lambdas from team ratings', () => {
+    const home = makeTeam(1, 1.5, 0.8);
+    const away = makeTeam(2, 1.0, 1.2);
+    expect(computeMatchLambdas(home, away, 1.25)).toEqual({
+      lambdaHome: 1.25 * 1.5 * 1.2,
+      lambdaAway: 1.25 * 1.0 * 0.8,
+    });
   });
 
   it('uses deterministic poisson draws', () => {
