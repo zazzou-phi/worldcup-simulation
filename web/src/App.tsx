@@ -124,6 +124,7 @@ export function App() {
       consensusModeDraft,
       state.fixtures,
       state.groupMemberships,
+      state.actualResults ?? [],
     );
   }, [masterStateBase, consensusModeDraft, state, publicMode]);
 
@@ -634,6 +635,8 @@ export function App() {
         ) : appView === 'predictions' && masterState ? (
           <MasterGroupView
             masterState={masterState}
+            fixtures={state.fixtures}
+            groupMemberships={state.groupMemberships}
             layout={layout}
             actualResults={state?.actualResults ?? []}
             canEditFrozenConsensus={!publicMode}

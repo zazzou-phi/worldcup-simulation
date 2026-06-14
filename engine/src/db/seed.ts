@@ -16,7 +16,7 @@ import {
 } from '../lib/flags.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = join(__dirname, '../../..');
+const DATA_DIR = join(__dirname, '../../../data');
 
 function readCsv(filename: string) {
   return parse(readFileSync(join(DATA_DIR, filename), 'utf8'), {

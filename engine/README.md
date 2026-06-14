@@ -75,7 +75,7 @@ Master (consensus) view mode is set per prediction in the Predictions view (Expe
 - Fixed reference tables: `teams`, `fixtures`, `group_memberships`
 - Per-simulation: `simulations`, `simulation_matches`
 
-Data sources: [`../teams.csv`](../teams.csv), [`../worldcup_2026_fixtures.csv`](../worldcup_2026_fixtures.csv), Annex C bracket lookup ([`../data/annex-c.json`](../data/annex-c.json)).
+Data sources: [`../data/teams.csv`](../data/teams.csv), [`../data/worldcup_2026_fixtures.csv`](../data/worldcup_2026_fixtures.csv), Annex C bracket lookup ([`../data/annex-c.json`](../data/annex-c.json)).
 
 SQLite database: [`../data/simulations.db`](../data/simulations.db) (shared with the web app).
 

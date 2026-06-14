@@ -243,6 +243,24 @@ describe('repository integration', () => {
     expect((deltas.get(78) ?? 0) < 0).toBe(true);
   });
 
+  it('master group standings prefer actual results over consensus', () => {
+    repo.setActualResult(1, 2, 1, 18);
+    const sim = repo.createSimulation('Consensus clash');
+    repo.updateMatchResult(sim.id, 2, 0, 2, 19);
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+
+    const master = repo.buildMasterGroupView(predictionId);
+    const groupA = master.groupStandings.find((g) => g.groupLetter === 'A')!;
+    const mexico = groupA.rows.find((r) => r.team.name === 'Mexico')!;
+    const southAfrica = groupA.rows.find((r) => r.team.name === 'South Africa')!;
+
+    expect(mexico.points).toBe(3);
+    expect(mexico.goalsFor).toBe(2);
+    expect(southAfrica.points).toBe(0);
+    expect(southAfrica.goalsFor).toBe(1);
+  });
+
   it('aggregates team goals across simulations including knockouts', () => {
     const sim1 = repo.createSimulation('One');
     const sim2 = repo.createSimulation('Two');

@@ -1261,7 +1261,7 @@ export class Repository {
       });
     }
 
-    const playedGroup = collectPlayedGroupMatches(fixtures, consensusMatches, []);
+    const playedGroup = collectPlayedGroupMatches(fixtures, consensusMatches, this.getActualResults());
     const groupStandings = computeAllGroupStandings(memberships, teamsById, playedGroup);
     const qualifyingThirdGroups = getQualifyingThirdGroups(groupStandings);
 

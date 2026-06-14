@@ -13,6 +13,7 @@ import type {
   ResolvedMatch,
   SimulationMatch,
   Team,
+  ActualMatchResult,
 } from '../engine/types.js';
 import {
   serializeActualResult,
@@ -69,6 +70,7 @@ export function redactMasterGroupState(
   exportTime: Date,
   memberships: GroupMembership[],
   allFixtures: Fixture[],
+  actualResults: ActualMatchResult[] = [],
 ): MasterGroupState {
   const groupFixtures = state.resolvedMatches
     .filter((m) => m.fixture.group != null)
@@ -117,7 +119,7 @@ export function redactMasterGroupState(
     if (match.awayTeam) teamsById.set(match.awayTeam.id, match.awayTeam);
   }
 
-  const playedGroup = collectPlayedGroupMatches(allFixtures, consensusMatches, []);
+  const playedGroup = collectPlayedGroupMatches(allFixtures, consensusMatches, actualResults);
   const groupStandings = computeAllGroupStandings(memberships, teamsById, playedGroup);
   const qualifyingThirdGroups = getQualifyingThirdGroups(groupStandings);
 
@@ -158,17 +160,18 @@ export function buildPublicSnapshot(
     throw new Error('No predictions configured for public export');
   }
   const masterRaw = repo.buildMasterGroupView(prediction.id);
+  const actualResults = repo.getActualResults();
   const masterGroupState = redactMasterGroupState(
     masterRaw,
     exportTime,
     groupMemberships,
     fixtures,
+    actualResults,
   );
   const masterTeamStats = repo.buildMasterTeamStats(prediction.id);
   const actualView = repo.buildActualResultsView();
 
   const teams = repo.getTeams();
-  const actualResults = repo.getActualResults();
 
   return {
     masterGroupState: serializeMasterGroupState(masterGroupState),

@@ -7,7 +7,8 @@ import {
 } from '../lib/doubleDown.js';
 import { isPublicMode } from '../config/appMode.js';
 import type { ConsensusMode } from '../lib/consensusMode.js';
-import type { ActualMatchResult, MasterGroupState } from '../types.js';
+import type { ActualMatchResult, Fixture, MasterGroupState } from '../types.js';
+import { deriveMasterGroupStandings } from '../lib/deriveGroupStandings.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
 import { GroupPhaseLayout } from './GroupPhaseLayout.js';
@@ -15,6 +16,8 @@ import { MasterFixtureModal } from './MasterFixtureModal.js';
 
 interface Props {
   masterState: MasterGroupState;
+  fixtures: Fixture[];
+  groupMemberships: Array<{ groupLetter: string; teamId: number }>;
   layout: 'horizontal' | 'vertical';
   actualResults?: ActualMatchResult[];
   canEditFrozenConsensus?: boolean;
@@ -24,6 +27,8 @@ interface Props {
 
 export function MasterGroupView({
   masterState,
+  fixtures,
+  groupMemberships,
   layout,
   actualResults = [],
   canEditFrozenConsensus = false,
@@ -70,6 +75,11 @@ export function MasterGroupView({
 
   const hasAnyData = Object.values(masterState.distributions).some((d) => d.total > 0);
 
+  const { groupStandings, qualifyingThirdGroups } = useMemo(
+    () => deriveMasterGroupStandings(masterState, fixtures, groupMemberships, actualResults),
+    [masterState, fixtures, groupMemberships, actualResults],
+  );
+
   const doubledMatchNumbers = useMemo(() => {
     if (publicMode) return undefined;
     const actualEntered = new Set(actualResults.map((r) => r.matchNumber));
@@ -107,14 +117,14 @@ export function MasterGroupView({
                 build consensus.
               </div>
             )}
-            {masterState.qualifyingThirdGroups.length > 0 && (
+            {qualifyingThirdGroups.length > 0 && (
               <div className="third-place-banner">
-                Third-place race: {masterState.qualifyingThirdGroups.join(', ')}
+                Third-place race: {qualifyingThirdGroups.join(', ')}
               </div>
             )}
             <GroupTables
-              standings={masterState.groupStandings}
-              qualifyingThirdGroups={masterState.qualifyingThirdGroups}
+              standings={groupStandings}
+              qualifyingThirdGroups={qualifyingThirdGroups}
               selectedTeamId={selectedTeamId}
               onSelectTeam={handleSelectTeam}
             />

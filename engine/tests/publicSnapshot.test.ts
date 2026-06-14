@@ -96,6 +96,7 @@ describe('publicSnapshot', () => {
       exportTime,
       repo.getGroupMemberships(),
       repo.getFixtures(),
+      repo.getActualResults(),
     );
 
     const groupA = redacted.groupStandings.find((g) => g.groupLetter === 'A')!;

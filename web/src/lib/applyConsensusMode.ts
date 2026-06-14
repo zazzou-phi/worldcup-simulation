@@ -6,6 +6,7 @@ import {
   getQualifyingThirdGroups,
 } from '@shared/engine/standings.js';
 import type {
+  ActualMatchResult,
   Fixture,
   GroupMembership,
   MasterGroupState,
@@ -25,6 +26,7 @@ export function applyConsensusMode(
   mode: ConsensusMode,
   fixtures: Fixture[],
   groupMemberships: GroupMembership[],
+  actualResults: ActualMatchResult[] = [],
 ): MasterGroupState {
   const resolvedMatches = state.resolvedMatches.map((match) => {
     if (match.isLocked) return match;
@@ -88,7 +90,7 @@ export function applyConsensusMode(
     status: match.result.status,
   }));
 
-  const playedGroup = collectPlayedGroupMatches(fixtures, consensusMatches, []);
+  const playedGroup = collectPlayedGroupMatches(fixtures, consensusMatches, actualResults);
   const groupStandings = computeAllGroupStandings(groupMemberships, teamsById, playedGroup);
   const qualifyingThirdGroups = getQualifyingThirdGroups(groupStandings);
 

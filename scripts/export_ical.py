@@ -14,10 +14,11 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-FIXTURES_CSV = ROOT / "worldcup_2026_fixtures.csv"
-INTERESTED_TEAMS_FILE = ROOT / "interested_teams.txt"
-OUTPUT_ICS = ROOT / "worldcup_2026.ics"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DATA_DIR = REPO_ROOT / "data"
+FIXTURES_CSV = DATA_DIR / "worldcup_2026_fixtures.csv"
+INTERESTED_TEAMS_FILE = DATA_DIR / "interested_teams.txt"
+OUTPUT_ICS = DATA_DIR / "worldcup_2026.ics"
 MATCH_DURATION = timedelta(hours=2)
 PRODID = "-//WC Simulation//World Cup 2026 Schedule//EN"
 

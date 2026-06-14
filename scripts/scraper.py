@@ -6,11 +6,14 @@ files rather than HTML tables. This script fetches those files directly.
 """
 
 from io import StringIO
+from pathlib import Path
 from urllib.request import urlopen
 
 import pandas as pd
 
 BASE_URL = "https://www.eloratings.net"
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+DEFAULT_OUTPUT = DATA_DIR / "elo_ratings.csv"
 
 RATING_COLUMNS = [
     "local_rank",
@@ -65,7 +68,7 @@ def _load_team_names() -> dict[str, str]:
     return teams
 
 
-def scrape_elo_ratings(output_csv="elo_ratings.csv", page="World"):
+def scrape_elo_ratings(output_csv=DEFAULT_OUTPUT, page="World"):
     print(f"Fetching {page} ratings from eloratings.net...")
     ratings_text = _fetch_text(f"{page}.tsv")
     team_names = _load_team_names()
@@ -91,6 +94,6 @@ def scrape_elo_ratings(output_csv="elo_ratings.csv", page="World"):
 
 
 if __name__ == "__main__":
-    df = scrape_elo_ratings("elo_ratings.csv")
+    df = scrape_elo_ratings(DEFAULT_OUTPUT)
     print(f"\nShape: {df.shape}")
     print(df[["rank", "team", "rating"]].head(10))

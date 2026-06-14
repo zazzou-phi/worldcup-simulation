@@ -8,8 +8,8 @@ Browser app and simulation engine for the FIFA World Cup 2026 group stage and kn
 |------|-------------|
 | [`engine/`](engine/) | TypeScript simulation engine, SQLite persistence, REST API, and CLI tools |
 | [`web/`](web/) | React + Vite frontend (private dev server or static public build) |
-| [`data/`](data/) | SQLite database (`simulations.db`, gitignored) and bracket reference data |
-| `teams.csv`, `worldcup_2026_fixtures.csv` | Seed data for teams and fixtures |
+| [`data/`](data/) | SQLite database (`simulations.db`, gitignored), bracket reference data, and seed CSVs |
+| [`scripts/`](scripts/) | Optional Python helpers (ratings scraper, iCal export, etc.) |
 
 See [`engine/README.md`](engine/README.md) for the HTTP API and CLI reference, and [`web/README.md`](web/README.md) for frontend-specific notes.
 
@@ -112,4 +112,4 @@ Public export behavior (kickoff redaction, standings recomputation) is covered i
 
 ## Other utilities
 
-Root-level Python scripts (`scraper.py`, `export_ical.py`) are optional helpers for fetching ratings and generating calendar exports. They are not required to run the web app.
+Optional Python scripts in [`scripts/`](scripts/) (`scraper.py`, `export_ical.py`, `recreate_team_ratings.py`) fetch ratings and generate calendar exports. They are not required to run the web app.

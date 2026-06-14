@@ -20,6 +20,7 @@ from typing import Literal
 
 ELO_BASE = 1500
 ELO_SCALE = 400
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 RatingMethod = Literal["elo", "goals"]
 
@@ -152,14 +153,14 @@ def main() -> int:
     parser.add_argument(
         "--teams",
         type=Path,
-        default=Path("teams.csv"),
-        help="Team list CSV (default: teams.csv)",
+        default=DATA_DIR / "teams.csv",
+        help="Team list CSV (default: data/teams.csv)",
     )
     parser.add_argument(
         "--elo",
         type=Path,
-        default=Path("elo_ratings.csv"),
-        help="Elo/goals source CSV (default: elo_ratings.csv)",
+        default=DATA_DIR / "elo_ratings.csv",
+        help="Elo/goals source CSV (default: data/elo_ratings.csv)",
     )
     parser.add_argument(
         "--write",
