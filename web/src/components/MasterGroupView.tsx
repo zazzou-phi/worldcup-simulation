@@ -154,6 +154,12 @@ export function MasterGroupView({
           match={modalMatch}
           distribution={masterState.distributions[String(modalMatch.fixture.matchNumber)]}
           defaultConsensusMode={masterState.consensusMode}
+          consensusMode={masterState.consensusMode}
+          drawnScoreline={
+            masterState.drawResults?.[String(modalMatch.fixture.matchNumber)] ??
+            masterState.drawResults?.[modalMatch.fixture.matchNumber as unknown as string] ??
+            null
+          }
           canEditFrozenConsensus={canEditFrozenConsensus}
           savingFrozenConsensus={savingFrozenConsensus}
           onFrozenConsensusModeChange={onFrozenConsensusModeChange}

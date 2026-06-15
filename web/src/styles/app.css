@@ -217,9 +217,14 @@ button {
   width: 100%;
 }
 
-.consensus-mode-control .consensus-mode-save {
+.header-draw-save-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.header-consensus-save {
   width: 100%;
-  margin-top: 0.15rem;
 }
 
 .consensus-mode-save-dirty {
@@ -1622,9 +1627,14 @@ button {
   white-space: nowrap;
 }
 
+.master-bar-stacked-track-wrap {
+  width: 100%;
+}
+
 .master-bar-stacked-track {
   display: flex;
   height: 2rem;
+  min-width: 3px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -1657,6 +1667,15 @@ button {
 .master-bar-segment:hover {
   filter: brightness(1.15);
   z-index: 1;
+}
+
+.master-bar-segment-drawn {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, white 75%, transparent);
+  filter: brightness(1.12);
+}
+
+.master-bar-segment-drawn:hover {
+  filter: brightness(1.22);
 }
 
 .master-bar-tooltip {

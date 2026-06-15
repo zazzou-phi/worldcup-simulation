@@ -6,20 +6,14 @@ import {
 
 interface Props {
   value: ConsensusMode;
-  dirty: boolean;
   saving?: boolean;
-  canSave: boolean;
   onChange: (value: ConsensusMode) => void;
-  onSave: () => void;
 }
 
 export function ConsensusModeControl({
   value,
-  dirty,
   saving = false,
-  canSave,
   onChange,
-  onSave,
 }: Props) {
   return (
     <div className="header-settings-segment consensus-mode-control" title={CONSENSUS_MODE_HINT}>
@@ -38,16 +32,6 @@ export function ConsensusModeControl({
           </button>
         ))}
       </div>
-      {canSave && (
-        <button
-          type="button"
-          className={`btn btn-ghost consensus-mode-save ${dirty ? 'consensus-mode-save-dirty' : ''}`}
-          disabled={!dirty || saving}
-          onClick={onSave}
-        >
-          {saving ? 'Saving…' : dirty ? 'Save mode' : 'Saved'}
-        </button>
-      )}
     </div>
   );
 }

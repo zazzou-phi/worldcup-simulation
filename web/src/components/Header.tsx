@@ -159,31 +159,44 @@ export function Header({
       {isPredictionsView && !publicMode && consensusMode != null && (
         <ConsensusModeControl
           value={consensusMode}
-          dirty={consensusModeDirty}
           saving={savingConsensusMode}
-          canSave={!publicMode}
           onChange={onConsensusModeChange}
-          onSave={onSaveConsensusMode}
         />
       )}
-      {isPredictionsView && !publicMode && onDraw != null && (
-        <button
-          type="button"
-          className={`btn btn-ghost ${drawActive ? 'active' : ''}`}
-          disabled={drawing || (!hasSavedDraw && !canDraw)}
-          title={
-            drawActive
-              ? hasSavedDraw
-                ? 'Sample new pool scores for unlocked fixtures'
-                : 'Sample pool scores for unlocked fixtures'
-              : hasSavedDraw
-                ? 'Use saved pool draw scores in standings'
-                : 'Switch to draw view and sample pool scores'
-          }
-          onClick={onDraw}
-        >
-          {drawing ? 'Drawing…' : drawActive && hasSavedDraw ? 'Redraw' : 'Draw'}
-        </button>
+      {isPredictionsView && !publicMode && (onDraw != null || consensusMode != null) && (
+        <div className="header-draw-save-stack">
+          {onDraw != null && (
+            <button
+              type="button"
+              className={`btn btn-ghost ${drawActive ? 'active' : ''}`}
+              disabled={drawing || (!hasSavedDraw && !canDraw)}
+              title={
+                drawActive
+                  ? hasSavedDraw
+                    ? 'Sample new pool scores for unlocked fixtures'
+                    : 'Sample pool scores for unlocked fixtures'
+                  : hasSavedDraw
+                    ? 'Use saved pool draw scores in standings'
+                    : 'Switch to draw view and sample pool scores'
+              }
+              onClick={onDraw}
+            >
+              {drawing ? 'Drawing…' : drawActive && hasSavedDraw ? 'Redraw' : 'Draw'}
+            </button>
+          )}
+          {consensusMode != null && (
+            <button
+              type="button"
+              className={`btn btn-ghost header-consensus-save ${
+                consensusModeDirty ? 'consensus-mode-save-dirty' : ''
+              }`}
+              disabled={!consensusModeDirty || savingConsensusMode}
+              onClick={onSaveConsensusMode}
+            >
+              {savingConsensusMode ? 'Saving…' : 'Save'}
+            </button>
+          )}
+        </div>
       )}
       {isPredictionsView && (
         <>
