@@ -15,8 +15,8 @@
       "eloDefensiveRating": 0.34925755230844235,
       "goalOffensiveRating": 1.232650558276307,
       "goalDefensiveRating": 0.7482859538114454,
-      "blendOffensiveRating": 2.0437453483191628,
-      "blendDefensiveRating": 0.5655883846394144
+      "blendOffensiveRating": 2.1904049667590546,
+      "blendDefensiveRating": 0.4908079526827659
     },
     {
       "id": 1,
@@ -33,8 +33,8 @@
       "eloDefensiveRating": 0.39774441365933794,
       "goalOffensiveRating": 1.1508713200674314,
       "goalDefensiveRating": 0.8577805666604725,
-      "blendOffensiveRating": 1.8141796398246626,
-      "blendDefensiveRating": 0.6471502291507069
+      "blendOffensiveRating": 1.9341169717836821,
+      "blendDefensiveRating": 0.5609365608816806
     },
     {
       "id": 2,
@@ -51,8 +51,8 @@
       "eloDefensiveRating": 0.43087137955712,
       "goalOffensiveRating": 1.0991085549761628,
       "goalDefensiveRating": 1.1355694247560573,
-      "blendOffensiveRating": 1.6851950514813874,
-      "blendDefensiveRating": 0.8129191588271568
+      "blendOffensiveRating": 1.7911693753279103,
+      "blendDefensiveRating": 0.680854313266068
     },
     {
       "id": 3,
@@ -69,8 +69,8 @@
       "eloDefensiveRating": 0.5018541914714629,
       "goalOffensiveRating": 1.4164968665356628,
       "goalDefensiveRating": 0.8070737683195627,
-      "blendOffensiveRating": 1.581997961951808,
-      "blendDefensiveRating": 0.6673271373934829
+      "blendOffensiveRating": 1.611923351441529,
+      "blendDefensiveRating": 0.6101270691468256
     },
     {
       "id": 4,
@@ -87,8 +87,8 @@
       "eloDefensiveRating": 0.5491159504777455,
       "goalOffensiveRating": 1.3016919095587338,
       "goalDefensiveRating": 0.7501155777613956,
-      "blendOffensiveRating": 1.447869952739398,
-      "blendDefensiveRating": 0.6580866816455118
+      "blendOffensiveRating": 1.4743014084710186,
+      "blendDefensiveRating": 0.6204180873931209
     },
     {
       "id": 5,
@@ -105,8 +105,8 @@
       "eloDefensiveRating": 0.5491159504777455,
       "goalOffensiveRating": 1.0640845444807925,
       "goalDefensiveRating": 0.9399557412684879,
-      "blendOffensiveRating": 1.3799522384567968,
-      "blendDefensiveRating": 0.7610073770813427
+      "blendOffensiveRating": 1.4370664451373272,
+      "blendDefensiveRating": 0.6877615422708654
     },
     {
       "id": 6,
@@ -123,8 +123,8 @@
       "eloDefensiveRating": 0.5616111026911087,
       "goalOffensiveRating": 0.7852383203489802,
       "goalDefensiveRating": 0.9575746045307473,
-      "blendOffensiveRating": 1.2763117143683138,
-      "blendDefensiveRating": 0.7762803182231534
+      "blendOffensiveRating": 1.3651060667387103,
+      "blendDefensiveRating": 0.7020742677387682
     },
     {
       "id": 7,
@@ -141,8 +141,8 @@
       "eloDefensiveRating": 0.5816155266276013,
       "goalOffensiveRating": 1.2689974250845264,
       "goalDefensiveRating": 1.0613795865538898,
-      "blendOffensiveRating": 1.3784112116165643,
-      "blendDefensiveRating": 0.8417167074342994
+      "blendOffensiveRating": 1.3981950696586118,
+      "blendDefensiveRating": 0.7518059053374386
     },
     {
       "id": 8,
@@ -159,8 +159,8 @@
       "eloDefensiveRating": 0.6206762579626095,
       "goalOffensiveRating": 0.7273992385837171,
       "goalDefensiveRating": 1.2637786836298812,
-      "blendOffensiveRating": 1.159681356359638,
-      "blendDefensiveRating": 0.9693303449765659
+      "blendOffensiveRating": 1.2378452543771004,
+      "blendDefensiveRating": 0.8488089058944783
     },
     {
       "id": 9,
@@ -177,8 +177,8 @@
       "eloDefensiveRating": 0.6284834041958145,
       "goalOffensiveRating": 1.0537577899019461,
       "goalDefensiveRating": 0.8437051852993226,
-      "blendOffensiveRating": 1.241144748070175,
-      "blendDefensiveRating": 0.7451645899623016
+      "blendOffensiveRating": 1.275027470685262,
+      "blendDefensiveRating": 0.7048306746400397
     },
     {
       "id": 10,
@@ -195,8 +195,8 @@
       "eloDefensiveRating": 0.6395786641348735,
       "goalOffensiveRating": 1.3601456808130554,
       "goalDefensiveRating": 0.9872424816879538,
-      "blendOffensiveRating": 1.312416863341519,
-      "blendDefensiveRating": 0.8280624982161803
+      "blendOffensiveRating": 1.3037866881204536,
+      "blendDefensiveRating": 0.7629081123268814
     },
     {
       "id": 11,
@@ -213,8 +213,8 @@
       "eloDefensiveRating": 0.6574111502790929,
       "goalOffensiveRating": 0.9364858401309484,
       "goalDefensiveRating": 1.3638356135338718,
-      "blendOffensiveRating": 1.166264060208765,
-      "blendDefensiveRating": 1.0403948966471226
+      "blendOffensiveRating": 1.207811837972976,
+      "blendDefensiveRating": 0.9080065094848161
     },
     {
       "id": 12,
@@ -231,8 +231,8 @@
       "eloDefensiveRating": 0.6673466474723551,
       "goalOffensiveRating": 1.097311407033492,
       "goalDefensiveRating": 0.9866414818005627,
-      "blendOffensiveRating": 1.1988563610320826,
-      "blendDefensiveRating": 0.8404504090317467
+      "blendOffensiveRating": 1.2172174014317414,
+      "blendDefensiveRating": 0.7806125490131279
     },
     {
       "id": 13,
@@ -249,8 +249,8 @@
       "eloDefensiveRating": 0.6740535927825116,
       "goalOffensiveRating": 0.8554374535540226,
       "goalDefensiveRating": 1.2129058116029334,
-      "blendOffensiveRating": 1.1209111900156155,
-      "blendDefensiveRating": 0.9661890612397253
+      "blendOffensiveRating": 1.1689133192035153,
+      "blendDefensiveRating": 0.8652047665569159
     },
     {
       "id": 14,
@@ -267,8 +267,8 @@
       "eloDefensiveRating": 0.6876703786065674,
       "goalOffensiveRating": 0.9031023391025836,
       "goalDefensiveRating": 1.385997857866384,
-      "blendOffensiveRating": 1.1171819846305977,
-      "blendDefensiveRating": 1.0662643941173375
+      "blendOffensiveRating": 1.1558911953348445,
+      "blendDefensiveRating": 0.935393432678134
     },
     {
       "id": 15,
@@ -285,8 +285,8 @@
       "eloDefensiveRating": 0.6911173407237252,
       "goalOffensiveRating": 0.9548080937877292,
       "goalDefensiveRating": 1.0305113280131601,
-      "blendOffensiveRating": 1.127677087531235,
-      "blendDefensiveRating": 0.8751177363895418
+      "blendOffensiveRating": 1.1589347173098346,
+      "blendDefensiveRating": 0.8115131687011381
     },
     {
       "id": 16,
@@ -303,8 +303,8 @@
       "eloDefensiveRating": 0.7157347391466743,
       "goalOffensiveRating": 0.8300766831944312,
       "goalDefensiveRating": 0.7957614133989183,
-      "blendOffensiveRating": 1.062624917886956,
-      "blendDefensiveRating": 0.7591207161459516
+      "blendOffensiveRating": 1.1046735610141962,
+      "blendDefensiveRating": 0.7441232140982387
     },
     {
       "id": 18,
@@ -321,8 +321,8 @@
       "eloDefensiveRating": 0.7338536503316929,
       "goalOffensiveRating": 1.0712081272701144,
       "goalDefensiveRating": 0.8585517989654933,
-      "blendOffensiveRating": 1.1111718501629673,
-      "blendDefensiveRating": 0.8014579967453114
+      "blendOffensiveRating": 1.1183979653135696,
+      "blendDefensiveRating": 0.7780887794567524
     },
     {
       "id": 19,
@@ -339,8 +339,8 @@
       "eloDefensiveRating": 0.7356905796624518,
       "goalOffensiveRating": 1.1030844370685102,
       "goalDefensiveRating": 1.2991065374095248,
-      "blendOffensiveRating": 1.1182734473608535,
-      "blendDefensiveRating": 1.041143130480589
+      "blendOffensiveRating": 1.1210198766084591,
+      "blendDefensiveRating": 0.9355554366400095
     },
     {
       "id": 21,
@@ -357,8 +357,8 @@
       "eloDefensiveRating": 0.800958889887749,
       "goalOffensiveRating": 0.7684328171523438,
       "goalDefensiveRating": 1.184890091017002,
-      "blendOffensiveRating": 0.9571845914622328,
-      "blendDefensiveRating": 1.009104866427958
+      "blendOffensiveRating": 0.9913140958555211,
+      "blendDefensiveRating": 0.9371537447686031
     },
     {
       "id": 22,
@@ -375,8 +375,8 @@
       "eloDefensiveRating": 0.8130638333451571,
       "goalOffensiveRating": 1.0898654638342196,
       "goalDefensiveRating": 1.2788397526778466,
-      "blendOffensiveRating": 1.0380824574160292,
-      "blendDefensiveRating": 1.065581428407137
+      "blendOffensiveRating": 1.0287192164530816,
+      "blendDefensiveRating": 0.9782920918298221
     },
     {
       "id": 23,
@@ -393,8 +393,8 @@
       "eloDefensiveRating": 0.8232909173723315,
       "goalOffensiveRating": 0.9156057953973916,
       "goalDefensiveRating": 0.7062629262762258,
-      "blendOffensiveRating": 0.9792466417935004,
-      "blendDefensiveRating": 0.7598449004359872
+      "blendOffensiveRating": 0.9907539802257345,
+      "blendDefensiveRating": 0.7817766819638733
     },
     {
       "id": 24,
@@ -411,8 +411,8 @@
       "eloDefensiveRating": 0.9053391476333772,
       "goalOffensiveRating": 0.7752091871736964,
       "goalDefensiveRating": 1.0690490756495452,
-      "blendOffensiveRating": 0.8740880416779251,
-      "blendDefensiveRating": 0.9940934940788514
+      "blendOffensiveRating": 0.8919670063210062,
+      "blendDefensiveRating": 0.9634132239864758
     },
     {
       "id": 25,
@@ -429,8 +429,8 @@
       "eloDefensiveRating": 0.9259401708681849,
       "goalOffensiveRating": 1.224785966167954,
       "goalDefensiveRating": 0.941408995516822,
-      "blendOffensiveRating": 0.9880777496605284,
-      "blendDefensiveRating": 0.9343265005099272
+      "blendOffensiveRating": 0.9452769116564617,
+      "blendDefensiveRating": 0.9314275454863506
     },
     {
       "id": 26,
@@ -447,8 +447,8 @@
       "eloDefensiveRating": 0.9375870644369771,
       "goalOffensiveRating": 1.0436294057209938,
       "goalDefensiveRating": 1.0380588223969578,
-      "blendOffensiveRating": 0.928370764857587,
-      "blendDefensiveRating": 0.9920572198027856
+      "blendOffensiveRating": 0.9075300585696884,
+      "blendDefensiveRating": 0.9732281804878116
     },
     {
       "id": 31,
@@ -465,8 +465,8 @@
       "eloDefensiveRating": 0.9517568783246754,
       "goalOffensiveRating": 1.1499175062030316,
       "goalDefensiveRating": 0.657147111549577,
-      "blendOffensiveRating": 0.9493718009461249,
-      "blendDefensiveRating": 0.7920359767065716
+      "blendOffensiveRating": 0.9131097549142633,
+      "blendDefensiveRating": 0.8472476998197781
     },
     {
       "id": 32,
@@ -483,8 +483,8 @@
       "eloDefensiveRating": 0.9709836426465159,
       "goalOffensiveRating": 1.0993844039413863,
       "goalDefensiveRating": 0.7680751875168447,
-      "blendOffensiveRating": 0.9226371408744325,
-      "blendDefensiveRating": 0.8609780520172412
+      "blendOffensiveRating": 0.8906782545889894,
+      "blendDefensiveRating": 0.8990043726127155
     },
     {
       "id": 34,
@@ -501,8 +501,8 @@
       "eloDefensiveRating": 1.0030590125422463,
       "goalOffensiveRating": 0.9240419785888707,
       "goalDefensiveRating": 0.8556502951039503,
-      "blendOffensiveRating": 0.8530624541745546,
-      "blendDefensiveRating": 0.9231422687311482
+      "blendOffensiveRating": 0.8402281589781831,
+      "blendDefensiveRating": 0.9507675894418803
     },
     {
       "id": 35,
@@ -519,8 +519,8 @@
       "eloDefensiveRating": 1.0182183082121763,
       "goalOffensiveRating": 0.7525835707573187,
       "goalDefensiveRating": 1.2837194887430836,
-      "blendOffensiveRating": 0.7952846769010127,
-      "blendDefensiveRating": 1.1621581660086764
+      "blendOffensiveRating": 0.8030057571136774,
+      "blendDefensiveRating": 1.1124015750233802
     },
     {
       "id": 36,
@@ -537,8 +537,8 @@
       "eloDefensiveRating": 1.0284515723378675,
       "goalOffensiveRating": 1.1128182450766557,
       "goalDefensiveRating": 1.0412884572163734,
-      "blendOffensiveRating": 0.8924814449400322,
-      "blendDefensiveRating": 1.0354110117658486
+      "blendOffensiveRating": 0.8526408351457113,
+      "blendDefensiveRating": 1.033005298807631
     },
     {
       "id": 38,
@@ -555,8 +555,8 @@
       "eloDefensiveRating": 1.0439946274047476,
       "goalOffensiveRating": 1.0513450169433456,
       "goalDefensiveRating": 0.9131026964926989,
-      "blendOffensiveRating": 0.866358327887831,
-      "blendDefensiveRating": 0.973032359423434
+      "blendOffensiveRating": 0.8329096144126679,
+      "blendDefensiveRating": 0.9975623304640265
     },
     {
       "id": 40,
@@ -573,8 +573,8 @@
       "eloDefensiveRating": 1.0597725856671791,
       "goalOffensiveRating": 0.9127009310535226,
       "goalDefensiveRating": 1.0891186403772897,
-      "blendOffensiveRating": 0.8183040015016863,
-      "blendDefensiveRating": 1.075682371580052
+      "blendOffensiveRating": 0.8012354444847705,
+      "blendDefensiveRating": 1.0701827363681733
     },
     {
       "id": 41,
@@ -591,8 +591,8 @@
       "eloDefensiveRating": 1.0650847178590572,
       "goalOffensiveRating": 1.2032275193558504,
       "goalDefensiveRating": 1.1100328152699896,
-      "blendOffensiveRating": 0.8985680208937928,
-      "blendDefensiveRating": 1.08945305677422
+      "blendOffensiveRating": 0.8434804450061784,
+      "blendDefensiveRating": 1.0810295006379687
     },
     {
       "id": 45,
@@ -609,8 +609,8 @@
       "eloDefensiveRating": 1.1196927790770395,
       "goalOffensiveRating": 1.056186515622931,
       "goalDefensiveRating": 0.8724424383412202,
-      "blendOffensiveRating": 0.8294878226245165,
-      "blendDefensiveRating": 0.9856475035928245
+      "blendOffensiveRating": 0.7884968752973693,
+      "blendDefensiveRating": 1.0319837724198289
     },
     {
       "id": 50,
@@ -627,8 +627,8 @@
       "eloDefensiveRating": 1.1595759098128045,
       "goalOffensiveRating": 0.7546181113226071,
       "goalDefensiveRating": 1.0255552795407668,
-      "blendOffensiveRating": 0.7251413305934613,
-      "blendDefensiveRating": 1.086917436413254
+      "blendOffensiveRating": 0.7198114314649703,
+      "blendDefensiveRating": 1.1120337453904976
     },
     {
       "id": 51,
@@ -645,8 +645,8 @@
       "eloDefensiveRating": 1.1859620992568631,
       "goalOffensiveRating": 0.986817286965279,
       "goalDefensiveRating": 0.8410234936706126,
-      "blendOffensiveRating": 0.7801787307902806,
-      "blendDefensiveRating": 0.9989557223461294
+      "blendOffensiveRating": 0.742814994546833,
+      "blendDefensiveRating": 1.0635993863738127
     },
     {
       "id": 53,
@@ -663,8 +663,8 @@
       "eloDefensiveRating": 1.2498884949348488,
       "goalOffensiveRating": 0.9224939974345626,
       "goalDefensiveRating": 0.9812962085790669,
-      "blendOffensiveRating": 0.7363165458148493,
-      "blendDefensiveRating": 1.1042728128276003
+      "blendOffensiveRating": 0.7026525223839799,
+      "blendDefensiveRating": 1.1546086964846383
     },
     {
       "id": 57,
@@ -681,8 +681,8 @@
       "eloDefensiveRating": 1.31069082203863,
       "goalOffensiveRating": 0.8616382605205484,
       "goalDefensiveRating": 0.9065456451951424,
-      "blendOffensiveRating": 0.6969964180192801,
-      "blendDefensiveRating": 1.091585960931541
+      "blendOffensiveRating": 0.6672263959492319,
+      "blendDefensiveRating": 1.167325308766721
     },
     {
       "id": 62,
@@ -699,8 +699,8 @@
       "eloDefensiveRating": 1.4057266297312447,
       "goalOffensiveRating": 0.956569291783544,
       "goalDefensiveRating": 0.7789960207069011,
-      "blendOffensiveRating": 0.6936610268763794,
-      "blendDefensiveRating": 1.0659484240024164
+      "blendOffensiveRating": 0.646122778216267,
+      "blendDefensiveRating": 1.183401681682223
     },
     {
       "id": 66,
@@ -717,8 +717,8 @@
       "eloDefensiveRating": 1.4667577363336373,
       "goalOffensiveRating": 0.8482012708404848,
       "goalDefensiveRating": 1.1514156175936516,
-      "blendOffensiveRating": 0.6451993109801551,
-      "blendDefensiveRating": 1.2957969156023852
+      "blendOffensiveRating": 0.6084931326873648,
+      "blendDefensiveRating": 1.3548940118608908
     },
     {
       "id": 67,
@@ -735,8 +735,8 @@
       "eloDefensiveRating": 1.4889249407784533,
       "goalOffensiveRating": 1.0558330286024942,
       "goalDefensiveRating": 1.230338493846188,
-      "blendOffensiveRating": 0.6985526375575903,
-      "blendDefensiveRating": 1.348733863943677
+      "blendOffensiveRating": 0.6339503167561799,
+      "blendDefensiveRating": 1.397194590365388
     },
     {
       "id": 70,
@@ -753,8 +753,8 @@
       "eloDefensiveRating": 1.5613554829020593,
       "goalOffensiveRating": 0.9267149037002217,
       "goalDefensiveRating": 0.8954898322128965,
-      "blendOffensiveRating": 0.6432403052731481,
-      "blendDefensiveRating": 1.2003604512411203
+      "blendOffensiveRating": 0.5919833166288001,
+      "blendDefensiveRating": 1.325147861851679
     },
     {
       "id": 71,
@@ -771,8 +771,8 @@
       "eloDefensiveRating": 1.6291433805670867,
       "goalOffensiveRating": 0.6428385897431611,
       "goalDefensiveRating": 0.9274713268845639,
-      "blendOffensiveRating": 0.5463541848025792,
-      "blendDefensiveRating": 1.2487361242796422
+      "blendOffensiveRating": 0.5289081770267947,
+      "blendDefensiveRating": 1.3802338799999012
     },
     {
       "id": 75,
@@ -789,8 +789,8 @@
       "eloDefensiveRating": 1.6998743614185918,
       "goalOffensiveRating": 1.030892728517398,
       "goalDefensiveRating": 1.13294370929001,
-      "blendOffensiveRating": 0.6421877898907218,
-      "blendDefensiveRating": 1.3925163403179475
+      "blendOffensiveRating": 0.5719033808616879,
+      "blendDefensiveRating": 1.4987627099897576
     },
     {
       "id": 78,
@@ -807,8 +807,8 @@
       "eloDefensiveRating": 1.7648299555565885,
       "goalOffensiveRating": 0.8276257353476623,
       "goalDefensiveRating": 0.8645087650019174,
-      "blendOffensiveRating": 0.5712953544200011,
-      "blendDefensiveRating": 1.2767262722491302
+      "blendOffensiveRating": 0.5249464981298296,
+      "blendDefensiveRating": 1.4454521255362807
     },
     {
       "id": 81,
@@ -825,8 +825,8 @@
       "eloDefensiveRating": 1.8276926846543662,
       "goalOffensiveRating": 0.9686151472316427,
       "goalDefensiveRating": 0.8847521735564211,
-      "blendOffensiveRating": 0.6000829963341902,
-      "blendDefensiveRating": 1.3164831947131472
+      "blendOffensiveRating": 0.533446167572662,
+      "blendDefensiveRating": 1.4931961767057238
     },
     {
       "id": 90,
@@ -843,8 +843,8 @@
       "eloDefensiveRating": 2.1772319957245974,
       "goalOffensiveRating": 1.065728368365716,
       "goalDefensiveRating": 1.293847974005765,
-      "blendOffensiveRating": 0.5759521207580841,
-      "blendDefensiveRating": 1.698310695971257
+      "blendOffensiveRating": 0.48739231433735447,
+      "blendDefensiveRating": 1.8638624172996399
     },
     {
       "id": 96,
@@ -861,8 +861,8 @@
       "eloDefensiveRating": 2.232348886106008,
       "goalOffensiveRating": 0.8597223668660309,
       "goalDefensiveRating": 0.9909552489006056,
-      "blendOffensiveRating": 0.5103683249190127,
-      "blendDefensiveRating": 1.559334840550668
+      "blendOffensiveRating": 0.44719922172494975,
+      "blendDefensiveRating": 1.7919798153664663
     }
   ],
   "fixtures": [
@@ -2374,11 +2374,25 @@
       "recordedAt": "2026-06-14T19:54:30.786Z"
     },
     {
+      "matchNumber": 26,
+      "goalsHome": 1,
+      "goalsAway": 0,
+      "winnerTeamId": 51,
+      "recordedAt": "2026-06-15T07:29:15.494Z"
+    },
+    {
       "matchNumber": 31,
       "goalsHome": 2,
       "goalsAway": 2,
       "winnerTeamId": null,
       "recordedAt": "2026-06-14T21:57:18.349Z"
+    },
+    {
+      "matchNumber": 32,
+      "goalsHome": 5,
+      "goalsAway": 1,
+      "winnerTeamId": 41,
+      "recordedAt": "2026-06-15T07:29:24.465Z"
     }
   ]
 }
