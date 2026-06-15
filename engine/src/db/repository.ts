@@ -73,6 +73,13 @@ import {
   setFrozenMatchConsensusMode,
 } from './predictionFrozenMatches.js';
 import {
+  deletePredictionDrawResults,
+  performPredictionDraw as runPredictionDraw,
+  readPredictionDrawResults,
+  readPredictionDrawSummary,
+  PredictionDrawError,
+} from './predictionDraw.js';
+import {
   formatSelectionSpec,
   parseSelectionInput,
   parseSelectionSpecJson,
@@ -536,6 +543,7 @@ export class Repository {
   deletePrediction(id: number): boolean {
     const existing = this.getPrediction(id);
     if (!existing) return false;
+    deletePredictionDrawResults(this.db, id);
     this.db
       .delete(schema.predictionFrozenMatches)
       .where(eq(schema.predictionFrozenMatches.predictionId, id))
@@ -543,6 +551,21 @@ export class Repository {
     deletePredictionAggregates(this.db, id);
     this.db.delete(schema.predictions).where(eq(schema.predictions.id, id)).run();
     return true;
+  }
+
+  performPredictionDraw(predictionId: number): MasterGroupState {
+    if (!this.getPrediction(predictionId)) {
+      throw new PredictionDrawError(`Prediction not found: ${predictionId}`);
+    }
+    try {
+      runPredictionDraw(this.db, predictionId);
+    } catch (err) {
+      if (err instanceof PredictionDrawError) throw err;
+      throw new PredictionDrawError(
+        err instanceof Error ? err.message : 'Failed to perform prediction draw',
+      );
+    }
+    return this.buildMasterGroupView(predictionId);
   }
 
   touchPrediction(id: number): Prediction | null {
@@ -1191,6 +1214,8 @@ export class Repository {
       predictionId,
     );
     const frozen = readEffectiveFrozenMatchDistributions(this.db, predictionId);
+    const drawResults = readPredictionDrawResults(this.db, predictionId);
+    const drawSummary = readPredictionDrawSummary(this.db, predictionId);
 
     const consensusMatches: SimulationMatch[] = [];
     const distributions: Record<number, OutcomeDistribution> = {};
@@ -1228,24 +1253,33 @@ export class Repository {
       let winnerTeamId: number | null = null;
       let status: MatchStatus = 'scheduled';
 
-      if (dist.total > 0 && homeTeam && awayTeam) {
-        const scoreline = chooseConsensus({
-          mode: frozenConsensusMode ?? consensusMode,
-          outcomeCounts: dist,
-          scorelines: matchScorelines,
-          homeOffensive: homeTeam.eloOffensiveRating,
-          awayOffensive: awayTeam.eloOffensiveRating,
-        });
-        if (scoreline) {
-          goalsHome = scoreline.goalsHome;
-          goalsAway = scoreline.goalsAway;
-          winnerTeamId = winnerFromGoals(
-            goalsHome,
-            goalsAway,
-            fixture.teamHomeId!,
-            fixture.teamAwayId!,
-          );
-          status = 'played';
+      if (homeTeam && awayTeam) {
+        const mode = frozenConsensusMode ?? consensusMode;
+        const savedDraw = drawResults.get(fixture.matchNumber);
+        const canPickScore =
+          mode === 'draw' ? savedDraw != null : dist.total > 0;
+        if (canPickScore) {
+          const scoreline = chooseConsensus({
+            mode,
+            outcomeCounts: dist,
+            scorelines: matchScorelines,
+            homeOffensive: homeTeam.eloOffensiveRating,
+            awayOffensive: awayTeam.eloOffensiveRating,
+            savedDraw: savedDraw
+              ? { goalsHome: savedDraw.goalsHome, goalsAway: savedDraw.goalsAway }
+              : null,
+          });
+          if (scoreline) {
+            goalsHome = scoreline.goalsHome;
+            goalsAway = scoreline.goalsAway;
+            winnerTeamId = winnerFromGoals(
+              goalsHome,
+              goalsAway,
+              fixture.teamHomeId!,
+              fixture.teamAwayId!,
+            );
+            status = 'played';
+          }
         }
       }
 
@@ -1288,6 +1322,13 @@ export class Repository {
       groupStandings,
       qualifyingThirdGroups,
       distributions,
+      draw: drawSummary,
+      drawResults: Object.fromEntries(
+        [...drawResults.entries()].map(([matchNumber, row]) => [
+          matchNumber,
+          { goalsHome: row.goalsHome, goalsAway: row.goalsAway },
+        ]),
+      ),
     };
   }
 

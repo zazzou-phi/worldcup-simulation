@@ -1,7 +1,7 @@
 import type { ConsensusMode } from '../lib/consensusMode.js';
 import {
   CONSENSUS_MODE_HINT,
-  CONSENSUS_MODE_OPTIONS,
+  CONSENSUS_MODE_PICKER_OPTIONS,
 } from '../lib/consensusMode.js';
 
 interface Props {
@@ -25,7 +25,7 @@ export function ConsensusModeControl({
     <div className="header-settings-segment consensus-mode-control" title={CONSENSUS_MODE_HINT}>
       <span className="header-settings-segment-label">Consensus</span>
       <div className="header-settings-segment-buttons">
-        {CONSENSUS_MODE_OPTIONS.map((option) => (
+        {CONSENSUS_MODE_PICKER_OPTIONS.map((option) => (
           <button
             key={option.value}
             type="button"

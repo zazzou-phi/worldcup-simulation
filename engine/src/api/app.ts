@@ -1,4 +1,5 @@
 import { FrozenMatchError } from '../db/errors.js';
+import { PredictionDrawError } from '../db/predictionDraw.js';
 import { Hono } from 'hono';
 import type { Repository } from '../db/repository.js';
 import { clearActualMatchResult, setActualMatchResult } from './actual-results.js';
@@ -181,6 +182,22 @@ export function createApiApp(repo: Repository) {
     } catch (err) {
       if (err instanceof FrozenMatchError) {
         throw new ApiError(err.message, 409, 'frozen_match_error');
+      }
+      throw err;
+    }
+  });
+
+  app.post('/api/v1/predictions/:id/draw', (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    try {
+      const view = repo.performPredictionDraw(id);
+      return c.json(serializeMasterGroupState(view));
+    } catch (err) {
+      if (err instanceof PredictionDrawError) {
+        throw new ApiError(err.message, 409, 'no_draw_eligible_matches');
       }
       throw err;
     }

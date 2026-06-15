@@ -125,6 +125,14 @@ export function initSchema(sqlite: Database.Database) {
       champion_wins INTEGER NOT NULL,
       PRIMARY KEY (prediction_id, team_id)
     );
+    CREATE TABLE IF NOT EXISTS prediction_draw_results (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+      goals_home INTEGER NOT NULL,
+      goals_away INTEGER NOT NULL,
+      drawn_at TEXT NOT NULL,
+      PRIMARY KEY (prediction_id, match_number)
+    );
     CREATE TABLE IF NOT EXISTS prediction_frozen_matches (
       prediction_id INTEGER NOT NULL REFERENCES predictions(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
@@ -200,6 +208,21 @@ function migrateSchema(sqlite: Database.Database) {
   migrateLegacyMasterAggregates(sqlite);
   ensureDefaultPrediction(sqlite);
   migratePredictionFrozenMatches(sqlite);
+  migratePredictionDrawResults(sqlite);
+}
+
+function migratePredictionDrawResults(sqlite: Database.Database) {
+  if (tableExists(sqlite, 'prediction_draw_results')) return;
+  sqlite.exec(`
+    CREATE TABLE prediction_draw_results (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+      goals_home INTEGER NOT NULL,
+      goals_away INTEGER NOT NULL,
+      drawn_at TEXT NOT NULL,
+      PRIMARY KEY (prediction_id, match_number)
+    )
+  `);
 }
 
 function migrateSimulationTeamEloDelta(sqlite: Database.Database) {

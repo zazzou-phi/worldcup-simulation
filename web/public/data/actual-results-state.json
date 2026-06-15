@@ -83,6 +83,20 @@
       "goalsAway": 1,
       "winnerTeamId": 41,
       "recordedAt": "2026-06-15T07:29:24.465Z"
+    },
+    {
+      "matchNumber": 37,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-15T21:03:36.544Z"
+    },
+    {
+      "matchNumber": 43,
+      "goalsHome": 0,
+      "goalsAway": 0,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-15T20:50:40.565Z"
     }
   ],
   "phase": "group",
@@ -860,45 +874,15 @@
             "blendOffensiveRating": 1.1210198766084591,
             "blendDefensiveRating": 0.9355554366400095
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
           "goalDifference": 0,
-          "points": 0,
+          "points": 1,
           "position": 1
-        },
-        {
-          "teamId": 31,
-          "team": {
-            "id": 31,
-            "name": "Iran",
-            "countryCode": "IR",
-            "flag": "🇮🇷",
-            "rank": 32,
-            "rating": 1764,
-            "elo": 1764,
-            "total": 669,
-            "goalsFor": 1273,
-            "goalsAgainst": 525,
-            "eloOffensiveRating": 0.8691040542308646,
-            "eloDefensiveRating": 0.9517568783246754,
-            "goalOffensiveRating": 1.1499175062030316,
-            "goalDefensiveRating": 0.657147111549577,
-            "blendOffensiveRating": 0.9131097549142633,
-            "blendDefensiveRating": 0.8472476998197781
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 2
         },
         {
           "teamId": 45,
@@ -919,6 +903,36 @@
             "goalDefensiveRating": 0.8724424383412202,
             "blendOffensiveRating": 0.7884968752973693,
             "blendDefensiveRating": 1.0319837724198289
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "points": 1,
+          "position": 2
+        },
+        {
+          "teamId": 31,
+          "team": {
+            "id": 31,
+            "name": "Iran",
+            "countryCode": "IR",
+            "flag": "🇮🇷",
+            "rank": 32,
+            "rating": 1764,
+            "elo": 1764,
+            "total": 669,
+            "goalsFor": 1273,
+            "goalsAgainst": 525,
+            "eloOffensiveRating": 0.8691040542308646,
+            "eloDefensiveRating": 0.9517568783246754,
+            "goalOffensiveRating": 1.1499175062030316,
+            "goalDefensiveRating": 0.657147111549577,
+            "blendOffensiveRating": 0.9131097549142633,
+            "blendDefensiveRating": 0.8472476998197781
           },
           "played": 0,
           "won": 0,
@@ -985,15 +999,45 @@
             "blendOffensiveRating": 2.1904049667590546,
             "blendDefensiveRating": 0.4908079526827659
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
           "goalsFor": 0,
           "goalsAgainst": 0,
           "goalDifference": 0,
-          "points": 0,
+          "points": 1,
           "position": 1
+        },
+        {
+          "teamId": 71,
+          "team": {
+            "id": 71,
+            "name": "Cape Verde",
+            "countryCode": "CV",
+            "flag": "🇨🇻",
+            "rank": 72,
+            "rating": 1549,
+            "elo": 1549,
+            "total": 251,
+            "goalsFor": 267,
+            "goalsAgainst": 278,
+            "eloOffensiveRating": 0.5077366249409898,
+            "eloDefensiveRating": 1.6291433805670867,
+            "goalOffensiveRating": 0.6428385897431611,
+            "goalDefensiveRating": 0.9274713268845639,
+            "blendOffensiveRating": 0.5289081770267947,
+            "blendDefensiveRating": 1.3802338799999012
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "goalDifference": 0,
+          "points": 1,
+          "position": 2
         },
         {
           "teamId": 15,
@@ -1023,7 +1067,7 @@
           "goalsAgainst": 0,
           "goalDifference": 0,
           "points": 0,
-          "position": 2
+          "position": 3
         },
         {
           "teamId": 70,
@@ -1044,36 +1088,6 @@
             "goalDefensiveRating": 0.8954898322128965,
             "blendOffensiveRating": 0.5919833166288001,
             "blendDefensiveRating": 1.325147861851679
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 3
-        },
-        {
-          "teamId": 71,
-          "team": {
-            "id": 71,
-            "name": "Cape Verde",
-            "countryCode": "CV",
-            "flag": "🇨🇻",
-            "rank": 72,
-            "rating": 1549,
-            "elo": 1549,
-            "total": 251,
-            "goalsFor": 267,
-            "goalsAgainst": 278,
-            "eloOffensiveRating": 0.5077366249409898,
-            "eloDefensiveRating": 1.6291433805670867,
-            "goalOffensiveRating": 0.6428385897431611,
-            "goalDefensiveRating": 0.9274713268845639,
-            "blendOffensiveRating": 0.5289081770267947,
-            "blendDefensiveRating": 1.3802338799999012
           },
           "played": 0,
           "won": 0,
@@ -1593,9 +1607,9 @@
     "C",
     "F",
     "G",
+    "H",
     "I",
     "J",
-    "K",
     "L"
   ],
   "resolvedMatches": [
@@ -3848,10 +3862,10 @@
         "matchNumber": 37,
         "teamHomeId": 19,
         "teamAwayId": 45,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 1,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 19,
@@ -3891,7 +3905,7 @@
       },
       "homeLabel": "Belgium",
       "awayLabel": "Egypt",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -4220,10 +4234,10 @@
         "matchNumber": 43,
         "teamHomeId": 0,
         "teamAwayId": 71,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 0,
+        "goalsAway": 0,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 0,
@@ -4263,7 +4277,7 @@
       },
       "homeLabel": "Spain",
       "awayLabel": "Cape Verde",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6141,7 +6155,7 @@
       "result": {
         "matchNumber": 74,
         "teamHomeId": 10,
-        "teamAwayId": 45,
+        "teamAwayId": 31,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6166,25 +6180,25 @@
         "blendDefensiveRating": 0.7629081123268814
       },
       "awayTeam": {
-        "id": 45,
-        "name": "Egypt",
-        "countryCode": "EG",
-        "flag": "🇪🇬",
-        "rank": 46,
-        "rating": 1699,
-        "elo": 1699,
-        "total": 884,
-        "goalsFor": 1545,
-        "goalsAgainst": 921,
-        "eloOffensiveRating": 0.7387524301763619,
-        "eloDefensiveRating": 1.1196927790770395,
-        "goalOffensiveRating": 1.056186515622931,
-        "goalDefensiveRating": 0.8724424383412202,
-        "blendOffensiveRating": 0.7884968752973693,
-        "blendDefensiveRating": 1.0319837724198289
+        "id": 31,
+        "name": "Iran",
+        "countryCode": "IR",
+        "flag": "🇮🇷",
+        "rank": 32,
+        "rating": 1764,
+        "elo": 1764,
+        "total": 669,
+        "goalsFor": 1273,
+        "goalsAgainst": 525,
+        "eloOffensiveRating": 0.8691040542308646,
+        "eloDefensiveRating": 0.9517568783246754,
+        "goalOffensiveRating": 1.1499175062030316,
+        "goalDefensiveRating": 0.657147111549577,
+        "blendOffensiveRating": 0.9131097549142633,
+        "blendDefensiveRating": 0.8472476998197781
       },
       "homeLabel": "Germany",
-      "awayLabel": "Egypt",
+      "awayLabel": "Iran",
       "isLocked": false
     },
     {
@@ -6327,7 +6341,7 @@
       "result": {
         "matchNumber": 77,
         "teamHomeId": 2,
-        "teamAwayId": 34,
+        "teamAwayId": 16,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6352,25 +6366,25 @@
         "blendDefensiveRating": 0.680854313266068
       },
       "awayTeam": {
-        "id": 34,
-        "name": "Algeria",
-        "countryCode": "DZ",
-        "flag": "🇩🇿",
-        "rank": 35,
-        "rating": 1743,
-        "elo": 1743,
-        "total": 688,
-        "goalsFor": 1052,
-        "goalsAgainst": 703,
-        "eloOffensiveRating": 0.8246531373040713,
-        "eloDefensiveRating": 1.0030590125422463,
-        "goalOffensiveRating": 0.9240419785888707,
-        "goalDefensiveRating": 0.8556502951039503,
-        "blendOffensiveRating": 0.8402281589781831,
-        "blendDefensiveRating": 0.9507675894418803
+        "id": 16,
+        "name": "Senegal",
+        "countryCode": "SN",
+        "flag": "🇸🇳",
+        "rank": 17,
+        "rating": 1878,
+        "elo": 1878,
+        "total": 704,
+        "goalsFor": 967,
+        "goalsAgainst": 669,
+        "eloOffensiveRating": 1.1557015698026296,
+        "eloDefensiveRating": 0.7157347391466743,
+        "goalOffensiveRating": 0.8300766831944312,
+        "goalDefensiveRating": 0.7957614133989183,
+        "blendOffensiveRating": 1.1046735610141962,
+        "blendDefensiveRating": 0.7441232140982387
       },
       "homeLabel": "France",
-      "awayLabel": "Algeria",
+      "awayLabel": "Senegal",
       "isLocked": false
     },
     {
@@ -6637,7 +6651,7 @@
       "result": {
         "matchNumber": 82,
         "teamHomeId": 19,
-        "teamAwayId": 16,
+        "teamAwayId": 15,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6662,25 +6676,25 @@
         "blendDefensiveRating": 0.9355554366400095
       },
       "awayTeam": {
-        "id": 16,
-        "name": "Senegal",
-        "countryCode": "SN",
-        "flag": "🇸🇳",
-        "rank": 17,
-        "rating": 1878,
-        "elo": 1878,
-        "total": 704,
-        "goalsFor": 967,
-        "goalsAgainst": 669,
-        "eloOffensiveRating": 1.1557015698026296,
-        "eloDefensiveRating": 0.7157347391466743,
-        "goalOffensiveRating": 0.8300766831944312,
-        "goalDefensiveRating": 0.7957614133989183,
-        "blendOffensiveRating": 1.1046735610141962,
-        "blendDefensiveRating": 0.7441232140982387
+        "id": 15,
+        "name": "Uruguay",
+        "countryCode": "UY",
+        "flag": "🇺🇾",
+        "rank": 16,
+        "rating": 1892,
+        "elo": 1892,
+        "total": 1019,
+        "goalsFor": 1610,
+        "goalsAgainst": 1254,
+        "eloOffensiveRating": 1.196867323178267,
+        "eloDefensiveRating": 0.6911173407237252,
+        "goalOffensiveRating": 0.9548080937877292,
+        "goalDefensiveRating": 1.0305113280131601,
+        "blendOffensiveRating": 1.1589347173098346,
+        "blendDefensiveRating": 0.8115131687011381
       },
       "homeLabel": "Belgium",
-      "awayLabel": "Senegal",
+      "awayLabel": "Uruguay",
       "isLocked": false
     },
     {
@@ -6885,7 +6899,7 @@
       "result": {
         "matchNumber": 86,
         "teamHomeId": 1,
-        "teamAwayId": 15,
+        "teamAwayId": 71,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6910,25 +6924,25 @@
         "blendDefensiveRating": 0.5609365608816806
       },
       "awayTeam": {
-        "id": 15,
-        "name": "Uruguay",
-        "countryCode": "UY",
-        "flag": "🇺🇾",
-        "rank": 16,
-        "rating": 1892,
-        "elo": 1892,
-        "total": 1019,
-        "goalsFor": 1610,
-        "goalsAgainst": 1254,
-        "eloOffensiveRating": 1.196867323178267,
-        "eloDefensiveRating": 0.6911173407237252,
-        "goalOffensiveRating": 0.9548080937877292,
-        "goalDefensiveRating": 1.0305113280131601,
-        "blendOffensiveRating": 1.1589347173098346,
-        "blendDefensiveRating": 0.8115131687011381
+        "id": 71,
+        "name": "Cape Verde",
+        "countryCode": "CV",
+        "flag": "🇨🇻",
+        "rank": 72,
+        "rating": 1549,
+        "elo": 1549,
+        "total": 251,
+        "goalsFor": 267,
+        "goalsAgainst": 278,
+        "eloOffensiveRating": 0.5077366249409898,
+        "eloDefensiveRating": 1.6291433805670867,
+        "goalOffensiveRating": 0.6428385897431611,
+        "goalDefensiveRating": 0.9274713268845639,
+        "blendOffensiveRating": 0.5289081770267947,
+        "blendDefensiveRating": 1.3802338799999012
       },
       "homeLabel": "Argentina",
-      "awayLabel": "Uruguay",
+      "awayLabel": "Cape Verde",
       "isLocked": false
     },
     {
@@ -6947,7 +6961,7 @@
       "result": {
         "matchNumber": 87,
         "teamHomeId": 5,
-        "teamAwayId": 38,
+        "teamAwayId": 34,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6972,25 +6986,25 @@
         "blendDefensiveRating": 0.6877615422708654
       },
       "awayTeam": {
-        "id": 38,
-        "name": "Uzbekistan",
-        "countryCode": "UZ",
-        "flag": "🇺🇿",
-        "rank": 39,
-        "rating": 1727,
-        "elo": 1727,
-        "total": 365,
-        "goalsFor": 635,
-        "goalsAgainst": 398,
-        "eloOffensiveRating": 0.7923180252855825,
-        "eloDefensiveRating": 1.0439946274047476,
-        "goalOffensiveRating": 1.0513450169433456,
-        "goalDefensiveRating": 0.9131026964926989,
-        "blendOffensiveRating": 0.8329096144126679,
-        "blendDefensiveRating": 0.9975623304640265
+        "id": 34,
+        "name": "Algeria",
+        "countryCode": "DZ",
+        "flag": "🇩🇿",
+        "rank": 35,
+        "rating": 1743,
+        "elo": 1743,
+        "total": 688,
+        "goalsFor": 1052,
+        "goalsAgainst": 703,
+        "eloOffensiveRating": 0.8246531373040713,
+        "eloDefensiveRating": 1.0030590125422463,
+        "goalOffensiveRating": 0.9240419785888707,
+        "goalDefensiveRating": 0.8556502951039503,
+        "blendOffensiveRating": 0.8402281589781831,
+        "blendDefensiveRating": 0.9507675894418803
       },
       "homeLabel": "Portugal",
-      "awayLabel": "Uzbekistan",
+      "awayLabel": "Algeria",
       "isLocked": false
     },
     {
@@ -7009,7 +7023,7 @@
       "result": {
         "matchNumber": 88,
         "teamHomeId": 25,
-        "teamAwayId": 31,
+        "teamAwayId": 45,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -7034,25 +7048,25 @@
         "blendDefensiveRating": 0.9314275454863506
       },
       "awayTeam": {
-        "id": 31,
-        "name": "Iran",
-        "countryCode": "IR",
-        "flag": "🇮🇷",
-        "rank": 32,
-        "rating": 1764,
-        "elo": 1764,
-        "total": 669,
-        "goalsFor": 1273,
-        "goalsAgainst": 525,
-        "eloOffensiveRating": 0.8691040542308646,
-        "eloDefensiveRating": 0.9517568783246754,
-        "goalOffensiveRating": 1.1499175062030316,
-        "goalDefensiveRating": 0.657147111549577,
-        "blendOffensiveRating": 0.9131097549142633,
-        "blendDefensiveRating": 0.8472476998197781
+        "id": 45,
+        "name": "Egypt",
+        "countryCode": "EG",
+        "flag": "🇪🇬",
+        "rank": 46,
+        "rating": 1699,
+        "elo": 1699,
+        "total": 884,
+        "goalsFor": 1545,
+        "goalsAgainst": 921,
+        "eloOffensiveRating": 0.7387524301763619,
+        "eloDefensiveRating": 1.1196927790770395,
+        "goalOffensiveRating": 1.056186515622931,
+        "goalDefensiveRating": 0.8724424383412202,
+        "blendOffensiveRating": 0.7884968752973693,
+        "blendDefensiveRating": 1.0319837724198289
       },
       "homeLabel": "Australia",
-      "awayLabel": "Iran",
+      "awayLabel": "Egypt",
       "isLocked": false
     },
     {

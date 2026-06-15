@@ -65,7 +65,7 @@ export const predictions = sqliteTable('predictions', {
   selectionSpec: text('selection_spec').notNull(),
   consensusMode: text('consensus_mode')
     .notNull()
-    .$type<'scoreline' | 'outcome' | 'expected' | 'rounded'>()
+    .$type<'scoreline' | 'outcome' | 'expected' | 'rounded' | 'draw'>()
     .default('expected'),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
@@ -159,6 +159,22 @@ export const predictionTeamStats = sqliteTable(
   (t) => [primaryKey({ columns: [t.predictionId, t.teamId] })],
 );
 
+export const predictionDrawResults = sqliteTable(
+  'prediction_draw_results',
+  {
+    predictionId: integer('prediction_id')
+      .notNull()
+      .references(() => predictions.id),
+    matchNumber: integer('match_number')
+      .notNull()
+      .references(() => fixtures.matchNumber),
+    goalsHome: integer('goals_home').notNull(),
+    goalsAway: integer('goals_away').notNull(),
+    drawnAt: text('drawn_at').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.predictionId, t.matchNumber] })],
+);
+
 export const predictionFrozenMatches = sqliteTable(
   'prediction_frozen_matches',
   {
@@ -175,7 +191,7 @@ export const predictionFrozenMatches = sqliteTable(
     scorelinesJson: text('scorelines_json').notNull(),
     consensusMode: text('consensus_mode')
       .notNull()
-      .$type<'scoreline' | 'outcome' | 'expected' | 'rounded'>()
+      .$type<'scoreline' | 'outcome' | 'expected' | 'rounded' | 'draw'>()
       .default('expected'),
     frozenAt: text('frozen_at').notNull(),
   },

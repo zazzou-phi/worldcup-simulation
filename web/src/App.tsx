@@ -40,6 +40,7 @@ import { PredictionManagerModal } from './components/PredictionManagerModal.js';
 import { TeamRatingsModal } from './components/TeamRatingsModal.js';
 import { MasterTeamStatsModal } from './components/MasterTeamStatsModal.js';
 import { TournamentStatsModal } from './components/TournamentStatsModal.js';
+import { DrawConfirmModal } from './components/DrawConfirmModal.js';
 import type { MonteCarloResult } from './types.js';
 
 export function App() {
@@ -75,6 +76,8 @@ export function App() {
   const [activePredictionLabel, setActivePredictionLabel] = useState<string | null>(null);
   const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
   const [showTournamentStats, setShowTournamentStats] = useState(false);
+  const [showDrawConfirm, setShowDrawConfirm] = useState(false);
+  const [drawingPrediction, setDrawingPrediction] = useState(false);
   const [loading, setLoading] = useState(true);
   const [simulating, setSimulating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -126,6 +129,17 @@ export function App() {
       state.actualResults ?? [],
     );
   }, [masterStateBase, consensusModeDraft, state, publicMode]);
+
+  const canDrawPrediction = useMemo(() => {
+    if (!masterState) return false;
+    return masterState.resolvedMatches.some((match) => {
+      if (match.fixture.group == null || match.isLocked) return false;
+      const dist =
+        masterState.distributions[String(match.fixture.matchNumber)] ??
+        masterState.distributions[match.fixture.matchNumber as unknown as string];
+      return (dist?.total ?? 0) > 0;
+    });
+  }, [masterState]);
 
   useEffect(() => {
     (async () => {
@@ -409,6 +423,41 @@ export function App() {
     }
   };
 
+  const runPredictionDraw = async () => {
+    if (predictionId == null || publicMode) return;
+    setDrawingPrediction(true);
+    setError(null);
+    try {
+      const next = await api.drawPrediction(predictionId);
+      setMasterStateBase(next);
+      const count = next.draw?.matchCount ?? 0;
+      setToast(`Drew ${count.toLocaleString()} fixture${count === 1 ? '' : 's'}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to draw prediction scores');
+    } finally {
+      setDrawingPrediction(false);
+      setShowDrawConfirm(false);
+    }
+  };
+
+  const handleDrawButton = () => {
+    if (publicMode || predictionId == null) return;
+
+    if (consensusModeDraft === 'draw') {
+      if (masterStateBase?.draw?.drawnAt) {
+        setShowDrawConfirm(true);
+      } else {
+        void runPredictionDraw();
+      }
+      return;
+    }
+
+    setConsensusModeDraft('draw');
+    if (!masterStateBase?.draw?.drawnAt) {
+      void runPredictionDraw();
+    }
+  };
+
   const consensusModeDirty = consensusModeDraft !== consensusModeSaved;
 
   const handleSimulateGroup = async (games: 1 | 2 | 3) => {
@@ -603,6 +652,11 @@ export function App() {
         onOpenTournamentStats={() => setShowTournamentStats(true)}
         onOpenPredictions={() => setShowPredictions(true)}
         onClearSimulation={publicMode ? handleClearSimulation : undefined}
+        drawActive={consensusModeDraft === 'draw'}
+        hasSavedDraw={Boolean(masterStateBase?.draw?.drawnAt)}
+        canDraw={canDrawPrediction}
+        drawing={drawingPrediction}
+        onDraw={publicMode ? undefined : handleDrawButton}
       />
 
       {toast && (
@@ -735,6 +789,13 @@ export function App() {
           predictionId={predictionId}
           allowRebuild={!publicMode}
           onClose={() => setShowMasterTeamStats(false)}
+        />
+      )}
+
+      {showDrawConfirm && (
+        <DrawConfirmModal
+          onConfirm={() => void runPredictionDraw()}
+          onClose={() => setShowDrawConfirm(false)}
         />
       )}
 

@@ -1,14 +1,14 @@
 export type MatchOutcome = 'homeWin' | 'draw' | 'awayWin';
 
 /** How master-view consensus picks a result. Default: expected. */
-export type ConsensusMode = 'scoreline' | 'outcome' | 'expected' | 'rounded';
+export type ConsensusMode = 'scoreline' | 'outcome' | 'expected' | 'rounded' | 'draw';
 
 export const DEFAULT_CONSENSUS_MODE: ConsensusMode = 'expected';
 
 export function parseConsensusMode(value: unknown): ConsensusMode {
   if (typeof value === 'string') {
     const raw = value.trim().toLowerCase();
-    if (raw === 'outcome' || raw === 'scoreline' || raw === 'expected' || raw === 'rounded') {
+    if (raw === 'outcome' || raw === 'scoreline' || raw === 'expected' || raw === 'rounded' || raw === 'draw') {
       return raw;
     }
   }
@@ -22,7 +22,7 @@ export function getDefaultConsensusMode(): ConsensusMode {
 
 export function getConsensusMode(): ConsensusMode {
   const raw = process.env.CONSENSUS_MODE?.trim().toLowerCase();
-  if (raw === 'outcome' || raw === 'scoreline' || raw === 'rounded') return raw;
+  if (raw === 'outcome' || raw === 'scoreline' || raw === 'rounded' || raw === 'draw') return raw;
   return DEFAULT_CONSENSUS_MODE;
 }
 
@@ -225,14 +225,19 @@ export interface ChooseConsensusInput {
   scorelines: ScorelineCount[];
   homeOffensive: number;
   awayOffensive: number;
+  /** Saved pool draw for this fixture (used when mode is draw). */
+  savedDraw?: { goalsHome: number; goalsAway: number } | null;
 }
 
-/** Pick master-view consensus using scoreline, expected, rounded, or outcome mode. */
+/** Pick master-view consensus using scoreline, expected, rounded, outcome, or draw mode. */
 export function chooseConsensus(input: ChooseConsensusInput): {
   goalsHome: number;
   goalsAway: number;
 } | null {
   const mode = input.mode ?? getConsensusMode();
+  if (mode === 'draw') {
+    return input.savedDraw ?? null;
+  }
   if (mode === 'scoreline') {
     return chooseRepresentativeScoreline(
       input.scorelines,

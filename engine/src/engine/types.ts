@@ -145,11 +145,13 @@ export interface OutcomeDistribution {
 }
 
 export interface MasterGroupState {
-  consensusMode: 'scoreline' | 'outcome' | 'expected' | 'rounded';
+  consensusMode: 'scoreline' | 'outcome' | 'expected' | 'rounded' | 'draw';
   resolvedMatches: ResolvedMatch[];
   groupStandings: GroupStandings[];
   qualifyingThirdGroups: string[];
   distributions: Record<number, OutcomeDistribution>;
+  draw?: { drawnAt: string; matchCount: number } | null;
+  drawResults?: Record<number, { goalsHome: number; goalsAway: number }>;
 }
 
 export interface MasterTeamStatsRow {
@@ -172,7 +174,7 @@ export interface Prediction {
   id: number;
   name: string;
   selectionSpec: SelectionSpec;
-  consensusMode: 'scoreline' | 'outcome' | 'expected' | 'rounded';
+  consensusMode: 'scoreline' | 'outcome' | 'expected' | 'rounded' | 'draw';
   createdAt: string;
   updatedAt: string;
 }

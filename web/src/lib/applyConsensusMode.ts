@@ -21,6 +21,17 @@ function distributionForMatch(
   return distributions[String(matchNumber)] ?? distributions[matchNumber as unknown as string];
 }
 
+function savedDrawForMatch(
+  state: MasterGroupState,
+  matchNumber: number,
+): { goalsHome: number; goalsAway: number } | null {
+  const key = String(matchNumber);
+  const row =
+    state.drawResults?.[key] ??
+    state.drawResults?.[matchNumber as unknown as string];
+  return row ?? null;
+}
+
 export function applyConsensusMode(
   state: MasterGroupState,
   mode: ConsensusMode,
@@ -32,6 +43,38 @@ export function applyConsensusMode(
     if (match.isLocked) return match;
 
     const dist = distributionForMatch(state.distributions, match.fixture.matchNumber);
+    const savedDraw = savedDrawForMatch(state, match.fixture.matchNumber);
+    if (mode === 'draw') {
+      if (!savedDraw || !match.homeTeam || !match.awayTeam) {
+        return {
+          ...match,
+          result: {
+            ...match.result,
+            goalsHome: null,
+            goalsAway: null,
+            winnerTeamId: null,
+            status: 'scheduled' as const,
+          },
+        };
+      }
+      const { goalsHome, goalsAway } = savedDraw;
+      return {
+        ...match,
+        result: {
+          ...match.result,
+          goalsHome,
+          goalsAway,
+          winnerTeamId: winnerFromGoals(
+            goalsHome,
+            goalsAway,
+            match.fixture.teamHomeId!,
+            match.fixture.teamAwayId!,
+          ),
+          status: 'played' as const,
+        },
+      };
+    }
+
     if (!dist || dist.total === 0 || !match.homeTeam || !match.awayTeam) {
       return {
         ...match,

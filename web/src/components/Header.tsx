@@ -40,6 +40,11 @@ interface Props {
   onOpenTournamentStats: () => void;
   onOpenPredictions: () => void;
   onClearSimulation?: () => void;
+  drawActive?: boolean;
+  hasSavedDraw?: boolean;
+  canDraw?: boolean;
+  drawing?: boolean;
+  onDraw?: () => void;
 }
 
 export function Header({
@@ -69,6 +74,11 @@ export function Header({
   onOpenTournamentStats,
   onOpenPredictions,
   onClearSimulation,
+  drawActive = false,
+  hasSavedDraw = false,
+  canDraw = false,
+  drawing = false,
+  onDraw,
 }: Props) {
   const { simulation } = state;
   const narrow = useMediaQuery(MOBILE_QUERY);
@@ -155,6 +165,25 @@ export function Header({
           onChange={onConsensusModeChange}
           onSave={onSaveConsensusMode}
         />
+      )}
+      {isPredictionsView && !publicMode && onDraw != null && (
+        <button
+          type="button"
+          className={`btn btn-ghost ${drawActive ? 'active' : ''}`}
+          disabled={drawing || (!hasSavedDraw && !canDraw)}
+          title={
+            drawActive
+              ? hasSavedDraw
+                ? 'Sample new pool scores for unlocked fixtures'
+                : 'Sample pool scores for unlocked fixtures'
+              : hasSavedDraw
+                ? 'Use saved pool draw scores in standings'
+                : 'Switch to draw view and sample pool scores'
+          }
+          onClick={onDraw}
+        >
+          {drawing ? 'Drawing…' : drawActive && hasSavedDraw ? 'Redraw' : 'Draw'}
+        </button>
       )}
       {isPredictionsView && (
         <>

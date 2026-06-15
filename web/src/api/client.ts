@@ -155,6 +155,9 @@ const privateApi = {
       },
     ),
 
+  drawPrediction: (id: number) =>
+    request<MasterGroupState>(`/api/v1/predictions/${id}/draw`, { method: 'POST' }),
+
   deletePrediction: (id: number) =>
     request<void>(`/api/v1/predictions/${id}`, { method: 'DELETE' }),
 

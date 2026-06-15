@@ -220,6 +220,31 @@ describe('chooseConsensus', () => {
       }),
     ).toEqual({ goalsHome: 1, goalsAway: 1 });
   });
+
+  it('returns savedDraw in draw mode', () => {
+    expect(
+      chooseConsensus({
+        mode: 'draw',
+        outcomeCounts,
+        scorelines: [{ goalsHome: 2, goalsAway: 0, n: 10 }],
+        homeOffensive: 1,
+        awayOffensive: 1,
+        savedDraw: { goalsHome: 0, goalsAway: 3 },
+      }),
+    ).toEqual({ goalsHome: 0, goalsAway: 3 });
+  });
+
+  it('returns null in draw mode when savedDraw is missing', () => {
+    expect(
+      chooseConsensus({
+        mode: 'draw',
+        outcomeCounts,
+        scorelines: [{ goalsHome: 2, goalsAway: 0, n: 10 }],
+        homeOffensive: 1,
+        awayOffensive: 1,
+      }),
+    ).toBeNull();
+  });
 });
 
 describe('getConsensusMode', () => {

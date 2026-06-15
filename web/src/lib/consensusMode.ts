@@ -9,10 +9,16 @@ export const CONSENSUS_MODE_OPTIONS: { value: ConsensusMode; label: string }[] =
   { value: 'rounded', label: 'Rounded' },
   { value: 'outcome', label: 'Outcome' },
   { value: 'scoreline', label: 'Scoreline' },
+  { value: 'draw', label: 'Draw' },
 ];
 
+/** Consensus picker in the header — Draw is a separate button. */
+export const CONSENSUS_MODE_PICKER_OPTIONS = CONSENSUS_MODE_OPTIONS.filter(
+  (option) => option.value !== 'draw',
+);
+
 export const CONSENSUS_MODE_HINT =
-  'How consensus picks a score from simulation distributions. Expected uses floored mean goals with modal scores for wins; Rounded uses the rounded mean only; Outcome picks the modal result then score; Scoreline picks the most frequent score within each outcome.';
+  'How consensus picks a score from simulation distributions. Expected uses floored mean goals with modal scores for wins; Rounded uses the rounded mean only; Outcome picks the modal result then score; Scoreline picks the most frequent score within each outcome. Use the Draw button for saved pool draws.';
 
 export function formatConsensusMode(mode: ConsensusMode): string {
   return CONSENSUS_MODE_OPTIONS.find((option) => option.value === mode)?.label ?? mode;
@@ -24,7 +30,7 @@ export function loadStoredConsensusMode(predictionId: number): ConsensusMode | n
   if (typeof window === 'undefined') return null;
   try {
     const raw = localStorage.getItem(`${STORAGE_KEY}:${predictionId}`);
-    if (raw === 'expected' || raw === 'outcome' || raw === 'scoreline' || raw === 'rounded') {
+    if (raw === 'expected' || raw === 'outcome' || raw === 'scoreline' || raw === 'rounded' || raw === 'draw') {
       return raw;
     }
   } catch {
