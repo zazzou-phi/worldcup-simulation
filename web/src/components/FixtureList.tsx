@@ -1,5 +1,6 @@
-import type { ActualMatchResult, ResolvedMatch } from '../types.js';
 import { matchTeamName, matchWinnerSide } from '@shared/lib/matchDisplay.js';
+import { formatFixturePrefix } from '../lib/fixtureLabel.js';
+import type { ActualMatchResult, ResolvedMatch } from '../types.js';
 import { ScoreDisplay, ScoreEditor } from './ScoreEditor.js';
 
 interface Props {
@@ -30,11 +31,6 @@ interface Props {
   ) => void;
   onCancelEdit: () => void;
   onClear: (matchNumber: number) => void;
-}
-
-function formatPrefix(round: string, matchNumber: number): string {
-  const md = round.replace('Matchday ', '');
-  return `MD${md.padStart(2, '0')} #${String(matchNumber).padStart(3)}`;
 }
 
 function teamClassName(match: ResolvedMatch, side: 'home' | 'away'): string {
@@ -131,7 +127,7 @@ export function FixtureList({
               onDoubleClick={() => canEdit && onStartEdit(num)}
             >
               <span className="fixture-prefix">
-                {formatPrefix(m.fixture.round, num)}
+                {formatFixturePrefix(m.fixture.round, m.fixture.date, m.fixture.time)}
                 {locked ? ' 🔒' : ''}
               </span>
               <span

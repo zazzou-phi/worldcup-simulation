@@ -10,6 +10,7 @@ import {
   roundColumnWidth,
 } from '@shared/lib/bracket-linear.js';
 import { matchSideCode, matchWinnerSide } from '@shared/lib/matchDisplay.js';
+import { formatFixturePrefix } from '../lib/fixtureLabel.js';
 import { MOBILE_QUERY, useMediaQuery } from '../lib/useMediaQuery.js';
 import type { ActualMatchResult, ResolvedMatch } from '../types.js';
 import { BracketConnectors } from './BracketConnectors.js';
@@ -84,7 +85,11 @@ function MatchNode({
     match.result.winnerTeamId != null
       ? matchWinnerSide(match)
       : null;
-  const num = match.fixture.matchNumber;
+  const label = formatFixturePrefix(
+    match.fixture.round,
+    match.fixture.date,
+    match.fixture.time,
+  );
 
   return (
     <div
@@ -92,7 +97,7 @@ function MatchNode({
       onClick={onSelect}
       onDoubleClick={() => editable && onStartEdit()}
     >
-      <div className="bracket-node-num">#{num}</div>
+      <div className="bracket-node-num">{label}</div>
       <div className={`bracket-node-team ${teamClassName(match, 'home')}`}>
         {matchSideCode(match, 'home')}
       </div>

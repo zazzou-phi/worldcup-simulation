@@ -2994,10 +2994,10 @@
         "matchNumber": 49,
         "teamHomeId": 2,
         "teamAwayId": 16,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 1,
+        "goalsAway": 0,
+        "winnerTeamId": 2,
+        "status": "played"
       },
       "homeTeam": {
         "id": 2,
@@ -5490,14 +5490,14 @@
             "blendOffensiveRating": 1.7911693753279103,
             "blendDefensiveRating": 0.680854313266068
           },
-          "played": 0,
-          "won": 0,
+          "played": 1,
+          "won": 1,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 0,
+          "goalsFor": 1,
           "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
+          "goalDifference": 1,
+          "points": 3,
           "position": 1
         },
         {
@@ -5531,36 +5531,6 @@
           "position": 2
         },
         {
-          "teamId": 16,
-          "team": {
-            "id": 16,
-            "name": "Senegal",
-            "countryCode": "SN",
-            "flag": "🇸🇳",
-            "rank": 17,
-            "rating": 1878,
-            "elo": 1878,
-            "total": 704,
-            "goalsFor": 967,
-            "goalsAgainst": 669,
-            "eloOffensiveRating": 1.1557015698026296,
-            "eloDefensiveRating": 0.7157347391466743,
-            "goalOffensiveRating": 0.8300766831944312,
-            "goalDefensiveRating": 0.7957614133989183,
-            "blendOffensiveRating": 1.1046735610141962,
-            "blendDefensiveRating": 0.7441232140982387
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 3
-        },
-        {
           "teamId": 62,
           "team": {
             "id": 62,
@@ -5587,6 +5557,36 @@
           "goalsFor": 0,
           "goalsAgainst": 0,
           "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 16,
+          "team": {
+            "id": 16,
+            "name": "Senegal",
+            "countryCode": "SN",
+            "flag": "🇸🇳",
+            "rank": 17,
+            "rating": 1878,
+            "elo": 1878,
+            "total": 704,
+            "goalsFor": 967,
+            "goalsAgainst": 669,
+            "eloOffensiveRating": 1.1557015698026296,
+            "eloDefensiveRating": 0.7157347391466743,
+            "goalOffensiveRating": 0.8300766831944312,
+            "goalDefensiveRating": 0.7957614133989183,
+            "blendOffensiveRating": 1.1046735610141962,
+            "blendDefensiveRating": 0.7441232140982387
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 0,
+          "lost": 1,
+          "goalsFor": 0,
+          "goalsAgainst": 1,
+          "goalDifference": -1,
           "points": 0,
           "position": 4
         }
@@ -5974,8 +5974,8 @@
     "F",
     "G",
     "H",
-    "I",
     "J",
+    "K",
     "L"
   ],
   "distributions": {
@@ -12653,11 +12653,232 @@
       "scorelines": []
     },
     "49": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 1250,
+      "draw": 563,
+      "awayWin": 687,
+      "total": 2500,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 151
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 172
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 115
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 49
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 19
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 7
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 254
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 279
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 173
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 58
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 19
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 4
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 197
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 208
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 110
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 50
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 6
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 136
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 120
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 45
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 22
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 7
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 63
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 78
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 36
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 7
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 38
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 25
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 9
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 10
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 9
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 4
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 3
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 2
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 2,
+          "n": 1
+        }
+      ]
     },
     "50": {
       "homeWin": 0,
