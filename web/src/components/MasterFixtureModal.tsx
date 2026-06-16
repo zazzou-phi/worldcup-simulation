@@ -47,7 +47,6 @@ interface Props {
   distribution: OutcomeDistribution | undefined;
   defaultConsensusMode: ConsensusMode;
   consensusMode?: ConsensusMode;
-  drawnScoreline?: Pick<ScorelineCount, 'goalsHome' | 'goalsAway'> | null;
   canEditFrozenConsensus?: boolean;
   savingFrozenConsensus?: boolean;
   onFrozenConsensusModeChange?: (matchNumber: number, mode: ConsensusMode) => void;
@@ -213,16 +212,32 @@ function OutcomeBar({
     .filter((s) => outcomeFromScoreline(s) === outcome)
     .sort(sortScorelines);
   const top = allMatching.slice(0, TOP_SCORELINES);
-  const otherCount = allMatching.slice(TOP_SCORELINES).reduce((sum, s) => sum + s.n, 0);
-  const segmentCount = top.length + (otherCount > 0 ? 1 : 0);
-  const highlightDrawn =
+  const otherScorelines = allMatching.slice(TOP_SCORELINES);
+  const otherCount = otherScorelines.reduce((sum, s) => sum + s.n, 0);
+  const highlightScoreline =
     drawnScoreline != null && outcomeFromScoreline(drawnScoreline) === outcome
       ? drawnScoreline
       : null;
-  const drawnInTop =
-    highlightDrawn != null && top.some((s) => scorelineMatches(s, highlightDrawn));
+  const highlightInTop =
+    highlightScoreline != null && top.some((s) => scorelineMatches(s, highlightScoreline));
+  const highlightedOther =
+    highlightScoreline != null && !highlightInTop
+      ? otherScorelines.find((s) => scorelineMatches(s, highlightScoreline))
+      : null;
+  const splitHighlightedFromOther =
+    highlightedOther != null && highlightedOther.n > 0;
+  const highlightedOtherCount = splitHighlightedFromOther ? highlightedOther.n : 0;
+  const remainingOtherCount = splitHighlightedFromOther
+    ? otherCount - highlightedOtherCount
+    : otherCount;
+  const segmentCount =
+    top.length +
+    (highlightedOtherCount > 0 ? 1 : 0) +
+    (remainingOtherCount > 0 ? 1 : 0);
 
   if (outcomeTotal === 0 || segmentCount === 0) return null;
+
+  let segmentIndex = 0;
 
   return (
     <div className="master-outcome-bar">
@@ -237,26 +252,42 @@ function OutcomeBar({
           className="master-bar-stacked-track"
           style={{ width: `${(outcomeTotal / allTotal) * 100}%` }}
         >
-          {top.map((s, index) => (
+          {top.map((s) => {
+            const index = segmentIndex++;
+            return (
+              <ScorelineSegment
+                key={`${s.goalsHome}-${s.goalsAway}`}
+                label={`${s.goalsHome}–${s.goalsAway}`}
+                count={s.n}
+                outcomeTotal={outcomeTotal}
+                allTotal={allTotal}
+                color={segmentColor(baseColor, index, segmentCount)}
+                highlighted={highlightScoreline != null && scorelineMatches(s, highlightScoreline)}
+              />
+            );
+          })}
+          {highlightedOtherCount > 0 && highlightedOther && (
             <ScorelineSegment
-              key={`${s.goalsHome}-${s.goalsAway}`}
-              label={`${s.goalsHome}–${s.goalsAway}`}
-              count={s.n}
+              key={`${highlightedOther.goalsHome}-${highlightedOther.goalsAway}`}
+              label={`${highlightedOther.goalsHome}–${highlightedOther.goalsAway}`}
+              count={highlightedOtherCount}
               outcomeTotal={outcomeTotal}
               allTotal={allTotal}
-              color={segmentColor(baseColor, index, segmentCount)}
-              highlighted={highlightDrawn != null && scorelineMatches(s, highlightDrawn)}
+              color={segmentColor(baseColor, segmentIndex++, segmentCount)}
+              highlighted
             />
-          ))}
-          {otherCount > 0 && (
+          )}
+          {remainingOtherCount > 0 && (
             <ScorelineSegment
               key="other"
               label="Other"
-              count={otherCount}
+              count={remainingOtherCount}
               outcomeTotal={outcomeTotal}
               allTotal={allTotal}
               color="var(--border)"
-              highlighted={highlightDrawn != null && !drawnInTop}
+              highlighted={
+                highlightScoreline != null && !highlightInTop && !splitHighlightedFromOther
+              }
             />
           )}
         </div>
@@ -270,7 +301,6 @@ export function MasterFixtureModal({
   distribution,
   defaultConsensusMode,
   consensusMode,
-  drawnScoreline = null,
   canEditFrozenConsensus = false,
   savingFrozenConsensus = false,
   onFrozenConsensusModeChange,
@@ -291,9 +321,10 @@ export function MasterFixtureModal({
     return computeMatchLambdas(match.homeTeam, match.awayTeam);
   }, [publicMode, match.homeTeam, match.awayTeam]);
   const frozenConsensusMode = distribution?.consensusMode ?? defaultConsensusMode;
-  const activeConsensusMode = consensusMode ?? defaultConsensusMode;
-  const drawHighlight =
-    activeConsensusMode === 'draw' ? drawnScoreline : null;
+  const highlightedScoreline =
+    played && match.result.goalsHome != null && match.result.goalsAway != null
+      ? { goalsHome: match.result.goalsHome, goalsAway: match.result.goalsAway }
+      : null;
   const showFrozenConsensusControl =
     match.isLocked && canEditFrozenConsensus && total > 0 && onFrozenConsensusModeChange != null;
 
@@ -369,7 +400,7 @@ export function MasterFixtureModal({
               allTotal={total}
               scorelines={scorelines}
               baseColor="var(--green)"
-              drawnScoreline={drawHighlight}
+              drawnScoreline={highlightedScoreline}
             />
             <OutcomeBar
               label="Draw"
@@ -378,7 +409,7 @@ export function MasterFixtureModal({
               allTotal={total}
               scorelines={scorelines}
               baseColor="var(--yellow)"
-              drawnScoreline={drawHighlight}
+              drawnScoreline={highlightedScoreline}
             />
             <OutcomeBar
               label={`${awayName} Win`}
@@ -387,7 +418,7 @@ export function MasterFixtureModal({
               allTotal={total}
               scorelines={scorelines}
               baseColor="var(--accent)"
-              drawnScoreline={drawHighlight}
+              drawnScoreline={highlightedScoreline}
             />
             <p className="muted master-bar-total">
               Top {TOP_SCORELINES} scorelines plus other per outcome · {total.toLocaleString()}{' '}

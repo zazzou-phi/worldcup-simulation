@@ -683,6 +683,7 @@ export function App() {
           </div>
         ) : appView === 'predictions' && masterState ? (
           <MasterGroupView
+            predictionId={predictionId}
             masterState={masterState}
             fixtures={state.fixtures}
             groupMemberships={state.groupMemberships}

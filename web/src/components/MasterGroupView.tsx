@@ -2,8 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { filterGroupMatchesByTeam } from '@shared/engine/matchFilters.js';
 import { teamCode } from '@shared/lib/teamCodes.js';
 import {
+  loadStoredFixedDoubleDowns,
+  storeFixedDoubleDowns,
+} from '../lib/fixedDoubleDowns.js';
+import {
   MAX_DOUBLE_DOWN,
-  pickDoubleDownMatches,
+  buildDoubledMatchNumbers,
 } from '../lib/doubleDown.js';
 import { isPublicMode } from '../config/appMode.js';
 import type { ConsensusMode } from '../lib/consensusMode.js';
@@ -15,6 +19,7 @@ import { GroupPhaseLayout } from './GroupPhaseLayout.js';
 import { MasterFixtureModal } from './MasterFixtureModal.js';
 
 interface Props {
+  predictionId?: number | null;
   masterState: MasterGroupState;
   fixtures: Fixture[];
   groupMemberships: Array<{ groupLetter: string; teamId: number }>;
@@ -25,6 +30,7 @@ interface Props {
 }
 
 export function MasterGroupView({
+  predictionId = null,
   masterState,
   fixtures,
   groupMemberships,
@@ -37,13 +43,41 @@ export function MasterGroupView({
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
   const [selectedMatchNumber, setSelectedMatchNumber] = useState<number | null>(null);
   const [modalMatchNumber, setModalMatchNumber] = useState<number | null>(null);
-  const [doubleCount, setDoubleCount] = useState(MAX_DOUBLE_DOWN);
+  const [fixedDoubledMatches, setFixedDoubledMatches] = useState<Set<number>>(() => new Set());
+
+  const actualMatchNumbers = useMemo(
+    () => new Set(actualResults.map((r) => r.matchNumber)),
+    [actualResults],
+  );
+
+  const persistFixedDoubledMatches = (next: Set<number>) => {
+    if (publicMode || predictionId == null) return;
+    storeFixedDoubleDowns(predictionId, next);
+  };
 
   useEffect(() => {
     setSelectedTeamId(null);
     setSelectedMatchNumber(null);
     setModalMatchNumber(null);
   }, [masterState.resolvedMatches.length, masterState.groupStandings.length]);
+
+  useEffect(() => {
+    if (publicMode || predictionId == null) {
+      setFixedDoubledMatches(new Set());
+      return;
+    }
+    setFixedDoubledMatches(loadStoredFixedDoubleDowns(predictionId));
+  }, [predictionId, publicMode]);
+
+  useEffect(() => {
+    if (publicMode || predictionId == null || actualMatchNumbers.size === 0) return;
+    setFixedDoubledMatches((prev) => {
+      const next = new Set([...prev].filter((matchNumber) => actualMatchNumbers.has(matchNumber)));
+      if (next.size === prev.size) return prev;
+      persistFixedDoubledMatches(next);
+      return next;
+    });
+  }, [actualMatchNumbers, predictionId, publicMode]);
 
   const allGroupMatches = useMemo(
     () => masterState.resolvedMatches.filter((m) => m.fixture.group != null),
@@ -78,16 +112,49 @@ export function MasterGroupView({
     [masterState, fixtures, groupMemberships, actualResults],
   );
 
+  const fixedDoubleCount = useMemo(() => {
+    let count = 0;
+    for (const matchNumber of fixedDoubledMatches) {
+      if (actualMatchNumbers.has(matchNumber)) count++;
+    }
+    return count;
+  }, [fixedDoubledMatches, actualMatchNumbers]);
+
   const doubledMatchNumbers = useMemo(() => {
     if (publicMode) return undefined;
-    const actualEntered = new Set(actualResults.map((r) => r.matchNumber));
-    const eligible = new Set(
-      Object.keys(masterState.distributions)
-        .map(Number)
-        .filter((matchNumber) => !actualEntered.has(matchNumber)),
+    return buildDoubledMatchNumbers(
+      fixedDoubledMatches,
+      allGroupMatches,
+      masterState.distributions,
+      masterState.consensusMode,
+      MAX_DOUBLE_DOWN,
+      actualMatchNumbers,
+      masterState.drawResults,
     );
-    return pickDoubleDownMatches(masterState.distributions, doubleCount, eligible);
-  }, [masterState.distributions, publicMode, doubleCount, actualResults]);
+  }, [
+    allGroupMatches,
+    masterState.consensusMode,
+    masterState.distributions,
+    masterState.drawResults,
+    publicMode,
+    fixedDoubledMatches,
+    actualMatchNumbers,
+  ]);
+
+  const handleToggleFixedDouble = (matchNumber: number) => {
+    if (!actualMatchNumbers.has(matchNumber)) return;
+    setFixedDoubledMatches((prev) => {
+      const next = new Set(prev);
+      if (next.has(matchNumber)) {
+        next.delete(matchNumber);
+      } else {
+        if (next.size >= MAX_DOUBLE_DOWN) return prev;
+        next.add(matchNumber);
+      }
+      persistFixedDoubledMatches(next);
+      return next;
+    });
+  };
 
   const handleSelectTeam = (teamId: number) => {
     setSelectedTeamId((prev) => (prev === teamId ? null : teamId));
@@ -136,10 +203,11 @@ export function MasterGroupView({
             actualResults={actualResults}
             allowEdit={false}
             canClearMatch={() => false}
-            doubleCount={publicMode ? undefined : doubleCount}
-            maxDoubleCount={publicMode ? undefined : MAX_DOUBLE_DOWN}
-            onDoubleCountChange={publicMode ? undefined : setDoubleCount}
+            doubleCount={publicMode ? undefined : MAX_DOUBLE_DOWN}
+            fixedDoubleCount={publicMode ? undefined : fixedDoubleCount}
             doubledMatchNumbers={doubledMatchNumbers}
+            actualMatchNumbers={publicMode ? undefined : actualMatchNumbers}
+            onToggleFixedDouble={publicMode ? undefined : handleToggleFixedDouble}
             onSelect={handleSelectMatch}
             onStartEdit={() => {}}
             onSave={() => {}}
@@ -155,11 +223,6 @@ export function MasterGroupView({
           distribution={masterState.distributions[String(modalMatch.fixture.matchNumber)]}
           defaultConsensusMode={masterState.consensusMode}
           consensusMode={masterState.consensusMode}
-          drawnScoreline={
-            masterState.drawResults?.[String(modalMatch.fixture.matchNumber)] ??
-            masterState.drawResults?.[modalMatch.fixture.matchNumber as unknown as string] ??
-            null
-          }
           canEditFrozenConsensus={canEditFrozenConsensus}
           savingFrozenConsensus={savingFrozenConsensus}
           onFrozenConsensusModeChange={onFrozenConsensusModeChange}

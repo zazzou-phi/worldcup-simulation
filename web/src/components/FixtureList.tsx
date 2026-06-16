@@ -15,9 +15,10 @@ interface Props {
   hidePredictedWhenLocked?: boolean;
   simulating?: boolean;
   doubleCount?: number;
-  maxDoubleCount?: number;
-  onDoubleCountChange?: (count: number) => void;
+  fixedDoubleCount?: number;
   doubledMatchNumbers?: ReadonlySet<number>;
+  actualMatchNumbers?: ReadonlySet<number>;
+  onToggleFixedDouble?: (matchNumber: number) => void;
   onSelect: (matchNumber: number | null) => void;
   onStartEdit: (matchNumber: number) => void;
   onSimulateMatch?: (matchNumber: number) => void;
@@ -57,9 +58,10 @@ export function FixtureList({
   hidePredictedWhenLocked = false,
   simulating = false,
   doubleCount,
-  maxDoubleCount = 10,
-  onDoubleCountChange,
+  fixedDoubleCount = 0,
   doubledMatchNumbers,
+  actualMatchNumbers,
+  onToggleFixedDouble,
   onSelect,
   onStartEdit,
   onSimulateMatch,
@@ -69,6 +71,8 @@ export function FixtureList({
 }: Props) {
   const actualByMatch = new Map(actualResults.map((r) => [r.matchNumber, r]));
   const showDoubleMarks = doubledMatchNumbers != null;
+  const remainingDoubleCount =
+    doubleCount != null ? Math.max(0, doubleCount - fixedDoubleCount) : 0;
 
   return (
     <div className={`fixture-list${showDoubleMarks ? ' fixture-list-doubles' : ''}`}>
@@ -77,32 +81,12 @@ export function FixtureList({
           Fixtures ({matches.length})
           {filterTeamLabel ? ` · ${filterTeamLabel}` : ''}
         </span>
-        {onDoubleCountChange != null && doubleCount != null && (
+        {showDoubleMarks && doubleCount != null && (
           <span className="fixture-double-counter">
             Double
-            <button
-              type="button"
-              className="btn btn-small btn-ghost fixture-double-btn"
-              aria-label="Decrease double count"
-              disabled={doubleCount <= 0}
-              onClick={() => onDoubleCountChange(Math.max(0, doubleCount - 1))}
-            >
-              −
-            </button>
-            <span className="fixture-double-value">
-              {doubleCount}/{maxDoubleCount}
+            <span className="fixture-double-value" title={`${fixedDoubleCount} fixed on played games`}>
+              {remainingDoubleCount}/{doubleCount}
             </span>
-            <button
-              type="button"
-              className="btn btn-small btn-ghost fixture-double-btn"
-              aria-label="Increase double count"
-              disabled={doubleCount >= maxDoubleCount}
-              onClick={() =>
-                onDoubleCountChange(Math.min(maxDoubleCount, doubleCount + 1))
-              }
-            >
-              +
-            </button>
           </span>
         )}
       </div>
@@ -131,7 +115,13 @@ export function FixtureList({
               : null;
           const actual = actualByMatch.get(num);
           const hidePredicted = hidePredictedWhenLocked && locked && actual != null;
-          const showDouble = showDoubleMarks && played && !hidePredicted && doubledMatchNumbers!.has(num);
+          const hasActual =
+            actualMatchNumbers != null ? actualMatchNumbers.has(num) : actual != null;
+          const isDoubled = doubledMatchNumbers?.has(num) ?? false;
+          const canToggleFixedDouble =
+            showDoubleMarks && hasActual && onToggleFixedDouble != null;
+          const showAutoDouble =
+            showDoubleMarks && played && !hidePredicted && isDoubled && !canToggleFixedDouble;
 
           return (
             <div
@@ -200,11 +190,26 @@ export function FixtureList({
                   </button>
                 )}
               </span>
-              {showDouble && (
+              {canToggleFixedDouble ? (
+                <button
+                  type="button"
+                  className={`fixture-double-mark fixture-double-toggle${isDoubled ? ' active' : ''}`}
+                  title={isDoubled ? 'Remove fixed double down' : 'Fix as double down'}
+                  aria-pressed={isDoubled}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFixedDouble!(num);
+                  }}
+                >
+                  {isDoubled ? 'D' : '·'}
+                </button>
+              ) : showAutoDouble ? (
                 <span className="fixture-double-mark" title="Double down">
                   D
                 </span>
-              )}
+              ) : showDoubleMarks ? (
+                <span className="fixture-double-mark fixture-double-empty" aria-hidden="true" />
+              ) : null}
             </div>
           );
         })}
