@@ -39,20 +39,20 @@ export function KnockoutPhaseLayout({
         <button
           type="button"
           role="tab"
-          aria-selected={useBracketView}
-          className={`group-phase-tab${useBracketView ? ' active' : ''}`}
-          onClick={() => onViewChange(true)}
-        >
-          Bracket
-        </button>
-        <button
-          type="button"
-          role="tab"
           aria-selected={!useBracketView}
           className={`group-phase-tab${!useBracketView ? ' active' : ''}`}
           onClick={() => onViewChange(false)}
         >
           Fixtures
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={useBracketView}
+          className={`group-phase-tab${useBracketView ? ' active' : ''}`}
+          onClick={() => onViewChange(true)}
+        >
+          Bracket
         </button>
       </div>
       <div className="knockout-phase-bracket">{bracket}</div>

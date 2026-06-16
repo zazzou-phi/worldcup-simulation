@@ -10,7 +10,7 @@ interface Props {
 
 export function GroupPhaseLayout({ standings, fixtures }: Props) {
   const narrow = useMediaQuery(MOBILE_QUERY);
-  const [tab, setTab] = useState<Tab>('standings');
+  const [tab, setTab] = useState<Tab>('fixtures');
 
   const classes = [
     'group-phase',
@@ -27,20 +27,20 @@ export function GroupPhaseLayout({ standings, fixtures }: Props) {
           <button
             type="button"
             role="tab"
-            aria-selected={tab === 'standings'}
-            className={`group-phase-tab${tab === 'standings' ? ' active' : ''}`}
-            onClick={() => setTab('standings')}
-          >
-            Standings
-          </button>
-          <button
-            type="button"
-            role="tab"
             aria-selected={tab === 'fixtures'}
             className={`group-phase-tab${tab === 'fixtures' ? ' active' : ''}`}
             onClick={() => setTab('fixtures')}
           >
             Fixtures
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'standings'}
+            className={`group-phase-tab${tab === 'standings' ? ' active' : ''}`}
+            onClick={() => setTab('standings')}
+          >
+            Standings
           </button>
         </div>
       )}
