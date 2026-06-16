@@ -2,6 +2,7 @@ import type { AppView } from './appView.js';
 import { APP_VIEW_LABELS } from './appView.js';
 import { CONSENSUS_MODE_HINT } from './consensusMode.js';
 import { RATING_ELO_WEIGHT_HINT } from './ratingEloWeight.js';
+import { TOURNAMENT_FORM_HINT } from './tournamentEloDeltaWeight.js';
 import { UPSET_FACTOR_HINT } from '../components/UpsetFactorControl.js';
 
 export type HelpSection = {
@@ -29,6 +30,10 @@ function simulationsHelp(publicMode: boolean): ViewHelp {
       paragraphs: [RATING_ELO_WEIGHT_HINT],
     },
     {
+      title: 'Tournament form',
+      paragraphs: [TOURNAMENT_FORM_HINT],
+    },
+    {
       title: 'Upset factor',
       paragraphs: [UPSET_FACTOR_HINT],
     },
@@ -44,21 +49,21 @@ function simulationsHelp(publicMode: boolean): ViewHelp {
     about.push({
       title: 'Public mode',
       paragraphs: [
-        'Your Country Ratings blend is saved in this browser. Simulations run entirely on your device.',
+        'Your Country Ratings blend and Tournament form settings are saved in this browser. Simulations run entirely on your device.',
       ],
     });
   } else {
     about.push({
       title: 'Private mode',
       paragraphs: [
-        'Your Country Ratings blend is saved to the database and shared across your simulations.',
+        'Your Country Ratings blend and Tournament form setting are saved to the database and shared across your simulations.',
       ],
     });
   }
 
   const howToBullets = [
     'Use the Simulate menu to run group rounds (1–3), advance through knockout rounds, or simulate a single match by clicking its score.',
-    'In the ⋮ options menu, adjust Country Ratings and Upset sliders, open Country Ratings or Tournament Stats, and switch between Group and Knockout stages.',
+    'In the ⋮ options menu, adjust Country Ratings, Tournament form, and Upset sliders, open Country Ratings or Tournament Stats, and switch between Group and Knockout stages.',
     'Click an unplayed score to simulate that match; double-click to enter a score manually.',
     'Knockout draws require picking a winner after entering equal goals.',
     'Click a team in the standings to filter the fixture list to that team\'s matches.',

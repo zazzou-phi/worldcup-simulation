@@ -80,7 +80,7 @@ export function SimulateMenu({
     );
     if (simulationComplete) {
       for (const entry of items) {
-        if (entry.kind === 'item' && entry.key !== 'bulk') {
+        if (entry.kind === 'item' && entry.key !== 'bulk' && entry.key !== 'clear') {
           disabled.add(entry.key);
         }
       }

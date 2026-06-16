@@ -23,6 +23,7 @@ export const teams = sqliteTable('teams', {
 export const appSettings = sqliteTable('app_settings', {
   id: integer('id').primaryKey(),
   ratingEloWeight: real('rating_elo_weight').notNull(),
+  tournamentEloDeltaWeight: real('tournament_elo_delta_weight').notNull().default(2),
 });
 
 export const groupMemberships = sqliteTable(

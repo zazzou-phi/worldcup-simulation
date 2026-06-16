@@ -326,6 +326,18 @@ describe('HTTP API', () => {
     expect(updated.blendOffensiveRating).not.toBe(before);
   });
 
+  it('PUT /settings/tournament-elo-delta-weight updates tournament form', async () => {
+    const res = await app.request('/api/v1/settings/tournament-elo-delta-weight', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tournamentEloDeltaWeight: 3 }),
+    });
+    expect(res.status).toBe(200);
+    const body = await json<{ tournamentEloDeltaWeight: number }>(res);
+    expect(body.tournamentEloDeltaWeight).toBe(3);
+    expect(repo.getTournamentEloDeltaWeight()).toBe(3);
+  });
+
   it('PATCH /predictions/:id updates consensus mode', async () => {
     const sim = repo.createSimulation('Consensus test');
     repo.updateMatchResult(sim.id, 1, 2, 1, null);

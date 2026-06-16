@@ -27,6 +27,11 @@ import type { AppView } from './lib/appView.js';
 import { DEFAULT_UPSET_VARIANCE } from './lib/upsetVariance.js';
 import { DEFAULT_RATING_ELO_WEIGHT, loadStoredRatingEloWeight, storeRatingEloWeight } from './lib/ratingEloWeight.js';
 import {
+  DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
+  loadStoredTournamentEloDeltaWeight,
+  storeTournamentEloDeltaWeight,
+} from './lib/tournamentEloDeltaWeight.js';
+import {
   DEFAULT_CONSENSUS_MODE,
   loadStoredConsensusMode,
   type ConsensusMode,
@@ -87,6 +92,9 @@ export function App() {
   const [ratingEloWeight, setRatingEloWeight] = useState(
     publicMode ? loadStoredRatingEloWeight() : DEFAULT_RATING_ELO_WEIGHT,
   );
+  const [tournamentEloDeltaWeight, setTournamentEloDeltaWeight] = useState(
+    publicMode ? loadStoredTournamentEloDeltaWeight() : DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
+  );
 
   const refreshState = useCallback(
     async (id: number) => {
@@ -144,17 +152,24 @@ export function App() {
   useEffect(() => {
     (async () => {
       try {
-        const [simulationLoad, initialPrediction, meta, settings] = await Promise.all([
+        const [simulationLoad, initialPrediction, meta, settings, tournamentFormSettings] =
+          await Promise.all([
           loadInitialSimulation(),
           loadInitialPrediction(),
           publicMode ? loadPublicMeta() : Promise.resolve(null),
           publicMode ? Promise.resolve(null) : api.getRatingEloWeight(),
+          publicMode ? Promise.resolve(null) : api.getTournamentEloDeltaWeight(),
         ]);
         const { id, state: initialState } = simulationLoad;
         const weight = publicMode
           ? loadStoredRatingEloWeight()
           : (settings?.ratingEloWeight ?? DEFAULT_RATING_ELO_WEIGHT);
+        const deltaWeight = publicMode
+          ? loadStoredTournamentEloDeltaWeight()
+          : (tournamentFormSettings?.tournamentEloDeltaWeight ??
+            DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT);
         setRatingEloWeight(weight);
+        setTournamentEloDeltaWeight(deltaWeight);
         const blendedState = {
           ...initialState,
           teams: applyRatingEloWeightToStateTeams(initialState.teams, weight),
@@ -206,9 +221,10 @@ export function App() {
     setShowPredictions(false);
   };
 
-  const handleCreatePrediction = async (name: string, selection: string) => {
+  const handleCreatePrediction = async (name: string, selection: string): Promise<number> => {
     const prediction = await api.createPrediction(name, selection);
     await switchPrediction(prediction.id);
+    return prediction.id;
   };
 
   const handleRenamePrediction = async (id: number, name: string) => {
@@ -389,6 +405,15 @@ export function App() {
     if (simulationId != null) await refreshState(simulationId);
   };
 
+  const handleTournamentEloDeltaWeightChange = async (value: number) => {
+    setTournamentEloDeltaWeight(value);
+    if (publicMode) {
+      storeTournamentEloDeltaWeight(value);
+      return;
+    }
+    await api.setTournamentEloDeltaWeight(value);
+  };
+
   const handleConsensusModeChange = (mode: ConsensusMode) => {
     if (publicMode) return;
     setConsensusModeDraft(mode);
@@ -471,6 +496,7 @@ export function App() {
           games,
           upsetVariance,
           ratingEloWeight,
+          tournamentEloDeltaWeight,
         );
         setState(nextState);
         setToast(
@@ -510,6 +536,7 @@ export function App() {
           throughRound,
           upsetVariance,
           ratingEloWeight,
+          tournamentEloDeltaWeight,
         );
         setState(nextState);
         setToast(
@@ -557,7 +584,9 @@ export function App() {
           : `${result.firstSimulationId}-${result.lastSimulationId}`;
       await handleCreatePrediction(result.batchName, selection);
       if (appView !== 'predictions') {
-        await switchAppView('predictions');
+        setSelectedMatchNumber(null);
+        setEditingMatchNumber(null);
+        setAppView('predictions');
       }
       setShowMonteCarlo(false);
       setToast(
@@ -582,6 +611,7 @@ export function App() {
           matchNumber,
           upsetVariance,
           ratingEloWeight,
+          tournamentEloDeltaWeight,
         );
         setState(nextState);
         setEditingMatchNumber(null);
@@ -634,9 +664,11 @@ export function App() {
         simulating={simulating}
         upsetVariance={upsetVariance}
         ratingEloWeight={ratingEloWeight}
+        tournamentEloDeltaWeight={tournamentEloDeltaWeight}
         onAppViewChange={switchAppView}
         onUpsetVarianceChange={setUpsetVariance}
         onRatingEloWeightChange={handleRatingEloWeightChange}
+        onTournamentEloDeltaWeightChange={handleTournamentEloDeltaWeightChange}
         onConsensusModeChange={handleConsensusModeChange}
         onSaveConsensusMode={handleSaveConsensusMode}
         onToggleStageView={() => setViewKnockout((v) => !v)}
@@ -778,8 +810,10 @@ export function App() {
           error={monteCarloError}
           upsetVariance={upsetVariance}
           ratingEloWeight={ratingEloWeight}
+          tournamentEloDeltaWeight={tournamentEloDeltaWeight}
           onUpsetVarianceChange={setUpsetVariance}
           onRatingEloWeightChange={handleRatingEloWeightChange}
+          onTournamentEloDeltaWeightChange={handleTournamentEloDeltaWeightChange}
           onClose={() => setShowMonteCarlo(false)}
           onRun={handleMonteCarlo}
         />

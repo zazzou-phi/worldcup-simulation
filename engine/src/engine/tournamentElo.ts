@@ -8,6 +8,16 @@ import {
 import type { Fixture, SimulationMatch, Team } from './types.js';
 
 export const DEFAULT_TOURNAMENT_ELO_K = 32;
+export const DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT = 2;
+export const TOURNAMENT_ELO_DELTA_WEIGHT_MAX = 5;
+
+export function effectiveEloForSimulation(
+  baseElo: number,
+  delta: number,
+  deltaWeight: number = DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
+): number {
+  return baseElo + deltaWeight * delta;
+}
 
 export interface EloMatchInput {
   matchNumber: number;
@@ -104,11 +114,14 @@ export function computeSimulationRatings(
   teams: Team[],
   deltas: Map<number, number>,
   eloWeight: number,
+  deltaWeight: number = DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
 ): Map<number, SimulationRatings> {
   const blendedRaw = teams.map((team) =>
     blendRawRatings(
       eloWeight,
-      rawEloRatings(team.elo + (deltas.get(team.id) ?? 0)),
+      rawEloRatings(
+        effectiveEloForSimulation(team.elo, deltas.get(team.id) ?? 0, deltaWeight),
+      ),
       rawGoalRatings(team.goalsFor, team.goalsAgainst, team.total),
     ),
   );

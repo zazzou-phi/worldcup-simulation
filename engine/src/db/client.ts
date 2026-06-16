@@ -5,6 +5,9 @@ import { rebuildPredictionAggregates } from './predictionAggregates.js';
 import { migrateExistingFrozenMatches, copyMissingFrozenMatchesFromDefault } from './predictionFrozenMatches.js';
 import { computeNormalizedTeamRatings, computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
 import { DEFAULT_RATING_ELO_WEIGHT } from '../api/ratingEloWeight.js';
+import {
+  DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
+} from '../api/tournamentEloDeltaWeight.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdirSync } from 'node:fs';
@@ -49,7 +52,8 @@ export function initSchema(sqlite: Database.Database) {
     );
     CREATE TABLE IF NOT EXISTS app_settings (
       id INTEGER PRIMARY KEY,
-      rating_elo_weight REAL NOT NULL
+      rating_elo_weight REAL NOT NULL,
+      tournament_elo_delta_weight REAL NOT NULL DEFAULT 2
     );
     CREATE TABLE IF NOT EXISTS group_memberships (
       group_letter TEXT NOT NULL,
@@ -203,6 +207,7 @@ function migrateSchema(sqlite: Database.Database) {
   migrateTeamsElo(sqlite);
   migrateTeamRatingMethods(sqlite);
   migrateBlendRatings(sqlite);
+  migrateTournamentEloDeltaWeight(sqlite);
   migrateSimulationTeamEloDelta(sqlite);
   migratePredictionConsensusMode(sqlite);
   migrateLegacyMasterAggregates(sqlite);
@@ -391,6 +396,19 @@ function migrateBlendRatings(sqlite: Database.Database) {
     }
   });
   apply(blended);
+}
+
+function migrateTournamentEloDeltaWeight(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'app_settings')) return;
+
+  const columns = sqlite.prepare('PRAGMA table_info(app_settings)').all() as Array<{
+    name: string;
+  }>;
+  if (!columns.some((column) => column.name === 'tournament_elo_delta_weight')) {
+    sqlite.exec(
+      `ALTER TABLE app_settings ADD COLUMN tournament_elo_delta_weight REAL NOT NULL DEFAULT ${DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT}`,
+    );
+  }
 }
 
 function migrateLegacyMasterAggregates(sqlite: Database.Database) {

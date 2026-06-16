@@ -21,6 +21,7 @@ import type {
   PredictionListPage,
   ValidateSelectionResult,
   RatingEloWeight,
+  TournamentEloDeltaWeight,
 } from '../engine/types.js';
 import { chooseConsensus, getDefaultConsensusMode, parseConsensusMode } from '../engine/consensus.js';
 import { winnerFromGoals } from '../engine/matchSimulator.js';
@@ -31,6 +32,7 @@ import {
   type SimulationRatings,
 } from '../engine/tournamentElo.js';
 import { DEFAULT_RATING_ELO_WEIGHT } from '../api/ratingEloWeight.js';
+import { DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT } from '../api/tournamentEloDeltaWeight.js';
 import { MatchLockedError, MatchClearBlockedError, ActualResultError, FrozenMatchError } from './errors.js';
 import {
   collectPlayedGroupMatches,
@@ -193,9 +195,10 @@ export class Repository {
   }
 
   setRatingEloWeight(eloWeight: RatingEloWeight): RatingEloWeight {
+    const deltaWeight = this.getTournamentEloDeltaWeight();
     this.db
       .insert(schema.appSettings)
-      .values({ id: 1, ratingEloWeight: eloWeight })
+      .values({ id: 1, ratingEloWeight: eloWeight, tournamentEloDeltaWeight: deltaWeight })
       .onConflictDoUpdate({
         target: schema.appSettings.id,
         set: { ratingEloWeight: eloWeight },
@@ -203,6 +206,30 @@ export class Repository {
       .run();
     this.recomputeBlendRatings(eloWeight);
     return eloWeight;
+  }
+
+  getTournamentEloDeltaWeight(): TournamentEloDeltaWeight {
+    const row = this.db
+      .select({ tournamentEloDeltaWeight: schema.appSettings.tournamentEloDeltaWeight })
+      .from(schema.appSettings)
+      .where(eq(schema.appSettings.id, 1))
+      .get();
+    return row?.tournamentEloDeltaWeight ?? DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT;
+  }
+
+  setTournamentEloDeltaWeight(
+    deltaWeight: TournamentEloDeltaWeight,
+  ): TournamentEloDeltaWeight {
+    const eloWeight = this.getRatingEloWeight();
+    this.db
+      .insert(schema.appSettings)
+      .values({ id: 1, ratingEloWeight: eloWeight, tournamentEloDeltaWeight: deltaWeight })
+      .onConflictDoUpdate({
+        target: schema.appSettings.id,
+        set: { tournamentEloDeltaWeight: deltaWeight },
+      })
+      .run();
+    return deltaWeight;
   }
 
   recomputeBlendRatings(eloWeight: RatingEloWeight = this.getRatingEloWeight()): void {
@@ -243,7 +270,12 @@ export class Repository {
   getSimulationRatingsMap(simulationId: number): Map<number, SimulationRatings> {
     const teams = this.getTeams();
     const deltas = this.getTournamentEloDeltas(simulationId);
-    return computeSimulationRatings(teams, deltas, this.getRatingEloWeight());
+    return computeSimulationRatings(
+      teams,
+      deltas,
+      this.getRatingEloWeight(),
+      this.getTournamentEloDeltaWeight(),
+    );
   }
 
   getTeamForSimulation(simulationId: number, teamId: number): Team {

@@ -70,6 +70,7 @@ function buildEngine(
   const teams = repo.getTeams();
   const teamsById = new Map(teams.map((t) => [t.id, t]));
   const eloWeight = repo.getRatingEloWeight();
+  const deltaWeight = repo.getTournamentEloDeltaWeight();
   const fixtures = repo.getFixtures();
   const memberships = repo.getGroupMemberships();
   const actualResults = repo.getActualResults();
@@ -94,7 +95,7 @@ function buildEngine(
   function refreshSimulationRatings(): void {
     const matchList = [...matches.values()];
     const deltas = recomputeEloDeltasFromSimulationState(teams, fixtures, matchList);
-    simulationRatings = computeSimulationRatings(teams, deltas, eloWeight);
+    simulationRatings = computeSimulationRatings(teams, deltas, eloWeight, deltaWeight);
   }
 
   function simTeam(teamId: number): Team {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { MonteCarloResult } from '../types.js';
 import { TEAM_CODES } from '@shared/lib/teamCodes.js';
 import { RatingEloWeightControl } from './RatingEloWeightControl.js';
+import { TournamentFormControl } from './TournamentFormControl.js';
 import { UpsetFactorControl } from './UpsetFactorControl.js';
 
 interface Props {
@@ -11,8 +12,10 @@ interface Props {
   error: string | null;
   upsetVariance: number;
   ratingEloWeight: number;
+  tournamentEloDeltaWeight: number;
   onUpsetVarianceChange: (value: number) => void;
   onRatingEloWeightChange: (value: number) => void;
+  onTournamentEloDeltaWeightChange: (value: number) => void;
   onClose: () => void;
   onRun: (count: number) => void;
 }
@@ -32,8 +35,10 @@ export function MonteCarloModal({
   error,
   upsetVariance,
   ratingEloWeight,
+  tournamentEloDeltaWeight,
   onUpsetVarianceChange,
   onRatingEloWeightChange,
+  onTournamentEloDeltaWeightChange,
   onClose,
   onRun,
 }: Props) {
@@ -85,6 +90,14 @@ export function MonteCarloModal({
           value={ratingEloWeight}
           disabled={running}
           onChange={onRatingEloWeightChange}
+        />
+
+        <TournamentFormControl
+          id="monte-carlo-tournament-form"
+          variant="full"
+          value={tournamentEloDeltaWeight}
+          disabled={running}
+          onChange={onTournamentEloDeltaWeightChange}
         />
 
         <UpsetFactorControl

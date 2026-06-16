@@ -10,6 +10,7 @@ import { HeaderDropdownMenu } from './HeaderDropdownMenu.js';
 import { UpsetFactorControl } from './UpsetFactorControl.js';
 import { ConsensusModeControl } from './ConsensusModeControl.js';
 import { RatingEloWeightControl, DEFAULT_RATING_ELO_WEIGHT } from './RatingEloWeightControl.js';
+import { TournamentFormControl, DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT } from './TournamentFormControl.js';
 import { ViewSwitcher } from './ViewSwitcher.js';
 import { ViewHelpButton } from './ViewHelpButton.js';
 
@@ -25,9 +26,11 @@ interface Props {
   simulating: boolean;
   upsetVariance: number;
   ratingEloWeight: number;
+  tournamentEloDeltaWeight: number;
   onAppViewChange: (view: AppView) => void;
   onUpsetVarianceChange: (value: number) => void;
   onRatingEloWeightChange: (value: number) => void;
+  onTournamentEloDeltaWeightChange: (value: number) => void;
   onConsensusModeChange: (mode: ConsensusMode) => void;
   onSaveConsensusMode: () => void;
   onToggleStageView: () => void;
@@ -59,9 +62,11 @@ export function Header({
   simulating,
   upsetVariance,
   ratingEloWeight,
+  tournamentEloDeltaWeight,
   onAppViewChange,
   onUpsetVarianceChange,
   onRatingEloWeightChange,
+  onTournamentEloDeltaWeightChange,
   onConsensusModeChange,
   onSaveConsensusMode,
   onToggleStageView,
@@ -118,6 +123,7 @@ export function Header({
   const menuActive =
     (showUpsetSetting && upsetVariance !== DEFAULT_UPSET_VARIANCE) ||
     (showUpsetSetting && ratingEloWeight !== DEFAULT_RATING_ELO_WEIGHT) ||
+    (showUpsetSetting && tournamentEloDeltaWeight !== DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT) ||
     (isPredictionsView && consensusModeDirty);
 
   const hasMenu = hasTopSection || hasBottomSection;
@@ -136,6 +142,11 @@ export function Header({
             value={ratingEloWeight}
             disabled={simulating}
             onChange={onRatingEloWeightChange}
+          />
+          <TournamentFormControl
+            value={tournamentEloDeltaWeight}
+            disabled={simulating}
+            onChange={onTournamentEloDeltaWeightChange}
           />
           <UpsetFactorControl
             value={upsetVariance}

@@ -1,6 +1,7 @@
 import { isPublicMode } from '../config/appMode.js';
 import { hydrateLocalState } from '../lib/localPredictionStorage.js';
 import { DEFAULT_RATING_ELO_WEIGHT } from '../lib/ratingEloWeight.js';
+import { DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT } from '../lib/tournamentEloDeltaWeight.js';
 import { staticApi, loadBootstrap, loadPublicMeta } from './staticClient.js';
 import type {
   ActualResultsState,
@@ -90,6 +91,15 @@ const privateApi = {
     request<{ ratingEloWeight: number }>('/api/v1/settings/rating-elo-weight', {
       method: 'PUT',
       body: JSON.stringify({ ratingEloWeight }),
+    }),
+
+  getTournamentEloDeltaWeight: () =>
+    request<{ tournamentEloDeltaWeight: number }>('/api/v1/settings/tournament-elo-delta-weight'),
+
+  setTournamentEloDeltaWeight: (tournamentEloDeltaWeight: number) =>
+    request<{ tournamentEloDeltaWeight: number }>('/api/v1/settings/tournament-elo-delta-weight', {
+      method: 'PUT',
+      body: JSON.stringify({ tournamentEloDeltaWeight }),
     }),
 
   getActualResultsState: () => request<ActualResultsState>('/api/v1/actual-results/state'),
@@ -318,6 +328,12 @@ const publicApiStub = {
   listTeams: staticApi.listTeams,
   getRatingEloWeight: async () => ({ ratingEloWeight: DEFAULT_RATING_ELO_WEIGHT }),
   setRatingEloWeight: async (ratingEloWeight: number) => ({ ratingEloWeight }),
+  getTournamentEloDeltaWeight: async () => ({
+    tournamentEloDeltaWeight: DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
+  }),
+  setTournamentEloDeltaWeight: async (tournamentEloDeltaWeight: number) => ({
+    tournamentEloDeltaWeight,
+  }),
   getActualResultsState: staticApi.getActualResultsState,
   getMasterGroupState: staticApi.getMasterGroupState,
   getMasterTeamStats: staticApi.getMasterTeamStats,

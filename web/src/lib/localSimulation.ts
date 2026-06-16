@@ -31,6 +31,7 @@ import {
   type SimulationRatings,
 } from '@shared/engine/tournamentElo.js';
 import { DEFAULT_RATING_ELO_WEIGHT } from '../lib/ratingEloWeight.js';
+import { DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT } from '../lib/tournamentEloDeltaWeight.js';
 import { normalizeBootstrapTeams } from './normalizeTeam.js';
 import type { Simulation, SimulationMatch, Team, TournamentState } from '../types.js';
 
@@ -107,6 +108,7 @@ function fromEngineMatches(state: TournamentState, matches: SimulationMatch[]): 
 function getSimulationRatingsForState(
   state: TournamentState,
   ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
+  deltaWeight: number = DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
 ): Map<number, SimulationRatings> {
   const teams = Object.values(state.teams);
   const deltas = recomputeEloDeltasFromSimulationState(
@@ -114,7 +116,7 @@ function getSimulationRatingsForState(
     state.fixtures,
     toEngineMatches(state),
   );
-  return computeSimulationRatings(teams, deltas, ratingEloWeight);
+  return computeSimulationRatings(teams, deltas, ratingEloWeight, deltaWeight);
 }
 
 function getTeam(state: TournamentState, teamId: number) {
@@ -192,6 +194,7 @@ export function simulateLocalMatch(
   matchNumber: number,
   upsetVariance?: number,
   ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
+  deltaWeight: number = DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
 ): { state: TournamentState; result: MatchResultRow } {
   const resolved = findResolvedMatch(state, matchNumber);
   if (resolved.isLocked) {
@@ -205,7 +208,7 @@ export function simulateLocalMatch(
   }
 
   const isKnockout = resolved.fixture.group == null;
-  const ratings = getSimulationRatingsForState(state, ratingEloWeight);
+  const ratings = getSimulationRatingsForState(state, ratingEloWeight, deltaWeight);
   const outcome = simulateMatchOutcome(
     teamForSimulation(resolved.homeTeam, ratings.get(resolved.homeTeam.id)),
     teamForSimulation(resolved.awayTeam, ratings.get(resolved.awayTeam.id)),
@@ -245,6 +248,7 @@ export function simulateLocalGroupPhase(
   gamesTarget: GroupGamesTarget,
   upsetVariance?: number,
   ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
+  deltaWeight: number = DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
 ): { state: TournamentState; result: GroupPhaseResult } {
   const fixtures = state.fixtures
     .filter((f) => f.group != null && isGroupFixtureWithinGamesTarget(f, gamesTarget))
@@ -275,6 +279,7 @@ export function simulateLocalGroupPhase(
     const ratings = getSimulationRatingsForState(
       fromEngineMatches(state, matches),
       ratingEloWeight,
+      deltaWeight,
     );
     const home = teamForSimulation(getTeam(state, fixture.teamHomeId), ratings.get(fixture.teamHomeId));
     const away = teamForSimulation(getTeam(state, fixture.teamAwayId), ratings.get(fixture.teamAwayId));
@@ -317,6 +322,7 @@ export function simulateLocalKnockouts(
   throughRoundName?: string,
   upsetVariance?: number,
   ratingEloWeight: number = DEFAULT_RATING_ELO_WEIGHT,
+  deltaWeight: number = DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
 ): { state: TournamentState; result: KnockoutsResult } {
   const throughName =
     throughRoundName ?? SIMULATION_KNOCKOUT_ROUNDS[SIMULATION_KNOCKOUT_ROUNDS.length - 1]!.name;
@@ -327,7 +333,13 @@ export function simulateLocalKnockouts(
 
   let currentState = state;
   if (!isGroupStageComplete(toEngineMatches(currentState), currentState.fixtures)) {
-    currentState = simulateLocalGroupPhase(currentState, 3, upsetVariance, ratingEloWeight).state;
+    currentState = simulateLocalGroupPhase(
+      currentState,
+      3,
+      upsetVariance,
+      ratingEloWeight,
+      deltaWeight,
+    ).state;
   }
 
   const roundResults: KnockoutRoundResult[] = [];
@@ -361,6 +373,7 @@ export function simulateLocalKnockouts(
       const ratings = getSimulationRatingsForState(
         fromEngineMatches(currentState, matches),
         ratingEloWeight,
+        deltaWeight,
       );
       const home = teamForSimulation(getTeam(currentState, match.teamHomeId), ratings.get(match.teamHomeId));
       const away = teamForSimulation(getTeam(currentState, match.teamAwayId), ratings.get(match.teamAwayId));

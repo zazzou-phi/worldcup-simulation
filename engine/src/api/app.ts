@@ -13,6 +13,7 @@ import {
   simulateMonteCarlo,
 } from './monteCarlo.js';
 import { parseRatingEloWeight } from './ratingEloWeight.js';
+import { parseTournamentEloDeltaWeight } from './tournamentEloDeltaWeight.js';
 import { parseConsensusModeBody } from './consensusMode.js';
 import {
   parseGroupGamesParam,
@@ -320,6 +321,22 @@ export function createApiApp(repo: Repository) {
     );
     repo.setRatingEloWeight(ratingEloWeight);
     return c.json({ ratingEloWeight });
+  });
+
+  app.get('/api/v1/settings/tournament-elo-delta-weight', (c) => {
+    return c.json({ tournamentEloDeltaWeight: repo.getTournamentEloDeltaWeight() });
+  });
+
+  app.put('/api/v1/settings/tournament-elo-delta-weight', async (c) => {
+    const body = await c.req.json().catch(() => null);
+    if (!body || typeof body !== 'object') {
+      throw new ApiError('Request body must be JSON', 400, 'invalid_body');
+    }
+    const tournamentEloDeltaWeight = parseTournamentEloDeltaWeight(
+      (body as { tournamentEloDeltaWeight: unknown }).tournamentEloDeltaWeight,
+    );
+    repo.setTournamentEloDeltaWeight(tournamentEloDeltaWeight);
+    return c.json({ tournamentEloDeltaWeight });
   });
 
   app.get('/api/v1/simulations/:id', (c) => {

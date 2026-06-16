@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import {
   computeEloDeltasFromMatches,
   computeSimulationRatings,
+  DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT,
+  effectiveEloForSimulation,
   expectedScore,
   matchEloDelta,
   recomputeEloDeltasFromSimulationState,
@@ -130,5 +132,30 @@ describe('tournamentElo', () => {
     );
     expect(boosted.get(1)!.offensiveRating).toBeGreaterThan(baseline.get(1)!.offensiveRating);
     expect(boosted.get(2)!.offensiveRating).toBeLessThan(baseline.get(2)!.offensiveRating);
+  });
+
+  it('effectiveEloForSimulation amplifies delta without changing base elo storage', () => {
+    expect(effectiveEloForSimulation(1600, 20, 2)).toBe(1640);
+    expect(effectiveEloForSimulation(1600, 20, 0)).toBe(1600);
+  });
+
+  it('computeSimulationRatings amplifies delta when beta is above 1', () => {
+    const teams = [makeTeam(1, 1800), makeTeam(2, 1200)];
+    const deltas = new Map([
+      [1, 40],
+      [2, -40],
+    ]);
+    const betaOne = computeSimulationRatings(teams, deltas, 1, 1);
+    const betaTwo = computeSimulationRatings(teams, deltas, 1, 2);
+    expect(betaTwo.get(1)!.offensiveRating).toBeGreaterThan(betaOne.get(1)!.offensiveRating);
+    expect(betaTwo.get(2)!.offensiveRating).toBeLessThan(betaOne.get(2)!.offensiveRating);
+  });
+
+  it('defaults beta to DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT', () => {
+    const teams = [makeTeam(1, 1500), makeTeam(2, 1500)];
+    const deltas = new Map([[1, 32], [2, -32]]);
+    const explicit = computeSimulationRatings(teams, deltas, 1, DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT);
+    const defaulted = computeSimulationRatings(teams, deltas, 1);
+    expect(defaulted.get(1)!.offensiveRating).toBeCloseTo(explicit.get(1)!.offensiveRating, 10);
   });
 });

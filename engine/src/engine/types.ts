@@ -4,6 +4,7 @@ import type { SelectionSpec } from '../lib/simulationSelection.js';
 export type { Phase };
 export type MatchStatus = 'scheduled' | 'played';
 export type RatingEloWeight = number;
+export type TournamentEloDeltaWeight = number;
 
 export interface Team {
   id: number;
