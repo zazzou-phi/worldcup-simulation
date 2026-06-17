@@ -139,6 +139,20 @@
       "goalsAway": 1,
       "winnerTeamId": 22,
       "recordedAt": "2026-06-17T07:15:05.639Z"
+    },
+    {
+      "matchNumber": 61,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-17T22:39:07.131Z"
+    },
+    {
+      "matchNumber": 67,
+      "goalsHome": 4,
+      "goalsAway": 2,
+      "winnerTeamId": 3,
+      "recordedAt": "2026-06-17T22:39:14.875Z"
     }
   ],
   "phase": "group",
@@ -1416,15 +1430,45 @@
             "blendOffensiveRating": 1.3799522384567968,
             "blendDefensiveRating": 0.7610073770813427
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
           "goalDifference": 0,
-          "points": 0,
+          "points": 1,
           "position": 1
+        },
+        {
+          "teamId": 53,
+          "team": {
+            "id": 53,
+            "name": "DR Congo",
+            "countryCode": "CD",
+            "flag": "🇨🇩",
+            "rank": 54,
+            "rating": 1655,
+            "elo": 1655,
+            "total": 547,
+            "goalsFor": 835,
+            "goalsAgainst": 641,
+            "eloOffensiveRating": 0.6617996444852501,
+            "eloDefensiveRating": 1.2498884949348488,
+            "goalOffensiveRating": 0.9224939974345626,
+            "goalDefensiveRating": 0.9812962085790669,
+            "blendOffensiveRating": 0.7363165458148493,
+            "blendDefensiveRating": 1.1042728128276003
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "points": 1,
+          "position": 2
         },
         {
           "teamId": 6,
@@ -1454,7 +1498,7 @@
           "goalsAgainst": 0,
           "goalDifference": 0,
           "points": 0,
-          "position": 2
+          "position": 3
         },
         {
           "teamId": 38,
@@ -1475,36 +1519,6 @@
             "goalDefensiveRating": 0.9131026964926989,
             "blendOffensiveRating": 0.866358327887831,
             "blendDefensiveRating": 0.973032359423434
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 3
-        },
-        {
-          "teamId": 53,
-          "team": {
-            "id": 53,
-            "name": "DR Congo",
-            "countryCode": "CD",
-            "flag": "🇨🇩",
-            "rank": 54,
-            "rating": 1655,
-            "elo": 1655,
-            "total": 547,
-            "goalsFor": 835,
-            "goalsAgainst": 641,
-            "eloOffensiveRating": 0.6617996444852501,
-            "eloDefensiveRating": 1.2498884949348488,
-            "goalOffensiveRating": 0.9224939974345626,
-            "goalDefensiveRating": 0.9812962085790669,
-            "blendOffensiveRating": 0.7363165458148493,
-            "blendDefensiveRating": 1.1042728128276003
           },
           "played": 0,
           "won": 0,
@@ -1541,45 +1555,15 @@
             "blendOffensiveRating": 1.581997961951808,
             "blendDefensiveRating": 0.6673271373934829
           },
-          "played": 0,
-          "won": 0,
+          "played": 1,
+          "won": 1,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
+          "goalsFor": 4,
+          "goalsAgainst": 2,
+          "goalDifference": 2,
+          "points": 3,
           "position": 1
-        },
-        {
-          "teamId": 9,
-          "team": {
-            "id": 9,
-            "name": "Croatia",
-            "countryCode": "HR",
-            "flag": "🇭🇷",
-            "rank": 10,
-            "rating": 1930,
-            "elo": 1930,
-            "total": 398,
-            "goalsFor": 694,
-            "goalsAgainst": 401,
-            "eloOffensiveRating": 1.3161457503440563,
-            "eloDefensiveRating": 0.6284834041958145,
-            "goalOffensiveRating": 1.0537577899019461,
-            "goalDefensiveRating": 0.8437051852993226,
-            "blendOffensiveRating": 1.241144748070175,
-            "blendDefensiveRating": 0.7451645899623016
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 2
         },
         {
           "teamId": 35,
@@ -1609,7 +1593,7 @@
           "goalsAgainst": 0,
           "goalDifference": 0,
           "points": 0,
-          "position": 3
+          "position": 2
         },
         {
           "teamId": 81,
@@ -1638,6 +1622,36 @@
           "goalsFor": 0,
           "goalsAgainst": 0,
           "goalDifference": 0,
+          "points": 0,
+          "position": 3
+        },
+        {
+          "teamId": 9,
+          "team": {
+            "id": 9,
+            "name": "Croatia",
+            "countryCode": "HR",
+            "flag": "🇭🇷",
+            "rank": 10,
+            "rating": 1930,
+            "elo": 1930,
+            "total": 398,
+            "goalsFor": 694,
+            "goalsAgainst": 401,
+            "eloOffensiveRating": 1.3161457503440563,
+            "eloDefensiveRating": 0.6284834041958145,
+            "goalOffensiveRating": 1.0537577899019461,
+            "goalDefensiveRating": 0.8437051852993226,
+            "blendOffensiveRating": 1.241144748070175,
+            "blendDefensiveRating": 0.7451645899623016
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 0,
+          "lost": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 4,
+          "goalDifference": -2,
           "points": 0,
           "position": 4
         }
@@ -5392,10 +5406,10 @@
         "matchNumber": 61,
         "teamHomeId": 5,
         "teamAwayId": 53,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 1,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 5,
@@ -5435,7 +5449,7 @@
       },
       "homeLabel": "Portugal",
       "awayLabel": "DR Congo",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5764,10 +5778,10 @@
         "matchNumber": 67,
         "teamHomeId": 3,
         "teamAwayId": 9,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 4,
+        "goalsAway": 2,
+        "winnerTeamId": 3,
+        "status": "played"
       },
       "homeTeam": {
         "id": 3,
@@ -5807,7 +5821,7 @@
       },
       "homeLabel": "England",
       "awayLabel": "Croatia",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6569,7 +6583,7 @@
       "result": {
         "matchNumber": 80,
         "teamHomeId": 3,
-        "teamAwayId": 35,
+        "teamAwayId": 81,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -6594,25 +6608,25 @@
         "blendDefensiveRating": 0.6673271373934829
       },
       "awayTeam": {
-        "id": 35,
-        "name": "Panama",
-        "countryCode": "PA",
-        "flag": "🇵🇦",
-        "rank": 36,
-        "rating": 1737,
-        "elo": 1737,
-        "total": 591,
-        "goalsFor": 736,
-        "goalsAgainst": 906,
-        "eloOffensiveRating": 0.8123756515893644,
-        "eloDefensiveRating": 1.0182183082121763,
-        "goalOffensiveRating": 0.7525835707573187,
-        "goalDefensiveRating": 1.2837194887430836,
-        "blendOffensiveRating": 0.7952846769010127,
-        "blendDefensiveRating": 1.1621581660086764
+        "id": 81,
+        "name": "Ghana",
+        "countryCode": "GH",
+        "flag": "🇬🇭",
+        "rank": 82,
+        "rating": 1503,
+        "elo": 1503,
+        "total": 778,
+        "goalsFor": 1247,
+        "goalsAgainst": 822,
+        "eloOffensiveRating": 0.45257923749391915,
+        "eloDefensiveRating": 1.8276926846543662,
+        "goalOffensiveRating": 0.9686151472316427,
+        "goalDefensiveRating": 0.8847521735564211,
+        "blendOffensiveRating": 0.6000829963341902,
+        "blendDefensiveRating": 1.3164831947131472
       },
       "homeLabel": "England",
-      "awayLabel": "Panama",
+      "awayLabel": "Ghana",
       "isLocked": false
     },
     {
@@ -6754,51 +6768,51 @@
       },
       "result": {
         "matchNumber": 83,
-        "teamHomeId": 6,
-        "teamAwayId": 9,
+        "teamHomeId": 53,
+        "teamAwayId": 35,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 6,
-        "name": "Colombia",
-        "countryCode": "CO",
-        "flag": "🇨🇴",
-        "rank": 7,
-        "rating": 1975,
-        "elo": 1975,
-        "total": 648,
-        "goalsFor": 842,
-        "goalsAgainst": 741,
-        "eloOffensiveRating": 1.4728621952636882,
-        "eloDefensiveRating": 0.5616111026911087,
-        "goalOffensiveRating": 0.7852383203489802,
-        "goalDefensiveRating": 0.9575746045307473,
-        "blendOffensiveRating": 1.2763117143683138,
-        "blendDefensiveRating": 0.7762803182231534
+        "id": 53,
+        "name": "DR Congo",
+        "countryCode": "CD",
+        "flag": "🇨🇩",
+        "rank": 54,
+        "rating": 1655,
+        "elo": 1655,
+        "total": 547,
+        "goalsFor": 835,
+        "goalsAgainst": 641,
+        "eloOffensiveRating": 0.6617996444852501,
+        "eloDefensiveRating": 1.2498884949348488,
+        "goalOffensiveRating": 0.9224939974345626,
+        "goalDefensiveRating": 0.9812962085790669,
+        "blendOffensiveRating": 0.7363165458148493,
+        "blendDefensiveRating": 1.1042728128276003
       },
       "awayTeam": {
-        "id": 9,
-        "name": "Croatia",
-        "countryCode": "HR",
-        "flag": "🇭🇷",
-        "rank": 10,
-        "rating": 1930,
-        "elo": 1930,
-        "total": 398,
-        "goalsFor": 694,
-        "goalsAgainst": 401,
-        "eloOffensiveRating": 1.3161457503440563,
-        "eloDefensiveRating": 0.6284834041958145,
-        "goalOffensiveRating": 1.0537577899019461,
-        "goalDefensiveRating": 0.8437051852993226,
-        "blendOffensiveRating": 1.241144748070175,
-        "blendDefensiveRating": 0.7451645899623016
+        "id": 35,
+        "name": "Panama",
+        "countryCode": "PA",
+        "flag": "🇵🇦",
+        "rank": 36,
+        "rating": 1737,
+        "elo": 1737,
+        "total": 591,
+        "goalsFor": 736,
+        "goalsAgainst": 906,
+        "eloOffensiveRating": 0.8123756515893644,
+        "eloDefensiveRating": 1.0182183082121763,
+        "goalOffensiveRating": 0.7525835707573187,
+        "goalDefensiveRating": 1.2837194887430836,
+        "blendOffensiveRating": 0.7952846769010127,
+        "blendDefensiveRating": 1.1621581660086764
       },
-      "homeLabel": "Colombia",
-      "awayLabel": "Croatia",
+      "homeLabel": "DR Congo",
+      "awayLabel": "Panama",
       "isLocked": false
     },
     {
@@ -7003,7 +7017,7 @@
       "result": {
         "matchNumber": 87,
         "teamHomeId": 5,
-        "teamAwayId": 38,
+        "teamAwayId": 6,
         "goalsHome": null,
         "goalsAway": null,
         "winnerTeamId": null,
@@ -7028,25 +7042,25 @@
         "blendDefensiveRating": 0.7610073770813427
       },
       "awayTeam": {
-        "id": 38,
-        "name": "Uzbekistan",
-        "countryCode": "UZ",
-        "flag": "🇺🇿",
-        "rank": 39,
-        "rating": 1727,
-        "elo": 1727,
-        "total": 365,
-        "goalsFor": 635,
-        "goalsAgainst": 398,
-        "eloOffensiveRating": 0.7923180252855825,
-        "eloDefensiveRating": 1.0439946274047476,
-        "goalOffensiveRating": 1.0513450169433456,
-        "goalDefensiveRating": 0.9131026964926989,
-        "blendOffensiveRating": 0.866358327887831,
-        "blendDefensiveRating": 0.973032359423434
+        "id": 6,
+        "name": "Colombia",
+        "countryCode": "CO",
+        "flag": "🇨🇴",
+        "rank": 7,
+        "rating": 1975,
+        "elo": 1975,
+        "total": 648,
+        "goalsFor": 842,
+        "goalsAgainst": 741,
+        "eloOffensiveRating": 1.4728621952636882,
+        "eloDefensiveRating": 0.5616111026911087,
+        "goalOffensiveRating": 0.7852383203489802,
+        "goalDefensiveRating": 0.9575746045307473,
+        "blendOffensiveRating": 1.2763117143683138,
+        "blendDefensiveRating": 0.7762803182231534
       },
       "homeLabel": "Portugal",
-      "awayLabel": "Uzbekistan",
+      "awayLabel": "Colombia",
       "isLocked": false
     },
     {

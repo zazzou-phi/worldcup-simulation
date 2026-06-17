@@ -3738,10 +3738,10 @@
         "matchNumber": 61,
         "teamHomeId": 5,
         "teamAwayId": 53,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 4,
+        "goalsAway": 1,
+        "winnerTeamId": 5,
+        "status": "played"
       },
       "homeTeam": {
         "id": 5,
@@ -3781,7 +3781,7 @@
       },
       "homeLabel": "Portugal",
       "awayLabel": "DR Congo",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -4110,10 +4110,10 @@
         "matchNumber": 67,
         "teamHomeId": 3,
         "teamAwayId": 9,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 2,
+        "goalsAway": 1,
+        "winnerTeamId": 3,
+        "status": "played"
       },
       "homeTeam": {
         "id": 3,
@@ -4153,7 +4153,7 @@
       },
       "homeLabel": "England",
       "awayLabel": "Croatia",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -4172,10 +4172,10 @@
         "matchNumber": 68,
         "teamHomeId": 81,
         "teamAwayId": 35,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 1,
+        "goalsAway": 3,
+        "winnerTeamId": 35,
+        "status": "played"
       },
       "homeTeam": {
         "id": 81,
@@ -5740,15 +5740,45 @@
             "blendOffensiveRating": 1.3799522384567968,
             "blendDefensiveRating": 0.7610073770813427
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
           "goalDifference": 0,
-          "points": 0,
+          "points": 1,
           "position": 1
+        },
+        {
+          "teamId": 53,
+          "team": {
+            "id": 53,
+            "name": "DR Congo",
+            "countryCode": "CD",
+            "flag": "🇨🇩",
+            "rank": 54,
+            "rating": 1655,
+            "elo": 1655,
+            "total": 547,
+            "goalsFor": 835,
+            "goalsAgainst": 641,
+            "eloOffensiveRating": 0.6617996444852501,
+            "eloDefensiveRating": 1.2498884949348488,
+            "goalOffensiveRating": 0.9224939974345626,
+            "goalDefensiveRating": 0.9812962085790669,
+            "blendOffensiveRating": 0.7363165458148493,
+            "blendDefensiveRating": 1.1042728128276003
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "goalDifference": 0,
+          "points": 1,
+          "position": 2
         },
         {
           "teamId": 6,
@@ -5778,7 +5808,7 @@
           "goalsAgainst": 0,
           "goalDifference": 0,
           "points": 0,
-          "position": 2
+          "position": 3
         },
         {
           "teamId": 38,
@@ -5799,36 +5829,6 @@
             "goalDefensiveRating": 0.9131026964926989,
             "blendOffensiveRating": 0.866358327887831,
             "blendDefensiveRating": 0.973032359423434
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 3
-        },
-        {
-          "teamId": 53,
-          "team": {
-            "id": 53,
-            "name": "DR Congo",
-            "countryCode": "CD",
-            "flag": "🇨🇩",
-            "rank": 54,
-            "rating": 1655,
-            "elo": 1655,
-            "total": 547,
-            "goalsFor": 835,
-            "goalsAgainst": 641,
-            "eloOffensiveRating": 0.6617996444852501,
-            "eloDefensiveRating": 1.2498884949348488,
-            "goalOffensiveRating": 0.9224939974345626,
-            "goalDefensiveRating": 0.9812962085790669,
-            "blendOffensiveRating": 0.7363165458148493,
-            "blendDefensiveRating": 1.1042728128276003
           },
           "played": 0,
           "won": 0,
@@ -5865,45 +5865,15 @@
             "blendOffensiveRating": 1.581997961951808,
             "blendDefensiveRating": 0.6673271373934829
           },
-          "played": 0,
-          "won": 0,
+          "played": 1,
+          "won": 1,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
+          "goalsFor": 4,
+          "goalsAgainst": 2,
+          "goalDifference": 2,
+          "points": 3,
           "position": 1
-        },
-        {
-          "teamId": 9,
-          "team": {
-            "id": 9,
-            "name": "Croatia",
-            "countryCode": "HR",
-            "flag": "🇭🇷",
-            "rank": 10,
-            "rating": 1930,
-            "elo": 1930,
-            "total": 398,
-            "goalsFor": 694,
-            "goalsAgainst": 401,
-            "eloOffensiveRating": 1.3161457503440563,
-            "eloDefensiveRating": 0.6284834041958145,
-            "goalOffensiveRating": 1.0537577899019461,
-            "goalDefensiveRating": 0.8437051852993226,
-            "blendOffensiveRating": 1.241144748070175,
-            "blendDefensiveRating": 0.7451645899623016
-          },
-          "played": 0,
-          "won": 0,
-          "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
-          "points": 0,
-          "position": 2
         },
         {
           "teamId": 35,
@@ -5925,13 +5895,43 @@
             "blendOffensiveRating": 0.7952846769010127,
             "blendDefensiveRating": 1.1621581660086764
           },
-          "played": 0,
-          "won": 0,
+          "played": 1,
+          "won": 1,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "goalDifference": 2,
+          "points": 3,
+          "position": 2
+        },
+        {
+          "teamId": 9,
+          "team": {
+            "id": 9,
+            "name": "Croatia",
+            "countryCode": "HR",
+            "flag": "🇭🇷",
+            "rank": 10,
+            "rating": 1930,
+            "elo": 1930,
+            "total": 398,
+            "goalsFor": 694,
+            "goalsAgainst": 401,
+            "eloOffensiveRating": 1.3161457503440563,
+            "eloDefensiveRating": 0.6284834041958145,
+            "goalOffensiveRating": 1.0537577899019461,
+            "goalDefensiveRating": 0.8437051852993226,
+            "blendOffensiveRating": 1.241144748070175,
+            "blendDefensiveRating": 0.7451645899623016
+          },
+          "played": 1,
+          "won": 0,
+          "drawn": 0,
+          "lost": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 4,
+          "goalDifference": -2,
           "points": 0,
           "position": 3
         },
@@ -5955,13 +5955,13 @@
             "blendOffensiveRating": 0.6000829963341902,
             "blendDefensiveRating": 1.3164831947131472
           },
-          "played": 0,
+          "played": 1,
           "won": 0,
           "drawn": 0,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
+          "lost": 1,
+          "goalsFor": 1,
+          "goalsAgainst": 3,
+          "goalDifference": -2,
           "points": 0,
           "position": 4
         }
@@ -5972,11 +5972,11 @@
     "A",
     "B",
     "C",
+    "E",
     "F",
     "G",
     "H",
-    "K",
-    "L"
+    "K"
   ],
   "distributions": {
     "1": {
@@ -13605,11 +13605,223 @@
       "scorelines": []
     },
     "61": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 1605,
+      "draw": 528,
+      "awayWin": 367,
+      "total": 2500,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 175
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 124
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 66
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 18
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 5
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 276
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 250
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 85
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 23
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 6
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 304
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 226
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 88
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 27
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 195
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 148
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 46
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 13
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 2
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 128
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 87
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 28
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 7
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 2
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 42
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 34
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 8
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 33
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 13
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 3
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 15
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 5
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 2
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "62": {
       "homeWin": 0,
@@ -13647,18 +13859,446 @@
       "scorelines": []
     },
     "67": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 1179,
+      "draw": 610,
+      "awayWin": 711,
+      "total": 2500,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 186
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 187
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 129
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 60
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 13
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 265
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 279
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 177
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 55
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 17
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 7
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 227
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 200
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 120
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 39
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 7
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 122
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 111
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 45
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 22
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 7
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 68
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 45
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 21
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 7
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 18
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 20
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 7
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 2
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 5
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 6
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 2
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 2
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 0,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "68": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 701,
+      "draw": 641,
+      "awayWin": 1158,
+      "total": 2500,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 270
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 290
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 245
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 129
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 53
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 26
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 5
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 259
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 269
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 193
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 90
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 33
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 14
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 120
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 161
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 91
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 48
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 16
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 41
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 51
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 24
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 10
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 13
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 11
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 10
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 5
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 1
+        }
+      ]
     },
     "69": {
       "homeWin": 0,
