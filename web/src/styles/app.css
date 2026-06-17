@@ -217,7 +217,7 @@ button {
   width: 100%;
 }
 
-.header-draw-save-stack {
+.header-sample-save-stack {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;

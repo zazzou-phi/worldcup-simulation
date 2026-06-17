@@ -45,7 +45,7 @@ import { PredictionManagerModal } from './components/PredictionManagerModal.js';
 import { TeamRatingsModal } from './components/TeamRatingsModal.js';
 import { MasterTeamStatsModal } from './components/MasterTeamStatsModal.js';
 import { TournamentStatsModal } from './components/TournamentStatsModal.js';
-import { DrawConfirmModal } from './components/DrawConfirmModal.js';
+import { SampleConfirmModal } from './components/SampleConfirmModal.js';
 import type { MonteCarloResult } from './types.js';
 
 export function App() {
@@ -81,8 +81,8 @@ export function App() {
   const [activePredictionLabel, setActivePredictionLabel] = useState<string | null>(null);
   const [showMasterTeamStats, setShowMasterTeamStats] = useState(false);
   const [showTournamentStats, setShowTournamentStats] = useState(false);
-  const [showDrawConfirm, setShowDrawConfirm] = useState(false);
-  const [drawingPrediction, setDrawingPrediction] = useState(false);
+  const [showResampleConfirm, setShowResampleConfirm] = useState(false);
+  const [samplingPrediction, setSamplingPrediction] = useState(false);
   const [loading, setLoading] = useState(true);
   const [simulating, setSimulating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,7 +138,7 @@ export function App() {
     );
   }, [masterStateBase, consensusModeDraft, state, publicMode]);
 
-  const canDrawPrediction = useMemo(() => {
+  const canSamplePrediction = useMemo(() => {
     if (!masterState) return false;
     return masterState.resolvedMatches.some((match) => {
       if (match.fixture.group == null || match.isLocked) return false;
@@ -448,38 +448,38 @@ export function App() {
     }
   };
 
-  const runPredictionDraw = async () => {
+  const runPredictionSample = async () => {
     if (predictionId == null || publicMode) return;
-    setDrawingPrediction(true);
+    setSamplingPrediction(true);
     setError(null);
     try {
-      const next = await api.drawPrediction(predictionId);
+      const next = await api.samplePrediction(predictionId);
       setMasterStateBase(next);
-      const count = next.draw?.matchCount ?? 0;
-      setToast(`Drew ${count.toLocaleString()} fixture${count === 1 ? '' : 's'}`);
+      const count = next.sample?.matchCount ?? 0;
+      setToast(`Sampled ${count.toLocaleString()} fixture${count === 1 ? '' : 's'}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to draw prediction scores');
+      setError(err instanceof Error ? err.message : 'Failed to sample prediction scores');
     } finally {
-      setDrawingPrediction(false);
-      setShowDrawConfirm(false);
+      setSamplingPrediction(false);
+      setShowResampleConfirm(false);
     }
   };
 
-  const handleDrawButton = () => {
+  const handleSampleButton = () => {
     if (publicMode || predictionId == null) return;
 
-    if (consensusModeDraft === 'draw') {
-      if (masterStateBase?.draw?.drawnAt) {
-        setShowDrawConfirm(true);
+    if (consensusModeDraft === 'sample') {
+      if (masterStateBase?.sample?.sampledAt) {
+        setShowResampleConfirm(true);
       } else {
-        void runPredictionDraw();
+        void runPredictionSample();
       }
       return;
     }
 
-    setConsensusModeDraft('draw');
-    if (!masterStateBase?.draw?.drawnAt) {
-      void runPredictionDraw();
+    setConsensusModeDraft('sample');
+    if (!masterStateBase?.sample?.sampledAt) {
+      void runPredictionSample();
     }
   };
 
@@ -684,11 +684,11 @@ export function App() {
         onOpenTournamentStats={() => setShowTournamentStats(true)}
         onOpenPredictions={() => setShowPredictions(true)}
         onClearSimulation={publicMode ? handleClearSimulation : undefined}
-        drawActive={consensusModeDraft === 'draw'}
-        hasSavedDraw={Boolean(masterStateBase?.draw?.drawnAt)}
-        canDraw={canDrawPrediction}
-        drawing={drawingPrediction}
-        onDraw={publicMode ? undefined : handleDrawButton}
+        sampleActive={consensusModeDraft === 'sample'}
+        hasSavedSample={Boolean(masterStateBase?.sample?.sampledAt)}
+        canSample={canSamplePrediction}
+        sampling={samplingPrediction}
+        onSample={publicMode ? undefined : handleSampleButton}
       />
 
       {toast && (
@@ -827,10 +827,10 @@ export function App() {
         />
       )}
 
-      {showDrawConfirm && (
-        <DrawConfirmModal
-          onConfirm={() => void runPredictionDraw()}
-          onClose={() => setShowDrawConfirm(false)}
+      {showResampleConfirm && (
+        <SampleConfirmModal
+          onConfirm={() => void runPredictionSample()}
+          onClose={() => setShowResampleConfirm(false)}
         />
       )}
 

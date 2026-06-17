@@ -97,11 +97,11 @@ function predictionsHelp(publicMode: boolean): ViewHelp {
       title: 'Consensus modes',
       paragraphs: [CONSENSUS_MODE_HINT],
       bullets: [
-        'Expected — floored mean goals with modal scores for wins.',
+        'Floor — floored mean goals with modal scores for wins.',
         'Rounded — rounded mean goals only.',
         'Outcome — modal result (win/draw/loss), then modal score within that outcome.',
         'Scoreline — most frequent exact scoreline.',
-        'Draw — use the Draw button: switches to saved pool scores, samples on first use, Redraw when already active.',
+        'Sample — use the Sample button: switches to saved pool scores, samples on first use, Resample when already active.',
       ],
     },
   ];
@@ -136,7 +136,7 @@ function predictionsHelp(publicMode: boolean): ViewHelp {
     howToBullets.splice(
       3,
       0,
-      'Use Draw to switch to saved pool scores. If none exist yet, it samples unlocked fixtures from the pool. Press Draw again while active to Redraw (with confirmation).',
+      'Use Sample to switch to saved pool scores. If none exist yet, it samples unlocked fixtures from the pool. Press Sample again while active to Resample (with confirmation).',
       'Save consensus mode changes with Save mode in the ⋮ menu.',
       'Override consensus for individual fixtures in the distribution modal (frozen consensus).',
       'Adjust the double-down count slider in the fixture list to highlight influential fixtures.',

@@ -2,21 +2,21 @@ import { eq } from 'drizzle-orm';
 import type { Db } from './client.js';
 import * as schema from './schema.js';
 
-export class PredictionDrawError extends Error {
+export class PredictionSampleError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'PredictionDrawError';
+    this.name = 'PredictionSampleError';
   }
 }
 
-export interface PredictionDrawResultRow {
+export interface PredictionSampleResultRow {
   goalsHome: number;
   goalsAway: number;
-  drawnAt: string;
+  sampledAt: string;
 }
 
-export interface PredictionDrawSummary {
-  drawnAt: string;
+export interface PredictionSampleSummary {
+  sampledAt: string;
   matchCount: number;
 }
 
@@ -28,56 +28,56 @@ function getSqlite(db: Db): import('better-sqlite3').Database {
   return sqlite;
 }
 
-export function readPredictionDrawResults(
+export function readPredictionSampleResults(
   db: Db,
   predictionId: number,
-): Map<number, PredictionDrawResultRow> {
+): Map<number, PredictionSampleResultRow> {
   const rows = db
     .select()
-    .from(schema.predictionDrawResults)
-    .where(eq(schema.predictionDrawResults.predictionId, predictionId))
+    .from(schema.predictionSampleResults)
+    .where(eq(schema.predictionSampleResults.predictionId, predictionId))
     .all();
 
-  const results = new Map<number, PredictionDrawResultRow>();
+  const results = new Map<number, PredictionSampleResultRow>();
   for (const row of rows) {
     results.set(row.matchNumber, {
       goalsHome: row.goalsHome,
       goalsAway: row.goalsAway,
-      drawnAt: row.drawnAt,
+      sampledAt: row.sampledAt,
     });
   }
   return results;
 }
 
-export function readPredictionDrawSummary(
+export function readPredictionSampleSummary(
   db: Db,
   predictionId: number,
-): PredictionDrawSummary | null {
+): PredictionSampleSummary | null {
   const rows = db
-    .select({ drawnAt: schema.predictionDrawResults.drawnAt })
-    .from(schema.predictionDrawResults)
-    .where(eq(schema.predictionDrawResults.predictionId, predictionId))
+    .select({ sampledAt: schema.predictionSampleResults.sampledAt })
+    .from(schema.predictionSampleResults)
+    .where(eq(schema.predictionSampleResults.predictionId, predictionId))
     .limit(1)
     .all();
   if (rows.length === 0) return null;
 
   const countRow = getSqlite(db)
-    .prepare('SELECT COUNT(*) AS n FROM prediction_draw_results WHERE prediction_id = ?')
+    .prepare('SELECT COUNT(*) AS n FROM prediction_sample_results WHERE prediction_id = ?')
     .get(predictionId) as { n: number };
 
   return {
-    drawnAt: rows[0]!.drawnAt,
+    sampledAt: rows[0]!.sampledAt,
     matchCount: countRow.n,
   };
 }
 
-export function deletePredictionDrawResults(db: Db, predictionId: number): void {
-  db.delete(schema.predictionDrawResults)
-    .where(eq(schema.predictionDrawResults.predictionId, predictionId))
+export function deletePredictionSampleResults(db: Db, predictionId: number): void {
+  db.delete(schema.predictionSampleResults)
+    .where(eq(schema.predictionSampleResults.predictionId, predictionId))
     .run();
 }
 
-export function performPredictionDraw(db: Db, predictionId: number): PredictionDrawSummary {
+export function performPredictionSample(db: Db, predictionId: number): PredictionSampleSummary {
   const sqlite = getSqlite(db);
   const eligibleMatches = sqlite
     .prepare(
@@ -93,10 +93,10 @@ export function performPredictionDraw(db: Db, predictionId: number): PredictionD
     .all(predictionId) as Array<{ matchNumber: number }>;
 
   if (eligibleMatches.length === 0) {
-    throw new PredictionDrawError('No unlocked group fixtures with simulation data to draw');
+    throw new PredictionSampleError('No unlocked group fixtures with simulation data to sample');
   }
 
-  const drawnAt = new Date().toISOString();
+  const sampledAt = new Date().toISOString();
   const sampleStmt = sqlite.prepare(
     `SELECT goals_home AS goalsHome, goals_away AS goalsAway
      FROM prediction_group_match_results
@@ -105,14 +105,14 @@ export function performPredictionDraw(db: Db, predictionId: number): PredictionD
      LIMIT 1`,
   );
   const insertStmt = sqlite.prepare(
-    `INSERT INTO prediction_draw_results (
-       prediction_id, match_number, goals_home, goals_away, drawn_at
+    `INSERT INTO prediction_sample_results (
+       prediction_id, match_number, goals_home, goals_away, sampled_at
      ) VALUES (?, ?, ?, ?, ?)`,
   );
 
-  const drawTransaction = sqlite.transaction((matches: Array<{ matchNumber: number }>) => {
+  const sampleTransaction = sqlite.transaction((matches: Array<{ matchNumber: number }>) => {
     sqlite
-      .prepare('DELETE FROM prediction_draw_results WHERE prediction_id = ?')
+      .prepare('DELETE FROM prediction_sample_results WHERE prediction_id = ?')
       .run(predictionId);
 
     for (const match of matches) {
@@ -125,12 +125,12 @@ export function performPredictionDraw(db: Db, predictionId: number): PredictionD
         match.matchNumber,
         sample.goalsHome,
         sample.goalsAway,
-        drawnAt,
+        sampledAt,
       );
     }
   });
 
-  drawTransaction(eligibleMatches);
+  sampleTransaction(eligibleMatches);
 
-  return { drawnAt, matchCount: eligibleMatches.length };
+  return { sampledAt, matchCount: eligibleMatches.length };
 }

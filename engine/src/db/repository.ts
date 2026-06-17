@@ -75,12 +75,12 @@ import {
   setFrozenMatchConsensusMode,
 } from './predictionFrozenMatches.js';
 import {
-  deletePredictionDrawResults,
-  performPredictionDraw as runPredictionDraw,
-  readPredictionDrawResults,
-  readPredictionDrawSummary,
-  PredictionDrawError,
-} from './predictionDraw.js';
+  deletePredictionSampleResults,
+  performPredictionSample as runPredictionSample,
+  readPredictionSampleResults,
+  readPredictionSampleSummary,
+  PredictionSampleError,
+} from './predictionSample.js';
 import {
   formatSelectionSpec,
   parseSelectionInput,
@@ -575,7 +575,7 @@ export class Repository {
   deletePrediction(id: number): boolean {
     const existing = this.getPrediction(id);
     if (!existing) return false;
-    deletePredictionDrawResults(this.db, id);
+    deletePredictionSampleResults(this.db, id);
     this.db
       .delete(schema.predictionFrozenMatches)
       .where(eq(schema.predictionFrozenMatches.predictionId, id))
@@ -585,16 +585,16 @@ export class Repository {
     return true;
   }
 
-  performPredictionDraw(predictionId: number): MasterGroupState {
+  performPredictionSample(predictionId: number): MasterGroupState {
     if (!this.getPrediction(predictionId)) {
-      throw new PredictionDrawError(`Prediction not found: ${predictionId}`);
+      throw new PredictionSampleError(`Prediction not found: ${predictionId}`);
     }
     try {
-      runPredictionDraw(this.db, predictionId);
+      runPredictionSample(this.db, predictionId);
     } catch (err) {
-      if (err instanceof PredictionDrawError) throw err;
-      throw new PredictionDrawError(
-        err instanceof Error ? err.message : 'Failed to perform prediction draw',
+      if (err instanceof PredictionSampleError) throw err;
+      throw new PredictionSampleError(
+        err instanceof Error ? err.message : 'Failed to perform prediction sample',
       );
     }
     return this.buildMasterGroupView(predictionId);
@@ -1246,8 +1246,8 @@ export class Repository {
       predictionId,
     );
     const frozen = readEffectiveFrozenMatchDistributions(this.db, predictionId);
-    const drawResults = readPredictionDrawResults(this.db, predictionId);
-    const drawSummary = readPredictionDrawSummary(this.db, predictionId);
+    const sampleResults = readPredictionSampleResults(this.db, predictionId);
+    const sampleSummary = readPredictionSampleSummary(this.db, predictionId);
 
     const consensusMatches: SimulationMatch[] = [];
     const distributions: Record<number, OutcomeDistribution> = {};
@@ -1287,9 +1287,9 @@ export class Repository {
 
       if (homeTeam && awayTeam) {
         const mode = frozenConsensusMode ?? consensusMode;
-        const savedDraw = drawResults.get(fixture.matchNumber);
+        const savedSample = sampleResults.get(fixture.matchNumber);
         const canPickScore =
-          mode === 'draw' ? savedDraw != null : dist.total > 0;
+          mode === 'sample' ? savedSample != null : dist.total > 0;
         if (canPickScore) {
           const scoreline = chooseConsensus({
             mode,
@@ -1297,8 +1297,8 @@ export class Repository {
             scorelines: matchScorelines,
             homeOffensive: homeTeam.eloOffensiveRating,
             awayOffensive: awayTeam.eloOffensiveRating,
-            savedDraw: savedDraw
-              ? { goalsHome: savedDraw.goalsHome, goalsAway: savedDraw.goalsAway }
+            savedSample: savedSample
+              ? { goalsHome: savedSample.goalsHome, goalsAway: savedSample.goalsAway }
               : null,
           });
           if (scoreline) {
@@ -1354,9 +1354,9 @@ export class Repository {
       groupStandings,
       qualifyingThirdGroups,
       distributions,
-      draw: drawSummary,
-      drawResults: Object.fromEntries(
-        [...drawResults.entries()].map(([matchNumber, row]) => [
+      sample: sampleSummary,
+      sampleResults: Object.fromEntries(
+        [...sampleResults.entries()].map(([matchNumber, row]) => [
           matchNumber,
           { goalsHome: row.goalsHome, goalsAway: row.goalsAway },
         ]),

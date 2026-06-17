@@ -129,13 +129,13 @@ export function MasterGroupView({
       masterState.consensusMode,
       MAX_DOUBLE_DOWN,
       actualMatchNumbers,
-      masterState.drawResults,
+      masterState.sampleResults,
     );
   }, [
     allGroupMatches,
     masterState.consensusMode,
     masterState.distributions,
-    masterState.drawResults,
+    masterState.sampleResults,
     publicMode,
     fixedDoubledMatches,
     actualMatchNumbers,

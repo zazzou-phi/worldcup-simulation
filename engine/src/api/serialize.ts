@@ -49,11 +49,11 @@ export function serializeMasterGroupState(state: MasterGroupState) {
         dist,
       ]),
     ),
-    ...(state.draw != null ? { draw: state.draw } : {}),
-    ...(state.drawResults != null && Object.keys(state.drawResults).length > 0
+    ...(state.sample != null ? { sample: state.sample } : {}),
+    ...(state.sampleResults != null && Object.keys(state.sampleResults).length > 0
       ? {
-          drawResults: Object.fromEntries(
-            Object.entries(state.drawResults).map(([matchNumber, row]) => [
+          sampleResults: Object.fromEntries(
+            Object.entries(state.sampleResults).map(([matchNumber, row]) => [
               matchNumber,
               row,
             ]),

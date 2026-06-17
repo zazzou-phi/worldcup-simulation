@@ -43,11 +43,11 @@ interface Props {
   onOpenTournamentStats: () => void;
   onOpenPredictions: () => void;
   onClearSimulation?: () => void;
-  drawActive?: boolean;
-  hasSavedDraw?: boolean;
-  canDraw?: boolean;
-  drawing?: boolean;
-  onDraw?: () => void;
+  sampleActive?: boolean;
+  hasSavedSample?: boolean;
+  canSample?: boolean;
+  sampling?: boolean;
+  onSample?: () => void;
 }
 
 export function Header({
@@ -79,11 +79,11 @@ export function Header({
   onOpenTournamentStats,
   onOpenPredictions,
   onClearSimulation,
-  drawActive = false,
-  hasSavedDraw = false,
-  canDraw = false,
-  drawing = false,
-  onDraw,
+  sampleActive = false,
+  hasSavedSample = false,
+  canSample = false,
+  sampling = false,
+  onSample,
 }: Props) {
   const { simulation } = state;
   const narrow = useMediaQuery(MOBILE_QUERY);
@@ -92,11 +92,13 @@ export function Header({
   const isResultsView = appView === 'results';
 
   const meta = isPredictionsView ? (
-    <span className="header-meta header-predictions">
-      {activePredictionLabel ? `${activePredictionLabel} · ` : ''}
-      Consensus, {formatConsensusMode(consensusMode ?? 'expected')}
-      {consensusModeDirty ? ' · unsaved' : ''}
-    </span>
+    publicMode ? null : (
+      <span className="header-meta header-predictions">
+        {activePredictionLabel ? `${activePredictionLabel} · ` : ''}
+        Consensus, {formatConsensusMode(consensusMode ?? 'floor')}
+        {consensusModeDirty ? ' · unsaved' : ''}
+      </span>
+    )
   ) : isResultsView ? (
     <span className="header-meta header-results">Recorded match results</span>
   ) : (
@@ -174,25 +176,25 @@ export function Header({
           onChange={onConsensusModeChange}
         />
       )}
-      {isPredictionsView && !publicMode && (onDraw != null || consensusMode != null) && (
-        <div className="header-draw-save-stack">
-          {onDraw != null && (
+      {isPredictionsView && !publicMode && (onSample != null || consensusMode != null) && (
+        <div className="header-sample-save-stack">
+          {onSample != null && (
             <button
               type="button"
-              className={`btn btn-ghost ${drawActive ? 'active' : ''}`}
-              disabled={drawing || (!hasSavedDraw && !canDraw)}
+              className={`btn btn-ghost ${sampleActive ? 'active' : ''}`}
+              disabled={sampling || (!hasSavedSample && !canSample)}
               title={
-                drawActive
-                  ? hasSavedDraw
+                sampleActive
+                  ? hasSavedSample
                     ? 'Sample new pool scores for unlocked fixtures'
                     : 'Sample pool scores for unlocked fixtures'
-                  : hasSavedDraw
-                    ? 'Use saved pool draw scores in standings'
-                    : 'Switch to draw view and sample pool scores'
+                  : hasSavedSample
+                    ? 'Use saved pool sample scores in standings'
+                    : 'Switch to sample view and sample pool scores'
               }
-              onClick={onDraw}
+              onClick={onSample}
             >
-              {drawing ? 'Drawing…' : drawActive && hasSavedDraw ? 'Redraw' : 'Draw'}
+              {sampling ? 'Sampling…' : sampleActive && hasSavedSample ? 'Resample' : 'Sample'}
             </button>
           )}
           {consensusMode != null && (
@@ -295,7 +297,7 @@ export function Header({
           </div>
           <div className="header-actions">{actions}</div>
         </div>
-        <div className="header-meta-row">{meta}</div>
+        {meta != null && <div className="header-meta-row">{meta}</div>}
       </header>
     );
   }

@@ -85,7 +85,7 @@ export function initSchema(sqlite: Database.Database) {
       id INTEGER PRIMARY KEY,
       name TEXT NOT NULL,
       selection_spec TEXT NOT NULL,
-      consensus_mode TEXT NOT NULL DEFAULT 'expected',
+      consensus_mode TEXT NOT NULL DEFAULT 'floor',
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
@@ -129,12 +129,12 @@ export function initSchema(sqlite: Database.Database) {
       champion_wins INTEGER NOT NULL,
       PRIMARY KEY (prediction_id, team_id)
     );
-    CREATE TABLE IF NOT EXISTS prediction_draw_results (
+    CREATE TABLE IF NOT EXISTS prediction_sample_results (
       prediction_id INTEGER NOT NULL REFERENCES predictions(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
       goals_home INTEGER NOT NULL,
       goals_away INTEGER NOT NULL,
-      drawn_at TEXT NOT NULL,
+      sampled_at TEXT NOT NULL,
       PRIMARY KEY (prediction_id, match_number)
     );
     CREATE TABLE IF NOT EXISTS prediction_frozen_matches (
@@ -145,7 +145,7 @@ export function initSchema(sqlite: Database.Database) {
       away_win INTEGER NOT NULL,
       total INTEGER NOT NULL,
       scorelines_json TEXT NOT NULL,
-      consensus_mode TEXT NOT NULL DEFAULT 'expected',
+      consensus_mode TEXT NOT NULL DEFAULT 'floor',
       frozen_at TEXT NOT NULL,
       PRIMARY KEY (prediction_id, match_number)
     );
@@ -213,21 +213,87 @@ function migrateSchema(sqlite: Database.Database) {
   migrateLegacyMasterAggregates(sqlite);
   ensureDefaultPrediction(sqlite);
   migratePredictionFrozenMatches(sqlite);
-  migratePredictionDrawResults(sqlite);
+  migratePredictionSampleResults(sqlite);
+  migrateConsensusModeNames(sqlite);
 }
 
-function migratePredictionDrawResults(sqlite: Database.Database) {
-  if (tableExists(sqlite, 'prediction_draw_results')) return;
+function migratePredictionSampleResults(sqlite: Database.Database) {
+  const hasNew = tableExists(sqlite, 'prediction_sample_results');
+  const hasOld = tableExists(sqlite, 'prediction_draw_results');
+
+  if (hasOld && hasNew) {
+    const newCount = (
+      sqlite.prepare('SELECT COUNT(*) AS n FROM prediction_sample_results').get() as { n: number }
+    ).n;
+    if (newCount === 0) {
+      sqlite.exec('DROP TABLE prediction_sample_results');
+    } else {
+      sqlite.exec(`
+        INSERT OR IGNORE INTO prediction_sample_results (
+          prediction_id, match_number, goals_home, goals_away, sampled_at
+        )
+        SELECT prediction_id, match_number, goals_home, goals_away, drawn_at
+        FROM prediction_draw_results
+      `);
+      sqlite.exec('DROP TABLE prediction_draw_results');
+      renameSampledAtColumn(sqlite);
+      return;
+    }
+  }
+
+  if (tableExists(sqlite, 'prediction_draw_results')) {
+    sqlite.exec('ALTER TABLE prediction_draw_results RENAME TO prediction_sample_results');
+    renameSampledAtColumn(sqlite);
+    return;
+  }
+
+  if (tableExists(sqlite, 'prediction_sample_results')) {
+    renameSampledAtColumn(sqlite);
+    return;
+  }
+
   sqlite.exec(`
-    CREATE TABLE prediction_draw_results (
+    CREATE TABLE prediction_sample_results (
       prediction_id INTEGER NOT NULL REFERENCES predictions(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
       goals_home INTEGER NOT NULL,
       goals_away INTEGER NOT NULL,
-      drawn_at TEXT NOT NULL,
+      sampled_at TEXT NOT NULL,
       PRIMARY KEY (prediction_id, match_number)
     )
   `);
+}
+
+function renameSampledAtColumn(sqlite: Database.Database) {
+  const columns = sqlite.prepare('PRAGMA table_info(prediction_sample_results)').all() as Array<{
+    name: string;
+  }>;
+  const names = new Set(columns.map((column) => column.name));
+  if (names.has('drawn_at') && !names.has('sampled_at')) {
+    sqlite.exec('ALTER TABLE prediction_sample_results RENAME COLUMN drawn_at TO sampled_at');
+  }
+}
+
+function migrateConsensusModeNames(sqlite: Database.Database) {
+  if (tableExists(sqlite, 'schema_flags')) {
+    const migrated = sqlite
+      .prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'consensus_mode_names_v2'")
+      .get();
+    if (migrated) return;
+  }
+
+  sqlite.exec(`
+    UPDATE predictions SET consensus_mode = 'floor' WHERE consensus_mode = 'expected';
+    UPDATE predictions SET consensus_mode = 'sample' WHERE consensus_mode = 'draw';
+    UPDATE prediction_frozen_matches SET consensus_mode = 'floor' WHERE consensus_mode = 'expected';
+    UPDATE prediction_frozen_matches SET consensus_mode = 'sample' WHERE consensus_mode = 'draw';
+  `);
+
+  if (tableExists(sqlite, 'schema_flags')) {
+    sqlite
+      .prepare("INSERT OR REPLACE INTO schema_flags (key, value) VALUES ('consensus_mode_names_v2', '1')")
+      .run();
+  }
 }
 
 function migrateSimulationTeamEloDelta(sqlite: Database.Database) {
@@ -247,10 +313,10 @@ function migratePredictionConsensusMode(sqlite: Database.Database) {
   const names = new Set(columns.map((column) => column.name));
   if (!names.has('consensus_mode')) {
     sqlite.exec(
-      "ALTER TABLE predictions ADD COLUMN consensus_mode TEXT NOT NULL DEFAULT 'expected'",
+      "ALTER TABLE predictions ADD COLUMN consensus_mode TEXT NOT NULL DEFAULT 'floor'",
     );
   }
-  sqlite.exec("UPDATE predictions SET consensus_mode = 'expected' WHERE consensus_mode IS NULL");
+  sqlite.exec("UPDATE predictions SET consensus_mode = 'floor' WHERE consensus_mode IS NULL");
 }
 
 function migrateTeamsElo(sqlite: Database.Database) {
@@ -441,7 +507,7 @@ function migrateLegacyMasterAggregates(sqlite: Database.Database) {
     sqlite
       .prepare(
         `INSERT INTO predictions (id, name, selection_spec, consensus_mode, created_at, updated_at)
-         VALUES (1, 'Default', ?, 'expected', ?, ?)`,
+         VALUES (1, 'Default', ?, 'floor', ?, ?)`,
       )
       .run(selectionSpec, now, now);
 
@@ -498,7 +564,7 @@ function migrateFrozenMatchConsensusMode(sqlite: Database.Database) {
   const names = new Set(columns.map((column) => column.name));
   if (!names.has('consensus_mode')) {
     sqlite.exec(
-      "ALTER TABLE prediction_frozen_matches ADD COLUMN consensus_mode TEXT NOT NULL DEFAULT 'expected'",
+      "ALTER TABLE prediction_frozen_matches ADD COLUMN consensus_mode TEXT NOT NULL DEFAULT 'floor'",
     );
   }
 
@@ -514,7 +580,7 @@ function migrateFrozenMatchConsensusMode(sqlite: Database.Database) {
       FROM predictions p
       WHERE p.id = prediction_frozen_matches.prediction_id
     )
-    WHERE consensus_mode IS NULL OR consensus_mode = 'expected'
+    WHERE consensus_mode IS NULL OR consensus_mode = 'floor'
   `);
 
   sqlite.exec(`
@@ -557,7 +623,7 @@ function migratePredictionFrozenMatches(sqlite: Database.Database) {
         away_win INTEGER NOT NULL,
         total INTEGER NOT NULL,
         scorelines_json TEXT NOT NULL,
-        consensus_mode TEXT NOT NULL DEFAULT 'expected',
+        consensus_mode TEXT NOT NULL DEFAULT 'floor',
         frozen_at TEXT NOT NULL,
         PRIMARY KEY (prediction_id, match_number)
       )
@@ -624,7 +690,7 @@ function ensureDefaultPrediction(sqlite: Database.Database) {
   sqlite
     .prepare(
       `INSERT INTO predictions (id, name, selection_spec, consensus_mode, created_at, updated_at)
-       VALUES (1, 'Default', ?, 'expected', ?, ?)`,
+       VALUES (1, 'Default', ?, 'floor', ?, ?)`,
     )
     .run(selectionSpec, now, now);
 

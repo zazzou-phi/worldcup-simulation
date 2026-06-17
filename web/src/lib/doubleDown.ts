@@ -9,13 +9,13 @@ function outcomeFromScoreline(goalsHome: number, goalsAway: number): MatchOutcom
   return 'draw';
 }
 
-function savedDrawForMatch(
-  drawResults: Record<string, { goalsHome: number; goalsAway: number }> | undefined,
+function savedSampleForMatch(
+  sampleResults: Record<string, { goalsHome: number; goalsAway: number }> | undefined,
   matchNumber: number,
 ): { goalsHome: number; goalsAway: number } | null {
-  if (!drawResults) return null;
+  if (!sampleResults) return null;
   const key = String(matchNumber);
-  return drawResults[key] ?? drawResults[matchNumber as unknown as string] ?? null;
+  return sampleResults[key] ?? sampleResults[matchNumber as unknown as string] ?? null;
 }
 
 /** Simulations matching the consensus predicted outcome (home win / draw / away win). */
@@ -34,7 +34,7 @@ export function predictedConsensusScore(
   match: ResolvedMatch,
   dist: OutcomeDistribution,
   mode: ConsensusMode,
-  drawResults?: Record<string, { goalsHome: number; goalsAway: number }>,
+  sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>,
 ): { goalsHome: number; goalsAway: number } | null {
   if (!match.homeTeam || !match.awayTeam) return null;
   return chooseConsensus({
@@ -43,7 +43,7 @@ export function predictedConsensusScore(
     scorelines: dist.scorelines,
     homeOffensive: match.homeTeam.eloOffensiveRating,
     awayOffensive: match.awayTeam.eloOffensiveRating,
-    savedDraw: savedDrawForMatch(drawResults, match.fixture.matchNumber),
+    savedSample: savedSampleForMatch(sampleResults, match.fixture.matchNumber),
   });
 }
 
@@ -54,7 +54,7 @@ export function pickDoubleDownMatches(
   mode: ConsensusMode,
   count: number,
   eligibleMatchNumbers?: ReadonlySet<number>,
-  drawResults?: Record<string, { goalsHome: number; goalsAway: number }>,
+  sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>,
 ): Set<number> {
   const limit = Math.max(0, Math.min(count, MAX_DOUBLE_DOWN));
   const matchesByNumber = new Map(
@@ -65,7 +65,7 @@ export function pickDoubleDownMatches(
     .map(([matchNumber, dist]) => {
       const match = matchesByNumber.get(Number(matchNumber));
       if (!match) return null;
-      const predicted = predictedConsensusScore(match, dist, mode, drawResults);
+      const predicted = predictedConsensusScore(match, dist, mode, sampleResults);
       if (!predicted) return null;
       return {
         matchNumber: Number(matchNumber),
@@ -90,7 +90,7 @@ export function buildDoubledMatchNumbers(
   mode: ConsensusMode,
   totalCount: number,
   actualMatchNumbers: ReadonlySet<number>,
-  drawResults?: Record<string, { goalsHome: number; goalsAway: number }>,
+  sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>,
 ): Set<number> {
   const fixed = new Set(
     [...fixedMatchNumbers].filter((matchNumber) => actualMatchNumbers.has(matchNumber)),
@@ -107,7 +107,7 @@ export function buildDoubledMatchNumbers(
     mode,
     remaining,
     eligible,
-    drawResults,
+    sampleResults,
   );
   return new Set([...fixed, ...autoPicked]);
 }

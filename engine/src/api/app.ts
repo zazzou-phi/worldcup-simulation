@@ -1,5 +1,5 @@
 import { FrozenMatchError } from '../db/errors.js';
-import { PredictionDrawError } from '../db/predictionDraw.js';
+import { PredictionSampleError } from '../db/predictionSample.js';
 import { Hono } from 'hono';
 import type { Repository } from '../db/repository.js';
 import { clearActualMatchResult, setActualMatchResult } from './actual-results.js';
@@ -188,17 +188,17 @@ export function createApiApp(repo: Repository) {
     }
   });
 
-  app.post('/api/v1/predictions/:id/draw', (c) => {
+  app.post('/api/v1/predictions/:id/sample', (c) => {
     const id = parseIntParam(c.req.param('id'));
     if (!repo.getPrediction(id)) {
       throw new ApiError('Prediction not found', 404, 'prediction_not_found');
     }
     try {
-      const view = repo.performPredictionDraw(id);
+      const view = repo.performPredictionSample(id);
       return c.json(serializeMasterGroupState(view));
     } catch (err) {
-      if (err instanceof PredictionDrawError) {
-        throw new ApiError(err.message, 409, 'no_draw_eligible_matches');
+      if (err instanceof PredictionSampleError) {
+        throw new ApiError(err.message, 409, 'no_sample_eligible_matches');
       }
       throw err;
     }

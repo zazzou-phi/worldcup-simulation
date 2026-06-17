@@ -191,10 +191,10 @@ describe('chooseConsensus', () => {
     ).toEqual({ goalsHome: 2, goalsAway: 0 });
   });
 
-  it('uses expected goals with modal scoreline for wins in expected mode', () => {
+  it('uses floor goals with modal scoreline for wins in floor mode', () => {
     expect(
       chooseConsensus({
-        mode: 'expected',
+        mode: 'floor',
         outcomeCounts,
         scorelines: [
           { goalsHome: 1, goalsAway: 1, n: 4 },
@@ -221,23 +221,23 @@ describe('chooseConsensus', () => {
     ).toEqual({ goalsHome: 1, goalsAway: 1 });
   });
 
-  it('returns savedDraw in draw mode', () => {
+  it('returns savedSample in sample mode', () => {
     expect(
       chooseConsensus({
-        mode: 'draw',
+        mode: 'sample',
         outcomeCounts,
         scorelines: [{ goalsHome: 2, goalsAway: 0, n: 10 }],
         homeOffensive: 1,
         awayOffensive: 1,
-        savedDraw: { goalsHome: 0, goalsAway: 3 },
+        savedSample: { goalsHome: 0, goalsAway: 3 },
       }),
     ).toEqual({ goalsHome: 0, goalsAway: 3 });
   });
 
-  it('returns null in draw mode when savedDraw is missing', () => {
+  it('returns null in sample mode when savedSample is missing', () => {
     expect(
       chooseConsensus({
-        mode: 'draw',
+        mode: 'sample',
         outcomeCounts,
         scorelines: [{ goalsHome: 2, goalsAway: 0, n: 10 }],
         homeOffensive: 1,
@@ -255,9 +255,9 @@ describe('getConsensusMode', () => {
     else process.env.CONSENSUS_MODE = original;
   });
 
-  it('defaults to expected', () => {
+  it('defaults to floor', () => {
     delete process.env.CONSENSUS_MODE;
-    expect(getConsensusMode()).toBe('expected');
+    expect(getConsensusMode()).toBe('floor');
   });
 
   it('reads outcome from env', () => {
@@ -265,8 +265,13 @@ describe('getConsensusMode', () => {
     expect(getConsensusMode()).toBe('outcome');
   });
 
-  it('reads expected from env', () => {
+  it('reads floor from env', () => {
+    process.env.CONSENSUS_MODE = 'floor';
+    expect(getConsensusMode()).toBe('floor');
+  });
+
+  it('maps legacy expected env value to floor', () => {
     process.env.CONSENSUS_MODE = 'expected';
-    expect(getConsensusMode()).toBe('expected');
+    expect(getConsensusMode()).toBe('floor');
   });
 });

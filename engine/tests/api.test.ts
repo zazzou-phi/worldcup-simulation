@@ -362,7 +362,7 @@ describe('HTTP API', () => {
     const sim = repo.createSimulation('Locked consensus');
     repo.updateMatchResult(sim.id, 1, 2, 1, 18);
     const prediction = repo.createPrediction('Locked pool', `${sim.id}-${sim.id}`);
-    repo.setPredictionConsensusMode(prediction.id, 'expected');
+    repo.setPredictionConsensusMode(prediction.id, 'floor');
 
     await app.request('/api/v1/actual-results/1', {
       method: 'PUT',
@@ -387,33 +387,33 @@ describe('HTTP API', () => {
     expect(master.resolvedMatches.find((m) => m.fixture.matchNumber === 1)?.result.goalsHome).not.toBeNull();
   });
 
-  it('POST /predictions/:id/draw samples and persists scores', async () => {
-    const sim1 = repo.createSimulation('Draw API A');
-    const sim2 = repo.createSimulation('Draw API B');
+  it('POST /predictions/:id/sample samples and persists scores', async () => {
+    const sim1 = repo.createSimulation('Sample API A');
+    const sim2 = repo.createSimulation('Sample API B');
     repo.updateMatchResult(sim1.id, 1, 1, 0, 18);
     repo.updateMatchResult(sim2.id, 1, 0, 1, 19);
-    const prediction = repo.createPrediction('Draw API', `${sim1.id}-${sim2.id}`);
+    const prediction = repo.createPrediction('Sample API', `${sim1.id}-${sim2.id}`);
 
-    const res = await app.request(`/api/v1/predictions/${prediction.id}/draw`, {
+    const res = await app.request(`/api/v1/predictions/${prediction.id}/sample`, {
       method: 'POST',
     });
     expect(res.status).toBe(200);
     const master = await json<{
-      draw?: { matchCount: number; drawnAt: string };
+      sample?: { matchCount: number; sampledAt: string };
       resolvedMatches: Array<{
         fixture: { matchNumber: number };
         result: { goalsHome: number | null; goalsAway: number | null; status: string };
       }>;
     }>(res);
-    expect(master.draw?.matchCount).toBeGreaterThan(0);
+    expect(master.sample?.matchCount).toBeGreaterThan(0);
     const match = master.resolvedMatches.find((m) => m.fixture.matchNumber === 1)!;
     expect(match.result.status).toBe('played');
     expect(match.result.goalsHome).not.toBeNull();
   });
 
-  it('POST /predictions/:id/draw returns 409 when pool is empty', async () => {
-    const prediction = repo.createPrediction('Empty draw', '1-9999');
-    const res = await app.request(`/api/v1/predictions/${prediction.id}/draw`, {
+  it('POST /predictions/:id/sample returns 409 when pool is empty', async () => {
+    const prediction = repo.createPrediction('Empty sample', '1-9999');
+    const res = await app.request(`/api/v1/predictions/${prediction.id}/sample`, {
       method: 'POST',
     });
     expect(res.status).toBe(409);

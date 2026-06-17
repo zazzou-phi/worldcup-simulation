@@ -64,7 +64,7 @@ curl -X POST http://localhost:3000/api/v1/simulations/1/simulate/knockouts
 
 Locked actual results are never re-simulated.
 
-Master (consensus) view mode is set per prediction in the Predictions view (Expected / Outcome / Scoreline). New predictions default from `CONSENSUS_MODE` when set, otherwise `expected`.
+Master (consensus) view mode is set per prediction in the Predictions view (Floor / Outcome / Scoreline). New predictions default from `CONSENSUS_MODE` when set, otherwise `floor`.
 
 ## Stack
 

@@ -92,7 +92,7 @@ describe('predictionFrozenMatches', () => {
   it('updates frozen consensus mode for a locked match', () => {
     const sim = repo.createSimulation('Frozen consensus API');
     const prediction = repo.createPrediction('Pool', `${sim.id}-${sim.id}`);
-    repo.setPredictionConsensusMode(prediction.id, 'expected');
+    repo.setPredictionConsensusMode(prediction.id, 'floor');
     repo.updateMatchResult(sim.id, 1, 2, 1, 18);
     repo.setActualResult(1, 2, 0, 18);
 
@@ -114,7 +114,7 @@ describe('predictionFrozenMatches', () => {
 
     repo.setActualResult(1, 2, 0, 18);
 
-    repo.setPredictionConsensusMode(predictionId, 'expected');
+    repo.setPredictionConsensusMode(predictionId, 'floor');
     const master = repo.buildMasterGroupView(predictionId);
     expect(master.distributions[1].consensusMode).toBe('scoreline');
     expect(master.resolvedMatches.find((m) => m.fixture.matchNumber === 1)?.result.goalsHome).toBe(
