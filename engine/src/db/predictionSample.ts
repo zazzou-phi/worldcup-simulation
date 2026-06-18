@@ -77,6 +77,60 @@ export function deletePredictionSampleResults(db: Db, predictionId: number): voi
     .run();
 }
 
+/** Pick one pool scoreline for a fixture (same source as sampling). */
+export function pickSampleGoalsFromPool(
+  db: Db,
+  predictionId: number,
+  matchNumber: number,
+): { goalsHome: number; goalsAway: number } | null {
+  const sqlite = getSqlite(db);
+  const sample = sqlite
+    .prepare(
+      `SELECT goals_home AS goalsHome, goals_away AS goalsAway
+       FROM prediction_group_match_results
+       WHERE prediction_id = ? AND match_number = ?
+       ORDER BY RANDOM()
+       LIMIT 1`,
+    )
+    .get(predictionId, matchNumber) as { goalsHome: number; goalsAway: number } | undefined;
+  return sample ?? null;
+}
+
+/** Resolve the sample scoreline to freeze when an actual result is entered. */
+export function resolveSampleGoalsForFreeze(
+  db: Db,
+  predictionId: number,
+  matchNumber: number,
+): { goalsHome: number; goalsAway: number } | null {
+  const existing = readPredictionSampleResults(db, predictionId).get(matchNumber);
+  if (existing) {
+    return { goalsHome: existing.goalsHome, goalsAway: existing.goalsAway };
+  }
+  return pickSampleGoalsFromPool(db, predictionId, matchNumber);
+}
+
+export function upsertPredictionSampleResult(
+  db: Db,
+  predictionId: number,
+  matchNumber: number,
+  goalsHome: number,
+  goalsAway: number,
+  sampledAt: string,
+): void {
+  const sqlite = getSqlite(db);
+  sqlite
+    .prepare(
+      `INSERT INTO prediction_sample_results (
+         prediction_id, match_number, goals_home, goals_away, sampled_at
+       ) VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(prediction_id, match_number) DO UPDATE SET
+         goals_home = excluded.goals_home,
+         goals_away = excluded.goals_away,
+         sampled_at = excluded.sampled_at`,
+    )
+    .run(predictionId, matchNumber, goalsHome, goalsAway, sampledAt);
+}
+
 export function performPredictionSample(db: Db, predictionId: number): PredictionSampleSummary {
   const sqlite = getSqlite(db);
   const eligibleMatches = sqlite
@@ -112,7 +166,13 @@ export function performPredictionSample(db: Db, predictionId: number): Predictio
 
   const sampleTransaction = sqlite.transaction((matches: Array<{ matchNumber: number }>) => {
     sqlite
-      .prepare('DELETE FROM prediction_sample_results WHERE prediction_id = ?')
+      .prepare(
+        `DELETE FROM prediction_sample_results
+         WHERE prediction_id = ?
+           AND match_number NOT IN (
+             SELECT match_number FROM actual_match_results
+           )`,
+      )
       .run(predictionId);
 
     for (const match of matches) {

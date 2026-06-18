@@ -7,6 +7,7 @@ import { seedDatabase } from '../src/db/seed.js';
 import { Repository } from '../src/db/repository.js';
 import { readPredictionMatchDistributions } from '../src/db/predictionAggregates.js';
 import { readFrozenMatchDistributions, copyCanonicalFrozenMatchesFromDefault } from '../src/db/predictionFrozenMatches.js';
+import { performPredictionSample, readPredictionSampleResults, upsertPredictionSampleResult } from '../src/db/predictionSample.js';
 
 function ensureTestPrediction(repo: Repository, maxId = 9999): number {
   const existing = repo.getActivePrediction();
@@ -126,6 +127,23 @@ describe('predictionFrozenMatches', () => {
     expect(master.distributions[2]?.consensusMode).toBeUndefined();
   });
 
+  it('freezes sample goals when an actual result is entered in sample mode', () => {
+    const sim = repo.createSimulation('Sample freeze');
+    const predictionId = ensureTestPrediction(repo);
+    repo.setPredictionConsensusMode(predictionId, 'sample');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    performPredictionSample(db, predictionId);
+    const sampled = readPredictionSampleResults(db, predictionId).get(1)!;
+
+    repo.setActualResult(1, 2, 0, 18);
+
+    const frozen = readFrozenMatchDistributions(db, predictionId);
+    expect(frozen.sampleGoalsByMatch.get(1)).toEqual({
+      goalsHome: sampled.goalsHome,
+      goalsAway: sampled.goalsAway,
+    });
+  });
+
   it('backfills locked predictions from Default for pools with only post-result simulations', () => {
     const defaultSim = repo.createSimulation('Default pool');
     const defaultId = repo.createPrediction('Default', `${defaultSim.id}-${defaultSim.id}`).id;
@@ -149,6 +167,84 @@ describe('predictionFrozenMatches', () => {
       'played',
     );
     expect(master.distributions[3].total).toBe(1);
+  });
+
+  it('stores locked sample prediction on the actual result when entered', () => {
+    const sim = repo.createSimulation('Sample actual');
+    const predictionId = ensureTestPrediction(repo);
+    repo.setPredictionConsensusMode(predictionId, 'sample');
+    repo.updateMatchResult(sim.id, 61, 4, 1, 5);
+    upsertPredictionSampleResult(db, predictionId, 61, 4, 1, new Date().toISOString());
+    repo.touchPrediction(predictionId);
+
+    repo.setActualResult(61, 1, 1, null);
+
+    const actual = repo.getActualResult(61)!;
+    expect(actual.predictedGoalsHome).toBe(4);
+    expect(actual.predictedGoalsAway).toBe(1);
+  });
+
+  it('forces canonical locked sample scores across predictions in sample mode', () => {
+    const defaultSim = repo.createSimulation('Default pool');
+    const otherSim = repo.createSimulation('Other pool');
+    const defaultId = ensureTestPrediction(repo);
+    const sqlite = (db as { $client?: import('better-sqlite3').Database }).$client!;
+    sqlite
+      .prepare('UPDATE predictions SET selection_spec = ? WHERE id = ?')
+      .run(JSON.stringify({ type: 'ranges', ranges: [[defaultSim.id, defaultSim.id]] }), defaultId);
+    const otherId = repo.createPrediction('Other', `${otherSim.id}-${otherSim.id}`).id;
+
+    repo.setPredictionConsensusMode(defaultId, 'sample');
+    repo.setPredictionConsensusMode(otherId, 'sample');
+    repo.updateMatchResult(defaultSim.id, 61, 4, 1, 5);
+    repo.updateMatchResult(otherSim.id, 61, 1, 0, 5);
+    upsertPredictionSampleResult(db, defaultId, 61, 4, 1, new Date().toISOString());
+    upsertPredictionSampleResult(db, otherId, 61, 1, 0, new Date().toISOString());
+
+    repo.touchPrediction(defaultId);
+    repo.setActualResult(61, 1, 1, null);
+
+    const defaultView = repo.buildMasterGroupView(defaultId);
+    const otherView = repo.buildMasterGroupView(otherId);
+    const defaultMatch = defaultView.resolvedMatches.find((m) => m.fixture.matchNumber === 61)!;
+    const otherMatch = otherView.resolvedMatches.find((m) => m.fixture.matchNumber === 61)!;
+
+    expect(defaultMatch.result.goalsHome).toBe(4);
+    expect(defaultMatch.result.goalsAway).toBe(1);
+    expect(otherMatch.result).toEqual(defaultMatch.result);
+  });
+
+  it('uses canonical locked sample scores when a prediction is missing its own', () => {
+    const defaultSim = repo.createSimulation('Default pool');
+    const defaultId = ensureTestPrediction(repo);
+    repo.renamePrediction(defaultId, 'Default');
+    const sqlite = (db as { $client?: import('better-sqlite3').Database }).$client!;
+    sqlite
+      .prepare('UPDATE predictions SET selection_spec = ? WHERE id = ?')
+      .run(JSON.stringify({ type: 'ranges', ranges: [[defaultSim.id, defaultSim.id]] }), defaultId);
+
+    repo.setPredictionConsensusMode(defaultId, 'sample');
+    repo.updateMatchResult(defaultSim.id, 1, 2, 1, 18);
+    upsertPredictionSampleResult(db, defaultId, 1, 2, 1, new Date().toISOString());
+
+    repo.setActualResult(1, 2, 0, 18);
+
+    const postLockSim = repo.createSimulation('Post-lock pool');
+    repo.updateMatchResult(postLockSim.id, 2, 1, 0, 32);
+    const otherId = repo.createPrediction('Post-lock', `${postLockSim.id}-${postLockSim.id}`).id;
+    repo.setPredictionConsensusMode(otherId, 'sample');
+    performPredictionSample(db, otherId);
+
+    const defaultView = repo.buildMasterGroupView(defaultId);
+    const otherView = repo.buildMasterGroupView(otherId);
+    const defaultMatch = defaultView.resolvedMatches.find((m) => m.fixture.matchNumber === 1)!;
+    const otherMatch = otherView.resolvedMatches.find((m) => m.fixture.matchNumber === 1)!;
+    expect(otherMatch.result).toEqual(defaultMatch.result);
+
+    performPredictionSample(db, otherId);
+    const afterResample = repo.buildMasterGroupView(otherId);
+    const afterMatch = afterResample.resolvedMatches.find((m) => m.fixture.matchNumber === 1)!;
+    expect(afterMatch.result).toEqual(otherMatch.result);
   });
 
   it('copies Default frozen stats to all predictions for locked matches', () => {

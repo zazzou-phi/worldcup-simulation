@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import { drizzle, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema.js';
 import { rebuildPredictionAggregates } from './predictionAggregates.js';
-import { migrateExistingFrozenMatches, copyMissingFrozenMatchesFromDefault } from './predictionFrozenMatches.js';
+import { migrateExistingFrozenMatches, copyMissingFrozenMatchesFromDefault, backfillFrozenSampleGoals, applyKnownLockedSampleGoals, syncCanonicalLockedSampleGoalsFromDefault } from './predictionFrozenMatches.js';
 import { computeNormalizedTeamRatings, computeBlendedNormalizedRatings } from '../engine/teamRatings.js';
 import { DEFAULT_RATING_ELO_WEIGHT } from '../api/ratingEloWeight.js';
 import {
@@ -146,6 +146,8 @@ export function initSchema(sqlite: Database.Database) {
       total INTEGER NOT NULL,
       scorelines_json TEXT NOT NULL,
       consensus_mode TEXT NOT NULL DEFAULT 'floor',
+      sample_goals_home INTEGER,
+      sample_goals_away INTEGER,
       frozen_at TEXT NOT NULL,
       PRIMARY KEY (prediction_id, match_number)
     );
@@ -171,6 +173,8 @@ export function initSchema(sqlite: Database.Database) {
       goals_home INTEGER NOT NULL,
       goals_away INTEGER NOT NULL,
       winner_team_id INTEGER REFERENCES teams(id),
+      predicted_goals_home INTEGER,
+      predicted_goals_away INTEGER,
       recorded_at TEXT NOT NULL
     );
   `);
@@ -215,6 +219,8 @@ function migrateSchema(sqlite: Database.Database) {
   migratePredictionFrozenMatches(sqlite);
   migratePredictionSampleResults(sqlite);
   migrateConsensusModeNames(sqlite);
+  migrateFrozenSampleGoals(sqlite);
+  migrateActualResultPredictedGoals(sqlite);
 }
 
 function migratePredictionSampleResults(sqlite: Database.Database) {
@@ -272,6 +278,81 @@ function renameSampledAtColumn(sqlite: Database.Database) {
   if (names.has('drawn_at') && !names.has('sampled_at')) {
     sqlite.exec('ALTER TABLE prediction_sample_results RENAME COLUMN drawn_at TO sampled_at');
   }
+}
+
+function migrateFrozenSampleGoals(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'prediction_frozen_matches')) return;
+
+  const columns = sqlite.prepare('PRAGMA table_info(prediction_frozen_matches)').all() as Array<{
+    name: string;
+  }>;
+  const names = new Set(columns.map((column) => column.name));
+  if (!names.has('sample_goals_home')) {
+    sqlite.exec('ALTER TABLE prediction_frozen_matches ADD COLUMN sample_goals_home INTEGER');
+  }
+  if (!names.has('sample_goals_away')) {
+    sqlite.exec('ALTER TABLE prediction_frozen_matches ADD COLUMN sample_goals_away INTEGER');
+  }
+
+  if (!tableExists(sqlite, 'schema_flags')) return;
+
+  const migrated = sqlite
+    .prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'frozen_sample_goals_v1'")
+    .get();
+  if (migrated) return;
+
+  const db = drizzle(sqlite, { schema });
+  backfillFrozenSampleGoals(db);
+  applyKnownLockedSampleGoals(db);
+  const predictions = sqlite.prepare('SELECT id FROM predictions').all() as Array<{ id: number }>;
+  for (const prediction of predictions) {
+    syncCanonicalLockedSampleGoalsFromDefault(db, prediction.id);
+  }
+
+  const synced = sqlite
+    .prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'frozen_sample_goals_v2'")
+    .get();
+  if (!synced) {
+    applyKnownLockedSampleGoals(db);
+    for (const prediction of predictions) {
+      syncCanonicalLockedSampleGoalsFromDefault(db, prediction.id);
+    }
+    sqlite
+      .prepare("INSERT INTO schema_flags (key, value) VALUES ('frozen_sample_goals_v2', '1')")
+      .run();
+  }
+
+  sqlite
+    .prepare("INSERT INTO schema_flags (key, value) VALUES ('frozen_sample_goals_v1', '1')")
+    .run();
+}
+
+function migrateActualResultPredictedGoals(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'actual_match_results')) return;
+
+  const columns = sqlite.prepare('PRAGMA table_info(actual_match_results)').all() as Array<{
+    name: string;
+  }>;
+  const names = new Set(columns.map((column) => column.name));
+  if (!names.has('predicted_goals_home')) {
+    sqlite.exec('ALTER TABLE actual_match_results ADD COLUMN predicted_goals_home INTEGER');
+  }
+  if (!names.has('predicted_goals_away')) {
+    sqlite.exec('ALTER TABLE actual_match_results ADD COLUMN predicted_goals_away INTEGER');
+  }
+
+  if (!tableExists(sqlite, 'schema_flags')) return;
+
+  const migrated = sqlite
+    .prepare("SELECT 1 AS ok FROM schema_flags WHERE key = 'actual_predicted_goals_v1'")
+    .get();
+  if (migrated) return;
+
+  const db = drizzle(sqlite, { schema });
+  applyKnownLockedSampleGoals(db);
+  sqlite
+    .prepare("INSERT INTO schema_flags (key, value) VALUES ('actual_predicted_goals_v1', '1')")
+    .run();
 }
 
 function migrateConsensusModeNames(sqlite: Database.Database) {
@@ -624,6 +705,8 @@ function migratePredictionFrozenMatches(sqlite: Database.Database) {
         total INTEGER NOT NULL,
         scorelines_json TEXT NOT NULL,
         consensus_mode TEXT NOT NULL DEFAULT 'floor',
+        sample_goals_home INTEGER,
+        sample_goals_away INTEGER,
         frozen_at TEXT NOT NULL,
         PRIMARY KEY (prediction_id, match_number)
       )

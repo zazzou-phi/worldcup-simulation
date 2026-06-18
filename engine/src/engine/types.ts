@@ -102,6 +102,9 @@ export interface ActualMatchResult {
   goalsAway: number;
   winnerTeamId: number | null;
   recordedAt: string;
+  /** Sample-mode consensus prediction locked when the actual result was first entered. */
+  predictedGoalsHome?: number | null;
+  predictedGoalsAway?: number | null;
 }
 
 export interface ResolvedMatch {

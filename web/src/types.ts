@@ -78,6 +78,8 @@ export interface ActualMatchResult {
   goalsAway: number;
   winnerTeamId: number | null;
   recordedAt: string;
+  predictedGoalsHome?: number | null;
+  predictedGoalsAway?: number | null;
 }
 
 export interface ResolvedMatch {

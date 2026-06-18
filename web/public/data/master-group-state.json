@@ -14328,5 +14328,13 @@
       "total": 0,
       "scorelines": []
     }
+  },
+  "sampleResults": {
+    "49": { "goalsHome": 1, "goalsAway": 0 },
+    "50": { "goalsHome": 0, "goalsAway": 2 },
+    "55": { "goalsHome": 2, "goalsAway": 0 },
+    "56": { "goalsHome": 2, "goalsAway": 0 },
+    "61": { "goalsHome": 4, "goalsAway": 1 },
+    "67": { "goalsHome": 2, "goalsAway": 1 }
   }
 }

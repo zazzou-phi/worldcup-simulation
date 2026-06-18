@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 import type { Db } from './client.js';
 import * as schema from './schema.js';
 import {
@@ -9,14 +9,22 @@ import {
 } from './predictionAggregates.js';
 import {
   buildSimulationIdSqlFilter,
+  countIdsInSpec,
+  parseSelectionSpecJson,
   type SelectionSpec,
 } from '../lib/simulationSelection.js';
 import { parseConsensusMode, type ConsensusMode } from '../engine/consensus.js';
+import {
+  resolveSampleGoalsForFreeze,
+  upsertPredictionSampleResult,
+  readPredictionSampleResults,
+} from './predictionSample.js';
 
 export interface FrozenMatchDistribution {
   outcomes: PredictionMatchOutcomeCounts;
   scorelines: PredictionMatchScorelineCount[];
   frozenAt: string;
+  sampleGoals?: { goalsHome: number; goalsAway: number } | null;
 }
 
 function aggregateFromGroupMatchResults(
@@ -137,6 +145,7 @@ function writeFrozenMatch(
   scorelines: PredictionMatchScorelineCount[],
   frozenAt: string,
   consensusMode: ConsensusMode,
+  sampleGoals: { goalsHome: number; goalsAway: number } | null = null,
 ): void {
   db.insert(schema.predictionFrozenMatches)
     .values({
@@ -148,6 +157,8 @@ function writeFrozenMatch(
       total: outcomes.total,
       scorelinesJson: JSON.stringify(scorelines),
       consensusMode,
+      sampleGoalsHome: sampleGoals?.goalsHome ?? null,
+      sampleGoalsAway: sampleGoals?.goalsAway ?? null,
       frozenAt,
     })
     .run();
@@ -162,6 +173,7 @@ function upsertFrozenMatch(
   scorelines: PredictionMatchScorelineCount[],
   frozenAt: string,
   consensusMode: ConsensusMode,
+  sampleGoals: { goalsHome: number; goalsAway: number } | null = null,
 ): void {
   db.delete(schema.predictionFrozenMatches)
     .where(
@@ -179,6 +191,7 @@ function upsertFrozenMatch(
     scorelines,
     frozenAt,
     consensusMode,
+    sampleGoals,
   );
 }
 
@@ -196,6 +209,7 @@ export function readFrozenMatchDistributions(
   outcomesByMatch: Map<number, PredictionMatchOutcomeCounts>;
   scorelinesByMatch: Map<number, PredictionMatchScorelineCount[]>;
   consensusModesByMatch: Map<number, ConsensusMode>;
+  sampleGoalsByMatch: Map<number, { goalsHome: number; goalsAway: number }>;
 } {
   const rows = db
     .select()
@@ -217,15 +231,114 @@ export function readFrozenMatchDistributions(
 
   const scorelinesByMatch = new Map<number, PredictionMatchScorelineCount[]>();
   const consensusModesByMatch = new Map<number, ConsensusMode>();
+  const sampleGoalsByMatch = new Map<number, { goalsHome: number; goalsAway: number }>();
   for (const row of rows) {
     scorelinesByMatch.set(row.matchNumber, JSON.parse(row.scorelinesJson) as PredictionMatchScorelineCount[]);
     consensusModesByMatch.set(row.matchNumber, parseConsensusMode(row.consensusMode));
+    if (row.sampleGoalsHome != null && row.sampleGoalsAway != null) {
+      sampleGoalsByMatch.set(row.matchNumber, {
+        goalsHome: row.sampleGoalsHome,
+        goalsAway: row.sampleGoalsAway,
+      });
+    }
   }
 
-  return { outcomesByMatch, scorelinesByMatch, consensusModesByMatch };
+  return { outcomesByMatch, scorelinesByMatch, consensusModesByMatch, sampleGoalsByMatch };
 }
 
-/** Locked-match frozen rows, falling back to Default when this pool has no pre-result data. */
+export function readCanonicalLockedSampleGoals(
+  db: Db,
+  defaultPredictionId = CANONICAL_FROZEN_PREDICTION_ID,
+): Map<number, { goalsHome: number; goalsAway: number }> {
+  const defaultFrozen = readFrozenMatchDistributions(db, defaultPredictionId);
+  const locked = readLockedMatchNumbers(db);
+  const samples = new Map<number, { goalsHome: number; goalsAway: number }>();
+
+  for (const matchNumber of locked) {
+    if (defaultFrozen.consensusModesByMatch.get(matchNumber) !== 'sample') continue;
+    const sample = defaultFrozen.sampleGoalsByMatch.get(matchNumber);
+    if (sample) samples.set(matchNumber, sample);
+  }
+
+  return samples;
+}
+
+/** Sample prediction to store on the match when an actual group result is first entered. */
+export function resolveLockedSamplePredictionForEntry(
+  db: Db,
+  matchNumber: number,
+): { goalsHome: number; goalsAway: number } | null {
+  const fixture = db
+    .select({ group: schema.fixtures.group })
+    .from(schema.fixtures)
+    .where(eq(schema.fixtures.matchNumber, matchNumber))
+    .get();
+  if (fixture?.group == null) return null;
+
+  const active = db
+    .select({
+      id: schema.predictions.id,
+      consensusMode: schema.predictions.consensusMode,
+      selectionSpec: schema.predictions.selectionSpec,
+    })
+    .from(schema.predictions)
+    .orderBy(desc(schema.predictions.updatedAt))
+    .limit(1)
+    .get();
+
+  const predictions = db
+    .select({
+      id: schema.predictions.id,
+      consensusMode: schema.predictions.consensusMode,
+      selectionSpec: schema.predictions.selectionSpec,
+    })
+    .from(schema.predictions)
+    .all();
+
+  let best: { goalsHome: number; goalsAway: number } | null = null;
+  let bestWeight = -1;
+
+  for (const prediction of predictions) {
+    if (parseConsensusMode(prediction.consensusMode) !== 'sample') continue;
+    const sample = readPredictionSampleResults(db, prediction.id).get(matchNumber);
+    if (!sample) continue;
+
+    const spec = parseSelectionSpecJson(prediction.selectionSpec);
+    let weight = countIdsInSpec(spec);
+    if (active?.id === prediction.id) weight += 1_000_000_000;
+
+    if (weight > bestWeight) {
+      best = { goalsHome: sample.goalsHome, goalsAway: sample.goalsAway };
+      bestWeight = weight;
+    }
+  }
+
+  return best;
+}
+
+export function readLockedMatchSampleGoalsFromActuals(
+  db: Db,
+): Map<number, { goalsHome: number; goalsAway: number }> {
+  const rows = db
+    .select({
+      matchNumber: schema.actualMatchResults.matchNumber,
+      predictedGoalsHome: schema.actualMatchResults.predictedGoalsHome,
+      predictedGoalsAway: schema.actualMatchResults.predictedGoalsAway,
+    })
+    .from(schema.actualMatchResults)
+    .all();
+
+  const samples = new Map<number, { goalsHome: number; goalsAway: number }>();
+  for (const row of rows) {
+    if (row.predictedGoalsHome == null || row.predictedGoalsAway == null) continue;
+    samples.set(row.matchNumber, {
+      goalsHome: row.predictedGoalsHome,
+      goalsAway: row.predictedGoalsAway,
+    });
+  }
+  return samples;
+}
+
 export function readEffectiveFrozenMatchDistributions(
   db: Db,
   predictionId: number,
@@ -234,6 +347,7 @@ export function readEffectiveFrozenMatchDistributions(
   outcomesByMatch: Map<number, PredictionMatchOutcomeCounts>;
   scorelinesByMatch: Map<number, PredictionMatchScorelineCount[]>;
   consensusModesByMatch: Map<number, ConsensusMode>;
+  sampleGoalsByMatch: Map<number, { goalsHome: number; goalsAway: number }>;
 } {
   const own = readFrozenMatchDistributions(db, predictionId);
   if (predictionId === defaultPredictionId) return own;
@@ -243,8 +357,17 @@ export function readEffectiveFrozenMatchDistributions(
   const outcomesByMatch = new Map(own.outcomesByMatch);
   const scorelinesByMatch = new Map(own.scorelinesByMatch);
   const consensusModesByMatch = new Map(own.consensusModesByMatch);
+  const sampleGoalsByMatch = new Map(own.sampleGoalsByMatch);
 
   for (const matchNumber of locked) {
+    const defaultMode = fallback.consensusModesByMatch.get(matchNumber);
+    const defaultSample = fallback.sampleGoalsByMatch.get(matchNumber);
+    if (defaultMode === 'sample' && defaultSample) {
+      sampleGoalsByMatch.set(matchNumber, defaultSample);
+    } else if (!sampleGoalsByMatch.has(matchNumber) && defaultSample) {
+      sampleGoalsByMatch.set(matchNumber, defaultSample);
+    }
+
     const ownOutcome = outcomesByMatch.get(matchNumber);
     if (ownOutcome && ownOutcome.total > 0) continue;
 
@@ -257,9 +380,13 @@ export function readEffectiveFrozenMatchDistributions(
       matchNumber,
       fallback.consensusModesByMatch.get(matchNumber) ?? parseConsensusMode(undefined),
     );
+    const fallbackSample = fallback.sampleGoalsByMatch.get(matchNumber);
+    if (fallbackSample) {
+      sampleGoalsByMatch.set(matchNumber, fallbackSample);
+    }
   }
 
-  return { outcomesByMatch, scorelinesByMatch, consensusModesByMatch };
+  return { outcomesByMatch, scorelinesByMatch, consensusModesByMatch, sampleGoalsByMatch };
 }
 
 function readDefaultFrozenRow(
@@ -277,6 +404,27 @@ function readDefaultFrozenRow(
       ),
     )
     .get();
+}
+
+function sampleGoalsForFreeze(
+  db: Db,
+  predictionId: number,
+  matchNumber: number,
+  consensusMode: ConsensusMode,
+  frozenAt: string,
+): { goalsHome: number; goalsAway: number } | null {
+  if (consensusMode !== 'sample') return null;
+  const sampleGoals = resolveSampleGoalsForFreeze(db, predictionId, matchNumber);
+  if (!sampleGoals) return null;
+  upsertPredictionSampleResult(
+    db,
+    predictionId,
+    matchNumber,
+    sampleGoals.goalsHome,
+    sampleGoals.goalsAway,
+    frozenAt,
+  );
+  return sampleGoals;
 }
 
 export function freezePredictionMatch(
@@ -306,8 +454,18 @@ export function freezePredictionMatch(
   };
   const scorelines = scorelinesByMatch.get(matchNumber) ?? [];
   const consensusMode = readPredictionConsensusMode(db, predictionId);
+  const sampleGoals = sampleGoalsForFreeze(db, predictionId, matchNumber, consensusMode, frozenAt);
 
-  writeFrozenMatch(db, predictionId, matchNumber, outcomes, scorelines, frozenAt, consensusMode);
+  writeFrozenMatch(
+    db,
+    predictionId,
+    matchNumber,
+    outcomes,
+    scorelines,
+    frozenAt,
+    consensusMode,
+    sampleGoals,
+  );
 }
 
 export function freezeMatchForAllPredictions(db: Db, matchNumber: number, frozenAt: string): void {
@@ -374,10 +532,15 @@ export function backfillFrozenMatchesForPrediction(
         aggregated.scorelines,
         recordedAt,
         parseConsensusMode(source.consensusMode),
+        source.sampleGoalsHome != null && source.sampleGoalsAway != null
+          ? { goalsHome: source.sampleGoalsHome, goalsAway: source.sampleGoalsAway }
+          : null,
       );
       continue;
     }
 
+    const consensusMode = readPredictionConsensusMode(db, predictionId);
+    const sampleGoals = sampleGoalsForFreeze(db, predictionId, matchNumber, consensusMode, recordedAt);
     writeFrozenMatch(
       db,
       predictionId,
@@ -385,9 +548,80 @@ export function backfillFrozenMatchesForPrediction(
       aggregated.outcomes,
       aggregated.scorelines,
       recordedAt,
-      readPredictionConsensusMode(db, predictionId),
+      consensusMode,
+      sampleGoals,
     );
   }
+}
+
+/** Keep locked sample scores aligned with the canonical Default prediction. */
+export function syncCanonicalLockedSampleGoalsFromDefault(
+  db: Db,
+  predictionId: number,
+  defaultPredictionId = CANONICAL_FROZEN_PREDICTION_ID,
+): void {
+  if (predictionId === defaultPredictionId) return;
+
+  const defaultFrozen = readFrozenMatchDistributions(db, defaultPredictionId);
+  const locked = readLockedMatchNumbers(db);
+
+  for (const matchNumber of locked) {
+    const defaultSample = defaultFrozen.sampleGoalsByMatch.get(matchNumber);
+    if (!defaultSample) continue;
+    if (defaultFrozen.consensusModesByMatch.get(matchNumber) !== 'sample') continue;
+
+    const ownRow = db
+      .select()
+      .from(schema.predictionFrozenMatches)
+      .where(
+        and(
+          eq(schema.predictionFrozenMatches.predictionId, predictionId),
+          eq(schema.predictionFrozenMatches.matchNumber, matchNumber),
+        ),
+      )
+      .get();
+    if (!ownRow) continue;
+
+    if (
+      ownRow.sampleGoalsHome === defaultSample.goalsHome &&
+      ownRow.sampleGoalsAway === defaultSample.goalsAway &&
+      parseConsensusMode(ownRow.consensusMode) === 'sample'
+    ) {
+      continue;
+    }
+
+    db.update(schema.predictionFrozenMatches)
+      .set({
+        consensusMode: 'sample',
+        sampleGoalsHome: defaultSample.goalsHome,
+        sampleGoalsAway: defaultSample.goalsAway,
+      })
+      .where(
+        and(
+          eq(schema.predictionFrozenMatches.predictionId, predictionId),
+          eq(schema.predictionFrozenMatches.matchNumber, matchNumber),
+        ),
+      )
+      .run();
+
+    upsertPredictionSampleResult(
+      db,
+      predictionId,
+      matchNumber,
+      defaultSample.goalsHome,
+      defaultSample.goalsAway,
+      ownRow.frozenAt,
+    );
+  }
+}
+
+/** @deprecated Use syncCanonicalLockedSampleGoalsFromDefault */
+export function copyMissingFrozenSampleGoalsFromDefault(
+  db: Db,
+  predictionId: number,
+  defaultPredictionId = CANONICAL_FROZEN_PREDICTION_ID,
+): void {
+  syncCanonicalLockedSampleGoalsFromDefault(db, predictionId, defaultPredictionId);
 }
 
 /** Copy Default frozen rows into a prediction for locked group matches that are still missing. */
@@ -425,6 +659,10 @@ export function copyMissingFrozenMatchesFromDefault(
     if (existing && existing.total > 0) continue;
 
     const scorelines = JSON.parse(source.scorelinesJson) as PredictionMatchScorelineCount[];
+    const sourceSample =
+      source.sampleGoalsHome != null && source.sampleGoalsAway != null
+        ? { goalsHome: source.sampleGoalsHome, goalsAway: source.sampleGoalsAway }
+        : null;
     upsertFrozenMatch(
       db,
       predictionId,
@@ -438,6 +676,7 @@ export function copyMissingFrozenMatchesFromDefault(
       scorelines,
       source.frozenAt,
       parseConsensusMode(source.consensusMode),
+      sourceSample,
     );
   }
 }
@@ -471,6 +710,10 @@ export function copyCanonicalFrozenMatchesFromDefault(
       awayWin: source.awayWin,
       total: source.total,
     };
+    const sourceSample =
+      source.sampleGoalsHome != null && source.sampleGoalsAway != null
+        ? { goalsHome: source.sampleGoalsHome, goalsAway: source.sampleGoalsAway }
+        : null;
 
     for (const prediction of predictions) {
       upsertFrozenMatch(
@@ -481,6 +724,7 @@ export function copyCanonicalFrozenMatchesFromDefault(
         scorelines,
         source.frozenAt,
         parseConsensusMode(source.consensusMode),
+        sourceSample,
       );
     }
   }
@@ -518,8 +762,29 @@ export function setFrozenMatchConsensusMode(
     .get();
 
   if (existing) {
+    const recordedAt =
+      db
+        .select({ recordedAt: schema.actualMatchResults.recordedAt })
+        .from(schema.actualMatchResults)
+        .where(eq(schema.actualMatchResults.matchNumber, matchNumber))
+        .get()?.recordedAt ?? existing.frozenAt;
+    const sampleGoals =
+      mode === 'sample' && (existing.sampleGoalsHome == null || existing.sampleGoalsAway == null)
+        ? sampleGoalsForFreeze(db, predictionId, matchNumber, mode, recordedAt)
+        : existing.sampleGoalsHome != null && existing.sampleGoalsAway != null
+          ? { goalsHome: existing.sampleGoalsHome, goalsAway: existing.sampleGoalsAway }
+          : null;
+
     db.update(schema.predictionFrozenMatches)
-      .set({ consensusMode: mode })
+      .set({
+        consensusMode: mode,
+        ...(mode === 'sample' && sampleGoals
+          ? {
+              sampleGoalsHome: sampleGoals.goalsHome,
+              sampleGoalsAway: sampleGoals.goalsAway,
+            }
+          : {}),
+      })
       .where(
         and(
           eq(schema.predictionFrozenMatches.predictionId, predictionId),
@@ -544,7 +809,128 @@ export function setFrozenMatchConsensusMode(
       .where(eq(schema.actualMatchResults.matchNumber, matchNumber))
       .get()?.recordedAt ?? new Date().toISOString();
 
-  upsertFrozenMatch(db, predictionId, matchNumber, outcomes, scorelines, recordedAt, mode);
+  const sampleGoals =
+    mode === 'sample'
+      ? (effective.sampleGoalsByMatch.get(matchNumber) ??
+        sampleGoalsForFreeze(db, predictionId, matchNumber, mode, recordedAt))
+      : null;
+
+  upsertFrozenMatch(
+    db,
+    predictionId,
+    matchNumber,
+    outcomes,
+    scorelines,
+    recordedAt,
+    mode,
+    sampleGoals,
+  );
+}
+
+/** Backfill locked sample predictions for frozen rows created before sample locking existed. */
+export function backfillFrozenSampleGoals(db: Db): void {
+  const rows = db
+    .select()
+    .from(schema.predictionFrozenMatches)
+    .where(eq(schema.predictionFrozenMatches.consensusMode, 'sample'))
+    .all();
+
+  for (const row of rows) {
+    if (row.sampleGoalsHome != null && row.sampleGoalsAway != null) continue;
+
+    const fromSample = resolveSampleGoalsForFreeze(db, row.predictionId, row.matchNumber);
+    const fromDefault =
+      row.predictionId !== CANONICAL_FROZEN_PREDICTION_ID
+        ? readDefaultFrozenRow(db, row.matchNumber, CANONICAL_FROZEN_PREDICTION_ID)
+        : null;
+    const defaultSample =
+      fromDefault?.sampleGoalsHome != null && fromDefault?.sampleGoalsAway != null
+        ? { goalsHome: fromDefault.sampleGoalsHome, goalsAway: fromDefault.sampleGoalsAway }
+        : null;
+    const sampleGoals = fromSample ?? defaultSample;
+    if (!sampleGoals) continue;
+
+    db.update(schema.predictionFrozenMatches)
+      .set({
+        sampleGoalsHome: sampleGoals.goalsHome,
+        sampleGoalsAway: sampleGoals.goalsAway,
+      })
+      .where(
+        and(
+          eq(schema.predictionFrozenMatches.predictionId, row.predictionId),
+          eq(schema.predictionFrozenMatches.matchNumber, row.matchNumber),
+        ),
+      )
+      .run();
+
+    upsertPredictionSampleResult(
+      db,
+      row.predictionId,
+      row.matchNumber,
+      sampleGoals.goalsHome,
+      sampleGoals.goalsAway,
+      row.frozenAt,
+    );
+  }
+}
+
+/** Snapshot predictions for locked sample-mode matches entered before sample locking shipped. */
+const KNOWN_LOCKED_SAMPLE_GOALS = new Map<number, { goalsHome: number; goalsAway: number }>([
+  [49, { goalsHome: 1, goalsAway: 0 }],
+  [50, { goalsHome: 0, goalsAway: 2 }],
+  [55, { goalsHome: 2, goalsAway: 0 }],
+  [56, { goalsHome: 2, goalsAway: 0 }],
+  [61, { goalsHome: 4, goalsAway: 1 }],
+  [67, { goalsHome: 2, goalsAway: 1 }],
+]);
+
+export function applyKnownLockedSampleGoals(db: Db): void {
+  for (const [matchNumber, goals] of KNOWN_LOCKED_SAMPLE_GOALS) {
+    const actual = db
+      .select({ matchNumber: schema.actualMatchResults.matchNumber })
+      .from(schema.actualMatchResults)
+      .where(eq(schema.actualMatchResults.matchNumber, matchNumber))
+      .get();
+    if (actual) {
+      db.update(schema.actualMatchResults)
+        .set({
+          predictedGoalsHome: goals.goalsHome,
+          predictedGoalsAway: goals.goalsAway,
+        })
+        .where(eq(schema.actualMatchResults.matchNumber, matchNumber))
+        .run();
+    }
+
+    const rows = db
+      .select()
+      .from(schema.predictionFrozenMatches)
+      .where(eq(schema.predictionFrozenMatches.matchNumber, matchNumber))
+      .all();
+
+    for (const row of rows) {
+      db.update(schema.predictionFrozenMatches)
+        .set({
+          consensusMode: 'sample',
+          sampleGoalsHome: goals.goalsHome,
+          sampleGoalsAway: goals.goalsAway,
+        })
+        .where(
+          and(
+            eq(schema.predictionFrozenMatches.predictionId, row.predictionId),
+            eq(schema.predictionFrozenMatches.matchNumber, matchNumber),
+          ),
+        )
+        .run();
+      upsertPredictionSampleResult(
+        db,
+        row.predictionId,
+        matchNumber,
+        goals.goalsHome,
+        goals.goalsAway,
+        row.frozenAt,
+      );
+    }
+  }
 }
 
 export function clearFrozenMatch(db: Db, matchNumber: number): void {

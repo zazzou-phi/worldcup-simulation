@@ -68,7 +68,43 @@ describe('predictionSample', () => {
     expect(sample.has(2)).toBe(true);
   });
 
-  it('replaces all sample rows on resample with a new timestamp', async () => {
+  it('preserves locked sample rows on resample', () => {
+    const { prediction, sim1, sim2 } = seedPoolWithTwoScores();
+    repo.updateMatchResult(sim1.id, 2, 1, 1, null);
+    repo.updateMatchResult(sim2.id, 2, 2, 0, null);
+    performPredictionSample(db, prediction.id);
+    const beforeLock = readPredictionSampleResults(db, prediction.id).get(1)!;
+
+    repo.setActualResult(1, 3, 0, repo.getFixtures().find((f) => f.matchNumber === 1)!.teamHomeId!);
+    performPredictionSample(db, prediction.id);
+
+    const afterResample = readPredictionSampleResults(db, prediction.id);
+    expect(afterResample.get(1)).toEqual(beforeLock);
+    expect(afterResample.has(2)).toBe(true);
+  });
+
+  it('freezes sample prediction when an actual result is entered in sample mode', () => {
+    const { prediction, sim1, sim2 } = seedPoolWithTwoScores();
+    repo.updateMatchResult(sim1.id, 2, 1, 1, null);
+    repo.updateMatchResult(sim2.id, 2, 2, 0, null);
+    performPredictionSample(db, prediction.id);
+    repo.setPredictionConsensusMode(prediction.id, 'sample');
+    const beforeLock = readPredictionSampleResults(db, prediction.id).get(1)!;
+
+    repo.setActualResult(1, 3, 0, repo.getFixtures().find((f) => f.matchNumber === 1)!.teamHomeId!);
+    performPredictionSample(db, prediction.id);
+
+    const view = repo.buildMasterGroupView(prediction.id);
+    const match = view.resolvedMatches.find((m) => m.fixture.matchNumber === 1)!;
+    expect(match.result.goalsHome).toBe(beforeLock.goalsHome);
+    expect(match.result.goalsAway).toBe(beforeLock.goalsAway);
+    expect(view.sampleResults?.[1]).toEqual({
+      goalsHome: beforeLock.goalsHome,
+      goalsAway: beforeLock.goalsAway,
+    });
+  });
+
+  it('replaces unlocked sample rows on resample with a new timestamp', async () => {
     const { prediction } = seedPoolWithTwoScores();
     const first = performPredictionSample(db, prediction.id);
     await new Promise((resolve) => setTimeout(resolve, 5));

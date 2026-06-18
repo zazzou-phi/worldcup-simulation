@@ -194,6 +194,8 @@ export const predictionFrozenMatches = sqliteTable(
       .notNull()
       .$type<'scoreline' | 'outcome' | 'floor' | 'rounded' | 'sample'>()
       .default('floor'),
+    sampleGoalsHome: integer('sample_goals_home'),
+    sampleGoalsAway: integer('sample_goals_away'),
     frozenAt: text('frozen_at').notNull(),
   },
   (t) => [primaryKey({ columns: [t.predictionId, t.matchNumber] })],
@@ -239,5 +241,7 @@ export const actualMatchResults = sqliteTable('actual_match_results', {
   goalsHome: integer('goals_home').notNull(),
   goalsAway: integer('goals_away').notNull(),
   winnerTeamId: integer('winner_team_id').references(() => teams.id),
+  predictedGoalsHome: integer('predicted_goals_home'),
+  predictedGoalsAway: integer('predicted_goals_away'),
   recordedAt: text('recorded_at').notNull(),
 });

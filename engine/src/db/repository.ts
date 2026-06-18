@@ -70,6 +70,10 @@ import {
   backfillFrozenMatchesForPrediction,
   clearFrozenMatch,
   copyMissingFrozenMatchesFromDefault,
+  syncCanonicalLockedSampleGoalsFromDefault,
+  readCanonicalLockedSampleGoals,
+  readLockedMatchSampleGoalsFromActuals,
+  resolveLockedSamplePredictionForEntry,
   freezeMatchForAllPredictions,
   readEffectiveFrozenMatchDistributions,
   setFrozenMatchConsensusMode,
@@ -168,6 +172,8 @@ function mapActualResult(row: typeof schema.actualMatchResults.$inferSelect): Ac
     goalsAway: row.goalsAway,
     winnerTeamId: row.winnerTeamId,
     recordedAt: row.recordedAt,
+    predictedGoalsHome: row.predictedGoalsHome,
+    predictedGoalsAway: row.predictedGoalsAway,
   };
 }
 
@@ -531,6 +537,7 @@ export class Repository {
     rebuildPredictionAggregates(this.db, row.id, parsed.spec);
     backfillFrozenMatchesForPrediction(this.db, row.id, parsed.spec);
     copyMissingFrozenMatchesFromDefault(this.db, row.id);
+    syncCanonicalLockedSampleGoalsFromDefault(this.db, row.id);
     return mapPrediction(row);
   }
 
@@ -820,9 +827,18 @@ export class Repository {
         .where(eq(schema.actualMatchResults.matchNumber, matchNumber))
         .run();
     } else {
+      const lockedSample = resolveLockedSamplePredictionForEntry(this.db, matchNumber);
       this.db
         .insert(schema.actualMatchResults)
-        .values({ matchNumber, goalsHome, goalsAway, winnerTeamId, recordedAt: now })
+        .values({
+          matchNumber,
+          goalsHome,
+          goalsAway,
+          winnerTeamId,
+          recordedAt: now,
+          predictedGoalsHome: lockedSample?.goalsHome ?? null,
+          predictedGoalsAway: lockedSample?.goalsAway ?? null,
+        })
         .run();
       freezeMatchForAllPredictions(this.db, matchNumber, now);
     }
@@ -1233,6 +1249,8 @@ export class Repository {
   }
 
   buildMasterGroupView(predictionId: number): MasterGroupState {
+    syncCanonicalLockedSampleGoalsFromDefault(this.db, predictionId);
+
     const prediction = this.getPrediction(predictionId);
     const consensusMode = prediction?.consensusMode ?? getDefaultConsensusMode();
     const teams = this.getTeams();
@@ -1240,6 +1258,9 @@ export class Repository {
     const fixtures = this.getFixtures();
     const memberships = this.getGroupMemberships();
     const groupFixtures = fixtures.filter((f) => f.group != null);
+    const lockedMatchNumbers = new Set(this.getActualResults().map((r) => r.matchNumber));
+    const lockedSampleGoals = readLockedMatchSampleGoalsFromActuals(this.db);
+    const canonicalSamples = readCanonicalLockedSampleGoals(this.db);
 
     const { outcomesByMatch, scorelinesByMatch } = readPredictionMatchDistributions(
       this.db,
@@ -1286,8 +1307,19 @@ export class Repository {
       let status: MatchStatus = 'scheduled';
 
       if (homeTeam && awayTeam) {
-        const mode = frozenConsensusMode ?? consensusMode;
-        const savedSample = sampleResults.get(fixture.matchNumber);
+        const lockedInSamplePool = locked && consensusMode === 'sample';
+        const mode = lockedInSamplePool
+          ? 'sample'
+          : (frozenConsensusMode ?? consensusMode);
+        const matchLockedSample = lockedSampleGoals.get(fixture.matchNumber);
+        const canonicalSample = canonicalSamples.get(fixture.matchNumber);
+        const frozenSample = frozen.sampleGoalsByMatch.get(fixture.matchNumber);
+        const liveSample = sampleResults.get(fixture.matchNumber);
+        const savedSample = lockedInSamplePool
+          ? (matchLockedSample ?? canonicalSample)
+          : mode === 'sample' && locked
+            ? frozenSample
+            : liveSample;
         const canPickScore =
           mode === 'sample' ? savedSample != null : dist.total > 0;
         if (canPickScore) {
@@ -1348,6 +1380,29 @@ export class Repository {
       };
     });
 
+    const mergedSampleResults = new Map(sampleResults);
+    for (const [matchNumber, goals] of frozen.sampleGoalsByMatch) {
+      const existing = mergedSampleResults.get(matchNumber);
+      mergedSampleResults.set(matchNumber, {
+        goalsHome: goals.goalsHome,
+        goalsAway: goals.goalsAway,
+        sampledAt: existing?.sampledAt ?? sampleSummary?.sampledAt ?? '',
+      });
+    }
+    if (consensusMode === 'sample') {
+      for (const matchNumber of lockedMatchNumbers) {
+        const lockedSample =
+          lockedSampleGoals.get(matchNumber) ?? canonicalSamples.get(matchNumber);
+        if (!lockedSample) continue;
+        const existing = mergedSampleResults.get(matchNumber);
+        mergedSampleResults.set(matchNumber, {
+          goalsHome: lockedSample.goalsHome,
+          goalsAway: lockedSample.goalsAway,
+          sampledAt: existing?.sampledAt ?? sampleSummary?.sampledAt ?? '',
+        });
+      }
+    }
+
     return {
       consensusMode,
       resolvedMatches,
@@ -1356,7 +1411,7 @@ export class Repository {
       distributions,
       sample: sampleSummary,
       sampleResults: Object.fromEntries(
-        [...sampleResults.entries()].map(([matchNumber, row]) => [
+        [...mergedSampleResults.entries()].map(([matchNumber, row]) => [
           matchNumber,
           { goalsHome: row.goalsHome, goalsAway: row.goalsAway },
         ]),
