@@ -28,6 +28,15 @@
       "predictedGoalsAway": 0
     },
     {
+      "matchNumber": 4,
+      "goalsHome": 1,
+      "goalsAway": 0,
+      "winnerTeamId": 18,
+      "recordedAt": "2026-06-19T09:52:25.992Z",
+      "predictedGoalsHome": 3,
+      "predictedGoalsAway": 0
+    },
+    {
       "matchNumber": 7,
       "goalsHome": 1,
       "goalsAway": 1,
@@ -269,14 +278,14 @@
             "blendOffensiveRating": 1.1111718501629673,
             "blendDefensiveRating": 0.8014579967453114
           },
-          "played": 1,
-          "won": 1,
+          "played": 2,
+          "won": 2,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 2,
+          "goalsFor": 3,
           "goalsAgainst": 0,
-          "goalDifference": 2,
-          "points": 3,
+          "goalDifference": 3,
+          "points": 6,
           "position": 1
         },
         {
@@ -299,13 +308,13 @@
             "blendOffensiveRating": 0.9226371408744325,
             "blendDefensiveRating": 0.8609780520172412
           },
-          "played": 1,
+          "played": 2,
           "won": 1,
           "drawn": 0,
-          "lost": 0,
+          "lost": 1,
           "goalsFor": 2,
-          "goalsAgainst": 1,
-          "goalDifference": 1,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
           "points": 3,
           "position": 2
         },
@@ -1961,10 +1970,10 @@
         "matchNumber": 4,
         "teamHomeId": 18,
         "teamAwayId": 32,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 1,
+        "goalsAway": 0,
+        "winnerTeamId": 18,
+        "status": "played"
       },
       "homeTeam": {
         "id": 18,
@@ -2004,7 +2013,7 @@
       },
       "homeLabel": "Mexico",
       "awayLabel": "South Korea",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {

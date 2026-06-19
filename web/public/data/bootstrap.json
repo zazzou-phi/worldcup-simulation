@@ -2338,6 +2338,15 @@
       "predictedGoalsAway": 0
     },
     {
+      "matchNumber": 4,
+      "goalsHome": 1,
+      "goalsAway": 0,
+      "winnerTeamId": 18,
+      "recordedAt": "2026-06-19T09:52:25.992Z",
+      "predictedGoalsHome": 3,
+      "predictedGoalsAway": 0
+    },
+    {
       "matchNumber": 7,
       "goalsHome": 1,
       "goalsAway": 1,
