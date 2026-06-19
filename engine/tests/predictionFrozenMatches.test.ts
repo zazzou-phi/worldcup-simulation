@@ -184,6 +184,23 @@ describe('predictionFrozenMatches', () => {
     expect(actual.predictedGoalsAway).toBe(1);
   });
 
+  it('keeps frozen floor predictions visible when pool consensus mode is sample', () => {
+    const sim = repo.createSimulation('Floor freeze');
+    const predictionId = ensureTestPrediction(repo);
+    repo.setPredictionConsensusMode(predictionId, 'floor');
+    repo.updateMatchResult(sim.id, 1, 2, 1, 18);
+    repo.setActualResult(1, 2, 0, 18);
+
+    repo.setPredictionConsensusMode(predictionId, 'sample');
+    const view = repo.buildMasterGroupView(predictionId);
+    const match = view.resolvedMatches.find((m) => m.fixture.matchNumber === 1)!;
+
+    expect(view.distributions[1].consensusMode).toBe('floor');
+    expect(match.result.status).toBe('played');
+    expect(match.result.goalsHome).toBe(2);
+    expect(match.result.goalsAway).toBe(1);
+  });
+
   it('forces canonical locked sample scores across predictions in sample mode', () => {
     const defaultSim = repo.createSimulation('Default pool');
     const otherSim = repo.createSimulation('Other pool');

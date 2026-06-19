@@ -1307,18 +1307,14 @@ export class Repository {
       let status: MatchStatus = 'scheduled';
 
       if (homeTeam && awayTeam) {
-        const lockedInSamplePool = locked && consensusMode === 'sample';
-        const mode = lockedInSamplePool
-          ? 'sample'
-          : (frozenConsensusMode ?? consensusMode);
+        const mode = frozenConsensusMode ?? consensusMode;
         const matchLockedSample = lockedSampleGoals.get(fixture.matchNumber);
         const canonicalSample = canonicalSamples.get(fixture.matchNumber);
         const frozenSample = frozen.sampleGoalsByMatch.get(fixture.matchNumber);
         const liveSample = sampleResults.get(fixture.matchNumber);
-        const savedSample = lockedInSamplePool
-          ? (matchLockedSample ?? canonicalSample)
-          : mode === 'sample' && locked
-            ? frozenSample
+        const savedSample =
+          mode === 'sample' && locked
+            ? (matchLockedSample ?? frozenSample ?? canonicalSample)
             : liveSample;
         const canPickScore =
           mode === 'sample' ? savedSample != null : dist.total > 0;
@@ -1391,8 +1387,12 @@ export class Repository {
     }
     if (consensusMode === 'sample') {
       for (const matchNumber of lockedMatchNumbers) {
+        const frozenMode = frozen.consensusModesByMatch.get(matchNumber);
+        if (frozenMode != null && frozenMode !== 'sample') continue;
         const lockedSample =
-          lockedSampleGoals.get(matchNumber) ?? canonicalSamples.get(matchNumber);
+          lockedSampleGoals.get(matchNumber) ??
+          frozen.sampleGoalsByMatch.get(matchNumber) ??
+          canonicalSamples.get(matchNumber);
         if (!lockedSample) continue;
         const existing = mergedSampleResults.get(matchNumber);
         mergedSampleResults.set(matchNumber, {
