@@ -426,6 +426,18 @@ describe('HTTP API', () => {
     }
   }
 
+  it('PUT /actual-results accepts team id 0 as winnerTeamId (Spain)', async () => {
+    const put = await app.request('/api/v1/actual-results/43', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goalsHome: 2, goalsAway: 1, winnerTeamId: 0 }),
+    });
+    expect(put.status).toBe(200);
+    const actual = await json<{ matchNumber: number; winnerTeamId: number }>(put);
+    expect(actual.matchNumber).toBe(43);
+    expect(actual.winnerTeamId).toBe(0);
+  });
+
   it('PUT /actual-results records score and applies to new simulation', async () => {
     const put = await app.request('/api/v1/actual-results/1', {
       method: 'PUT',

@@ -23,8 +23,8 @@ function parseNonNegativeInt(value: unknown, field: string): number {
 }
 
 function parseOptionalTeamId(value: unknown): number | null {
-  if (typeof value !== 'number' || !Number.isInteger(value) || value < 1) {
-    throw new ApiError('winnerTeamId must be a positive integer', 400, 'invalid_winner');
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
+    throw new ApiError('winnerTeamId must be a non-negative integer', 400, 'invalid_winner');
   }
   return value;
 }

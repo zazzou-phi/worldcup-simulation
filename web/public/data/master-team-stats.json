@@ -36,9 +36,9 @@
       "teamName": "Spain",
       "countryCode": "ES",
       "flag": "🇪🇸",
-      "totalGoals": 33219,
+      "totalGoals": 33218,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 13.2876,
+      "avgGoalsPerSimulation": 13.2872,
       "championWins": 656
     },
     {
@@ -76,9 +76,9 @@
       "teamName": "Norway",
       "countryCode": "NO",
       "flag": "🇳🇴",
-      "totalGoals": 21685,
+      "totalGoals": 21689,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 8.674,
+      "avgGoalsPerSimulation": 8.6756,
       "championWins": 25
     },
     {
@@ -136,9 +136,9 @@
       "teamName": "United States",
       "countryCode": "US",
       "flag": "🇺🇸",
-      "totalGoals": 18396,
+      "totalGoals": 18400,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 7.3584,
+      "avgGoalsPerSimulation": 7.36,
       "championWins": 3
     },
     {
@@ -156,9 +156,9 @@
       "teamName": "Australia",
       "countryCode": "AU",
       "flag": "🇦🇺",
-      "totalGoals": 16910,
+      "totalGoals": 16906,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 6.764,
+      "avgGoalsPerSimulation": 6.7624,
       "championWins": 16
     },
     {
@@ -206,9 +206,9 @@
       "teamName": "Morocco",
       "countryCode": "MA",
       "flag": "🇲🇦",
-      "totalGoals": 15323,
+      "totalGoals": 15324,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 6.1292,
+      "avgGoalsPerSimulation": 6.1296,
       "championWins": 37
     },
     {
@@ -256,9 +256,9 @@
       "teamName": "Uruguay",
       "countryCode": "UY",
       "flag": "🇺🇾",
-      "totalGoals": 13264,
+      "totalGoals": 13265,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 5.3056,
+      "avgGoalsPerSimulation": 5.306,
       "championWins": 27
     },
     {
@@ -286,9 +286,9 @@
       "teamName": "Scotland",
       "countryCode": null,
       "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-      "totalGoals": 11029,
+      "totalGoals": 11028,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 4.4116,
+      "avgGoalsPerSimulation": 4.4112,
       "championWins": 9
     },
     {
@@ -376,9 +376,9 @@
       "teamName": "Algeria",
       "countryCode": "DZ",
       "flag": "🇩🇿",
-      "totalGoals": 7467,
+      "totalGoals": 7463,
       "simulationsWithMatches": 2500,
-      "avgGoalsPerSimulation": 2.9868,
+      "avgGoalsPerSimulation": 2.9852,
       "championWins": 9
     },
     {
