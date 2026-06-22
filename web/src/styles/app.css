@@ -708,10 +708,6 @@ button {
   outline: 1px solid var(--cyan);
 }
 
-.fixture-row.fixture-locked {
-  opacity: 0.92;
-}
-
 .header-results {
   color: var(--yellow, #f5c542);
 }
@@ -721,9 +717,22 @@ button {
 }
 
 .fixture-prefix {
-  color: var(--text-muted);
   font-size: 0.85em;
   white-space: nowrap;
+}
+
+.fixture-prefix-matchday,
+.fixture-prefix-kickoff {
+  color: var(--text-muted);
+}
+
+.fixture-prefix-locked .fixture-prefix-matchday {
+  color: var(--yellow);
+  font-weight: 600;
+}
+
+.fixture-prefix-locked .fixture-prefix-kickoff {
+  color: var(--cyan);
 }
 
 .fixture-home,

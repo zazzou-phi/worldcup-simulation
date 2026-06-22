@@ -15,8 +15,17 @@ function formatKickoffCet(date: string, time: string): string {
   return `${day}.${month} ${hour}`;
 }
 
-export function formatFixturePrefix(round: string, date: string, time: string): string {
+export function getFixturePrefixParts(
+  round: string,
+  date: string,
+  time: string,
+): { matchday: string | null; kickoff: string } {
   const kickoff = formatKickoffCet(date, time);
-  const matchday = /^Matchday (\d+)$/.exec(round)?.[1];
+  const matchday = /^Matchday (\d+)$/.exec(round)?.[1] ?? null;
+  return { matchday, kickoff };
+}
+
+export function formatFixturePrefix(round: string, date: string, time: string): string {
+  const { matchday, kickoff } = getFixturePrefixParts(round, date, time);
   return matchday != null ? `${matchday}. ${kickoff}` : kickoff;
 }

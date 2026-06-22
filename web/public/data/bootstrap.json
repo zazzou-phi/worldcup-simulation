@@ -2554,6 +2554,15 @@
       "predictedGoalsAway": 0
     },
     {
+      "matchNumber": 40,
+      "goalsHome": 1,
+      "goalsAway": 3,
+      "winnerTeamId": 45,
+      "recordedAt": "2026-06-22T08:19:36.552Z",
+      "predictedGoalsHome": 1,
+      "predictedGoalsAway": 1
+    },
+    {
       "matchNumber": 43,
       "goalsHome": 0,
       "goalsAway": 0,
@@ -2579,6 +2588,15 @@
       "recordedAt": "2026-06-21T21:11:09.872Z",
       "predictedGoalsHome": 4,
       "predictedGoalsAway": 2
+    },
+    {
+      "matchNumber": 46,
+      "goalsHome": 2,
+      "goalsAway": 2,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-22T00:12:16.236Z",
+      "predictedGoalsHome": 2,
+      "predictedGoalsAway": 1
     },
     {
       "matchNumber": 49,

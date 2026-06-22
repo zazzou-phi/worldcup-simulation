@@ -333,7 +333,6 @@ export function MasterFixtureModal({
       <div className="modal modal-wide master-fixture-modal" onClick={(e) => e.stopPropagation()}>
         <h2>
           Match #{match.fixture.matchNumber} · {match.fixture.group}
-          {match.isLocked ? ' 🔒' : ''}
         </h2>
         <p className="master-fixture-teams">
           {homeName} vs {awayName}

@@ -2436,10 +2436,10 @@
         "matchNumber": 40,
         "teamHomeId": 67,
         "teamAwayId": 45,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 1,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 67,
@@ -2479,7 +2479,7 @@
       },
       "homeLabel": "New Zealand",
       "awayLabel": "Egypt",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -2808,10 +2808,10 @@
         "matchNumber": 46,
         "teamHomeId": 15,
         "teamAwayId": 71,
-        "goalsHome": null,
-        "goalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 2,
+        "goalsAway": 1,
+        "winnerTeamId": 15,
+        "status": "played"
       },
       "homeTeam": {
         "id": 15,
@@ -2851,7 +2851,7 @@
       },
       "homeLabel": "Uruguay",
       "awayLabel": "Cape Verde",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5221,6 +5221,36 @@
       "groupLetter": "G",
       "rows": [
         {
+          "teamId": 45,
+          "team": {
+            "id": 45,
+            "name": "Egypt",
+            "countryCode": "EG",
+            "flag": "🇪🇬",
+            "rank": 46,
+            "rating": 1699,
+            "elo": 1699,
+            "total": 884,
+            "goalsFor": 1545,
+            "goalsAgainst": 921,
+            "eloOffensiveRating": 0.7387524301763619,
+            "eloDefensiveRating": 1.1196927790770395,
+            "goalOffensiveRating": 1.056186515622931,
+            "goalDefensiveRating": 0.8724424383412202,
+            "blendOffensiveRating": 0.8294878226245165,
+            "blendDefensiveRating": 0.9856475035928245
+          },
+          "played": 2,
+          "won": 1,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 4,
+          "goalsAgainst": 2,
+          "goalDifference": 2,
+          "points": 4,
+          "position": 1
+        },
+        {
           "teamId": 31,
           "team": {
             "id": 31,
@@ -5248,7 +5278,7 @@
           "goalsAgainst": 2,
           "goalDifference": 0,
           "points": 2,
-          "position": 1
+          "position": 2
         },
         {
           "teamId": 19,
@@ -5278,7 +5308,7 @@
           "goalsAgainst": 1,
           "goalDifference": 0,
           "points": 2,
-          "position": 2
+          "position": 3
         },
         {
           "teamId": 67,
@@ -5300,43 +5330,13 @@
             "blendOffensiveRating": 0.6985526375575903,
             "blendDefensiveRating": 1.348733863943677
           },
-          "played": 1,
+          "played": 2,
           "won": 0,
           "drawn": 1,
-          "lost": 0,
-          "goalsFor": 2,
-          "goalsAgainst": 2,
-          "goalDifference": 0,
-          "points": 1,
-          "position": 3
-        },
-        {
-          "teamId": 45,
-          "team": {
-            "id": 45,
-            "name": "Egypt",
-            "countryCode": "EG",
-            "flag": "🇪🇬",
-            "rank": 46,
-            "rating": 1699,
-            "elo": 1699,
-            "total": 884,
-            "goalsFor": 1545,
-            "goalsAgainst": 921,
-            "eloOffensiveRating": 0.7387524301763619,
-            "eloDefensiveRating": 1.1196927790770395,
-            "goalOffensiveRating": 1.056186515622931,
-            "goalDefensiveRating": 0.8724424383412202,
-            "blendOffensiveRating": 0.8294878226245165,
-            "blendDefensiveRating": 0.9856475035928245
-          },
-          "played": 1,
-          "won": 0,
-          "drawn": 1,
-          "lost": 0,
-          "goalsFor": 1,
-          "goalsAgainst": 1,
-          "goalDifference": 0,
+          "lost": 1,
+          "goalsFor": 3,
+          "goalsAgainst": 5,
+          "goalDifference": -2,
           "points": 1,
           "position": 4
         }
@@ -5395,15 +5395,45 @@
             "blendOffensiveRating": 1.127677087531235,
             "blendDefensiveRating": 0.8751177363895418
           },
-          "played": 1,
+          "played": 2,
           "won": 0,
-          "drawn": 1,
+          "drawn": 2,
           "lost": 0,
-          "goalsFor": 1,
-          "goalsAgainst": 1,
+          "goalsFor": 3,
+          "goalsAgainst": 3,
           "goalDifference": 0,
-          "points": 1,
+          "points": 2,
           "position": 2
+        },
+        {
+          "teamId": 71,
+          "team": {
+            "id": 71,
+            "name": "Cape Verde",
+            "countryCode": "CV",
+            "flag": "🇨🇻",
+            "rank": 72,
+            "rating": 1549,
+            "elo": 1549,
+            "total": 251,
+            "goalsFor": 267,
+            "goalsAgainst": 278,
+            "eloOffensiveRating": 0.5077366249409898,
+            "eloDefensiveRating": 1.6291433805670867,
+            "goalOffensiveRating": 0.6428385897431611,
+            "goalDefensiveRating": 0.9274713268845639,
+            "blendOffensiveRating": 0.5463541848025792,
+            "blendDefensiveRating": 1.2487361242796422
+          },
+          "played": 2,
+          "won": 0,
+          "drawn": 2,
+          "lost": 0,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "points": 2,
+          "position": 3
         },
         {
           "teamId": 70,
@@ -5432,36 +5462,6 @@
           "goalsFor": 1,
           "goalsAgainst": 5,
           "goalDifference": -4,
-          "points": 1,
-          "position": 3
-        },
-        {
-          "teamId": 71,
-          "team": {
-            "id": 71,
-            "name": "Cape Verde",
-            "countryCode": "CV",
-            "flag": "🇨🇻",
-            "rank": 72,
-            "rating": 1549,
-            "elo": 1549,
-            "total": 251,
-            "goalsFor": 267,
-            "goalsAgainst": 278,
-            "eloOffensiveRating": 0.5077366249409898,
-            "eloDefensiveRating": 1.6291433805670867,
-            "goalOffensiveRating": 0.6428385897431611,
-            "goalDefensiveRating": 0.9274713268845639,
-            "blendOffensiveRating": 0.5463541848025792,
-            "blendDefensiveRating": 1.2487361242796422
-          },
-          "played": 1,
-          "won": 0,
-          "drawn": 1,
-          "lost": 0,
-          "goalsFor": 0,
-          "goalsAgainst": 0,
-          "goalDifference": 0,
           "points": 1,
           "position": 4
         }
@@ -5970,12 +5970,12 @@
   ],
   "qualifyingThirdGroups": [
     "A",
-    "B",
     "C",
     "D",
     "E",
     "F",
     "G",
+    "H",
     "K"
   ],
   "distributions": {
@@ -19882,11 +19882,208 @@
       "consensusMode": "sample"
     },
     "40": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 631,
+      "draw": 602,
+      "awayWin": 1267,
+      "total": 2500,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 218
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 355
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 242
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 159
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 59
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 16
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 220
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 273
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 184
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 120
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 29
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 12
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 6
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 109
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 151
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 99
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 42
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 19
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 6
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 47
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 48
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 16
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 12
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 9
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 8
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 11
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 11
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "41": {
       "homeWin": 0,
@@ -22055,11 +22252,208 @@
       "consensusMode": "sample"
     },
     "46": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 1631,
+      "draw": 532,
+      "awayWin": 337,
+      "total": 2500,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 252
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 144
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 43
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 16
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 379
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 215
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 84
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 24
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 6
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 322
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 195
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 57
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 11
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 226
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 122
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 27
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 8
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 127
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 64
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 23
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 5
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 52
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 25
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 7
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 21
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 13
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 5
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 16,
+          "goalsAway": 1,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "47": {
       "homeWin": 0,

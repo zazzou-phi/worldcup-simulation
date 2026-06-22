@@ -1,6 +1,6 @@
 import { matchTeamName, matchWinnerSide } from '@shared/lib/matchDisplay.js';
-import { formatFixturePrefix } from '../lib/fixtureLabel.js';
 import type { ActualMatchResult, ResolvedMatch } from '../types.js';
+import { FixturePrefix } from './FixturePrefix.js';
 import { ScoreDisplay, ScoreEditor } from './ScoreEditor.js';
 
 interface Props {
@@ -122,14 +122,16 @@ export function FixtureList({
           return (
             <div
               key={num}
-              className={`fixture-row ${selected ? 'selected' : ''} ${locked ? 'fixture-locked' : ''}`}
+              className={`fixture-row ${selected ? 'selected' : ''}`}
               onClick={() => onSelect(selected ? null : num)}
               onDoubleClick={() => canEdit && onStartEdit(num)}
             >
-              <span className="fixture-prefix">
-                {formatFixturePrefix(m.fixture.round, m.fixture.date, m.fixture.time)}
-                {locked ? ' 🔒' : ''}
-              </span>
+              <FixturePrefix
+                round={m.fixture.round}
+                date={m.fixture.date}
+                time={m.fixture.time}
+                locked={locked}
+              />
               <span
                 className={`fixture-home ${teamClassName(m, 'home')}`}
                 title={matchTeamName(m, 'home')}
