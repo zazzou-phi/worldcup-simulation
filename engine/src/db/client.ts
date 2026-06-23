@@ -158,6 +158,8 @@ export function initSchema(sqlite: Database.Database) {
       team_away_id INTEGER REFERENCES teams(id),
       goals_home INTEGER,
       goals_away INTEGER,
+      pen_goals_home INTEGER,
+      pen_goals_away INTEGER,
       winner_team_id INTEGER REFERENCES teams(id),
       status TEXT NOT NULL,
       PRIMARY KEY (simulation_id, match_number)
@@ -195,6 +197,12 @@ function migrateSchema(sqlite: Database.Database) {
     sqlite.exec(
       'ALTER TABLE simulation_matches ADD COLUMN team_away_id INTEGER REFERENCES teams(id)',
     );
+  }
+  if (!names.has('pen_goals_home')) {
+    sqlite.exec('ALTER TABLE simulation_matches ADD COLUMN pen_goals_home INTEGER');
+  }
+  if (!names.has('pen_goals_away')) {
+    sqlite.exec('ALTER TABLE simulation_matches ADD COLUMN pen_goals_away INTEGER');
   }
   sqlite.exec(`UPDATE simulations SET phase = 'g3' WHERE phase = 'knockout'`);
 

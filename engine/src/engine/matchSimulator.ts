@@ -1,3 +1,4 @@
+import { simulatePenaltyShootout, teamPenaltyRate } from './penaltyShootout.js';
 import { teamForSimulation } from './teamRatings.js';
 import type { Team } from './types.js';
 
@@ -25,6 +26,8 @@ export interface SimulatedMatchOutcome {
   goals2: number;
   winnerId?: number;
   pTeam1Wins?: number;
+  penGoalsHome?: number;
+  penGoalsAway?: number;
 }
 
 export interface MatchResultRow {
@@ -32,6 +35,8 @@ export interface MatchResultRow {
   goalsHome: number;
   goalsAway: number;
   winnerTeamId: number | null;
+  penGoalsHome?: number | null;
+  penGoalsAway?: number | null;
 }
 
 export interface GroupPhaseResult {
@@ -148,10 +153,13 @@ export function simulateMatchOutcome(
     } else if (goals2 > goals1) {
       result.winnerId = away.id;
     } else {
-      const pTeam1Wins = lambda1 / (lambda1 + lambda2);
-      const team1Wins = rng.random() < pTeam1Wins;
-      result.winnerId = team1Wins ? home.id : away.id;
-      result.pTeam1Wins = pTeam1Wins;
+      const pHome = teamPenaltyRate(home, away);
+      const pAway = teamPenaltyRate(away, home);
+      const shootout = simulatePenaltyShootout(pHome, pAway, rng);
+      result.penGoalsHome = shootout.penGoalsHome;
+      result.penGoalsAway = shootout.penGoalsAway;
+      result.winnerId = shootout.homeWins ? home.id : away.id;
+      result.pTeam1Wins = pHome / (pHome + pAway);
     }
   }
 

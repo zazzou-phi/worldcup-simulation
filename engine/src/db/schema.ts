@@ -214,6 +214,8 @@ export const simulationMatches = sqliteTable(
     teamAwayId: integer('team_away_id').references(() => teams.id),
     goalsHome: integer('goals_home'),
     goalsAway: integer('goals_away'),
+    penGoalsHome: integer('pen_goals_home'),
+    penGoalsAway: integer('pen_goals_away'),
     winnerTeamId: integer('winner_team_id').references(() => teams.id),
     status: text('status').notNull().$type<'scheduled' | 'played'>(),
   },

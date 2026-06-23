@@ -27,6 +27,8 @@ export function exportSimulation(
         teamAwayId,
         goalsHome,
         goalsAway,
+        penGoalsHome,
+        penGoalsAway,
         winnerTeamId,
         status,
       }) => ({
@@ -35,6 +37,8 @@ export function exportSimulation(
         teamAwayId,
         goalsHome,
         goalsAway,
+        penGoalsHome,
+        penGoalsAway,
         winnerTeamId,
         status,
       }),

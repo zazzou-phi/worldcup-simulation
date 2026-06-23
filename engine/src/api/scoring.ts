@@ -7,6 +7,8 @@ export interface SetScoreInput {
   goalsHome: unknown;
   goalsAway: unknown;
   winnerTeamId?: unknown;
+  penGoalsHome?: unknown;
+  penGoalsAway?: unknown;
 }
 
 export interface SetScoreResult {
@@ -128,8 +130,24 @@ export function setMatchScore(
   }
   const winnerTeamId = resolveWinnerTeamId(resolved, goalsHome, goalsAway, winnerInput);
 
+  let penGoalsHome: number | null = null;
+  let penGoalsAway: number | null = null;
+  if (input.penGoalsHome !== undefined || input.penGoalsAway !== undefined) {
+    if (input.penGoalsHome === undefined || input.penGoalsAway === undefined) {
+      throw new ApiError('penGoalsHome and penGoalsAway must both be provided', 400, 'invalid_score');
+    }
+    penGoalsHome = parseNonNegativeInt(input.penGoalsHome, 'penGoalsHome');
+    penGoalsAway = parseNonNegativeInt(input.penGoalsAway, 'penGoalsAway');
+    if (resolved.fixture.group == null && goalsHome === goalsAway && penGoalsHome === penGoalsAway) {
+      throw new ApiError('Penalty shootout scores cannot be tied', 400, 'invalid_score');
+    }
+  }
+
   try {
-    repo.updateMatchResult(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId);
+    repo.updateMatchResult(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId, {
+      penGoalsHome,
+      penGoalsAway,
+    });
   } catch (err) {
     if (err instanceof MatchLockedError) {
       throw new ApiError(err.message, 409, 'match_locked');

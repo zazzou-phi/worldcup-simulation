@@ -106,7 +106,8 @@ export function FixtureList({
           const penWinnerSide =
             played &&
             m.result.goalsHome === m.result.goalsAway &&
-            m.result.winnerTeamId != null
+            m.result.winnerTeamId != null &&
+            m.result.penGoalsHome == null
               ? matchWinnerSide(m)
               : null;
           const actual = actualByMatch.get(num);
@@ -152,6 +153,8 @@ export function FixtureList({
                     goalsHome={m.result.goalsHome}
                     goalsAway={m.result.goalsAway}
                     played={played}
+                    penGoalsHome={m.result.penGoalsHome}
+                    penGoalsAway={m.result.penGoalsAway}
                     penWinnerSide={penWinnerSide}
                     actual={actual}
                     hidePredicted={hidePredicted}

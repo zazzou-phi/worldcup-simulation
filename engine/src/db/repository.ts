@@ -160,6 +160,8 @@ function mapMatch(row: typeof schema.simulationMatches.$inferSelect): Simulation
     teamAwayId: row.teamAwayId,
     goalsHome: row.goalsHome,
     goalsAway: row.goalsAway,
+    penGoalsHome: row.penGoalsHome,
+    penGoalsAway: row.penGoalsAway,
     winnerTeamId: row.winnerTeamId,
     status: row.status,
   };
@@ -718,6 +720,8 @@ export class Repository {
           .set({
             goalsHome: match.goalsHome,
             goalsAway: match.goalsAway,
+            penGoalsHome: match.penGoalsHome,
+            penGoalsAway: match.penGoalsAway,
             winnerTeamId: match.winnerTeamId,
             status: match.status,
           })
@@ -998,16 +1002,24 @@ export class Repository {
     goalsHome: number,
     goalsAway: number,
     winnerTeamId: number | null,
-    options: { sync?: boolean } = {},
+    options: {
+      sync?: boolean;
+      penGoalsHome?: number | null;
+      penGoalsAway?: number | null;
+    } = {},
   ): void {
     if (this.isMatchLocked(matchNumber)) {
       throw new MatchLockedError(matchNumber);
     }
+    const penGoalsHome = options.penGoalsHome ?? null;
+    const penGoalsAway = options.penGoalsAway ?? null;
     this.db
       .update(schema.simulationMatches)
       .set({
         goalsHome,
         goalsAway,
+        penGoalsHome,
+        penGoalsAway,
         winnerTeamId,
         status: 'played',
       })
@@ -1059,6 +1071,8 @@ export class Repository {
         teamAwayId: away?.id ?? fixture.teamAwayId,
         goalsHome: actual?.goalsHome ?? null,
         goalsAway: actual?.goalsAway ?? null,
+        penGoalsHome: null,
+        penGoalsAway: null,
         winnerTeamId: actual?.winnerTeamId ?? null,
         status: actual ? 'played' : 'scheduled',
       };
@@ -1091,6 +1105,8 @@ export class Repository {
         teamAwayId: fixture.teamAwayId,
         goalsHome: actual?.goalsHome ?? null,
         goalsAway: actual?.goalsAway ?? null,
+        penGoalsHome: null,
+        penGoalsAway: null,
         winnerTeamId: actual?.winnerTeamId ?? null,
         status: actual ? 'played' : 'scheduled',
       };
@@ -1141,6 +1157,7 @@ export class Repository {
     goalsHome: number,
     goalsAway: number,
     winnerTeamId: number | null,
+    penGoals?: { penGoalsHome?: number | null; penGoalsAway?: number | null },
   ): void {
     if (this.isMatchLocked(matchNumber)) {
       throw new MatchLockedError(matchNumber);
@@ -1153,7 +1170,10 @@ export class Repository {
       throw new MatchClearBlockedError(matchNumber);
     }
 
-    this.persistMatchResult(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId);
+    this.persistMatchResult(simulationId, matchNumber, goalsHome, goalsAway, winnerTeamId, {
+      penGoalsHome: penGoals?.penGoalsHome ?? null,
+      penGoalsAway: penGoals?.penGoalsAway ?? null,
+    });
   }
 
   clearMatchResult(simulationId: number, matchNumber: number): void {
@@ -1173,6 +1193,8 @@ export class Repository {
       .set({
         goalsHome: null,
         goalsAway: null,
+        penGoalsHome: null,
+        penGoalsAway: null,
         winnerTeamId: null,
         status: 'scheduled',
       })
@@ -1350,6 +1372,8 @@ export class Repository {
         teamAwayId: fixture.teamAwayId,
         goalsHome,
         goalsAway,
+        penGoalsHome: null,
+        penGoalsAway: null,
         winnerTeamId,
         status,
       });

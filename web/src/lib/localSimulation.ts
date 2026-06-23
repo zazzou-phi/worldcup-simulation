@@ -133,6 +133,7 @@ export function setLocalMatchScore(
   goalsHome: number,
   goalsAway: number,
   winnerTeamId?: number | null,
+  penGoals?: { penGoalsHome?: number | null; penGoalsAway?: number | null },
 ): TournamentState {
   const resolved = findResolvedMatch(state, matchNumber);
   if (resolved.isLocked) {
@@ -145,12 +146,16 @@ export function setLocalMatchScore(
   }
 
   const winner = resolveWinnerTeamId(resolved, goalsHome, goalsAway, winnerTeamId);
+  const penGoalsHome = penGoals?.penGoalsHome ?? null;
+  const penGoalsAway = penGoals?.penGoalsAway ?? null;
   const matches = toEngineMatches(state).map((match) =>
     match.matchNumber === matchNumber
       ? {
           ...match,
           goalsHome,
           goalsAway,
+          penGoalsHome,
+          penGoalsAway,
           winnerTeamId: winner,
           status: 'played' as const,
         }
@@ -180,6 +185,8 @@ export function clearLocalMatchScore(
           ...match,
           goalsHome: null,
           goalsAway: null,
+          penGoalsHome: null,
+          penGoalsAway: null,
           winnerTeamId: null,
           status: 'scheduled' as const,
         }
@@ -230,6 +237,10 @@ export function simulateLocalMatch(
     outcome.goals1,
     outcome.goals2,
     winnerTeamId,
+    {
+      penGoalsHome: outcome.penGoalsHome ?? null,
+      penGoalsAway: outcome.penGoalsAway ?? null,
+    },
   );
 
   return {
@@ -239,6 +250,8 @@ export function simulateLocalMatch(
       goalsHome: outcome.goals1,
       goalsAway: outcome.goals2,
       winnerTeamId,
+      penGoalsHome: outcome.penGoalsHome ?? null,
+      penGoalsAway: outcome.penGoalsAway ?? null,
     },
   };
 }
@@ -292,6 +305,8 @@ export function simulateLocalGroupPhase(
             ...row,
             goalsHome: outcome.goals1,
             goalsAway: outcome.goals2,
+            penGoalsHome: outcome.penGoalsHome ?? null,
+            penGoalsAway: outcome.penGoalsAway ?? null,
             winnerTeamId,
             status: 'played' as const,
           }
@@ -386,6 +401,8 @@ export function simulateLocalKnockouts(
               ...row,
               goalsHome: outcome.goals1,
               goalsAway: outcome.goals2,
+              penGoalsHome: outcome.penGoalsHome ?? null,
+              penGoalsAway: outcome.penGoalsAway ?? null,
               winnerTeamId,
               status: 'played' as const,
             }
@@ -397,6 +414,8 @@ export function simulateLocalKnockouts(
         goalsHome: outcome.goals1,
         goalsAway: outcome.goals2,
         winnerTeamId,
+        penGoalsHome: outcome.penGoalsHome ?? null,
+        penGoalsAway: outcome.penGoalsAway ?? null,
       });
     }
 

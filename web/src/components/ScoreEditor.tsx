@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { formatMatchScore } from '@shared/lib/matchDisplay.js';
 import type { ResolvedMatch } from '../types.js';
 
 interface ScoreEditorProps {
@@ -112,6 +113,8 @@ interface ScoreDisplayProps {
   goalsHome: number | null;
   goalsAway: number | null;
   played: boolean;
+  penGoalsHome?: number | null;
+  penGoalsAway?: number | null;
   penWinnerSide?: 'home' | 'away' | null;
   actual?: { goalsHome: number; goalsAway: number };
   hidePredicted?: boolean;
@@ -130,6 +133,8 @@ export function ScoreDisplay({
   goalsHome,
   goalsAway,
   played,
+  penGoalsHome,
+  penGoalsAway,
   penWinnerSide,
   actual,
   hidePredicted = false,
@@ -138,6 +143,11 @@ export function ScoreDisplay({
   onClick,
   onDoubleClick,
 }: ScoreDisplayProps) {
+  const scoreText = formatMatchScore(goalsHome, goalsAway, played, {
+    penGoalsHome,
+    penGoalsAway,
+    penWinnerSide,
+  });
   if (actual && hidePredicted) {
     return (
       <div className="score-display score-actual-only" title="Actual result">
@@ -215,9 +225,7 @@ export function ScoreDisplay({
         onClick?.();
       }}
     >
-      {penWinnerSide === 'home' ? '(p) ' : ''}
-      {goalsHome} - {goalsAway}
-      {penWinnerSide === 'away' ? ' (p)' : ''}
+      {scoreText}
     </button>
   );
 }

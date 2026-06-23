@@ -28,3 +28,27 @@ export function matchWinnerSide(match: ResolvedMatch): 'home' | 'away' | null {
   }
   return null;
 }
+
+export function formatMatchScore(
+  goalsHome: number | null,
+  goalsAway: number | null,
+  played: boolean,
+  options: {
+    penGoalsHome?: number | null;
+    penGoalsAway?: number | null;
+    penWinnerSide?: 'home' | 'away' | null;
+  } = {},
+): string {
+  if (!played || goalsHome == null || goalsAway == null) return '- vs -';
+  const base = `${goalsHome} - ${goalsAway}`;
+  if (
+    goalsHome === goalsAway &&
+    options.penGoalsHome != null &&
+    options.penGoalsAway != null
+  ) {
+    return `${base} (${options.penGoalsHome}-${options.penGoalsAway})`;
+  }
+  if (options.penWinnerSide === 'home') return `(p) ${base}`;
+  if (options.penWinnerSide === 'away') return `${base} (p)`;
+  return base;
+}

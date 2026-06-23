@@ -211,7 +211,11 @@ export class SimulationRunner {
       match.goals1,
       match.goals2,
       winnerTeamId,
-      { sync: true },
+      {
+        sync: true,
+        penGoalsHome: match.penGoalsHome ?? null,
+        penGoalsAway: match.penGoalsAway ?? null,
+      },
     );
 
     return {
@@ -219,6 +223,8 @@ export class SimulationRunner {
       goalsHome: match.goals1,
       goalsAway: match.goals2,
       winnerTeamId,
+      penGoalsHome: match.penGoalsHome ?? null,
+      penGoalsAway: match.penGoalsAway ?? null,
     };
   }
 
@@ -329,7 +335,11 @@ export class SimulationRunner {
         match.goals1,
         match.goals2,
         winnerTeamId,
-        { sync: false },
+        {
+          sync: false,
+          penGoalsHome: match.penGoalsHome ?? null,
+          penGoalsAway: match.penGoalsAway ?? null,
+        },
       );
 
       results.push({
@@ -337,6 +347,8 @@ export class SimulationRunner {
         goalsHome: match.goals1,
         goalsAway: match.goals2,
         winnerTeamId,
+        penGoalsHome: match.penGoalsHome ?? null,
+        penGoalsAway: match.penGoalsAway ?? null,
       });
     }
 

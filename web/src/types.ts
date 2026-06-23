@@ -40,6 +40,8 @@ export interface SimulationMatch {
   teamAwayId: number | null;
   goalsHome: number | null;
   goalsAway: number | null;
+  penGoalsHome: number | null;
+  penGoalsAway: number | null;
   winnerTeamId: number | null;
   status: MatchStatus;
 }
@@ -221,6 +223,8 @@ export interface MatchResultRow {
   goalsHome: number;
   goalsAway: number;
   winnerTeamId: number | null;
+  penGoalsHome?: number | null;
+  penGoalsAway?: number | null;
 }
 
 export interface SimulateGroupResult {

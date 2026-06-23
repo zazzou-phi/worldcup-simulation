@@ -82,7 +82,8 @@ function MatchNode({
   const penWinnerSide =
     played &&
     match.result.goalsHome === match.result.goalsAway &&
-    match.result.winnerTeamId != null
+    match.result.winnerTeamId != null &&
+    match.result.penGoalsHome == null
       ? matchWinnerSide(match)
       : null;
   return (
@@ -114,6 +115,8 @@ function MatchNode({
           goalsHome={match.result.goalsHome}
           goalsAway={match.result.goalsAway}
           played={played}
+          penGoalsHome={match.result.penGoalsHome}
+          penGoalsAway={match.result.penGoalsAway}
           penWinnerSide={penWinnerSide}
           actual={actual}
           hidePredicted={hidePredicted}

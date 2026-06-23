@@ -46,6 +46,8 @@ function match(
     matchNumber,
     goalsHome: null,
     goalsAway: null,
+    penGoalsHome: null,
+    penGoalsAway: null,
     winnerTeamId: null,
     status: 'scheduled',
     teamHomeId: homeId,

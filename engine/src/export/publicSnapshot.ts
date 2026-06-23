@@ -92,6 +92,8 @@ export function redactMasterGroupState(
         teamAwayId: fixture.teamAwayId,
         goalsHome: null,
         goalsAway: null,
+        penGoalsHome: null,
+        penGoalsAway: null,
         winnerTeamId: null,
         status: 'scheduled',
       });
@@ -108,6 +110,8 @@ export function redactMasterGroupState(
       teamAwayId: fixture.teamAwayId,
       goalsHome: existing.result.goalsHome,
       goalsAway: existing.result.goalsAway,
+      penGoalsHome: existing.result.penGoalsHome,
+      penGoalsAway: existing.result.penGoalsAway,
       winnerTeamId: existing.result.winnerTeamId,
       status: existing.result.status,
     });

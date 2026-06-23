@@ -53,6 +53,8 @@ export interface SimulationMatch {
   teamAwayId: number | null;
   goalsHome: number | null;
   goalsAway: number | null;
+  penGoalsHome: number | null;
+  penGoalsAway: number | null;
   winnerTeamId: number | null;
   status: MatchStatus;
 }

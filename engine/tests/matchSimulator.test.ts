@@ -60,24 +60,47 @@ describe('matchSimulator', () => {
     expect(samplePoisson(1.25, rng)).toBeGreaterThanOrEqual(0);
   });
 
-  it('breaks knockout ties using lambda-weighted bernoulli', () => {
-    const home = makeTeam(1, 1, 1);
-    const away = makeTeam(2, 1, 1);
-    const rng: RandomSource = { random: () => 0.1 };
+  it('resolves knockout ties with a simulated penalty shootout', () => {
+    const home = makeTeam(1, 1.5, 0.8);
+    const away = makeTeam(2, 1.0, 1.2);
+    const rng: RandomSource = {
+      random: (() => {
+        let i = 0;
+        return () => {
+          const values = [
+            0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.99,
+          ];
+          return values[i++] ?? 0.99;
+        };
+      })(),
+    };
 
-    const result = simulateMatchOutcome(home, away, true, { gpg: 1.25, rng, upsetVariance: 0 });
+    const result = simulateMatchOutcome(home, away, true, { gpg: 0, rng, upsetVariance: 0 });
     expect(result.goals1).toBe(0);
     expect(result.goals2).toBe(0);
-    expect(result.winnerId).toBe(1);
-    expect(result.pTeam1Wins).toBe(0.5);
+    expect(result.penGoalsHome).toBe(6);
+    expect(result.penGoalsAway).toBe(5);
+    expect(result.winnerId).toBe(home.id);
   });
 
-  it('assigns winner from score in knockout without tie-break', () => {
-    const home = makeTeam(1, 0, 0);
-    const away = makeTeam(2, 0, 0);
-    const rng: RandomSource = { random: () => 0.99 };
-    const result = simulateMatchOutcome(home, away, true, { gpg: 0, rng, upsetVariance: 0 });
-    expect(result.winnerId).toBeDefined();
+  it('leaves penalty goals unset when knockout ends in regulation', () => {
+    const home = makeTeam(1, 3, 0.5);
+    const away = makeTeam(2, 0.2, 2);
+    const rng: RandomSource = {
+      random: (() => {
+        let n = 0;
+        return () => {
+          n++;
+          if (n <= 2) return 0.4;
+          if (n === 3) return 0.05;
+          return 0.5;
+        };
+      })(),
+    };
+    const result = simulateMatchOutcome(home, away, true, { gpg: 1.25, rng, upsetVariance: 0 });
+    expect(result.goals1).toBeGreaterThan(result.goals2);
+    expect(result.winnerId).toBe(home.id);
+    expect(result.penGoalsHome).toBeUndefined();
   });
 
   it('log-normal form shocks have mean ~1', () => {

@@ -152,6 +152,8 @@ export function createEmptyMatches(
     teamAwayId: f.teamAwayId,
     goalsHome: null,
     goalsAway: null,
+    penGoalsHome: null,
+    penGoalsAway: null,
     winnerTeamId: null,
     status: 'scheduled' as const,
   }));
@@ -170,6 +172,8 @@ export function applyActualResultsToMatches(
       ...match,
       goalsHome: actual.goalsHome,
       goalsAway: actual.goalsAway,
+      penGoalsHome: null,
+      penGoalsAway: null,
       winnerTeamId: actual.winnerTeamId,
       status: 'played',
     };

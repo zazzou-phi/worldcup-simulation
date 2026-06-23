@@ -137,6 +137,8 @@ function buildEngine(
 
     match.goalsHome = outcome.goals1;
     match.goalsAway = outcome.goals2;
+    match.penGoalsHome = outcome.penGoalsHome ?? null;
+    match.penGoalsAway = outcome.penGoalsAway ?? null;
     match.winnerTeamId = winnerTeamId;
     match.status = 'played';
   }
@@ -193,6 +195,8 @@ function createInitialMatches(
       teamAwayId: fixture.teamAwayId,
       goalsHome: actual?.goalsHome ?? null,
       goalsAway: actual?.goalsAway ?? null,
+      penGoalsHome: null,
+      penGoalsAway: null,
       winnerTeamId: actual?.winnerTeamId ?? null,
       status: actual ? ('played' as const) : ('scheduled' as const),
     };

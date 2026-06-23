@@ -171,6 +171,8 @@ export function matchesFromActualResults(
       teamAwayId: fixture.teamAwayId,
       goalsHome: actual?.goalsHome ?? null,
       goalsAway: actual?.goalsAway ?? null,
+      penGoalsHome: null,
+      penGoalsAway: null,
       winnerTeamId: actual?.winnerTeamId ?? null,
       status: actual ? 'played' : 'scheduled',
     };
