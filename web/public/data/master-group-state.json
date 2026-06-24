@@ -703,7 +703,7 @@
       },
       "homeLabel": "Switzerland",
       "awayLabel": "Canada",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -767,7 +767,7 @@
       },
       "homeLabel": "Bosnia and Herzegovina",
       "awayLabel": "Qatar",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -4740,36 +4740,6 @@
       "groupLetter": "B",
       "rows": [
         {
-          "teamId": 24,
-          "team": {
-            "id": 24,
-            "name": "Canada",
-            "countryCode": "CA",
-            "flag": "🇨🇦",
-            "rank": 25,
-            "rating": 1784,
-            "elo": 1784,
-            "total": 488,
-            "goalsFor": 626,
-            "goalsAgainst": 623,
-            "eloOffensiveRating": 0.9136639719561284,
-            "eloDefensiveRating": 0.9053391476333772,
-            "goalOffensiveRating": 0.7752091871736964,
-            "goalDefensiveRating": 1.0690490756495452,
-            "blendOffensiveRating": 0.8802134345644097,
-            "blendDefensiveRating": 0.9847685612906453
-          },
-          "played": 3,
-          "won": 2,
-          "drawn": 1,
-          "lost": 0,
-          "goalsFor": 10,
-          "goalsAgainst": 3,
-          "goalDifference": 7,
-          "points": 7,
-          "position": 1
-        },
-        {
           "teamId": 14,
           "team": {
             "id": 14,
@@ -4790,12 +4760,42 @@
             "blendDefensiveRating": 1.0264875956838801
           },
           "played": 3,
+          "won": 2,
+          "drawn": 1,
+          "lost": 0,
+          "goalsFor": 7,
+          "goalsAgainst": 3,
+          "goalDifference": 4,
+          "points": 7,
+          "position": 1
+        },
+        {
+          "teamId": 24,
+          "team": {
+            "id": 24,
+            "name": "Canada",
+            "countryCode": "CA",
+            "flag": "🇨🇦",
+            "rank": 25,
+            "rating": 1784,
+            "elo": 1784,
+            "total": 488,
+            "goalsFor": 626,
+            "goalsAgainst": 623,
+            "eloOffensiveRating": 0.9136639719561284,
+            "eloDefensiveRating": 0.9053391476333772,
+            "goalOffensiveRating": 0.7752091871736964,
+            "goalDefensiveRating": 1.0690490756495452,
+            "blendOffensiveRating": 0.8802134345644097,
+            "blendDefensiveRating": 0.9847685612906453
+          },
+          "played": 3,
           "won": 1,
           "drawn": 1,
           "lost": 1,
-          "goalsFor": 7,
-          "goalsAgainst": 5,
-          "goalDifference": 2,
+          "goalsFor": 8,
+          "goalsAgainst": 3,
+          "goalDifference": 5,
           "points": 4,
           "position": 2
         },
@@ -4823,9 +4823,9 @@
           "won": 1,
           "drawn": 1,
           "lost": 1,
-          "goalsFor": 4,
+          "goalsFor": 5,
           "goalsAgainst": 6,
-          "goalDifference": -2,
+          "goalDifference": -1,
           "points": 4,
           "position": 3
         },
@@ -4854,8 +4854,8 @@
           "drawn": 1,
           "lost": 2,
           "goalsFor": 2,
-          "goalsAgainst": 9,
-          "goalDifference": -7,
+          "goalsAgainst": 10,
+          "goalDifference": -8,
           "points": 1,
           "position": 4
         }
@@ -12845,7 +12845,8 @@
           "goalsAway": 0,
           "n": 1
         }
-      ]
+      ],
+      "consensusMode": "sample"
     },
     "12": {
       "homeWin": 1207,
@@ -13018,7 +13019,8 @@
           "goalsAway": 1,
           "n": 1
         }
-      ]
+      ],
+      "consensusMode": "sample"
     },
     "13": {
       "homeWin": 55681,

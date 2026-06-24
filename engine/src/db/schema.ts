@@ -269,6 +269,11 @@ export const simulationTeamEloDelta = sqliteTable(
   (t) => [primaryKey({ columns: [t.simulationId, t.teamId] })],
 );
 
+export const actualThirdPlaceOrder = sqliteTable('actual_third_place_order', {
+  groupLetter: text('group_letter').primaryKey(),
+  position: integer('position').notNull(),
+});
+
 export const actualMatchResults = sqliteTable('actual_match_results', {
   matchNumber: integer('match_number')
     .primaryKey()

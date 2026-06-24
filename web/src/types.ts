@@ -102,6 +102,7 @@ export interface TournamentState {
   groupMemberships: Array<{ groupLetter: string; teamId: number }>;
   groupStandings: GroupStandings[];
   qualifyingThirdGroups: string[];
+  thirdPlaceOrder: ThirdPlaceOrderRow[];
   annexCCombinationId: number | null;
   resolvedMatches: ResolvedMatch[];
   actualResults: ActualMatchResult[];
@@ -114,6 +115,7 @@ export interface ActualResultsState {
   phase: Phase;
   groupStandings: GroupStandings[];
   qualifyingThirdGroups: string[];
+  thirdPlaceOrder: ThirdPlaceOrderRow[];
   resolvedMatches: ResolvedMatch[];
 }
 

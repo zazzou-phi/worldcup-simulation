@@ -5,6 +5,8 @@ import {
   getQualifyingThirdGroupsKey,
   getTeamAtPosition,
 } from './standings.js';
+import type { ThirdPlaceOrderEntry } from './predictionKnockout.js';
+import { getQualifyingThirdGroupsFromOrder } from './predictionKnockout.js';
 
 type AnnexEntry = { id: number; thirdByMatch: Record<string, string> };
 
@@ -178,10 +180,14 @@ export function buildSlotContext(
   fixtures: Fixture[],
   matches: SimulationMatch[],
   teamsById: Map<number, Team>,
-  annexCCombinationId: number | null,
+  thirdPlaceOrder?: ThirdPlaceOrderEntry[],
 ): SlotContext {
-  const qualifyingThirdGroups = getQualifyingThirdGroups(standings);
-  const annex = lookupAnnexC(getQualifyingThirdGroupsKey(standings));
+  const qualifyingThirdGroups = thirdPlaceOrder
+    ? getQualifyingThirdGroupsFromOrder(thirdPlaceOrder)
+    : getQualifyingThirdGroups(standings);
+  const annex = lookupAnnexC(
+    thirdPlaceOrder ? qualifyingThirdGroups.join('') : getQualifyingThirdGroupsKey(standings),
+  );
   const annexThirdByMatch = annex?.thirdByMatch ?? {};
 
   const partial: Omit<SlotContext, 'winnersByMatch' | 'losersByMatch'> = {

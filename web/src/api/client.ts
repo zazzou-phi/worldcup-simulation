@@ -198,6 +198,14 @@ const privateApi = {
       }),
     }),
 
+  setActualThirdPlaceOrder: (
+    order: Array<{ groupLetter: string; position: number }>,
+  ) =>
+    request<ActualResultsState>('/api/v1/actual-results/third-place-order', {
+      method: 'PUT',
+      body: JSON.stringify({ order }),
+    }),
+
   setPredictionThirdPlaceOrder: (
     id: number,
     order: Array<{ groupLetter: string; position: number }>,
@@ -418,6 +426,9 @@ const publicApiStub = {
     throw new Error('Not available in public mode');
   },
   simulatePredictionKnockoutRound: async (): Promise<MasterKnockoutState> => {
+    throw new Error('Not available in public mode');
+  },
+  setActualThirdPlaceOrder: async (): Promise<ActualResultsState> => {
     throw new Error('Not available in public mode');
   },
   setPredictionThirdPlaceOrder: async (): Promise<MasterKnockoutState> => {

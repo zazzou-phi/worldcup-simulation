@@ -127,6 +127,7 @@ export interface TournamentState {
   groupMemberships: GroupMembership[];
   groupStandings: GroupStandings[];
   qualifyingThirdGroups: string[];
+  thirdPlaceOrder: ThirdPlaceOrderRow[];
   annexCCombinationId: number | null;
   resolvedMatches: ResolvedMatch[];
   actualResults: ActualMatchResult[];

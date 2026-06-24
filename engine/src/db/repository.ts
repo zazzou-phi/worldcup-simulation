@@ -62,6 +62,7 @@ import {
 import {
   buildPredictionKnockoutRatings,
   buildPredictionSlotContext,
+  buildThirdPlaceOrderRows,
   canResimulateKnockoutRound,
   computeKnockoutRoundAvailability,
   getQualifyingThirdGroupsFromOrder,
@@ -72,14 +73,15 @@ import {
 import {
   clearKnockoutResultsFromRoundOnward,
   clearPredictionKnockoutResults,
-  clearPredictionThirdPlaceOrder,
   deletePredictionKnockoutData,
-  ensurePredictionThirdPlaceOrder,
   hasPredictionKnockoutResults,
   readPredictionKnockoutResults,
   writePredictionKnockoutRound,
-  writePredictionThirdPlaceOrder,
 } from './predictionKnockoutStorage.js';
+import {
+  ensureActualThirdPlaceOrder,
+  writeActualThirdPlaceOrder,
+} from './actualThirdPlaceStorage.js';
 import {
   deletePredictionAggregates,
   readPredictionMatchDistributions,
@@ -588,7 +590,7 @@ export class Repository {
       .returning()
       .get();
     if (row) {
-      this.invalidatePredictionKnockout(id, true);
+      this.invalidatePredictionKnockout(id);
     }
     return row ? mapPrediction(row) : null;
   }
@@ -606,7 +608,7 @@ export class Repository {
     } catch (err) {
       throw new FrozenMatchError(err instanceof Error ? err.message : 'Failed to update frozen match');
     }
-    this.invalidatePredictionKnockout(predictionId, true);
+    this.invalidatePredictionKnockout(predictionId);
     return this.buildMasterGroupView(predictionId);
   }
 
@@ -636,7 +638,7 @@ export class Repository {
         err instanceof Error ? err.message : 'Failed to perform prediction sample',
       );
     }
-    this.invalidatePredictionKnockout(predictionId, true);
+    this.invalidatePredictionKnockout(predictionId);
     return this.buildMasterGroupView(predictionId);
   }
 
@@ -654,16 +656,30 @@ export class Repository {
     for (const prediction of this.listPredictions()) {
       if (simulationIdInSpec(simulationId, prediction.selectionSpec)) {
         refreshSimulationInPredictionAggregates(this.db, prediction.id, simulationId);
-        this.invalidatePredictionKnockout(prediction.id, true);
+        this.invalidatePredictionKnockout(prediction.id);
       }
     }
   }
 
-  private invalidatePredictionKnockout(predictionId: number, resetThirdPlace = true): void {
+  private invalidatePredictionKnockout(predictionId: number): void {
     clearPredictionKnockoutResults(this.db, predictionId);
-    if (resetThirdPlace) {
-      clearPredictionThirdPlaceOrder(this.db, predictionId);
+  }
+
+  private invalidateAllPredictionKnockouts(): void {
+    for (const prediction of this.listPredictions()) {
+      this.invalidatePredictionKnockout(prediction.id);
     }
+  }
+
+  private   resyncAllSimulations(): void {
+    for (const simulation of this.listSimulations()) {
+      this.syncResolvedParticipants(simulation.id, { refreshMasterStats: false });
+    }
+    this.rebuildAllPredictionAggregates();
+  }
+
+  getEnsuredThirdPlaceOrder(standings: TournamentState['groupStandings']): ThirdPlaceOrderEntry[] {
+    return ensureActualThirdPlaceOrder(this.db, standings);
   }
 
   private removeSimulationFromAllPredictions(simulationId: number): void {
@@ -887,7 +903,7 @@ export class Repository {
     }
     if (fixture.group != null) {
       for (const prediction of this.listPredictions()) {
-        this.invalidatePredictionKnockout(prediction.id, true);
+        this.invalidatePredictionKnockout(prediction.id);
       }
     }
     return this.getActualResult(matchNumber)!;
@@ -914,7 +930,7 @@ export class Repository {
     clearFrozenMatch(this.db, matchNumber);
     for (const prediction of this.listPredictions()) {
       rebuildPredictionAggregates(this.db, prediction.id, prediction.selectionSpec);
-      this.invalidatePredictionKnockout(prediction.id, true);
+      this.invalidatePredictionKnockout(prediction.id);
     }
   }
 
@@ -1089,6 +1105,7 @@ export class Repository {
     resolvedMatches: ResolvedMatch[];
     groupStandings: TournamentState['groupStandings'];
     qualifyingThirdGroups: string[];
+    thirdPlaceOrder: ThirdPlaceOrderRow[];
     phase: ReturnType<typeof computeActualPhase>;
   } {
     const teams = this.getTeams();
@@ -1102,9 +1119,11 @@ export class Repository {
     const playedGroup = collectPlayedGroupMatches(fixtures, matches, actualResults);
 
     const groupStandings = computeAllGroupStandings(memberships, teamsById, playedGroup);
-    const qualifyingThirdGroups = getQualifyingThirdGroups(groupStandings);
-    const annex = lookupAnnexC(getQualifyingThirdGroupsKey(groupStandings));
-    const ctx = buildSlotContext(groupStandings, fixtures, matches, teamsById, annex?.id ?? null);
+    const thirdPlaceOrderEntries = ensureActualThirdPlaceOrder(this.db, groupStandings);
+    const qualifyingThirdGroups = getQualifyingThirdGroupsFromOrder(thirdPlaceOrderEntries);
+    const thirdPlaceOrder = buildThirdPlaceOrderRows(groupStandings, thirdPlaceOrderEntries);
+    const annex = lookupAnnexC(qualifyingThirdGroups.join(''));
+    const ctx = buildSlotContext(groupStandings, fixtures, matches, teamsById, thirdPlaceOrderEntries);
 
     const resolvedMatches: ResolvedMatch[] = fixtures.map((fixture) => {
       const actual = actualByMatch.get(fixture.matchNumber);
@@ -1134,7 +1153,14 @@ export class Repository {
 
     const phase = computeActualPhase(actualResults, fixtures);
 
-    return { actualResults, resolvedMatches, groupStandings, qualifyingThirdGroups, phase };
+    return {
+      actualResults,
+      resolvedMatches,
+      groupStandings,
+      qualifyingThirdGroups,
+      thirdPlaceOrder,
+      phase,
+    };
   }
 
   private buildMatchesFromActuals(
@@ -1268,12 +1294,17 @@ export class Repository {
     const memberships = this.getGroupMemberships();
     const actualResults = this.getActualResults();
 
+    const playedGroup = collectPlayedGroupMatches(fixtures, matches, actualResults);
+    const groupStandings = computeAllGroupStandings(memberships, teamsById, playedGroup);
+    const thirdPlaceOrder = ensureActualThirdPlaceOrder(this.db, groupStandings);
+
     const synced = syncResolvedParticipantsInMemory(
       fixtures,
       matches,
       teamsById,
       memberships,
       actualResults,
+      thirdPlaceOrder,
     );
 
     for (const match of synced.matches) {
@@ -1509,15 +1540,25 @@ export class Repository {
 
     const simulationRow = this.getSimulation(simulationId)!;
     const locked = new Set(this.getActualResults().map((r) => r.matchNumber));
+    const matches = this.getSimulationMatches(simulationId);
+    const fixtures = this.getFixtures();
+    const memberships = this.getGroupMemberships();
+    const teams = this.getTeams();
+    const actualResults = this.getActualResults();
+    const teamsById = new Map(teams.map((t) => [t.id, t]));
+    const playedGroup = collectPlayedGroupMatches(fixtures, matches, actualResults);
+    const groupStandings = computeAllGroupStandings(memberships, teamsById, playedGroup);
+    const thirdPlaceOrder = ensureActualThirdPlaceOrder(this.db, groupStandings);
 
     const raw = buildTournamentStateFromData({
       simulation: simulationRow,
-      teams: this.getTeams(),
-      fixtures: this.getFixtures(),
-      matches: this.getSimulationMatches(simulationId),
-      groupMemberships: this.getGroupMemberships(),
-      actualResults: this.getActualResults(),
+      teams,
+      fixtures,
+      matches,
+      groupMemberships: memberships,
+      actualResults,
       lockedMatchNumbers: locked,
+      thirdPlaceOrder,
     });
 
     return {
@@ -1535,19 +1576,13 @@ export class Repository {
     if (!this.getPrediction(predictionId)) {
       throw new Error(`Prediction not found: ${predictionId}`);
     }
-    this.invalidatePredictionKnockout(predictionId, false);
+    this.invalidatePredictionKnockout(predictionId);
     return this.buildMasterKnockoutView(predictionId);
   }
 
-  setPredictionThirdPlaceOrder(
-    predictionId: number,
-    order: ThirdPlaceOrderEntry[],
-  ): MasterKnockoutState {
-    if (!this.getPrediction(predictionId)) {
-      throw new Error(`Prediction not found: ${predictionId}`);
-    }
-    const masterGroup = this.buildMasterGroupView(predictionId);
-    const validGroups = new Set(masterGroup.groupStandings.map((group) => group.groupLetter));
+  setActualThirdPlaceOrder(order: ThirdPlaceOrderEntry[]) {
+    const view = this.buildActualResultsView();
+    const validGroups = new Set(view.groupStandings.map((group) => group.groupLetter));
     if (order.length !== validGroups.size) {
       throw new Error(`Third-place order must include all ${validGroups.size} groups`);
     }
@@ -1560,9 +1595,10 @@ export class Repository {
         throw new Error(`Unknown group letter: ${entry.groupLetter}`);
       }
     }
-    writePredictionThirdPlaceOrder(this.db, predictionId, order);
-    clearPredictionKnockoutResults(this.db, predictionId);
-    return this.buildMasterKnockoutView(predictionId);
+    writeActualThirdPlaceOrder(this.db, order);
+    this.invalidateAllPredictionKnockouts();
+    this.resyncAllSimulations();
+    return this.buildActualResultsView();
   }
 
   simulatePredictionKnockoutRoundForPrediction(
@@ -1593,9 +1629,8 @@ export class Repository {
       throw new Error('Group stage is not complete for this prediction');
     }
 
-    const thirdPlaceOrder = ensurePredictionThirdPlaceOrder(
+    const thirdPlaceOrder = ensureActualThirdPlaceOrder(
       this.db,
-      predictionId,
       masterGroup.groupStandings,
     );
     let knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
@@ -1702,32 +1737,16 @@ export class Repository {
       groupMatches.map((match) => match.result),
     );
 
-    const thirdPlaceOrderEntries = ensurePredictionThirdPlaceOrder(
+    const thirdPlaceOrderEntries = ensureActualThirdPlaceOrder(
       this.db,
-      predictionId,
       masterGroup.groupStandings,
     );
     const qualifyingThirdGroups = getQualifyingThirdGroupsFromOrder(thirdPlaceOrderEntries);
 
-    const thirdPlaceOrder: ThirdPlaceOrderRow[] = thirdPlaceOrderEntries.map((entry) => {
-      const group = masterGroup.groupStandings.find(
-        (standing) => standing.groupLetter === entry.groupLetter,
-      );
-      const row = group?.rows[2];
-      if (!row) {
-        throw new Error(`Missing third-place row for group ${entry.groupLetter}`);
-      }
-      return {
-        groupLetter: entry.groupLetter,
-        position: entry.position,
-        teamId: row.teamId,
-        team: row.team,
-        points: row.points,
-        goalDifference: row.goalDifference,
-        goalsFor: row.goalsFor,
-        qualified: entry.position <= 8,
-      };
-    });
+    const thirdPlaceOrder: ThirdPlaceOrderRow[] = buildThirdPlaceOrderRows(
+      masterGroup.groupStandings,
+      thirdPlaceOrderEntries,
+    );
 
     const knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
     const { ctx, annexCCombinationId } = buildPredictionSlotContext(

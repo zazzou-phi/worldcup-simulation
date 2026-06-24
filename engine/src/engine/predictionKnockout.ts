@@ -31,7 +31,7 @@ import {
   SIMULATION_KNOCKOUT_ROUNDS,
 } from './simulationRounds.js';
 import { rankThirdPlaceTeams } from './standings.js';
-import type { Fixture, GroupStandings, SimulationMatch, Team } from './types.js';
+import type { Fixture, GroupStandings, SimulationMatch, Team, ThirdPlaceOrderRow } from './types.js';
 
 export type SimulatedPredictionKnockoutMatch = MatchResultRow & {
   distribution: KnockoutMatchDistribution;
@@ -93,6 +93,31 @@ export function defaultThirdPlaceOrder(standings: GroupStandings[]): ThirdPlaceO
     groupLetter: row.groupLetter,
     position: index + 1,
   }));
+}
+
+export function buildThirdPlaceOrderRows(
+  standings: GroupStandings[],
+  entries: ThirdPlaceOrderEntry[],
+): ThirdPlaceOrderRow[] {
+  return [...entries]
+    .sort((a, b) => a.position - b.position)
+    .map((entry) => {
+      const group = standings.find((standing) => standing.groupLetter === entry.groupLetter);
+      const row = group?.rows[2];
+      if (!row) {
+        throw new Error(`Missing third-place row for group ${entry.groupLetter}`);
+      }
+      return {
+        groupLetter: entry.groupLetter,
+        position: entry.position,
+        teamId: row.teamId,
+        team: row.team,
+        points: row.points,
+        goalDifference: row.goalDifference,
+        goalsFor: row.goalsFor,
+        qualified: entry.position <= 8,
+      };
+    });
 }
 
 export function knockoutResultsToSimulationMatches(

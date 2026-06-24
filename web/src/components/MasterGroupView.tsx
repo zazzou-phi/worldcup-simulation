@@ -121,6 +121,13 @@ export function MasterGroupView({
     [masterState, fixtures, groupMemberships, actualResults],
   );
 
+  const effectiveQualifyingThirdGroups = useMemo(() => {
+    if (thirdPlaceOrder && thirdPlaceOrder.length > 0) {
+      return thirdPlaceOrder.filter((row) => row.qualified).map((row) => row.groupLetter).sort();
+    }
+    return qualifyingThirdGroups;
+  }, [thirdPlaceOrder, qualifyingThirdGroups]);
+
   const fixedDoubleCount = useMemo(() => {
     let count = 0;
     for (const matchNumber of fixedDoubledMatches) {
@@ -192,7 +199,7 @@ export function MasterGroupView({
             )}
             <GroupTables
               standings={groupStandings}
-              qualifyingThirdGroups={qualifyingThirdGroups}
+              qualifyingThirdGroups={effectiveQualifyingThirdGroups}
               selectedTeamId={selectedTeamId}
               onSelectTeam={handleSelectTeam}
             />

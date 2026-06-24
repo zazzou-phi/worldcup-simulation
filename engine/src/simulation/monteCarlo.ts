@@ -4,9 +4,8 @@ import { compareFixturesChronologically } from '../engine/fixtureOrder.js';
 import {
   collectPlayedGroupMatches,
   computeAllGroupStandings,
-  getQualifyingThirdGroupsKey,
 } from '../engine/standings.js';
-import { buildSlotContext, lookupAnnexC, resolveMatchTeams } from '../engine/bracket.js';
+import { buildSlotContext, resolveMatchTeams } from '../engine/bracket.js';
 import {
   simulateMatchOutcome,
   winnerFromGoals,
@@ -107,9 +106,8 @@ function buildEngine(
     const matchList = [...matches.values()];
     const playedGroup = collectPlayedGroupMatches(fixtures, matchList, actualResults);
     const groupStandings = computeAllGroupStandings(memberships, teamsById, playedGroup);
-    const annex = lookupAnnexC(getQualifyingThirdGroupsKey(groupStandings));
-    const annexId = annex?.id ?? null;
-    const ctx = buildSlotContext(groupStandings, fixtures, matchList, teamsById, annexId);
+    const thirdPlaceOrder = repo.getEnsuredThirdPlaceOrder(groupStandings);
+    const ctx = buildSlotContext(groupStandings, fixtures, matchList, teamsById, thirdPlaceOrder);
 
     for (const fixture of fixtures) {
       const { home, away } = resolveMatchTeams(fixture, ctx, teamsById);

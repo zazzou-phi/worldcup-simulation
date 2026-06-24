@@ -7,6 +7,7 @@ import type { TournamentState } from '../types.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
 import { GroupPhaseLayout } from './GroupPhaseLayout.js';
+import { ThirdPlaceEditor } from './ThirdPlaceEditor.js';
 
 interface Props {
   state: TournamentState;
@@ -87,19 +88,32 @@ export function GroupPhaseView({
   return (
     <GroupPhaseLayout
       standings={
-        <>
-          {qualifyingThirdGroups.length > 0 && (
-            <div className="third-place-banner">
-              Third-place race: {qualifyingThirdGroups.join(', ')}
-            </div>
-          )}
+        <div className="group-standings-scroll">
           <GroupTables
             standings={groupStandings}
-            qualifyingThirdGroups={qualifyingThirdGroups}
+            qualifyingThirdGroups={
+              (state.thirdPlaceOrder?.length ?? 0) > 0
+                ? state.qualifyingThirdGroups
+                : qualifyingThirdGroups
+            }
             selectedTeamId={selectedTeamId}
             onSelectTeam={handleSelectTeam}
           />
-        </>
+          {state.thirdPlaceOrder?.length > 0 ? (
+            <ThirdPlaceEditor
+              rows={state.thirdPlaceOrder}
+              canEdit={false}
+              onMoveUp={() => {}}
+              onMoveDown={() => {}}
+            />
+          ) : (
+            qualifyingThirdGroups.length > 0 && (
+              <div className="third-place-banner">
+                Third-place race: {qualifyingThirdGroups.join(', ')}
+              </div>
+            )
+          )}
+        </div>
       }
       fixtures={
         <FixtureList

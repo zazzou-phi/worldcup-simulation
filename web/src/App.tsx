@@ -597,11 +597,13 @@ export function App() {
   const persistThirdPlaceOrder = async (
     order: Array<{ groupLetter: string; position: number }>,
   ) => {
-    if (predictionId == null || publicMode) return;
+    if (publicMode) return;
     setError(null);
     try {
-      const next = await api.setPredictionThirdPlaceOrder(predictionId, order);
-      setMasterKnockoutState(next);
+      const next = await api.setActualThirdPlaceOrder(order);
+      setActualState(next);
+      if (predictionId != null) await refreshMasterKnockoutState(predictionId);
+      if (simulationId != null) await refreshState(simulationId);
       setToast('Third-place order updated');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update third-place order');
@@ -609,8 +611,8 @@ export function App() {
   };
 
   const handleMoveThirdPlace = (groupLetter: string, direction: 'up' | 'down') => {
-    if (!masterKnockoutState) return;
-    const nextOrder = swapThirdPlaceOrder(masterKnockoutState.thirdPlaceOrder, groupLetter, direction);
+    if (!actualState?.thirdPlaceOrder) return;
+    const nextOrder = swapThirdPlaceOrder(actualState.thirdPlaceOrder, groupLetter, direction);
     if (!nextOrder) return;
     const apply = () => void persistThirdPlaceOrder(nextOrder);
     confirmIfKnockoutResults(apply);
@@ -989,9 +991,7 @@ export function App() {
               groupMemberships={state.groupMemberships}
               actualResults={state?.actualResults ?? []}
               thirdPlaceOrder={masterKnockoutState?.thirdPlaceOrder}
-              canEditThirdPlace={!publicMode}
-              onMoveThirdPlaceUp={(groupLetter) => handleMoveThirdPlace(groupLetter, 'up')}
-              onMoveThirdPlaceDown={(groupLetter) => handleMoveThirdPlace(groupLetter, 'down')}
+              canEditThirdPlace={false}
               canEditFrozenConsensus={!publicMode}
               savingFrozenConsensus={savingFrozenConsensus}
               onFrozenConsensusModeChange={handleFrozenConsensusModeChange}
@@ -1019,6 +1019,9 @@ export function App() {
               actualState={actualState}
               selectedMatchNumber={selectedMatchNumber}
               editingMatchNumber={editingMatchNumber}
+              canEditThirdPlace
+              onMoveThirdPlaceUp={(groupLetter) => handleMoveThirdPlace(groupLetter, 'up')}
+              onMoveThirdPlaceDown={(groupLetter) => handleMoveThirdPlace(groupLetter, 'down')}
               onSelectMatch={setSelectedMatchNumber}
               onStartEdit={setEditingMatchNumber}
               onSaveScore={handleSaveActualScore}

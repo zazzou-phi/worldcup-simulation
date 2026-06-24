@@ -189,17 +189,12 @@ export function resetPredictionThirdPlaceOrder(
 export function clearPredictionKnockoutState(
   db: Db,
   predictionId: number,
-  standings?: GroupStandings[],
 ): void {
   clearPredictionKnockoutResults(db, predictionId);
-  if (standings) {
-    resetPredictionThirdPlaceOrder(db, predictionId, standings);
-  }
 }
 
 export function deletePredictionKnockoutData(db: Db, predictionId: number): void {
   clearPredictionKnockoutResults(db, predictionId);
-  clearPredictionThirdPlaceOrder(db, predictionId);
 }
 
 export function readPredictionKnockoutResult(

@@ -6,12 +6,16 @@ import type { ActualResultsState } from '../types.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
 import { GroupPhaseLayout } from './GroupPhaseLayout.js';
+import { ThirdPlaceEditor } from './ThirdPlaceEditor.js';
 
 interface Props {
   actualState: ActualResultsState;
   selectedMatchNumber: number | null;
   editingMatchNumber: number | null;
   readOnly?: boolean;
+  canEditThirdPlace?: boolean;
+  onMoveThirdPlaceUp?: (groupLetter: string) => void;
+  onMoveThirdPlaceDown?: (groupLetter: string) => void;
   onSelectMatch: (matchNumber: number | null) => void;
   onStartEdit: (matchNumber: number) => void;
   onSaveScore: (
@@ -29,6 +33,9 @@ export function ActualResultsView({
   selectedMatchNumber,
   editingMatchNumber,
   readOnly = false,
+  canEditThirdPlace = false,
+  onMoveThirdPlaceUp,
+  onMoveThirdPlaceDown,
   onSelectMatch,
   onStartEdit,
   onSaveScore,
@@ -88,19 +95,28 @@ export function ActualResultsView({
   return (
     <GroupPhaseLayout
       standings={
-        <>
-          {actualState.qualifyingThirdGroups.length > 0 && (
-            <div className="third-place-banner">
-              Third-place race: {actualState.qualifyingThirdGroups.join(', ')}
-            </div>
-          )}
+        <div className="group-standings-scroll">
           <GroupTables
             standings={actualState.groupStandings}
             qualifyingThirdGroups={actualState.qualifyingThirdGroups}
             selectedTeamId={selectedTeamId}
             onSelectTeam={handleSelectTeam}
           />
-        </>
+          {(actualState.thirdPlaceOrder ?? []).length > 0 ? (
+            <ThirdPlaceEditor
+              rows={actualState.thirdPlaceOrder}
+              canEdit={canEditThirdPlace}
+              onMoveUp={(groupLetter) => onMoveThirdPlaceUp?.(groupLetter)}
+              onMoveDown={(groupLetter) => onMoveThirdPlaceDown?.(groupLetter)}
+            />
+          ) : (
+            actualState.qualifyingThirdGroups.length > 0 && (
+              <div className="third-place-banner">
+                Third-place race: {actualState.qualifyingThirdGroups.join(', ')}
+              </div>
+            )
+          )}
+        </div>
       }
       fixtures={
         <FixtureList

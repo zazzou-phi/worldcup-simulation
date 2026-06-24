@@ -187,6 +187,10 @@ export function initSchema(sqlite: Database.Database) {
       elo_delta REAL NOT NULL DEFAULT 0,
       PRIMARY KEY (simulation_id, team_id)
     );
+    CREATE TABLE IF NOT EXISTS actual_third_place_order (
+      group_letter TEXT PRIMARY KEY,
+      position INTEGER NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS actual_match_results (
       match_number INTEGER PRIMARY KEY REFERENCES fixtures(match_number),
       goals_home INTEGER NOT NULL,
@@ -247,6 +251,7 @@ function migrateSchema(sqlite: Database.Database) {
   migrateFrozenSampleGoals(sqlite);
   migrateActualResultPredictedGoals(sqlite);
   migratePredictionKnockoutTables(sqlite);
+  migrateActualThirdPlaceOrder(sqlite);
 }
 
 function migratePredictionKnockoutTables(sqlite: Database.Database) {
@@ -282,6 +287,38 @@ function migratePredictionKnockoutTables(sqlite: Database.Database) {
     .all() as Array<{ name: string }>;
   if (!columns.some((column) => column.name === 'distribution_json')) {
     sqlite.exec(`ALTER TABLE prediction_knockout_results ADD COLUMN distribution_json TEXT`);
+  }
+}
+
+function migrateActualThirdPlaceOrder(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'actual_third_place_order')) {
+    sqlite.exec(`
+      CREATE TABLE actual_third_place_order (
+        group_letter TEXT PRIMARY KEY,
+        position INTEGER NOT NULL
+      )
+    `);
+  }
+
+  if (!tableExists(sqlite, 'prediction_third_place_order')) return;
+
+  const globalCount = (
+    sqlite.prepare('SELECT COUNT(*) AS n FROM actual_third_place_order').get() as { n: number }
+  ).n;
+  if (globalCount > 0) return;
+
+  const legacy = sqlite
+    .prepare(
+      `SELECT group_letter, position FROM prediction_third_place_order
+       WHERE prediction_id = (
+         SELECT prediction_id FROM prediction_third_place_order LIMIT 1
+       )`,
+    )
+    .all() as Array<{ group_letter: string; position: number }>;
+  for (const row of legacy) {
+    sqlite
+      .prepare('INSERT INTO actual_third_place_order (group_letter, position) VALUES (?, ?)')
+      .run(row.group_letter, row.position);
   }
 }
 

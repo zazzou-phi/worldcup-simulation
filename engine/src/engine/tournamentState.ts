@@ -10,6 +10,8 @@ import {
   getQualifyingThirdGroups,
   getQualifyingThirdGroupsKey,
 } from './standings.js';
+import type { ThirdPlaceOrderEntry } from './predictionKnockout.js';
+import { buildThirdPlaceOrderRows, getQualifyingThirdGroupsFromOrder } from './predictionKnockout.js';
 import type {
   ActualMatchResult,
   Fixture,
@@ -18,6 +20,7 @@ import type {
   Simulation,
   SimulationMatch,
   Team,
+  ThirdPlaceOrderRow,
   TournamentState,
 } from './types.js';
 import { recomputeEloDeltasFromSimulationState } from './tournamentElo.js';
@@ -34,12 +37,16 @@ export function syncResolvedParticipantsInMemory(
   teamsById: Map<number, Team>,
   memberships: GroupMembership[],
   actualResults: ActualMatchResult[],
+  thirdPlaceOrder?: ThirdPlaceOrderEntry[],
 ): SyncResolvedParticipantsResult {
   const playedGroup = collectPlayedGroupMatches(fixtures, matches, actualResults);
   const groupStandings = computeAllGroupStandings(memberships, teamsById, playedGroup);
-  const annex = lookupAnnexC(getQualifyingThirdGroupsKey(groupStandings));
+  const annexKey = thirdPlaceOrder
+    ? getQualifyingThirdGroupsFromOrder(thirdPlaceOrder).join('')
+    : getQualifyingThirdGroupsKey(groupStandings);
+  const annex = lookupAnnexC(annexKey);
   const annexId = annex?.id ?? null;
-  const ctx = buildSlotContext(groupStandings, fixtures, matches, teamsById, annexId);
+  const ctx = buildSlotContext(groupStandings, fixtures, matches, teamsById, thirdPlaceOrder);
   const phase = computePhase(matches, fixtures);
 
   const updatedMatches = matches.map((match) => {
@@ -68,6 +75,7 @@ export interface BuildTournamentStateInput {
   groupMemberships: GroupMembership[];
   actualResults: ActualMatchResult[];
   lockedMatchNumbers?: ReadonlySet<number>;
+  thirdPlaceOrder?: ThirdPlaceOrderEntry[];
 }
 
 export function buildTournamentStateFromData(
@@ -84,6 +92,7 @@ export function buildTournamentStateFromData(
     teamsById,
     input.groupMemberships,
     input.actualResults,
+    input.thirdPlaceOrder,
   );
 
   const simulation: Simulation = {
@@ -103,7 +112,12 @@ export function buildTournamentStateFromData(
     teamsById,
     playedGroup,
   );
-  const qualifyingThirdGroups = getQualifyingThirdGroups(groupStandings);
+  const qualifyingThirdGroups = input.thirdPlaceOrder
+    ? getQualifyingThirdGroupsFromOrder(input.thirdPlaceOrder)
+    : getQualifyingThirdGroups(groupStandings);
+  const thirdPlaceOrder: ThirdPlaceOrderRow[] = input.thirdPlaceOrder
+    ? buildThirdPlaceOrderRows(groupStandings, input.thirdPlaceOrder)
+    : [];
 
   const resolvedMatches: ResolvedMatch[] = input.fixtures.map((fixture) => {
     const result = matches.find((m) => m.matchNumber === fixture.matchNumber)!;
@@ -130,6 +144,7 @@ export function buildTournamentStateFromData(
     groupMemberships: input.groupMemberships,
     groupStandings,
     qualifyingThirdGroups,
+    thirdPlaceOrder,
     annexCCombinationId: synced.annexCCombinationId,
     resolvedMatches,
     actualResults: input.actualResults,

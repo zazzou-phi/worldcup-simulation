@@ -9,6 +9,7 @@ import type {
   Fixture,
   GroupMembership,
   MasterGroupState,
+  MasterKnockoutState,
   OutcomeDistribution,
   ResolvedMatch,
   SimulationMatch,
@@ -48,6 +49,7 @@ export interface PublicSnapshot {
     phase: ReturnType<typeof computeActualPhase>;
     groupStandings: MasterGroupState['groupStandings'];
     qualifyingThirdGroups: string[];
+    thirdPlaceOrder: MasterKnockoutState['thirdPlaceOrder'];
     resolvedMatches: ReturnType<typeof serializeResolvedMatch>[];
   };
   bootstrap: PublicBootstrap;
@@ -191,6 +193,16 @@ export function buildPublicSnapshot(
       phase: actualView.phase,
       groupStandings: actualView.groupStandings,
       qualifyingThirdGroups: actualView.qualifyingThirdGroups,
+      thirdPlaceOrder: actualView.thirdPlaceOrder.map((row) => ({
+        groupLetter: row.groupLetter,
+        position: row.position,
+        teamId: row.teamId,
+        team: serializeTeam(row.team),
+        points: row.points,
+        goalDifference: row.goalDifference,
+        goalsFor: row.goalsFor,
+        qualified: row.qualified,
+      })),
       resolvedMatches: actualView.resolvedMatches.map(serializeResolvedMatch),
     },
     bootstrap: {

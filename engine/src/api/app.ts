@@ -262,20 +262,48 @@ export function createApiApp(repo: Repository) {
     }
   });
 
-  app.put('/api/v1/predictions/:id/third-place-order', async (c) => {
-    const id = parseIntParam(c.req.param('id'));
-    if (!repo.getPrediction(id)) {
-      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
-    }
+  app.put('/api/v1/actual-results/third-place-order', async (c) => {
     const body = await c.req.json().catch(() => null);
     const order = parseThirdPlaceOrderBody(body);
     try {
-      const view = repo.setPredictionThirdPlaceOrder(id, order);
-      return c.json(serializeMasterKnockoutState(view));
+      const view = repo.setActualThirdPlaceOrder(order);
+      return c.json({
+        actualResults: view.actualResults.map(serializeActualResult),
+        phase: view.phase,
+        groupStandings: view.groupStandings,
+        qualifyingThirdGroups: view.qualifyingThirdGroups,
+        thirdPlaceOrder: view.thirdPlaceOrder.map((row) => ({
+          groupLetter: row.groupLetter,
+          position: row.position,
+          teamId: row.teamId,
+          team: serializeTeam(row.team),
+          points: row.points,
+          goalDifference: row.goalDifference,
+          goalsFor: row.goalsFor,
+          qualified: row.qualified,
+        })),
+        resolvedMatches: view.resolvedMatches.map((m) => ({
+          fixture: m.fixture,
+          result: serializeMatch(m.result),
+          homeTeam: m.homeTeam ? serializeTeam(m.homeTeam) : null,
+          awayTeam: m.awayTeam ? serializeTeam(m.awayTeam) : null,
+          homeLabel: m.homeLabel,
+          awayLabel: m.awayLabel,
+          isLocked: m.isLocked,
+        })),
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Invalid third-place order';
       throw new ApiError(message, 400, 'invalid_body');
     }
+  });
+
+  app.put('/api/v1/predictions/:id/third-place-order', async (c) => {
+    throw new ApiError(
+      'Third-place order is managed from the Results view',
+      410,
+      'third_place_order_moved',
+    );
   });
 
   app.post('/api/v1/predictions/:id/knockout/clear', (c) => {
@@ -303,6 +331,16 @@ export function createApiApp(repo: Repository) {
       phase: view.phase,
       groupStandings: view.groupStandings,
       qualifyingThirdGroups: view.qualifyingThirdGroups,
+      thirdPlaceOrder: view.thirdPlaceOrder.map((row) => ({
+        groupLetter: row.groupLetter,
+        position: row.position,
+        teamId: row.teamId,
+        team: serializeTeam(row.team),
+        points: row.points,
+        goalDifference: row.goalDifference,
+        goalsFor: row.goalsFor,
+        qualified: row.qualified,
+      })),
       resolvedMatches: view.resolvedMatches.map((m) => ({
         fixture: m.fixture,
         result: serializeMatch(m.result),
