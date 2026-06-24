@@ -7,6 +7,7 @@ import { seedDatabase } from '../src/db/seed.js';
 import { Repository } from '../src/db/repository.js';
 import { runMonteCarlo } from '../src/simulation/monteCarlo.js';
 import { createApiApp } from '../src/api/app.js';
+import { testRng } from './testRng.js';
 
 describe('runMonteCarlo', () => {
   let repo: Repository;
@@ -19,7 +20,7 @@ describe('runMonteCarlo', () => {
   });
 
   it('returns champion counts that sum to the run count', async () => {
-    const result = await runMonteCarlo(repo, 50, { rng: { random: () => 0.5 }, upsetVariance: 0 });
+    const result = await runMonteCarlo(repo, 50, { rng: testRng(), upsetVariance: 0 });
     const totalWins = result.champions.reduce((sum, row) => sum + row.wins, 0);
     expect(totalWins).toBe(50);
     expect(result.count).toBe(50);
@@ -30,7 +31,7 @@ describe('runMonteCarlo', () => {
 
   it('persists each tournament as a completed simulation', async () => {
     const before = repo.listSimulations().length;
-    const result = await runMonteCarlo(repo, 3, { rng: { random: () => 0.5 }, upsetVariance: 0 });
+    const result = await runMonteCarlo(repo, 3, { rng: testRng(), upsetVariance: 0 });
 
     expect(repo.listSimulations().length).toBe(before + 3);
     expect(result.firstSimulationId).toBeGreaterThan(0);
@@ -50,7 +51,7 @@ describe('runMonteCarlo', () => {
   it('reports progress at completion', async () => {
     const progress: Array<[number, number]> = [];
     await runMonteCarlo(repo, 25, {
-      rng: { random: () => 0.5 },
+      rng: testRng(),
       upsetVariance: 0,
       onProgress: (completed, total) => progress.push([completed, total]),
     });
@@ -64,7 +65,7 @@ describe('runMonteCarlo', () => {
       repo.setActualResult(fixture.matchNumber, 1, 0, fixture.teamHomeId);
     }
 
-    const result = await runMonteCarlo(repo, 10, { rng: { random: () => 0.5 }, upsetVariance: 0 });
+    const result = await runMonteCarlo(repo, 10, { rng: testRng(), upsetVariance: 0 });
     expect(result.champions.reduce((sum, row) => sum + row.wins, 0)).toBe(10);
   });
 });

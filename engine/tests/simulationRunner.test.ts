@@ -7,6 +7,7 @@ import { seedDatabase } from '../src/db/seed.js';
 import { Repository } from '../src/db/repository.js';
 import { SimulationRunner } from '../src/simulation/runner.js';
 import { parseMatchday } from '../src/engine/fixtureOrder.js';
+import { testRng } from './testRng.js';
 
 describe('SimulationRunner', () => {
   let repo: Repository;
@@ -47,7 +48,7 @@ describe('SimulationRunner', () => {
 
   it('skips locked actual results during group simulation', () => {
     insertActual(1, 2, 1);
-    const runner = new SimulationRunner(repo, { random: () => 0.5 });
+    const runner = new SimulationRunner(repo, testRng());
     const result = runner.simulateGroupPhase();
 
     expect(result.matchesPlayed).toBe(1);
@@ -83,7 +84,7 @@ describe('SimulationRunner (seeded)', () => {
     initSchema(sqlite);
     seedDatabase(sqlite);
     repo = new Repository(drizzle(sqlite, { schema }));
-    runner = new SimulationRunner(repo, { random: () => 0.5 });
+    runner = new SimulationRunner(repo, testRng());
   });
 
   it('simulateGroupPhaseUpTo(1) plays 24 fixtures through MD7', () => {
