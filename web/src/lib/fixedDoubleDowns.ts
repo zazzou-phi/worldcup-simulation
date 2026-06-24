@@ -1,6 +1,7 @@
 import { MAX_DOUBLE_DOWN } from './doubleDown.js';
 
-const STORAGE_KEY = 'wc-fixed-double-downs';
+const SHARED_STORAGE_KEY = 'wc-fixed-double-downs';
+const LEGACY_STORAGE_PREFIX = 'wc-fixed-double-downs:';
 
 function parseMatchNumbers(raw: string | null): number[] {
   if (!raw) return [];
@@ -15,23 +16,42 @@ function parseMatchNumbers(raw: string | null): number[] {
   }
 }
 
+/** Copy per-prediction legacy picks into the shared store when it is still empty. */
+export function inheritFixedDoubleDowns(fromPredictionId: number | null): void {
+  if (typeof window === 'undefined' || fromPredictionId == null) return;
+  try {
+    if (parseMatchNumbers(localStorage.getItem(SHARED_STORAGE_KEY)).length > 0) return;
+    const legacy = parseMatchNumbers(
+      localStorage.getItem(`${LEGACY_STORAGE_PREFIX}${fromPredictionId}`),
+    );
+    if (legacy.length === 0) return;
+    localStorage.setItem(SHARED_STORAGE_KEY, JSON.stringify(legacy));
+  } catch {
+    /* ignore */
+  }
+}
+
 export function loadStoredFixedDoubleDowns(predictionId: number): Set<number> {
   if (typeof window === 'undefined') return new Set();
   try {
-    return new Set(parseMatchNumbers(localStorage.getItem(`${STORAGE_KEY}:${predictionId}`)));
+    const shared = parseMatchNumbers(localStorage.getItem(SHARED_STORAGE_KEY));
+    if (shared.length > 0) return new Set(shared);
+    return new Set(
+      parseMatchNumbers(localStorage.getItem(`${LEGACY_STORAGE_PREFIX}${predictionId}`)),
+    );
   } catch {
     return new Set();
   }
 }
 
 export function storeFixedDoubleDowns(
-  predictionId: number,
+  _predictionId: number,
   matchNumbers: Iterable<number>,
 ): void {
   if (typeof window === 'undefined') return;
   try {
     const values = [...matchNumbers].slice(0, MAX_DOUBLE_DOWN);
-    localStorage.setItem(`${STORAGE_KEY}:${predictionId}`, JSON.stringify(values));
+    localStorage.setItem(SHARED_STORAGE_KEY, JSON.stringify(values));
   } catch {
     /* ignore */
   }

@@ -169,6 +169,32 @@ describe('predictionFrozenMatches', () => {
     expect(master.distributions[3].total).toBe(1);
   });
 
+  it('matches locked sample consensus across post-lock bulk predictions', () => {
+    const poolSim = repo.createSimulation('Pre-lock pool');
+    const poolId = repo.createPrediction('Pool', `${poolSim.id}-${poolSim.id}`).id;
+    repo.setPredictionConsensusMode(poolId, 'sample');
+    repo.updateMatchResult(poolSim.id, 3, 2, 0, 18);
+    upsertPredictionSampleResult(db, poolId, 3, 2, 0, new Date().toISOString());
+    repo.touchPrediction(poolId);
+
+    repo.setActualResult(3, 1, 1, null);
+
+    const postLockSim = repo.createSimulation('Post-lock bulk');
+    repo.updateMatchResult(postLockSim.id, 4, 1, 0, 32);
+    const laterId = repo
+      .createPrediction('Post-lock bulk', `${postLockSim.id}-${postLockSim.id}`)
+      .id;
+    repo.setPredictionConsensusMode(laterId, 'sample');
+
+    const poolView = repo.buildMasterGroupView(poolId);
+    const laterView = repo.buildMasterGroupView(laterId);
+    const poolMatch = poolView.resolvedMatches.find((m) => m.fixture.matchNumber === 3)!;
+    const laterMatch = laterView.resolvedMatches.find((m) => m.fixture.matchNumber === 3)!;
+
+    expect(laterMatch.result).toEqual(poolMatch.result);
+    expect(laterView.distributions[3].consensusMode).toBe('sample');
+  });
+
   it('stores locked sample prediction on the actual result when entered', () => {
     const sim = repo.createSimulation('Sample actual');
     const predictionId = ensureTestPrediction(repo);

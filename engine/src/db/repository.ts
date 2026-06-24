@@ -71,6 +71,7 @@ import {
   clearFrozenMatch,
   copyMissingFrozenMatchesFromDefault,
   syncCanonicalLockedSampleGoalsFromDefault,
+  applyCanonicalLockedConsensusFromActuals,
   readCanonicalLockedSampleGoals,
   readLockedMatchSampleGoalsFromActuals,
   resolveLockedSamplePredictionForEntry,
@@ -540,6 +541,7 @@ export class Repository {
     backfillFrozenMatchesForPrediction(this.db, row.id, parsed.spec);
     copyMissingFrozenMatchesFromDefault(this.db, row.id);
     syncCanonicalLockedSampleGoalsFromDefault(this.db, row.id);
+    applyCanonicalLockedConsensusFromActuals(this.db, row.id);
     return mapPrediction(row);
   }
 
@@ -1272,6 +1274,7 @@ export class Repository {
 
   buildMasterGroupView(predictionId: number): MasterGroupState {
     syncCanonicalLockedSampleGoalsFromDefault(this.db, predictionId);
+    applyCanonicalLockedConsensusFromActuals(this.db, predictionId);
 
     const prediction = this.getPrediction(predictionId);
     const consensusMode = prediction?.consensusMode ?? getDefaultConsensusMode();

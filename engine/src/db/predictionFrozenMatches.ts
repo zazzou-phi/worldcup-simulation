@@ -137,6 +137,36 @@ function readPredictionConsensusMode(db: Db, predictionId: number): ConsensusMod
   return parseConsensusMode(row?.consensusMode);
 }
 
+function readLockedSampleFromActual(
+  db: Db,
+  matchNumber: number,
+): { goalsHome: number; goalsAway: number } | null {
+  const row = db
+    .select({
+      predictedGoalsHome: schema.actualMatchResults.predictedGoalsHome,
+      predictedGoalsAway: schema.actualMatchResults.predictedGoalsAway,
+    })
+    .from(schema.actualMatchResults)
+    .where(eq(schema.actualMatchResults.matchNumber, matchNumber))
+    .get();
+  if (row?.predictedGoalsHome == null || row?.predictedGoalsAway == null) return null;
+  return { goalsHome: row.predictedGoalsHome, goalsAway: row.predictedGoalsAway };
+}
+
+/** Locked sample scores stored on actual results override Default floor backfills. */
+function resolveFrozenConsensusForBackfill(
+  db: Db,
+  matchNumber: number,
+  sourceConsensusMode: ConsensusMode,
+  sourceSample: { goalsHome: number; goalsAway: number } | null,
+): { consensusMode: ConsensusMode; sampleGoals: { goalsHome: number; goalsAway: number } | null } {
+  const actualSample = readLockedSampleFromActual(db, matchNumber);
+  if (actualSample) {
+    return { consensusMode: 'sample', sampleGoals: actualSample };
+  }
+  return { consensusMode: sourceConsensusMode, sampleGoals: sourceSample };
+}
+
 function writeFrozenMatch(
   db: Db,
   predictionId: number,
@@ -524,6 +554,16 @@ export function backfillFrozenMatchesForPrediction(
         },
         scorelines: JSON.parse(source.scorelinesJson) as PredictionMatchScorelineCount[],
       };
+      const sourceSample =
+        source.sampleGoalsHome != null && source.sampleGoalsAway != null
+          ? { goalsHome: source.sampleGoalsHome, goalsAway: source.sampleGoalsAway }
+          : null;
+      const { consensusMode, sampleGoals } = resolveFrozenConsensusForBackfill(
+        db,
+        matchNumber,
+        parseConsensusMode(source.consensusMode),
+        sourceSample,
+      );
       writeFrozenMatch(
         db,
         predictionId,
@@ -531,10 +571,8 @@ export function backfillFrozenMatchesForPrediction(
         aggregated.outcomes,
         aggregated.scorelines,
         recordedAt,
-        parseConsensusMode(source.consensusMode),
-        source.sampleGoalsHome != null && source.sampleGoalsAway != null
-          ? { goalsHome: source.sampleGoalsHome, goalsAway: source.sampleGoalsAway }
-          : null,
+        consensusMode,
+        sampleGoals,
       );
       continue;
     }
@@ -615,6 +653,70 @@ export function syncCanonicalLockedSampleGoalsFromDefault(
   }
 }
 
+/**
+ * Repair locked rows that copied Default floor stats but should use the canonical
+ * sample score stored on the actual result (post-lock prediction pools).
+ */
+export function applyCanonicalLockedConsensusFromActuals(
+  db: Db,
+  predictionId: number,
+  defaultPredictionId = CANONICAL_FROZEN_PREDICTION_ID,
+): void {
+  if (predictionId === defaultPredictionId) return;
+
+  const locked = readLockedMatchNumbers(db);
+
+  for (const matchNumber of locked) {
+    const actualSample = readLockedSampleFromActual(db, matchNumber);
+    if (!actualSample) continue;
+
+    const ownRow = db
+      .select()
+      .from(schema.predictionFrozenMatches)
+      .where(
+        and(
+          eq(schema.predictionFrozenMatches.predictionId, predictionId),
+          eq(schema.predictionFrozenMatches.matchNumber, matchNumber),
+        ),
+      )
+      .get();
+    if (!ownRow) continue;
+
+    const defaultRow = readDefaultFrozenRow(db, matchNumber, defaultPredictionId);
+    if (!defaultRow || ownRow.total !== defaultRow.total) continue;
+
+    const ownMode = parseConsensusMode(ownRow.consensusMode);
+    const needsMode = ownMode !== 'sample';
+    const needsSample =
+      ownRow.sampleGoalsHome !== actualSample.goalsHome ||
+      ownRow.sampleGoalsAway !== actualSample.goalsAway;
+    if (!needsMode && !needsSample) continue;
+
+    db.update(schema.predictionFrozenMatches)
+      .set({
+        consensusMode: 'sample',
+        sampleGoalsHome: actualSample.goalsHome,
+        sampleGoalsAway: actualSample.goalsAway,
+      })
+      .where(
+        and(
+          eq(schema.predictionFrozenMatches.predictionId, predictionId),
+          eq(schema.predictionFrozenMatches.matchNumber, matchNumber),
+        ),
+      )
+      .run();
+
+    upsertPredictionSampleResult(
+      db,
+      predictionId,
+      matchNumber,
+      actualSample.goalsHome,
+      actualSample.goalsAway,
+      ownRow.frozenAt,
+    );
+  }
+}
+
 /** @deprecated Use syncCanonicalLockedSampleGoalsFromDefault */
 export function copyMissingFrozenSampleGoalsFromDefault(
   db: Db,
@@ -663,6 +765,12 @@ export function copyMissingFrozenMatchesFromDefault(
       source.sampleGoalsHome != null && source.sampleGoalsAway != null
         ? { goalsHome: source.sampleGoalsHome, goalsAway: source.sampleGoalsAway }
         : null;
+    const { consensusMode, sampleGoals } = resolveFrozenConsensusForBackfill(
+      db,
+      source.matchNumber,
+      parseConsensusMode(source.consensusMode),
+      sourceSample,
+    );
     upsertFrozenMatch(
       db,
       predictionId,
@@ -675,8 +783,8 @@ export function copyMissingFrozenMatchesFromDefault(
       },
       scorelines,
       source.frozenAt,
-      parseConsensusMode(source.consensusMode),
-      sourceSample,
+      consensusMode,
+      sampleGoals,
     );
   }
 }

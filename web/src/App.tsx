@@ -37,6 +37,7 @@ import {
   type ConsensusMode,
 } from './lib/consensusMode.js';
 import { applyConsensusMode } from './lib/applyConsensusMode.js';
+import { inheritFixedDoubleDowns } from './lib/fixedDoubleDowns.js';
 import { applyRatingEloWeightToStateTeams } from './lib/normalizeTeam.js';
 import { applyBlendRatingsToTeams } from '@shared/engine/teamRatings.js';
 import { MOBILE_QUERY } from './lib/useMediaQuery.js';
@@ -210,6 +211,7 @@ export function App() {
   const showGroupView = !viewKnockout;
 
   const switchPrediction = async (id: number) => {
+    inheritFixedDoubleDowns(predictionId);
     const prediction = await api.activatePrediction(id);
     const page = await api.listPredictions(1, 100);
     const entry = page.items.find((item) => item.id === id);
@@ -222,6 +224,7 @@ export function App() {
   };
 
   const handleCreatePrediction = async (name: string, selection: string): Promise<number> => {
+    inheritFixedDoubleDowns(predictionId);
     const prediction = await api.createPrediction(name, selection);
     await switchPrediction(prediction.id);
     return prediction.id;
