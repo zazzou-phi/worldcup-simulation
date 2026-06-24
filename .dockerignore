@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+.git
+.github
+docs
+scripts
+.env
+.env.*
+**/*.log
+.DS_Store
+data/simulations.db
+data/simulations.db-wal
+data/simulations.db-shm
+web/public/data
