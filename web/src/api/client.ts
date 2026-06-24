@@ -226,6 +226,15 @@ const privateApi = {
   activatePrediction: (id: number) =>
     request<Prediction>(`/api/v1/predictions/${id}/activate`, { method: 'POST' }),
 
+  exportPublic: () =>
+    request<{
+      ok: true;
+      outDir: string;
+      exportedAt: string;
+      predictionId: number;
+      predictionName: string;
+    }>('/api/v1/export/public', { method: 'POST' }),
+
   setActualResult: (
     matchNumber: number,
     goalsHome: number,

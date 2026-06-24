@@ -1,4 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { mkdtempSync, readdirSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import * as schema from '../src/db/schema.js';
@@ -634,5 +637,37 @@ describe('HTTP API', () => {
       method: 'POST',
     });
     expect(res.status).toBe(409);
+  });
+
+  it('POST /export/public writes snapshot files', async () => {
+    const sim = repo.createSimulation('Export test');
+    repo.createPrediction('Export pool', String(sim.id));
+
+    const outDir = mkdtempSync(join(tmpdir(), 'wc-export-'));
+    const previous = process.env.PUBLIC_EXPORT_DIR;
+    process.env.PUBLIC_EXPORT_DIR = outDir;
+    try {
+      const res = await app.request('/api/v1/export/public', { method: 'POST' });
+      expect(res.status).toBe(200);
+      const body = await json<{
+        ok: true;
+        outDir: string;
+        predictionName: string;
+      }>(res);
+      expect(body.ok).toBe(true);
+      expect(body.outDir).toBe(outDir);
+      expect(body.predictionName).toBe('Export pool');
+      expect(readdirSync(outDir).sort()).toEqual([
+        'actual-results-state.json',
+        'bootstrap.json',
+        'master-group-state.json',
+        'master-knockout-state.json',
+        'master-team-stats.json',
+        'meta.json',
+      ]);
+    } finally {
+      if (previous === undefined) delete process.env.PUBLIC_EXPORT_DIR;
+      else process.env.PUBLIC_EXPORT_DIR = previous;
+    }
   });
 });

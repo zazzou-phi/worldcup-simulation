@@ -43,6 +43,8 @@ interface Props {
   onOpenMasterTeamStats: () => void;
   onOpenTournamentStats: () => void;
   onOpenPredictions: () => void;
+  onExportPublic?: () => void;
+  exportingPublic?: boolean;
   onClearSimulation?: () => void;
   sampleActive?: boolean;
   hasSavedSample?: boolean;
@@ -87,6 +89,8 @@ export function Header({
   onOpenMasterTeamStats,
   onOpenTournamentStats,
   onOpenPredictions,
+  onExportPublic,
+  exportingPublic = false,
   onClearSimulation,
   sampleActive = false,
   hasSavedSample = false,
@@ -284,6 +288,17 @@ export function Header({
           {showManagePredictions && (
             <button type="button" className="btn btn-ghost" onClick={onOpenPredictions}>
               Manage Predictions
+            </button>
+          )}
+          {showManagePredictions && onExportPublic != null && (
+            <button
+              type="button"
+              className="btn btn-ghost"
+              disabled={exportingPublic}
+              title="Write public-site JSON snapshots to web/public/data (same as npm run export:public)"
+              onClick={onExportPublic}
+            >
+              {exportingPublic ? 'Exporting…' : 'Export Public Site'}
             </button>
           )}
         </>

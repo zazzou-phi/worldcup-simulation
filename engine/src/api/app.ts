@@ -38,6 +38,7 @@ import {
   serializeTeam,
   serializeTournamentState,
 } from './serialize.js';
+import { writePublicSnapshot } from '../export/writePublicSnapshot.js';
 
 export function createApiApp(repo: Repository) {
   const app = new Hono();
@@ -51,6 +52,18 @@ export function createApiApp(repo: Repository) {
   });
 
   app.get('/health', (c) => c.json({ ok: true }));
+
+  app.post('/api/v1/export/public', (c) => {
+    try {
+      return c.json(writePublicSnapshot(repo));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Export failed';
+      if (message.includes('No predictions configured')) {
+        throw new ApiError(message, 404, 'prediction_not_found');
+      }
+      throw err;
+    }
+  });
 
   app.get('/api/v1/actual-results', (c) =>
     c.json(repo.getActualResults().map(serializeActualResult)),

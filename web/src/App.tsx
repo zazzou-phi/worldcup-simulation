@@ -110,6 +110,7 @@ export function App() {
   const [knockoutClearAction, setKnockoutClearAction] = useState<(() => void) | null>(null);
   const [loading, setLoading] = useState(true);
   const [simulating, setSimulating] = useState(false);
+  const [exportingPublic, setExportingPublic] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [publicMeta, setPublicMeta] = useState<PublicMeta | null>(null);
@@ -520,6 +521,22 @@ export function App() {
       }
     };
     confirmIfKnockoutResults(save);
+  };
+
+  const handleExportPublic = async () => {
+    if (publicMode) return;
+    setExportingPublic(true);
+    setError(null);
+    try {
+      const result = await api.exportPublic();
+      setToast(
+        `Exported "${result.predictionName}" to ${result.outDir} (${result.exportedAt})`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to export public site');
+    } finally {
+      setExportingPublic(false);
+    }
   };
 
   const handleFrozenConsensusModeChange = async (matchNumber: number, mode: ConsensusMode) => {
@@ -933,6 +950,8 @@ export function App() {
         onOpenMasterTeamStats={() => setShowMasterTeamStats(true)}
         onOpenTournamentStats={() => setShowTournamentStats(true)}
         onOpenPredictions={() => setShowPredictions(true)}
+        onExportPublic={publicMode ? undefined : handleExportPublic}
+        exportingPublic={exportingPublic}
         onClearSimulation={publicMode ? handleClearSimulation : undefined}
         sampleActive={consensusModeDraft === 'sample'}
         hasSavedSample={Boolean(masterStateBase?.sample?.sampledAt)}
