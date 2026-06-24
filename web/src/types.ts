@@ -142,6 +142,38 @@ export interface MasterGroupState {
   sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>;
 }
 
+export interface ThirdPlaceOrderRow {
+  groupLetter: string;
+  position: number;
+  teamId: number;
+  team: Team;
+  points: number;
+  goalDifference: number;
+  goalsFor: number;
+  qualified: boolean;
+}
+
+export interface KnockoutRoundAvailability {
+  name: string;
+  label: string;
+  matches: number[];
+  canSimulate: boolean;
+  isComplete: boolean;
+  disabledReason?: string;
+}
+
+export interface MasterKnockoutState {
+  consensusMode: 'scoreline' | 'outcome' | 'floor' | 'rounded' | 'sample';
+  resolvedMatches: ResolvedMatch[];
+  thirdPlaceOrder: ThirdPlaceOrderRow[];
+  qualifyingThirdGroups: string[];
+  annexCCombinationId: number | null;
+  rounds: KnockoutRoundAvailability[];
+  distributions: Record<string, OutcomeDistribution>;
+  hasKnockoutResults: boolean;
+  groupStageComplete: boolean;
+}
+
 export interface MasterTeamStatsRow {
   teamId: number;
   teamName: string;

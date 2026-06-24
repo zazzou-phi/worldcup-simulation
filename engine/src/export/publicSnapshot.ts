@@ -18,6 +18,7 @@ import type {
 import {
   serializeActualResult,
   serializeMasterGroupState,
+  serializeMasterKnockoutState,
   serializeMasterTeamStats,
   serializeResolvedMatch,
   serializeTeam,
@@ -40,6 +41,7 @@ export interface PublicMeta {
 
 export interface PublicSnapshot {
   masterGroupState: ReturnType<typeof serializeMasterGroupState>;
+  masterKnockoutState: ReturnType<typeof serializeMasterKnockoutState>;
   masterTeamStats: ReturnType<typeof serializeMasterTeamStats>;
   actualResultsState: {
     actualResults: ReturnType<typeof serializeActualResult>[];
@@ -173,12 +175,16 @@ export function buildPublicSnapshot(
     actualResults,
   );
   const masterTeamStats = repo.buildMasterTeamStats(prediction.id);
+  const masterKnockoutState = serializeMasterKnockoutState(
+    repo.buildMasterKnockoutView(prediction.id),
+  );
   const actualView = repo.buildActualResultsView();
 
   const teams = repo.getTeams();
 
   return {
     masterGroupState: serializeMasterGroupState(masterGroupState),
+    masterKnockoutState,
     masterTeamStats: serializeMasterTeamStats(masterTeamStats),
     actualResultsState: {
       actualResults: actualView.actualResults.map(serializeActualResult),
@@ -205,6 +211,7 @@ export function buildPublicSnapshot(
 export function snapshotToFiles(snapshot: PublicSnapshot): Record<string, unknown> {
   return {
     'master-group-state.json': snapshot.masterGroupState,
+    'master-knockout-state.json': snapshot.masterKnockoutState,
     'master-team-stats.json': snapshot.masterTeamStats,
     'actual-results-state.json': snapshot.actualResultsState,
     'bootstrap.json': snapshot.bootstrap,

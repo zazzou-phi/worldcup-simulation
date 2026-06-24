@@ -13,15 +13,19 @@ import {
 import type {
   ActualResultsState,
   MasterGroupState,
+  MasterKnockoutState,
   PublicMeta,
   Team,
+  ThirdPlaceOrderRow,
   TournamentState,
 } from './types.js';
 import { Header } from './components/Header.js';
 import { ActualResultsView } from './components/ActualResultsView.js';
+import { ActualResultsKnockoutView } from './components/ActualResultsKnockoutView.js';
 import { GroupPhaseView } from './components/GroupPhaseView.js';
 import { KnockoutView } from './components/KnockoutView.js';
 import { MasterGroupView } from './components/MasterGroupView.js';
+import { MasterKnockoutView } from './components/MasterKnockoutView.js';
 import { MonteCarloModal } from './components/MonteCarloModal.js';
 import type { AppView } from './lib/appView.js';
 import { DEFAULT_UPSET_VARIANCE } from './lib/upsetVariance.js';
@@ -37,7 +41,7 @@ import {
   type ConsensusMode,
 } from './lib/consensusMode.js';
 import { applyConsensusMode } from './lib/applyConsensusMode.js';
-import { inheritFixedDoubleDowns } from './lib/fixedDoubleDowns.js';
+import { inheritFixedDoubleDowns, inheritKnockoutR32FixedDoubleDowns } from './lib/fixedDoubleDowns.js';
 import { applyRatingEloWeightToStateTeams } from './lib/normalizeTeam.js';
 import { applyBlendRatingsToTeams } from '@shared/engine/teamRatings.js';
 import { MOBILE_QUERY } from './lib/useMediaQuery.js';
@@ -47,6 +51,11 @@ import { TeamRatingsModal } from './components/TeamRatingsModal.js';
 import { MasterTeamStatsModal } from './components/MasterTeamStatsModal.js';
 import { TournamentStatsModal } from './components/TournamentStatsModal.js';
 import { SampleConfirmModal } from './components/SampleConfirmModal.js';
+import { KnockoutClearConfirmModal } from './components/KnockoutClearConfirmModal.js';
+import {
+  DEFAULT_PREDICTION_KNOCKOUT_MC_COUNT,
+  PredictionKnockoutBulkModal,
+} from './components/PredictionKnockoutBulkModal.js';
 import type { MonteCarloResult } from './types.js';
 
 export function App() {
@@ -68,12 +77,14 @@ export function App() {
   } | null>(null);
   const [bulkSimulating, setBulkSimulating] = useState(false);
   const [viewKnockout, setViewKnockout] = useState(false);
+  const [predictionsViewKnockout, setPredictionsViewKnockout] = useState(false);
   const [appView, setAppView] = useState<AppView>(publicMode ? 'simulations' : 'predictions');
   const [actualState, setActualState] = useState<ActualResultsState | null>(null);
   const [knockoutBracketView, setKnockoutBracketView] = useState(
     () => typeof window !== 'undefined' && !window.matchMedia(MOBILE_QUERY).matches,
   );
   const [masterStateBase, setMasterStateBase] = useState<MasterGroupState | null>(null);
+  const [masterKnockoutState, setMasterKnockoutState] = useState<MasterKnockoutState | null>(null);
   const [consensusModeDraft, setConsensusModeDraft] = useState<ConsensusMode>(DEFAULT_CONSENSUS_MODE);
   const [consensusModeSaved, setConsensusModeSaved] = useState<ConsensusMode>(DEFAULT_CONSENSUS_MODE);
   const [savingConsensusMode, setSavingConsensusMode] = useState(false);
@@ -84,6 +95,19 @@ export function App() {
   const [showTournamentStats, setShowTournamentStats] = useState(false);
   const [showResampleConfirm, setShowResampleConfirm] = useState(false);
   const [samplingPrediction, setSamplingPrediction] = useState(false);
+  const [simulatingPredictionKnockout, setSimulatingPredictionKnockout] = useState(false);
+  const [showPredictionKnockoutBulk, setShowPredictionKnockoutBulk] = useState(false);
+  const [predictionKnockoutMcCount, setPredictionKnockoutMcCount] = useState(
+    DEFAULT_PREDICTION_KNOCKOUT_MC_COUNT,
+  );
+  const [predictionKnockoutBulkError, setPredictionKnockoutBulkError] = useState<string | null>(null);
+  const [predictionKnockoutBulkProgress, setPredictionKnockoutBulkProgress] = useState<{
+    roundLabel: string;
+    matchCount: number;
+    simulationCount: number;
+  } | null>(null);
+  const [showKnockoutClearConfirm, setShowKnockoutClearConfirm] = useState(false);
+  const [knockoutClearAction, setKnockoutClearAction] = useState<(() => void) | null>(null);
   const [loading, setLoading] = useState(true);
   const [simulating, setSimulating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -112,10 +136,27 @@ export function App() {
     return next;
   }, []);
 
+  const refreshMasterKnockoutState = useCallback(async (id?: number | null) => {
+    const pid = id ?? predictionId;
+    if (pid == null) {
+      setMasterKnockoutState(null);
+      return null;
+    }
+    try {
+      const next = await api.getMasterKnockoutState(pid);
+      setMasterKnockoutState(next);
+      return next;
+    } catch {
+      setMasterKnockoutState(null);
+      return null;
+    }
+  }, [predictionId]);
+
   const refreshMasterState = useCallback(async (id?: number | null) => {
     const pid = id ?? predictionId;
     if (pid == null) {
       setMasterStateBase(null);
+      setMasterKnockoutState(null);
       return null;
     }
     const next = await api.getMasterGroupState(pid);
@@ -124,8 +165,9 @@ export function App() {
     setConsensusModeSaved(saved);
     const stored = !publicMode ? loadStoredConsensusMode(pid) : null;
     setConsensusModeDraft(stored ?? saved);
+    await refreshMasterKnockoutState(pid);
     return next;
-  }, [predictionId, publicMode]);
+  }, [predictionId, publicMode, refreshMasterKnockoutState]);
 
   const masterState = useMemo(() => {
     if (!masterStateBase || !state) return masterStateBase;
@@ -188,6 +230,11 @@ export function App() {
             ? loadStoredConsensusMode(initialPrediction.id)
             : null;
           setConsensusModeDraft(stored ?? saved);
+          try {
+            setMasterKnockoutState(await api.getMasterKnockoutState(initialPrediction.id));
+          } catch {
+            setMasterKnockoutState(null);
+          }
         }
         if (publicMode && meta) {
           setPublicMeta(meta);
@@ -209,9 +256,43 @@ export function App() {
   }, [publicMode, state, publicMeta]);
 
   const showGroupView = !viewKnockout;
+  const predictionsShowGroupView = !predictionsViewKnockout;
+  const headerShowGroupView =
+    appView === 'predictions' ? predictionsShowGroupView : showGroupView;
+
+  const confirmIfKnockoutResults = (action: () => void | Promise<void>) => {
+    if (masterKnockoutState?.hasKnockoutResults) {
+      setKnockoutClearAction(() => () => void action());
+      setShowKnockoutClearConfirm(true);
+      return;
+    }
+    void action();
+  };
+
+  const swapThirdPlaceOrder = (
+    rows: ThirdPlaceOrderRow[],
+    groupLetter: string,
+    direction: 'up' | 'down',
+  ): Array<{ groupLetter: string; position: number }> | null => {
+    const sorted = [...rows].sort((a, b) => a.position - b.position);
+    const index = sorted.findIndex((row) => row.groupLetter === groupLetter);
+    if (index < 0) return null;
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= sorted.length) return null;
+    return sorted.map((row, rowIndex) => {
+      if (rowIndex === index) {
+        return { groupLetter: row.groupLetter, position: sorted[swapIndex]!.position };
+      }
+      if (rowIndex === swapIndex) {
+        return { groupLetter: row.groupLetter, position: sorted[index]!.position };
+      }
+      return { groupLetter: row.groupLetter, position: row.position };
+    });
+  };
 
   const switchPrediction = async (id: number) => {
     inheritFixedDoubleDowns(predictionId);
+    inheritKnockoutR32FixedDoubleDowns(predictionId);
     const prediction = await api.activatePrediction(id);
     const page = await api.listPredictions(1, 100);
     const entry = page.items.find((item) => item.id === id);
@@ -225,6 +306,7 @@ export function App() {
 
   const handleCreatePrediction = async (name: string, selection: string): Promise<number> => {
     inheritFixedDoubleDowns(predictionId);
+    inheritKnockoutR32FixedDoubleDowns(predictionId);
     const prediction = await api.createPrediction(name, selection);
     await switchPrediction(prediction.id);
     return prediction.id;
@@ -424,56 +506,82 @@ export function App() {
 
   const handleSaveConsensusMode = async () => {
     if (predictionId == null || publicMode) return;
-    setSavingConsensusMode(true);
-    setError(null);
-    try {
-      await api.updatePredictionConsensusMode(predictionId, consensusModeDraft);
-      await refreshMasterState(predictionId);
-      setToast('Consensus mode saved');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save consensus mode');
-    } finally {
-      setSavingConsensusMode(false);
-    }
+    const save = async () => {
+      setSavingConsensusMode(true);
+      setError(null);
+      try {
+        await api.updatePredictionConsensusMode(predictionId, consensusModeDraft);
+        await refreshMasterState(predictionId);
+        setToast('Consensus mode saved');
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to save consensus mode');
+      } finally {
+        setSavingConsensusMode(false);
+      }
+    };
+    confirmIfKnockoutResults(save);
   };
 
   const handleFrozenConsensusModeChange = async (matchNumber: number, mode: ConsensusMode) => {
     if (predictionId == null || publicMode) return;
-    setSavingFrozenConsensus(true);
-    setError(null);
-    try {
-      const next = await api.setFrozenMatchConsensusMode(predictionId, matchNumber, mode);
-      setMasterStateBase(next);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update locked consensus');
-    } finally {
-      setSavingFrozenConsensus(false);
-    }
+    const save = async () => {
+      setSavingFrozenConsensus(true);
+      setError(null);
+      try {
+        const next = await api.setFrozenMatchConsensusMode(predictionId, matchNumber, mode);
+        setMasterStateBase(next);
+        await refreshMasterKnockoutState(predictionId);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to update locked consensus');
+      } finally {
+        setSavingFrozenConsensus(false);
+      }
+    };
+    confirmIfKnockoutResults(save);
   };
 
   const runPredictionSample = async () => {
     if (predictionId == null || publicMode) return;
-    setSamplingPrediction(true);
-    setError(null);
-    try {
-      const next = await api.samplePrediction(predictionId);
-      setMasterStateBase(next);
-      const count = next.sample?.matchCount ?? 0;
-      setToast(`Sampled ${count.toLocaleString()} fixture${count === 1 ? '' : 's'}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sample prediction scores');
-    } finally {
-      setSamplingPrediction(false);
-      setShowResampleConfirm(false);
+    const sample = async () => {
+      setSamplingPrediction(true);
+      setError(null);
+      try {
+        const next = await api.samplePrediction(predictionId);
+        setMasterStateBase(next);
+        await refreshMasterKnockoutState(predictionId);
+        const count = next.sample?.matchCount ?? 0;
+        setToast(`Sampled ${count.toLocaleString()} fixture${count === 1 ? '' : 's'}`);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to sample prediction scores');
+      } finally {
+        setSamplingPrediction(false);
+        setShowResampleConfirm(false);
+      }
+    };
+    if (masterKnockoutState?.hasKnockoutResults) {
+      setKnockoutClearAction(() => () => void sample());
+      setShowKnockoutClearConfirm(true);
+      return;
     }
+    await sample();
   };
 
   const handleSampleButton = () => {
     if (publicMode || predictionId == null) return;
 
+    if (appView === 'predictions' && predictionsViewKnockout) {
+      void handleResampleLastKnockoutRound();
+      return;
+    }
+
     if (consensusModeDraft === 'sample') {
       if (masterStateBase?.sample?.sampledAt) {
-        setShowResampleConfirm(true);
+        if (masterKnockoutState?.hasKnockoutResults) {
+          setKnockoutClearAction(() => () => setShowResampleConfirm(true));
+          setShowKnockoutClearConfirm(true);
+        } else {
+          setShowResampleConfirm(true);
+        }
       } else {
         void runPredictionSample();
       }
@@ -483,6 +591,137 @@ export function App() {
     setConsensusModeDraft('sample');
     if (!masterStateBase?.sample?.sampledAt) {
       void runPredictionSample();
+    }
+  };
+
+  const persistThirdPlaceOrder = async (
+    order: Array<{ groupLetter: string; position: number }>,
+  ) => {
+    if (predictionId == null || publicMode) return;
+    setError(null);
+    try {
+      const next = await api.setPredictionThirdPlaceOrder(predictionId, order);
+      setMasterKnockoutState(next);
+      setToast('Third-place order updated');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update third-place order');
+    }
+  };
+
+  const handleMoveThirdPlace = (groupLetter: string, direction: 'up' | 'down') => {
+    if (!masterKnockoutState) return;
+    const nextOrder = swapThirdPlaceOrder(masterKnockoutState.thirdPlaceOrder, groupLetter, direction);
+    if (!nextOrder) return;
+    const apply = () => void persistThirdPlaceOrder(nextOrder);
+    confirmIfKnockoutResults(apply);
+  };
+
+  const knockoutSimOptions = {
+    count: predictionKnockoutMcCount,
+    upsetVariance,
+    ratingEloWeight,
+    tournamentEloDeltaWeight,
+  };
+
+  const handleSimulatePredictionKnockoutRound = async (
+    roundName: string,
+    options?: { resimulate?: boolean },
+  ) => {
+    if (predictionId == null || publicMode) return;
+    setSimulatingPredictionKnockout(true);
+    setError(null);
+    try {
+      const next = await api.simulatePredictionKnockoutRound(predictionId, roundName, {
+        ...knockoutSimOptions,
+        resimulate: options?.resimulate ?? false,
+      });
+      setMasterKnockoutState(next);
+      const round = next.rounds.find((entry) => entry.name === roundName);
+      setToast(
+        options?.resimulate
+          ? `${round?.label ?? roundName} re-sampled (${predictionKnockoutMcCount.toLocaleString()} draws per match)`
+          : `${round?.label ?? roundName} simulated`,
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to simulate knockout round');
+    } finally {
+      setSimulatingPredictionKnockout(false);
+    }
+  };
+
+  const lastSimulatedKnockoutRound = useMemo(() => {
+    if (!masterKnockoutState) return null;
+    for (let index = masterKnockoutState.rounds.length - 1; index >= 0; index -= 1) {
+      const round = masterKnockoutState.rounds[index];
+      if (round?.isComplete) return round;
+    }
+    return null;
+  }, [masterKnockoutState]);
+
+  const handleResampleLastKnockoutRound = async () => {
+    if (!lastSimulatedKnockoutRound) return;
+    await handleSimulatePredictionKnockoutRound(lastSimulatedKnockoutRound.name, {
+      resimulate: true,
+    });
+  };
+
+  const handleBulkSimulatePredictionKnockout = async (
+    roundName: string,
+    count: number,
+    resimulate: boolean,
+  ) => {
+    if (predictionId == null || publicMode || !masterKnockoutState) return;
+
+    const round = masterKnockoutState.rounds.find((entry) => entry.name === roundName);
+    if (!round) return;
+
+    setSimulatingPredictionKnockout(true);
+    setPredictionKnockoutBulkError(null);
+    setPredictionKnockoutMcCount(count);
+    setError(null);
+    setPredictionKnockoutBulkProgress({
+      roundLabel: round.label,
+      matchCount: round.matches.length,
+      simulationCount: count,
+    });
+
+    try {
+      const next = await api.simulatePredictionKnockoutRound(predictionId, roundName, {
+        count,
+        upsetVariance,
+        ratingEloWeight,
+        tournamentEloDeltaWeight,
+        resimulate,
+      });
+      setMasterKnockoutState(next);
+      setToast(
+        resimulate
+          ? `${round.label} re-simulated (${count.toLocaleString()} draws per match)`
+          : `${round.label} simulated (${count.toLocaleString()} draws per match)`,
+      );
+      setShowPredictionKnockoutBulk(false);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to simulate knockout round';
+      setPredictionKnockoutBulkError(message);
+      setError(message);
+    } finally {
+      setSimulatingPredictionKnockout(false);
+      setPredictionKnockoutBulkProgress(null);
+    }
+  };
+
+  const handleClearPredictionKnockout = async () => {
+    if (predictionId == null || publicMode) return;
+    setSimulatingPredictionKnockout(true);
+    setError(null);
+    try {
+      const next = await api.clearPredictionKnockout(predictionId);
+      setMasterKnockoutState(next);
+      setToast('Knockout results cleared');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to clear knockout results');
+    } finally {
+      setSimulatingPredictionKnockout(false);
     }
   };
 
@@ -658,7 +897,7 @@ export function App() {
       <Header
         state={state}
         appView={appView}
-        showGroupView={showGroupView}
+        showGroupView={headerShowGroupView}
         publicMode={publicMode}
         consensusMode={consensusModeDraft}
         consensusModeDirty={consensusModeDirty}
@@ -674,7 +913,13 @@ export function App() {
         onTournamentEloDeltaWeightChange={handleTournamentEloDeltaWeightChange}
         onConsensusModeChange={handleConsensusModeChange}
         onSaveConsensusMode={handleSaveConsensusMode}
-        onToggleStageView={() => setViewKnockout((v) => !v)}
+        onToggleStageView={() => {
+          if (appView === 'predictions') {
+            setPredictionsViewKnockout((value) => !value);
+          } else {
+            setViewKnockout((value) => !value);
+          }
+        }}
         onOpenSimulations={() => setShowSimulations(true)}
         onOpenRatings={() => setShowRatings(true)}
         onSimulateGroupGames={handleSimulateGroup}
@@ -690,8 +935,27 @@ export function App() {
         sampleActive={consensusModeDraft === 'sample'}
         hasSavedSample={Boolean(masterStateBase?.sample?.sampledAt)}
         canSample={canSamplePrediction}
+        canResampleKnockoutRound={lastSimulatedKnockoutRound != null}
         sampling={samplingPrediction}
+        simulatingPredictionKnockout={simulatingPredictionKnockout}
         onSample={publicMode ? undefined : handleSampleButton}
+        predictionKnockoutRounds={masterKnockoutState?.rounds}
+        predictionGroupStageComplete={masterKnockoutState?.groupStageComplete ?? false}
+        predictionHasKnockoutResults={masterKnockoutState?.hasKnockoutResults ?? false}
+        onSimulatePredictionKnockoutRound={
+          publicMode ? undefined : handleSimulatePredictionKnockoutRound
+        }
+        onOpenPredictionKnockoutBulk={
+          publicMode
+            ? undefined
+            : () => {
+                setPredictionKnockoutBulkError(null);
+                setShowPredictionKnockoutBulk(true);
+              }
+        }
+        onClearPredictionKnockout={
+          publicMode ? undefined : () => void handleClearPredictionKnockout()
+        }
       />
 
       {toast && (
@@ -717,27 +981,64 @@ export function App() {
             )}
           </div>
         ) : appView === 'predictions' && masterState ? (
-          <MasterGroupView
-            predictionId={predictionId}
-            masterState={masterState}
-            fixtures={state.fixtures}
-            groupMemberships={state.groupMemberships}
-            actualResults={state?.actualResults ?? []}
-            canEditFrozenConsensus={!publicMode}
-            savingFrozenConsensus={savingFrozenConsensus}
-            onFrozenConsensusModeChange={handleFrozenConsensusModeChange}
-          />
+          predictionsShowGroupView ? (
+            <MasterGroupView
+              predictionId={predictionId}
+              masterState={masterState}
+              fixtures={state.fixtures}
+              groupMemberships={state.groupMemberships}
+              actualResults={state?.actualResults ?? []}
+              thirdPlaceOrder={masterKnockoutState?.thirdPlaceOrder}
+              canEditThirdPlace={!publicMode}
+              onMoveThirdPlaceUp={(groupLetter) => handleMoveThirdPlace(groupLetter, 'up')}
+              onMoveThirdPlaceDown={(groupLetter) => handleMoveThirdPlace(groupLetter, 'down')}
+              canEditFrozenConsensus={!publicMode}
+              savingFrozenConsensus={savingFrozenConsensus}
+              onFrozenConsensusModeChange={handleFrozenConsensusModeChange}
+            />
+          ) : masterKnockoutState ? (
+            <MasterKnockoutView
+              predictionId={predictionId}
+              masterKnockoutState={masterKnockoutState}
+              useBracketView={knockoutBracketView}
+              onViewChange={setKnockoutBracketView}
+              selectedMatchNumber={selectedMatchNumber}
+              simulating={simulatingPredictionKnockout}
+              consensusModeDirty={consensusModeDirty}
+              actualResults={state?.actualResults ?? []}
+              onSelectMatch={setSelectedMatchNumber}
+            />
+          ) : (
+            <div className="master-empty">
+              <p>Loading knockout state…</p>
+            </div>
+          )
         ) : appView === 'results' && !publicMode && actualState ? (
-          <ActualResultsView
-            actualState={actualState}
-            selectedMatchNumber={selectedMatchNumber}
-            editingMatchNumber={editingMatchNumber}
-            onSelectMatch={setSelectedMatchNumber}
-            onStartEdit={setEditingMatchNumber}
-            onSaveScore={handleSaveActualScore}
-            onCancelEdit={() => setEditingMatchNumber(null)}
-            onClearScore={handleClearActualScore}
-          />
+          showGroupView ? (
+            <ActualResultsView
+              actualState={actualState}
+              selectedMatchNumber={selectedMatchNumber}
+              editingMatchNumber={editingMatchNumber}
+              onSelectMatch={setSelectedMatchNumber}
+              onStartEdit={setEditingMatchNumber}
+              onSaveScore={handleSaveActualScore}
+              onCancelEdit={() => setEditingMatchNumber(null)}
+              onClearScore={handleClearActualScore}
+            />
+          ) : (
+            <ActualResultsKnockoutView
+              actualState={actualState}
+              useBracketView={knockoutBracketView}
+              onViewChange={setKnockoutBracketView}
+              selectedMatchNumber={selectedMatchNumber}
+              editingMatchNumber={editingMatchNumber}
+              onSelectMatch={setSelectedMatchNumber}
+              onStartEdit={setEditingMatchNumber}
+              onSaveScore={handleSaveActualScore}
+              onCancelEdit={() => setEditingMatchNumber(null)}
+              onClearScore={handleClearActualScore}
+            />
+          )
         ) : showGroupView ? (
           <GroupPhaseView
             state={state}
@@ -822,6 +1123,33 @@ export function App() {
         />
       )}
 
+      {showPredictionKnockoutBulk && masterKnockoutState && (
+        <PredictionKnockoutBulkModal
+          running={simulatingPredictionKnockout}
+          progress={predictionKnockoutBulkProgress}
+          error={predictionKnockoutBulkError}
+          rounds={masterKnockoutState.rounds}
+          groupStageComplete={masterKnockoutState.groupStageComplete}
+          consensusMode={consensusModeSaved}
+          consensusModeDirty={consensusModeDirty}
+          upsetVariance={upsetVariance}
+          ratingEloWeight={ratingEloWeight}
+          tournamentEloDeltaWeight={tournamentEloDeltaWeight}
+          mcCount={predictionKnockoutMcCount}
+          onUpsetVarianceChange={setUpsetVariance}
+          onRatingEloWeightChange={handleRatingEloWeightChange}
+          onTournamentEloDeltaWeightChange={handleTournamentEloDeltaWeightChange}
+          onMcCountChange={setPredictionKnockoutMcCount}
+          onClose={() => {
+            if (!simulatingPredictionKnockout) {
+              setShowPredictionKnockoutBulk(false);
+              setPredictionKnockoutBulkError(null);
+            }
+          }}
+          onRun={handleBulkSimulatePredictionKnockout}
+        />
+      )}
+
       {showMasterTeamStats && (
         <MasterTeamStatsModal
           predictionId={predictionId}
@@ -834,6 +1162,23 @@ export function App() {
         <SampleConfirmModal
           onConfirm={() => void runPredictionSample()}
           onClose={() => setShowResampleConfirm(false)}
+        />
+      )}
+
+      {showKnockoutClearConfirm && (
+        <KnockoutClearConfirmModal
+          title="Clear knockout results?"
+          message="Changing group standings or third-place teams will clear all simulated knockout results for this prediction."
+          confirmLabel="Continue"
+          onConfirm={() => {
+            setShowKnockoutClearConfirm(false);
+            knockoutClearAction?.();
+            setKnockoutClearAction(null);
+          }}
+          onClose={() => {
+            setShowKnockoutClearConfirm(false);
+            setKnockoutClearAction(null);
+          }}
         />
       )}
 

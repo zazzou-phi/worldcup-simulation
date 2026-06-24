@@ -1,4 +1,4 @@
-import type { TournamentState } from '../types.js';
+import type { TournamentState, KnockoutRoundAvailability } from '../types.js';
 import { phaseLabel } from '@shared/engine/phase.js';
 import type { AppView } from '../lib/appView.js';
 import { DEFAULT_UPSET_VARIANCE } from '../lib/upsetVariance.js';
@@ -6,6 +6,7 @@ import type { ConsensusMode } from '../lib/consensusMode.js';
 import { formatConsensusMode } from '../lib/consensusMode.js';
 import { MOBILE_QUERY, useMediaQuery } from '../lib/useMediaQuery.js';
 import { SimulateMenu } from './SimulateMenu.js';
+import { PredictionKnockoutSimulateMenu } from './PredictionKnockoutSimulateMenu.js';
 import { HeaderDropdownMenu } from './HeaderDropdownMenu.js';
 import { UpsetFactorControl } from './UpsetFactorControl.js';
 import { ConsensusModeControl } from './ConsensusModeControl.js';
@@ -46,8 +47,16 @@ interface Props {
   sampleActive?: boolean;
   hasSavedSample?: boolean;
   canSample?: boolean;
+  canResampleKnockoutRound?: boolean;
   sampling?: boolean;
+  simulatingPredictionKnockout?: boolean;
   onSample?: () => void;
+  predictionKnockoutRounds?: KnockoutRoundAvailability[];
+  predictionGroupStageComplete?: boolean;
+  predictionHasKnockoutResults?: boolean;
+  onSimulatePredictionKnockoutRound?: (roundName: string) => void;
+  onOpenPredictionKnockoutBulk?: () => void;
+  onClearPredictionKnockout?: () => void;
 }
 
 export function Header({
@@ -82,8 +91,16 @@ export function Header({
   sampleActive = false,
   hasSavedSample = false,
   canSample = false,
+  canResampleKnockoutRound = false,
   sampling = false,
+  simulatingPredictionKnockout = false,
   onSample,
+  predictionKnockoutRounds,
+  predictionGroupStageComplete = false,
+  predictionHasKnockoutResults = false,
+  onSimulatePredictionKnockoutRound,
+  onOpenPredictionKnockoutBulk,
+  onClearPredictionKnockout,
 }: Props) {
   const { simulation } = state;
   const narrow = useMediaQuery(MOBILE_QUERY);
@@ -110,8 +127,8 @@ export function Header({
     </>
   );
 
-  const showStageSetting = isSimulationsView;
-  const showUpsetSetting = isSimulationsView;
+  const showStageSetting = isSimulationsView || isPredictionsView || isResultsView;
+  const showUpsetSetting = isSimulationsView || (isPredictionsView && !publicMode);
   const showRatings = isSimulationsView;
   const showManagePredictions = isPredictionsView && !publicMode;
   const showManageSimulations = isSimulationsView && !publicMode;
@@ -122,10 +139,19 @@ export function Header({
     showManagePredictions ||
     showManageSimulations;
 
+  const showPredictionKnockoutUpset =
+    isPredictionsView && !publicMode && !showGroupView;
+  const predictionsKnockoutView = isPredictionsView && !showGroupView;
+
+  const showPredictionKnockoutRatingSettings = showPredictionKnockoutUpset;
+
   const menuActive =
     (showUpsetSetting && upsetVariance !== DEFAULT_UPSET_VARIANCE) ||
-    (showUpsetSetting && ratingEloWeight !== DEFAULT_RATING_ELO_WEIGHT) ||
-    (showUpsetSetting && tournamentEloDeltaWeight !== DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT) ||
+    (showPredictionKnockoutRatingSettings && ratingEloWeight !== DEFAULT_RATING_ELO_WEIGHT) ||
+    (showPredictionKnockoutRatingSettings &&
+      tournamentEloDeltaWeight !== DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT) ||
+    (isSimulationsView && ratingEloWeight !== DEFAULT_RATING_ELO_WEIGHT) ||
+    (isSimulationsView && tournamentEloDeltaWeight !== DEFAULT_TOURNAMENT_ELO_DELTA_WEIGHT) ||
     (isPredictionsView && consensusModeDirty);
 
   const hasMenu = hasTopSection || hasBottomSection;
@@ -140,23 +166,43 @@ export function Header({
     >
       {showUpsetSetting && (
         <>
-          <RatingEloWeightControl
-            value={ratingEloWeight}
-            disabled={simulating}
-            onChange={onRatingEloWeightChange}
-          />
-          <TournamentFormControl
-            value={tournamentEloDeltaWeight}
-            disabled={simulating}
-            onChange={onTournamentEloDeltaWeightChange}
-          />
-          <UpsetFactorControl
-            value={upsetVariance}
-            disabled={simulating}
-            variant="compact"
-            id="header-upset-factor"
-            onChange={onUpsetVarianceChange}
-          />
+          {isSimulationsView && (
+            <>
+              <RatingEloWeightControl
+                value={ratingEloWeight}
+                disabled={simulating}
+                onChange={onRatingEloWeightChange}
+              />
+              <TournamentFormControl
+                value={tournamentEloDeltaWeight}
+                disabled={simulating}
+                onChange={onTournamentEloDeltaWeightChange}
+              />
+            </>
+          )}
+          {(isSimulationsView || showPredictionKnockoutUpset) && (
+            <UpsetFactorControl
+              value={upsetVariance}
+              disabled={simulating || simulatingPredictionKnockout}
+              variant="compact"
+              id={showPredictionKnockoutUpset ? 'header-prediction-upset-factor' : 'header-upset-factor'}
+              onChange={onUpsetVarianceChange}
+            />
+          )}
+          {showPredictionKnockoutRatingSettings && (
+            <>
+              <RatingEloWeightControl
+                value={ratingEloWeight}
+                disabled={simulatingPredictionKnockout}
+                onChange={onRatingEloWeightChange}
+              />
+              <TournamentFormControl
+                value={tournamentEloDeltaWeight}
+                disabled={simulatingPredictionKnockout}
+                onChange={onTournamentEloDeltaWeightChange}
+              />
+            </>
+          )}
         </>
       )}
       {showRatings && (
@@ -181,20 +227,36 @@ export function Header({
           {onSample != null && (
             <button
               type="button"
-              className={`btn btn-ghost ${sampleActive ? 'active' : ''}`}
-              disabled={sampling || (!hasSavedSample && !canSample)}
+              className={`btn btn-ghost ${!predictionsKnockoutView && sampleActive ? 'active' : ''}`}
+              disabled={
+                predictionsKnockoutView
+                  ? simulatingPredictionKnockout || !canResampleKnockoutRound
+                  : sampling || (!hasSavedSample && !canSample)
+              }
               title={
-                sampleActive
-                  ? hasSavedSample
-                    ? 'Sample new pool scores for unlocked fixtures'
-                    : 'Sample pool scores for unlocked fixtures'
-                  : hasSavedSample
-                    ? 'Use saved pool sample scores in standings'
-                    : 'Switch to sample view and sample pool scores'
+                predictionsKnockoutView
+                  ? canResampleKnockoutRound
+                    ? 'Re-run Monte Carlo for the latest simulated knockout round only'
+                    : 'Simulate a knockout round first'
+                  : sampleActive
+                    ? hasSavedSample
+                      ? 'Sample new pool scores for unlocked group fixtures'
+                      : 'Sample pool scores for unlocked group fixtures'
+                    : hasSavedSample
+                      ? 'Use saved pool sample scores in group standings'
+                      : 'Switch to sample view and sample pool scores'
               }
               onClick={onSample}
             >
-              {sampling ? 'Sampling…' : sampleActive && hasSavedSample ? 'Resample' : 'Sample'}
+              {predictionsKnockoutView
+                ? simulatingPredictionKnockout
+                  ? 'Resampling…'
+                  : 'Resample round'
+                : sampling
+                  ? 'Sampling…'
+                  : sampleActive && hasSavedSample
+                    ? 'Resample'
+                    : 'Sample'}
             </button>
           )}
           {consensusMode != null && (
@@ -262,6 +324,9 @@ export function Header({
     </HeaderDropdownMenu>
   ) : null;
 
+  const showPredictionKnockoutSimulate =
+    isPredictionsView && !showGroupView && !publicMode && predictionKnockoutRounds != null;
+
   const simulateMenu = isSimulationsView ? (
     <SimulateMenu
       state={state}
@@ -272,6 +337,16 @@ export function Header({
       onSimulateKnockouts={onSimulateKnockoutsThrough}
       onBulk={onOpenMonteCarlo}
       onClear={onClearSimulation}
+    />
+  ) : showPredictionKnockoutSimulate ? (
+    <PredictionKnockoutSimulateMenu
+      rounds={predictionKnockoutRounds}
+      groupStageComplete={predictionGroupStageComplete}
+      simulating={simulatingPredictionKnockout}
+      hasKnockoutResults={predictionHasKnockoutResults}
+      onSimulateRound={onSimulatePredictionKnockoutRound!}
+      onOpenBulk={onOpenPredictionKnockoutBulk}
+      onClearKnockout={onClearPredictionKnockout}
     />
   ) : null;
 

@@ -14,6 +14,7 @@ import type {
   ActualMatchResult,
   MatchStatus,
   MasterGroupState,
+  MasterKnockoutState,
   MasterTeamStats,
   OutcomeDistribution,
   Prediction,
@@ -22,6 +23,7 @@ import type {
   ValidateSelectionResult,
   RatingEloWeight,
   TournamentEloDeltaWeight,
+  ThirdPlaceOrderRow,
 } from '../engine/types.js';
 import { chooseConsensus, getDefaultConsensusMode, parseConsensusMode } from '../engine/consensus.js';
 import { winnerFromGoals } from '../engine/matchSimulator.js';
@@ -57,6 +59,27 @@ import {
   computeActualPhase,
   KNOCKOUT_ELIGIBLE_PHASES,
 } from '../engine/phase.js';
+import {
+  buildPredictionKnockoutRatings,
+  buildPredictionSlotContext,
+  canResimulateKnockoutRound,
+  computeKnockoutRoundAvailability,
+  getQualifyingThirdGroupsFromOrder,
+  isGroupStageCompleteForPrediction,
+  simulatePredictionKnockoutRound,
+  type ThirdPlaceOrderEntry,
+} from '../engine/predictionKnockout.js';
+import {
+  clearKnockoutResultsFromRoundOnward,
+  clearPredictionKnockoutResults,
+  clearPredictionThirdPlaceOrder,
+  deletePredictionKnockoutData,
+  ensurePredictionThirdPlaceOrder,
+  hasPredictionKnockoutResults,
+  readPredictionKnockoutResults,
+  writePredictionKnockoutRound,
+  writePredictionThirdPlaceOrder,
+} from './predictionKnockoutStorage.js';
 import {
   deletePredictionAggregates,
   readPredictionMatchDistributions,
@@ -564,6 +587,9 @@ export class Repository {
       .where(eq(schema.predictions.id, id))
       .returning()
       .get();
+    if (row) {
+      this.invalidatePredictionKnockout(id, true);
+    }
     return row ? mapPrediction(row) : null;
   }
 
@@ -580,6 +606,7 @@ export class Repository {
     } catch (err) {
       throw new FrozenMatchError(err instanceof Error ? err.message : 'Failed to update frozen match');
     }
+    this.invalidatePredictionKnockout(predictionId, true);
     return this.buildMasterGroupView(predictionId);
   }
 
@@ -591,6 +618,7 @@ export class Repository {
       .delete(schema.predictionFrozenMatches)
       .where(eq(schema.predictionFrozenMatches.predictionId, id))
       .run();
+    deletePredictionKnockoutData(this.db, id);
     deletePredictionAggregates(this.db, id);
     this.db.delete(schema.predictions).where(eq(schema.predictions.id, id)).run();
     return true;
@@ -608,6 +636,7 @@ export class Repository {
         err instanceof Error ? err.message : 'Failed to perform prediction sample',
       );
     }
+    this.invalidatePredictionKnockout(predictionId, true);
     return this.buildMasterGroupView(predictionId);
   }
 
@@ -625,7 +654,15 @@ export class Repository {
     for (const prediction of this.listPredictions()) {
       if (simulationIdInSpec(simulationId, prediction.selectionSpec)) {
         refreshSimulationInPredictionAggregates(this.db, prediction.id, simulationId);
+        this.invalidatePredictionKnockout(prediction.id, true);
       }
+    }
+  }
+
+  private invalidatePredictionKnockout(predictionId: number, resetThirdPlace = true): void {
+    clearPredictionKnockoutResults(this.db, predictionId);
+    if (resetThirdPlace) {
+      clearPredictionThirdPlaceOrder(this.db, predictionId);
     }
   }
 
@@ -848,6 +885,11 @@ export class Repository {
         .run();
       freezeMatchForAllPredictions(this.db, matchNumber, now);
     }
+    if (fixture.group != null) {
+      for (const prediction of this.listPredictions()) {
+        this.invalidatePredictionKnockout(prediction.id, true);
+      }
+    }
     return this.getActualResult(matchNumber)!;
   }
 
@@ -872,6 +914,7 @@ export class Repository {
     clearFrozenMatch(this.db, matchNumber);
     for (const prediction of this.listPredictions()) {
       rebuildPredictionAggregates(this.db, prediction.id, prediction.selectionSpec);
+      this.invalidatePredictionKnockout(prediction.id, true);
     }
   }
 
@@ -1481,6 +1524,318 @@ export class Repository {
       ...raw,
       teams: raw.teams,
       matches: raw.matches.map((m) => ({ ...m, simulationId })),
+    };
+  }
+
+  predictionHasKnockoutResults(predictionId: number): boolean {
+    return hasPredictionKnockoutResults(this.db, predictionId);
+  }
+
+  clearPredictionKnockout(predictionId: number): MasterKnockoutState {
+    if (!this.getPrediction(predictionId)) {
+      throw new Error(`Prediction not found: ${predictionId}`);
+    }
+    this.invalidatePredictionKnockout(predictionId, false);
+    return this.buildMasterKnockoutView(predictionId);
+  }
+
+  setPredictionThirdPlaceOrder(
+    predictionId: number,
+    order: ThirdPlaceOrderEntry[],
+  ): MasterKnockoutState {
+    if (!this.getPrediction(predictionId)) {
+      throw new Error(`Prediction not found: ${predictionId}`);
+    }
+    const masterGroup = this.buildMasterGroupView(predictionId);
+    const validGroups = new Set(masterGroup.groupStandings.map((group) => group.groupLetter));
+    if (order.length !== validGroups.size) {
+      throw new Error(`Third-place order must include all ${validGroups.size} groups`);
+    }
+    const positions = new Set(order.map((entry) => entry.position));
+    if (positions.size !== order.length) {
+      throw new Error('Third-place order positions must be unique');
+    }
+    for (const entry of order) {
+      if (!validGroups.has(entry.groupLetter)) {
+        throw new Error(`Unknown group letter: ${entry.groupLetter}`);
+      }
+    }
+    writePredictionThirdPlaceOrder(this.db, predictionId, order);
+    clearPredictionKnockoutResults(this.db, predictionId);
+    return this.buildMasterKnockoutView(predictionId);
+  }
+
+  simulatePredictionKnockoutRoundForPrediction(
+    predictionId: number,
+    roundName: string,
+    options: {
+      count?: number;
+      upsetVariance?: number;
+      ratingEloWeight?: number;
+      tournamentEloDeltaWeight?: number;
+      resimulate?: boolean;
+    } = {},
+  ): MasterKnockoutState {
+    if (!this.getPrediction(predictionId)) {
+      throw new Error(`Prediction not found: ${predictionId}`);
+    }
+
+    const masterGroup = this.buildMasterGroupView(predictionId);
+    const prediction = this.getPrediction(predictionId)!;
+    const teams = this.getTeams();
+    const teamsById = new Map(teams.map((team) => [team.id, team]));
+    const fixtures = this.getFixtures();
+    const groupMatches = masterGroup.resolvedMatches.filter((match) => match.fixture.group != null);
+    const groupStageComplete = isGroupStageCompleteForPrediction(
+      groupMatches.map((match) => match.result),
+    );
+    if (!groupStageComplete) {
+      throw new Error('Group stage is not complete for this prediction');
+    }
+
+    const thirdPlaceOrder = ensurePredictionThirdPlaceOrder(
+      this.db,
+      predictionId,
+      masterGroup.groupStandings,
+    );
+    let knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+    let { ctx } = buildPredictionSlotContext(
+      masterGroup.groupStandings,
+      thirdPlaceOrder,
+      fixtures,
+      knockoutResults,
+      teamsById,
+    );
+
+    const rounds = computeKnockoutRoundAvailability(
+      fixtures,
+      ctx,
+      teamsById,
+      knockoutResults,
+      groupStageComplete,
+    );
+    const round = rounds.find((entry) => entry.name === roundName);
+    if (!round) {
+      throw new RangeError(`Unknown knockout round: ${roundName}`);
+    }
+
+    const resimulateCheck = canResimulateKnockoutRound(
+      fixtures,
+      ctx,
+      teamsById,
+      knockoutResults,
+      groupStageComplete,
+      roundName,
+    );
+
+    if (round.isComplete) {
+      if (!options.resimulate) {
+        throw new Error(round.disabledReason ?? 'Round already simulated');
+      }
+      if (!resimulateCheck.allowed) {
+        throw new Error(resimulateCheck.disabledReason ?? 'Round cannot be re-simulated');
+      }
+      clearKnockoutResultsFromRoundOnward(this.db, predictionId, roundName);
+      knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+      const rebuilt = buildPredictionSlotContext(
+        masterGroup.groupStandings,
+        thirdPlaceOrder,
+        fixtures,
+        knockoutResults,
+        teamsById,
+      );
+      ctx = rebuilt.ctx;
+    } else if (!round.canSimulate) {
+      throw new Error(round.disabledReason ?? 'Round cannot be simulated');
+    }
+
+    const eloWeight = options.ratingEloWeight ?? this.getRatingEloWeight();
+    const deltaWeight = options.tournamentEloDeltaWeight ?? this.getTournamentEloDeltaWeight();
+    const ratingsByTeamId = buildPredictionKnockoutRatings(
+      teams,
+      fixtures,
+      ctx,
+      teamsById,
+      groupMatches.map((match) => ({ fixture: match.fixture, result: match.result })),
+      knockoutResults,
+      eloWeight,
+      deltaWeight,
+    );
+
+    const results = simulatePredictionKnockoutRound(
+      roundName,
+      fixtures,
+      ctx,
+      teamsById,
+      prediction.consensusMode,
+      { ...options, ratingsByTeamId },
+    );
+
+    writePredictionKnockoutRound(
+      this.db,
+      predictionId,
+      results.map((result) => ({
+        matchNumber: result.matchNumber,
+        goalsHome: result.goalsHome,
+        goalsAway: result.goalsAway,
+        winnerTeamId: result.winnerTeamId!,
+        penGoalsHome: result.penGoalsHome ?? null,
+        penGoalsAway: result.penGoalsAway ?? null,
+        distribution: result.distribution,
+      })),
+    );
+
+    return this.buildMasterKnockoutView(predictionId);
+  }
+
+  buildMasterKnockoutView(predictionId: number): MasterKnockoutState {
+    const masterGroup = this.buildMasterGroupView(predictionId);
+    const teams = this.getTeams();
+    const teamsById = new Map(teams.map((team) => [team.id, team]));
+    const fixtures = this.getFixtures();
+    const knockoutFixtures = fixtures.filter((fixture) => fixture.group == null);
+    const actualResults = this.getActualResults();
+    const actualByMatch = new Map(actualResults.map((result) => [result.matchNumber, result]));
+
+    const groupMatches = masterGroup.resolvedMatches.filter((match) => match.fixture.group != null);
+    const groupStageComplete = isGroupStageCompleteForPrediction(
+      groupMatches.map((match) => match.result),
+    );
+
+    const thirdPlaceOrderEntries = ensurePredictionThirdPlaceOrder(
+      this.db,
+      predictionId,
+      masterGroup.groupStandings,
+    );
+    const qualifyingThirdGroups = getQualifyingThirdGroupsFromOrder(thirdPlaceOrderEntries);
+
+    const thirdPlaceOrder: ThirdPlaceOrderRow[] = thirdPlaceOrderEntries.map((entry) => {
+      const group = masterGroup.groupStandings.find(
+        (standing) => standing.groupLetter === entry.groupLetter,
+      );
+      const row = group?.rows[2];
+      if (!row) {
+        throw new Error(`Missing third-place row for group ${entry.groupLetter}`);
+      }
+      return {
+        groupLetter: entry.groupLetter,
+        position: entry.position,
+        teamId: row.teamId,
+        team: row.team,
+        points: row.points,
+        goalDifference: row.goalDifference,
+        goalsFor: row.goalsFor,
+        qualified: entry.position <= 8,
+      };
+    });
+
+    const knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+    const { ctx, annexCCombinationId } = buildPredictionSlotContext(
+      masterGroup.groupStandings,
+      thirdPlaceOrderEntries,
+      fixtures,
+      knockoutResults,
+      teamsById,
+    );
+
+    const rounds = computeKnockoutRoundAvailability(
+      fixtures,
+      ctx,
+      teamsById,
+      knockoutResults,
+      groupStageComplete,
+    );
+
+    const knockoutResultByMatch = new Map(
+      knockoutResults.map((result) => [result.matchNumber, result]),
+    );
+
+    const prediction = this.getPrediction(predictionId)!;
+    const distributions: Record<number, OutcomeDistribution> = {};
+    for (const result of knockoutResults) {
+      if (!result.distribution || result.distribution.total <= 0) continue;
+      distributions[result.matchNumber] = {
+        ...result.distribution,
+        consensusMode: prediction.consensusMode,
+      };
+    }
+
+    const resolvedMatches: ResolvedMatch[] = knockoutFixtures.map((fixture) => {
+      const { home, away } = resolveMatchTeams(fixture, ctx, teamsById);
+      const persisted = knockoutResultByMatch.get(fixture.matchNumber);
+      const actual = actualByMatch.get(fixture.matchNumber);
+      const isLocked = this.isMatchLocked(fixture.matchNumber);
+
+      let result: SimulationMatch;
+      if (actual) {
+        result = {
+          simulationId: 0,
+          matchNumber: fixture.matchNumber,
+          teamHomeId: home?.id ?? fixture.teamHomeId,
+          teamAwayId: away?.id ?? fixture.teamAwayId,
+          goalsHome: actual.goalsHome,
+          goalsAway: actual.goalsAway,
+          penGoalsHome: null,
+          penGoalsAway: null,
+          winnerTeamId: actual.winnerTeamId,
+          status: 'played',
+        };
+      } else if (persisted) {
+        result = {
+          simulationId: 0,
+          matchNumber: fixture.matchNumber,
+          teamHomeId: home?.id ?? null,
+          teamAwayId: away?.id ?? null,
+          goalsHome: persisted.goalsHome,
+          goalsAway: persisted.goalsAway,
+          penGoalsHome: persisted.penGoalsHome,
+          penGoalsAway: persisted.penGoalsAway,
+          winnerTeamId: persisted.winnerTeamId,
+          status: 'played',
+        };
+      } else {
+        result = {
+          simulationId: 0,
+          matchNumber: fixture.matchNumber,
+          teamHomeId: home?.id ?? null,
+          teamAwayId: away?.id ?? null,
+          goalsHome: null,
+          goalsAway: null,
+          penGoalsHome: null,
+          penGoalsAway: null,
+          winnerTeamId: null,
+          status: 'scheduled',
+        };
+      }
+
+      return {
+        fixture,
+        result,
+        homeTeam: home,
+        awayTeam: away,
+        homeLabel: home ? home.name : fixture.slotHome,
+        awayLabel: away ? away.name : fixture.slotAway,
+        isLocked,
+      };
+    });
+
+    return {
+      consensusMode: masterGroup.consensusMode,
+      resolvedMatches,
+      thirdPlaceOrder,
+      qualifyingThirdGroups,
+      annexCCombinationId,
+      distributions,
+      rounds: rounds.map((round) => ({
+        name: round.name,
+        label: round.label,
+        matches: [...round.matches],
+        canSimulate: round.canSimulate,
+        isComplete: round.isComplete,
+        disabledReason: round.disabledReason,
+      })),
+      hasKnockoutResults: knockoutResults.length > 0,
+      groupStageComplete,
     };
   }
 }

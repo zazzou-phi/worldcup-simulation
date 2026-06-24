@@ -1,7 +1,12 @@
 import { chooseConsensus, type ConsensusMode, type MatchOutcome } from '@shared/engine/consensus.js';
+import { SIMULATION_KNOCKOUT_ROUNDS } from '@shared/engine/simulationRounds.js';
 import type { OutcomeDistribution, ResolvedMatch } from '../types.js';
 
 export const MAX_DOUBLE_DOWN = 10;
+export const KNOCKOUT_R32_DOUBLE_DOWN_COUNT = 1;
+
+const roundOf32 = SIMULATION_KNOCKOUT_ROUNDS.find((round) => round.name === 'round_of_32');
+export const KNOCKOUT_R32_MATCH_NUMBERS = new Set(roundOf32?.matches ?? []);
 
 function outcomeFromScoreline(goalsHome: number, goalsAway: number): MatchOutcome {
   if (goalsHome > goalsAway) return 'homeWin';
@@ -35,7 +40,16 @@ export function predictedConsensusScore(
   dist: OutcomeDistribution,
   mode: ConsensusMode,
   sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>,
+  options?: { preferPlayedResult?: boolean },
 ): { goalsHome: number; goalsAway: number } | null {
+  if (
+    options?.preferPlayedResult &&
+    match.result.status === 'played' &&
+    match.result.goalsHome != null &&
+    match.result.goalsAway != null
+  ) {
+    return { goalsHome: match.result.goalsHome, goalsAway: match.result.goalsAway };
+  }
   if (!match.homeTeam || !match.awayTeam) return null;
   return chooseConsensus({
     mode,
@@ -55,6 +69,7 @@ export function pickDoubleDownMatches(
   count: number,
   eligibleMatchNumbers?: ReadonlySet<number>,
   sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>,
+  options?: { preferPlayedResult?: boolean },
 ): Set<number> {
   const limit = Math.max(0, Math.min(count, MAX_DOUBLE_DOWN));
   const matchesByNumber = new Map(
@@ -65,7 +80,7 @@ export function pickDoubleDownMatches(
     .map(([matchNumber, dist]) => {
       const match = matchesByNumber.get(Number(matchNumber));
       if (!match) return null;
-      const predicted = predictedConsensusScore(match, dist, mode, sampleResults);
+      const predicted = predictedConsensusScore(match, dist, mode, sampleResults, options);
       if (!predicted) return null;
       return {
         matchNumber: Number(matchNumber),
@@ -91,6 +106,7 @@ export function buildDoubledMatchNumbers(
   totalCount: number,
   actualMatchNumbers: ReadonlySet<number>,
   sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>,
+  options?: { preferPlayedResult?: boolean },
 ): Set<number> {
   const fixed = new Set(
     [...fixedMatchNumbers].filter((matchNumber) => actualMatchNumbers.has(matchNumber)),
@@ -108,6 +124,51 @@ export function buildDoubledMatchNumbers(
     remaining,
     eligible,
     sampleResults,
+    options,
+  );
+  return new Set([...fixed, ...autoPicked]);
+}
+
+/** One double-down in the Round of 32, using the same pick logic as the group stage. */
+export function buildKnockoutR32DoubledMatchNumbers(
+  fixedMatchNumbers: ReadonlySet<number>,
+  resolvedMatches: ResolvedMatch[],
+  distributions: Record<string, OutcomeDistribution>,
+  mode: ConsensusMode,
+  actualMatchNumbers: ReadonlySet<number>,
+): Set<number> {
+  const r32Matches = resolvedMatches.filter((match) =>
+    KNOCKOUT_R32_MATCH_NUMBERS.has(match.fixture.matchNumber),
+  );
+  const r32Distributions = Object.fromEntries(
+    Object.entries(distributions).filter(([matchNumber]) =>
+      KNOCKOUT_R32_MATCH_NUMBERS.has(Number(matchNumber)),
+    ),
+  );
+
+  const fixed = new Set(
+    [...fixedMatchNumbers].filter(
+      (matchNumber) =>
+        KNOCKOUT_R32_MATCH_NUMBERS.has(matchNumber) && actualMatchNumbers.has(matchNumber),
+    ),
+  );
+  const remaining = Math.max(0, KNOCKOUT_R32_DOUBLE_DOWN_COUNT - fixed.size);
+  let eligible = new Set(
+    Object.keys(r32Distributions)
+      .map(Number)
+      .filter((matchNumber) => !actualMatchNumbers.has(matchNumber)),
+  );
+  if (eligible.size === 0) {
+    eligible = new Set(Object.keys(r32Distributions).map(Number));
+  }
+  const autoPicked = pickDoubleDownMatches(
+    r32Matches,
+    r32Distributions,
+    mode,
+    remaining,
+    eligible,
+    undefined,
+    { preferPlayedResult: true },
   );
   return new Set([...fixed, ...autoPicked]);
 }

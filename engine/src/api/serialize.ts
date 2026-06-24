@@ -5,6 +5,7 @@ import type {
   SimulationMatch,
   ActualMatchResult,
   MasterGroupState,
+  MasterKnockoutState,
   MasterTeamStats,
 } from '../engine/types.js';
 
@@ -60,6 +61,34 @@ export function serializeMasterGroupState(state: MasterGroupState) {
           ),
         }
       : {}),
+  };
+}
+
+export function serializeMasterKnockoutState(state: MasterKnockoutState) {
+  return {
+    consensusMode: state.consensusMode,
+    resolvedMatches: state.resolvedMatches.map(serializeResolvedMatch),
+    thirdPlaceOrder: state.thirdPlaceOrder.map((row) => ({
+      groupLetter: row.groupLetter,
+      position: row.position,
+      teamId: row.teamId,
+      team: serializeTeam(row.team),
+      points: row.points,
+      goalDifference: row.goalDifference,
+      goalsFor: row.goalsFor,
+      qualified: row.qualified,
+    })),
+    qualifyingThirdGroups: state.qualifyingThirdGroups,
+    annexCCombinationId: state.annexCCombinationId,
+    rounds: state.rounds,
+    hasKnockoutResults: state.hasKnockoutResults,
+    groupStageComplete: state.groupStageComplete,
+    distributions: Object.fromEntries(
+      Object.entries(state.distributions).map(([matchNumber, distribution]) => [
+        matchNumber,
+        distribution,
+      ]),
+    ),
   };
 }
 

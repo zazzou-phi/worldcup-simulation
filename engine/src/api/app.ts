@@ -16,6 +16,12 @@ import { parseRatingEloWeight } from './ratingEloWeight.js';
 import { parseTournamentEloDeltaWeight } from './tournamentEloDeltaWeight.js';
 import { parseConsensusModeBody } from './consensusMode.js';
 import {
+  parseKnockoutRoundName,
+  parsePredictionKnockoutCount,
+  parseResimulateFlag,
+  parseThirdPlaceOrderBody,
+} from './predictionKnockout.js';
+import {
   parseGroupGamesParam,
   parseThroughRoundParam,
   simulateGroupPhase,
@@ -27,6 +33,7 @@ import {
   serializeActualResult,
   serializeMatch,
   serializeMasterGroupState,
+  serializeMasterKnockoutState,
   serializeMasterTeamStats,
   serializeTeam,
   serializeTournamentState,
@@ -48,6 +55,15 @@ export function createApiApp(repo: Repository) {
   app.get('/api/v1/actual-results', (c) =>
     c.json(repo.getActualResults().map(serializeActualResult)),
   );
+
+  app.get('/api/v1/master/knockout-state', (c) => {
+    const predictionId = resolvePredictionIdParam(c.req.query('predictionId'), repo);
+    if (predictionId == null) {
+      throw new ApiError('No predictions configured', 404, 'prediction_not_found');
+    }
+    const view = repo.buildMasterKnockoutView(predictionId);
+    return c.json(serializeMasterKnockoutState(view));
+  });
 
   app.get('/api/v1/master/group-state', (c) => {
     const predictionId = resolvePredictionIdParam(c.req.query('predictionId'), repo);
@@ -202,6 +218,73 @@ export function createApiApp(repo: Repository) {
       }
       throw err;
     }
+  });
+
+  app.post('/api/v1/predictions/:id/knockout/simulate-round', async (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    const body = await c.req.json().catch(() => null);
+    if (!body || typeof body !== 'object') {
+      throw new ApiError('Request body must be JSON', 400, 'invalid_body');
+    }
+    const round = parseKnockoutRoundName((body as { round?: unknown }).round);
+    const count = parsePredictionKnockoutCount((body as { count?: unknown }).count);
+    const upsetVariance = parseUpsetVariance((body as { upsetVariance?: unknown }).upsetVariance);
+    const ratingEloWeightRaw = (body as { ratingEloWeight?: unknown }).ratingEloWeight;
+    const tournamentEloDeltaWeightRaw = (body as { tournamentEloDeltaWeight?: unknown })
+      .tournamentEloDeltaWeight;
+    const ratingEloWeight =
+      ratingEloWeightRaw === undefined ? undefined : parseRatingEloWeight(ratingEloWeightRaw);
+    const tournamentEloDeltaWeight =
+      tournamentEloDeltaWeightRaw === undefined
+        ? undefined
+        : parseTournamentEloDeltaWeight(tournamentEloDeltaWeightRaw);
+    const resimulate = parseResimulateFlag((body as { resimulate?: unknown }).resimulate);
+    try {
+      const view = repo.simulatePredictionKnockoutRoundForPrediction(id, round, {
+        count,
+        upsetVariance,
+        ratingEloWeight,
+        tournamentEloDeltaWeight,
+        resimulate,
+      });
+      return c.json(serializeMasterKnockoutState(view));
+    } catch (err) {
+      if (err instanceof RangeError) {
+        throw new ApiError(err.message, 400, 'invalid_body');
+      }
+      if (err instanceof Error) {
+        throw new ApiError(err.message, 409, 'knockout_simulate_error');
+      }
+      throw err;
+    }
+  });
+
+  app.put('/api/v1/predictions/:id/third-place-order', async (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    const body = await c.req.json().catch(() => null);
+    const order = parseThirdPlaceOrderBody(body);
+    try {
+      const view = repo.setPredictionThirdPlaceOrder(id, order);
+      return c.json(serializeMasterKnockoutState(view));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Invalid third-place order';
+      throw new ApiError(message, 400, 'invalid_body');
+    }
+  });
+
+  app.post('/api/v1/predictions/:id/knockout/clear', (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    const view = repo.clearPredictionKnockout(id);
+    return c.json(serializeMasterKnockoutState(view));
   });
 
   app.get('/api/v1/predictions/:id/team-stats', (c) => {

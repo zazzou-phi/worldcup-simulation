@@ -118,7 +118,7 @@ export function FixtureList({
           const canToggleFixedDouble =
             showDoubleMarks && hasActual && onToggleFixedDouble != null;
           const showAutoDouble =
-            showDoubleMarks && played && !hidePredicted && isDoubled && !canToggleFixedDouble;
+            showDoubleMarks && isDoubled && !canToggleFixedDouble && !hidePredicted;
 
           return (
             <div

@@ -7,6 +7,7 @@ import type {
   ActualResultsState,
   ApiErrorBody,
   MasterGroupState,
+  MasterKnockoutState,
   MasterTeamStats,
   MonteCarloResult,
   Prediction,
@@ -110,6 +111,12 @@ const privateApi = {
     return request<MasterGroupState>(`/api/v1/master/group-state${qs}`);
   },
 
+  getMasterKnockoutState: (predictionId?: number) => {
+    const qs =
+      predictionId != null ? `?predictionId=${encodeURIComponent(String(predictionId))}` : '';
+    return request<MasterKnockoutState>(`/api/v1/master/knockout-state${qs}`);
+  },
+
   getMasterTeamStats: (predictionId?: number) => {
     const qs =
       predictionId != null ? `?predictionId=${encodeURIComponent(String(predictionId))}` : '';
@@ -167,6 +174,43 @@ const privateApi = {
 
   samplePrediction: (id: number) =>
     request<MasterGroupState>(`/api/v1/predictions/${id}/sample`, { method: 'POST' }),
+
+  simulatePredictionKnockoutRound: (
+    id: number,
+    round: string,
+    options?: {
+      count?: number;
+      upsetVariance?: number;
+      ratingEloWeight?: number;
+      tournamentEloDeltaWeight?: number;
+      resimulate?: boolean;
+    },
+  ) =>
+    request<MasterKnockoutState>(`/api/v1/predictions/${id}/knockout/simulate-round`, {
+      method: 'POST',
+      body: JSON.stringify({
+        round,
+        count: options?.count,
+        upsetVariance: options?.upsetVariance,
+        ratingEloWeight: options?.ratingEloWeight,
+        tournamentEloDeltaWeight: options?.tournamentEloDeltaWeight,
+        resimulate: options?.resimulate ?? false,
+      }),
+    }),
+
+  setPredictionThirdPlaceOrder: (
+    id: number,
+    order: Array<{ groupLetter: string; position: number }>,
+  ) =>
+    request<MasterKnockoutState>(`/api/v1/predictions/${id}/third-place-order`, {
+      method: 'PUT',
+      body: JSON.stringify({ order }),
+    }),
+
+  clearPredictionKnockout: (id: number) =>
+    request<MasterKnockoutState>(`/api/v1/predictions/${id}/knockout/clear`, {
+      method: 'POST',
+    }),
 
   deletePrediction: (id: number) =>
     request<void>(`/api/v1/predictions/${id}`, { method: 'DELETE' }),
@@ -336,6 +380,7 @@ const publicApiStub = {
   }),
   getActualResultsState: staticApi.getActualResultsState,
   getMasterGroupState: staticApi.getMasterGroupState,
+  getMasterKnockoutState: staticApi.getMasterKnockoutState,
   getMasterTeamStats: staticApi.getMasterTeamStats,
   rebuildMasterTeamStats: async (): Promise<MasterTeamStats> => {
     throw new Error('Not available in public mode');
@@ -367,6 +412,18 @@ const publicApiStub = {
     updatedAt: '',
   }),
   setFrozenMatchConsensusMode: async (): Promise<MasterGroupState> => {
+    throw new Error('Not available in public mode');
+  },
+  samplePrediction: async (): Promise<MasterGroupState> => {
+    throw new Error('Not available in public mode');
+  },
+  simulatePredictionKnockoutRound: async (): Promise<MasterKnockoutState> => {
+    throw new Error('Not available in public mode');
+  },
+  setPredictionThirdPlaceOrder: async (): Promise<MasterKnockoutState> => {
+    throw new Error('Not available in public mode');
+  },
+  clearPredictionKnockout: async (): Promise<MasterKnockoutState> => {
     throw new Error('Not available in public mode');
   },
   deletePrediction: async (): Promise<void> => {

@@ -37,6 +37,11 @@ interface Props {
   canModifyMatch?: (matchNumber: number) => boolean;
   actualResults?: ActualMatchResult[];
   hidePredictedWhenLocked?: boolean;
+  doubleCount?: number;
+  fixedDoubleCount?: number;
+  doubledMatchNumbers?: ReadonlySet<number>;
+  actualMatchNumbers?: ReadonlySet<number>;
+  onToggleFixedDouble?: (matchNumber: number) => void;
 }
 
 function teamClassName(match: ResolvedMatch, side: 'home' | 'away'): string {
@@ -236,6 +241,11 @@ export function KnockoutList({
   canModifyMatch,
   actualResults = [],
   hidePredictedWhenLocked = false,
+  doubleCount,
+  fixedDoubleCount,
+  doubledMatchNumbers,
+  actualMatchNumbers,
+  onToggleFixedDouble,
 }: Props) {
   const knockout = matches.filter((m) => m.fixture.group == null);
 
@@ -249,6 +259,11 @@ export function KnockoutList({
         actualResults={actualResults}
         hidePredictedWhenLocked={hidePredictedWhenLocked}
         simulating={simulating}
+        doubleCount={doubleCount}
+        fixedDoubleCount={fixedDoubleCount}
+        doubledMatchNumbers={doubledMatchNumbers}
+        actualMatchNumbers={actualMatchNumbers}
+        onToggleFixedDouble={onToggleFixedDouble}
         onSelect={onSelect}
         onStartEdit={onStartEdit}
         onSimulateMatch={onSimulateMatch}

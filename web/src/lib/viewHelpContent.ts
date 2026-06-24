@@ -110,7 +110,7 @@ function predictionsHelp(publicMode: boolean): ViewHelp {
     about.push({
       title: 'Double-down weighting',
       paragraphs: [
-        'Fixtures marked with a double-down icon are weighted more heavily when computing consensus standings. The slider in the fixture list controls how many fixtures receive this boost.',
+        'Fixtures marked with a double-down icon are weighted more heavily when computing consensus standings. On the Group stage, the counter in the fixture list controls how many group fixtures receive this boost (up to 10). On the Knockout stage, one Round of 32 fixture is marked the same way.',
       ],
     });
   }
@@ -136,10 +136,12 @@ function predictionsHelp(publicMode: boolean): ViewHelp {
     howToBullets.splice(
       3,
       0,
-      'Use Sample to switch to saved pool scores. If none exist yet, it samples unlocked fixtures from the pool. Press Sample again while active to Resample (with confirmation).',
+      'Use Sample on the Group stage to switch to saved pool scores. If none exist yet, it samples unlocked group fixtures from the pool. Press Sample again while active to Resample (with confirmation).',
+      'On the Knockout stage, Resample round in ⋮ re-runs Monte Carlo for the latest simulated knockout round only — group fixtures are not changed.',
       'Save consensus mode changes with Save mode in the ⋮ menu.',
       'Override consensus for individual fixtures in the distribution modal (frozen consensus).',
-      'Adjust the double-down count slider in the fixture list to highlight influential fixtures.',
+      'Adjust the double-down counter in the Group fixture list to highlight influential group fixtures.',
+      'On the Knockout stage, one Round of 32 fixture is auto-marked as double-down; fix it on played actual results if needed.',
       'Use Manage Predictions in the ⋮ menu to create, switch, rename, or delete prediction sets.',
     );
   }
@@ -172,9 +174,10 @@ function resultsHelp(): ViewHelp {
       {
         title: 'Controls and interactions',
         bullets: [
+          'Use Group / Knockout in the ⋮ menu to switch between group tables and the knockout bracket.',
           'Double-click a score to edit it; clear scores where allowed.',
-          'Click a team in the standings to filter the fixture list.',
-          'On mobile, use the Standings and Fixtures tabs to switch panels.',
+          'Knockout draws require picking a winner after entering equal goals.',
+          'On mobile, use the Standings and Fixtures tabs (group) or Bracket and Fixtures tabs (knockout).',
         ],
       },
     ],

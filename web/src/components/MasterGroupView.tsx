@@ -11,12 +11,13 @@ import {
 } from '../lib/doubleDown.js';
 import { isPublicMode } from '../config/appMode.js';
 import type { ConsensusMode } from '../lib/consensusMode.js';
-import type { ActualMatchResult, Fixture, MasterGroupState } from '../types.js';
+import type { ActualMatchResult, Fixture, MasterGroupState, ThirdPlaceOrderRow } from '../types.js';
 import { deriveMasterGroupStandings } from '../lib/deriveGroupStandings.js';
 import { GroupTables } from './GroupTables.js';
 import { FixtureList } from './FixtureList.js';
 import { GroupPhaseLayout } from './GroupPhaseLayout.js';
 import { MasterFixtureModal } from './MasterFixtureModal.js';
+import { ThirdPlaceEditor } from './ThirdPlaceEditor.js';
 
 interface Props {
   predictionId?: number | null;
@@ -24,6 +25,10 @@ interface Props {
   fixtures: Fixture[];
   groupMemberships: Array<{ groupLetter: string; teamId: number }>;
   actualResults?: ActualMatchResult[];
+  thirdPlaceOrder?: ThirdPlaceOrderRow[];
+  canEditThirdPlace?: boolean;
+  onMoveThirdPlaceUp?: (groupLetter: string) => void;
+  onMoveThirdPlaceDown?: (groupLetter: string) => void;
   canEditFrozenConsensus?: boolean;
   savingFrozenConsensus?: boolean;
   onFrozenConsensusModeChange?: (matchNumber: number, mode: ConsensusMode) => void;
@@ -35,6 +40,10 @@ export function MasterGroupView({
   fixtures,
   groupMemberships,
   actualResults = [],
+  thirdPlaceOrder,
+  canEditThirdPlace = false,
+  onMoveThirdPlaceUp,
+  onMoveThirdPlaceDown,
   canEditFrozenConsensus = false,
   savingFrozenConsensus = false,
   onFrozenConsensusModeChange,
@@ -174,16 +183,11 @@ export function MasterGroupView({
     <>
       <GroupPhaseLayout
         standings={
-          <>
+          <div className="group-standings-scroll">
             {!hasAnyData && (
               <div className="third-place-banner master-empty-banner">
                 No group matches played across simulations yet. Run simulations or bulk simulate to
                 build consensus.
-              </div>
-            )}
-            {qualifyingThirdGroups.length > 0 && (
-              <div className="third-place-banner">
-                Third-place race: {qualifyingThirdGroups.join(', ')}
               </div>
             )}
             <GroupTables
@@ -192,7 +196,21 @@ export function MasterGroupView({
               selectedTeamId={selectedTeamId}
               onSelectTeam={handleSelectTeam}
             />
-          </>
+            {thirdPlaceOrder && thirdPlaceOrder.length > 0 ? (
+              <ThirdPlaceEditor
+                rows={thirdPlaceOrder}
+                canEdit={canEditThirdPlace}
+                onMoveUp={(groupLetter) => onMoveThirdPlaceUp?.(groupLetter)}
+                onMoveDown={(groupLetter) => onMoveThirdPlaceDown?.(groupLetter)}
+              />
+            ) : (
+              qualifyingThirdGroups.length > 0 && (
+                <div className="third-place-banner">
+                  Third-place race: {qualifyingThirdGroups.join(', ')}
+                </div>
+              )
+            )}
+          </div>
         }
         fixtures={
           <FixtureList

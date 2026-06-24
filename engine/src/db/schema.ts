@@ -176,6 +176,39 @@ export const predictionSampleResults = sqliteTable(
   (t) => [primaryKey({ columns: [t.predictionId, t.matchNumber] })],
 );
 
+export const predictionThirdPlaceOrder = sqliteTable(
+  'prediction_third_place_order',
+  {
+    predictionId: integer('prediction_id')
+      .notNull()
+      .references(() => predictions.id),
+    groupLetter: text('group_letter').notNull(),
+    position: integer('position').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.predictionId, t.groupLetter] })],
+);
+
+export const predictionKnockoutResults = sqliteTable(
+  'prediction_knockout_results',
+  {
+    predictionId: integer('prediction_id')
+      .notNull()
+      .references(() => predictions.id),
+    matchNumber: integer('match_number')
+      .notNull()
+      .references(() => fixtures.matchNumber),
+    goalsHome: integer('goals_home').notNull(),
+    goalsAway: integer('goals_away').notNull(),
+    winnerTeamId: integer('winner_team_id')
+      .notNull()
+      .references(() => teams.id),
+    penGoalsHome: integer('pen_goals_home'),
+    penGoalsAway: integer('pen_goals_away'),
+    distributionJson: text('distribution_json'),
+  },
+  (t) => [primaryKey({ columns: [t.predictionId, t.matchNumber] })],
+);
+
 export const predictionFrozenMatches = sqliteTable(
   'prediction_frozen_matches',
   {

@@ -1,6 +1,7 @@
 import type {
   ActualResultsState,
   MasterGroupState,
+  MasterKnockoutState,
   MasterTeamStats,
   PublicMeta,
   Team,
@@ -38,6 +39,8 @@ export async function loadBootstrap(): Promise<PublicBootstrap> {
 
 export const staticApi = {
   getMasterGroupState: () => loadJson<MasterGroupState>('master-group-state.json'),
+
+  getMasterKnockoutState: () => loadJson<MasterKnockoutState>('master-knockout-state.json'),
 
   getMasterTeamStats: () => loadJson<MasterTeamStats>('master-team-stats.json'),
 

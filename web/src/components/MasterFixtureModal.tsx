@@ -47,6 +47,7 @@ interface Props {
   distribution: OutcomeDistribution | undefined;
   defaultConsensusMode: ConsensusMode;
   consensusMode?: ConsensusMode;
+  distributionSource?: 'pool' | 'knockout';
   canEditFrozenConsensus?: boolean;
   savingFrozenConsensus?: boolean;
   onFrozenConsensusModeChange?: (matchNumber: number, mode: ConsensusMode) => void;
@@ -301,6 +302,7 @@ export function MasterFixtureModal({
   distribution,
   defaultConsensusMode,
   consensusMode,
+  distributionSource = 'pool',
   canEditFrozenConsensus = false,
   savingFrozenConsensus = false,
   onFrozenConsensusModeChange,
@@ -326,17 +328,27 @@ export function MasterFixtureModal({
       ? { goalsHome: match.result.goalsHome, goalsAway: match.result.goalsAway }
       : null;
   const showFrozenConsensusControl =
-    match.isLocked && canEditFrozenConsensus && total > 0 && onFrozenConsensusModeChange != null;
+    distributionSource === 'pool' &&
+    match.isLocked &&
+    canEditFrozenConsensus &&
+    total > 0 &&
+    onFrozenConsensusModeChange != null;
+  const matchStageLabel = match.fixture.group ?? 'Knockout';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal modal-wide master-fixture-modal" onClick={(e) => e.stopPropagation()}>
         <h2>
-          Match #{match.fixture.matchNumber} · {match.fixture.group}
+          Match #{match.fixture.matchNumber} · {matchStageLabel}
         </h2>
         <p className="master-fixture-teams">
           {homeName} vs {awayName}
         </p>
+        {distributionSource === 'knockout' && total > 0 && (
+          <p className="muted master-fixture-source">
+            Distribution from {total.toLocaleString()} knockout Monte Carlo simulations
+          </p>
+        )}
         {matchLambdas && (
           <p className="master-fixture-expected-goals">
             Lambda (λ): {formatExpectedGoal(matchLambdas.lambdaHome)}–
@@ -425,7 +437,11 @@ export function MasterFixtureModal({
             </p>
           </div>
         ) : (
-          <p className="muted">No simulation data for this fixture yet.</p>
+          <p className="muted">
+            {distributionSource === 'knockout'
+              ? 'No knockout simulation data for this match yet. Simulate the round first.'
+              : 'No simulation data for this fixture yet.'}
+          </p>
         )}
 
         <div className="modal-actions">

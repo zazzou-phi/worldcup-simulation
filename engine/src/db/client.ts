@@ -137,6 +137,23 @@ export function initSchema(sqlite: Database.Database) {
       sampled_at TEXT NOT NULL,
       PRIMARY KEY (prediction_id, match_number)
     );
+    CREATE TABLE IF NOT EXISTS prediction_third_place_order (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      group_letter TEXT NOT NULL,
+      position INTEGER NOT NULL,
+      PRIMARY KEY (prediction_id, group_letter)
+    );
+    CREATE TABLE IF NOT EXISTS prediction_knockout_results (
+      prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+      match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+      goals_home INTEGER NOT NULL,
+      goals_away INTEGER NOT NULL,
+      winner_team_id INTEGER NOT NULL REFERENCES teams(id),
+      pen_goals_home INTEGER,
+      pen_goals_away INTEGER,
+      distribution_json TEXT,
+      PRIMARY KEY (prediction_id, match_number)
+    );
     CREATE TABLE IF NOT EXISTS prediction_frozen_matches (
       prediction_id INTEGER NOT NULL REFERENCES predictions(id),
       match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
@@ -229,6 +246,43 @@ function migrateSchema(sqlite: Database.Database) {
   migrateConsensusModeNames(sqlite);
   migrateFrozenSampleGoals(sqlite);
   migrateActualResultPredictedGoals(sqlite);
+  migratePredictionKnockoutTables(sqlite);
+}
+
+function migratePredictionKnockoutTables(sqlite: Database.Database) {
+  if (!tableExists(sqlite, 'prediction_third_place_order')) {
+    sqlite.exec(`
+      CREATE TABLE prediction_third_place_order (
+        prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+        group_letter TEXT NOT NULL,
+        position INTEGER NOT NULL,
+        PRIMARY KEY (prediction_id, group_letter)
+      )
+    `);
+  }
+  if (!tableExists(sqlite, 'prediction_knockout_results')) {
+    sqlite.exec(`
+      CREATE TABLE prediction_knockout_results (
+        prediction_id INTEGER NOT NULL REFERENCES predictions(id),
+        match_number INTEGER NOT NULL REFERENCES fixtures(match_number),
+        goals_home INTEGER NOT NULL,
+        goals_away INTEGER NOT NULL,
+        winner_team_id INTEGER NOT NULL REFERENCES teams(id),
+        pen_goals_home INTEGER,
+        pen_goals_away INTEGER,
+        distribution_json TEXT,
+        PRIMARY KEY (prediction_id, match_number)
+      )
+    `);
+    return;
+  }
+
+  const columns = sqlite
+    .prepare(`PRAGMA table_info(prediction_knockout_results)`)
+    .all() as Array<{ name: string }>;
+  if (!columns.some((column) => column.name === 'distribution_json')) {
+    sqlite.exec(`ALTER TABLE prediction_knockout_results ADD COLUMN distribution_json TEXT`);
+  }
 }
 
 function migratePredictionSampleResults(sqlite: Database.Database) {
