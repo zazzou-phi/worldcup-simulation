@@ -20,6 +20,10 @@ interface Props {
   doubledMatchNumbers?: ReadonlySet<number>;
   actualMatchNumbers?: ReadonlySet<number>;
   onToggleFixedDouble?: (matchNumber: number) => void;
+  showSampleResample?: boolean;
+  canResampleMatch?: (matchNumber: number) => boolean;
+  resamplingMatchNumber?: number | null;
+  onResampleMatch?: (matchNumber: number) => void;
   onSelect: (matchNumber: number | null) => void;
   onStartEdit: (matchNumber: number) => void;
   onSimulateMatch?: (matchNumber: number) => void;
@@ -58,6 +62,10 @@ export function FixtureList({
   doubledMatchNumbers,
   actualMatchNumbers,
   onToggleFixedDouble,
+  showSampleResample = false,
+  canResampleMatch,
+  resamplingMatchNumber = null,
+  onResampleMatch,
   onSelect,
   onStartEdit,
   onSimulateMatch,
@@ -71,7 +79,9 @@ export function FixtureList({
     doubleCount != null ? Math.max(0, doubleCount - fixedDoubleCount) : 0;
 
   return (
-    <div className={`fixture-list${showDoubleMarks ? ' fixture-list-doubles' : ''}`}>
+    <div
+      className={`fixture-list${showDoubleMarks ? ' fixture-list-doubles' : ''}${showSampleResample ? ' fixture-list-sample-resample' : ''}`}
+    >
       <div className="fixture-list-header">
         <span>
           Fixtures ({matches.length})
@@ -119,6 +129,12 @@ export function FixtureList({
             showDoubleMarks && hasActual && onToggleFixedDouble != null;
           const showAutoDouble =
             showDoubleMarks && isDoubled && !canToggleFixedDouble && !hidePredicted;
+          const canResample =
+            showSampleResample &&
+            selected &&
+            !locked &&
+            onResampleMatch != null &&
+            (canResampleMatch?.(num) ?? false);
 
           return (
             <div
@@ -127,6 +143,22 @@ export function FixtureList({
               onClick={() => onSelect(selected ? null : num)}
               onDoubleClick={() => canEdit && onStartEdit(num)}
             >
+              {canResample ? (
+                <button
+                  type="button"
+                  className="fixture-resample-btn"
+                  aria-label="Resample this fixture"
+                  disabled={resamplingMatchNumber === num}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onResampleMatch!(num);
+                  }}
+                >
+                  ↻
+                </button>
+              ) : showSampleResample ? (
+                <span className="fixture-resample-placeholder" aria-hidden="true" />
+              ) : null}
               <FixturePrefix
                 round={m.fixture.round}
                 date={m.fixture.date}

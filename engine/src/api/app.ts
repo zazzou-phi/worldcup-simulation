@@ -233,6 +233,23 @@ export function createApiApp(repo: Repository) {
     }
   });
 
+  app.post('/api/v1/predictions/:id/sample/:matchNumber', (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    const matchNumber = parseIntParam(c.req.param('matchNumber'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    try {
+      const view = repo.performPredictionSampleMatch(id, matchNumber);
+      return c.json(serializeMasterGroupState(view));
+    } catch (err) {
+      if (err instanceof PredictionSampleError) {
+        throw new ApiError(err.message, 409, 'no_sample_eligible_matches');
+      }
+      throw err;
+    }
+  });
+
   app.post('/api/v1/predictions/:id/knockout/simulate-round', async (c) => {
     const id = parseIntParam(c.req.param('id'));
     if (!repo.getPrediction(id)) {

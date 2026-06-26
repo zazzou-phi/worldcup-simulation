@@ -194,3 +194,49 @@ export function performPredictionSample(db: Db, predictionId: number): Predictio
 
   return { sampledAt, matchCount: eligibleMatches.length };
 }
+
+export function performPredictionSampleMatch(
+  db: Db,
+  predictionId: number,
+  matchNumber: number,
+): PredictionSampleSummary {
+  const sqlite = getSqlite(db);
+  const fixture = sqlite
+    .prepare(
+      `SELECT f.match_number AS matchNumber, f."group" AS "group"
+       FROM fixtures f
+       WHERE f.match_number = ?`,
+    )
+    .get(matchNumber) as { matchNumber: number; group: string | null } | undefined;
+
+  if (!fixture) {
+    throw new PredictionSampleError(`Fixture not found: ${matchNumber}`);
+  }
+  if (fixture.group == null) {
+    throw new PredictionSampleError('Only group fixtures can be sampled');
+  }
+
+  const locked = sqlite
+    .prepare('SELECT 1 FROM actual_match_results WHERE match_number = ?')
+    .get(matchNumber);
+  if (locked) {
+    throw new PredictionSampleError('Locked fixtures cannot be resampled');
+  }
+
+  const sample = pickSampleGoalsFromPool(db, predictionId, matchNumber);
+  if (!sample) {
+    throw new PredictionSampleError('No simulation data for this fixture');
+  }
+
+  const sampledAt = new Date().toISOString();
+  upsertPredictionSampleResult(
+    db,
+    predictionId,
+    matchNumber,
+    sample.goalsHome,
+    sample.goalsAway,
+    sampledAt,
+  );
+
+  return readPredictionSampleSummary(db, predictionId)!;
+}

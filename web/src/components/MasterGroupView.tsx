@@ -32,6 +32,9 @@ interface Props {
   canEditFrozenConsensus?: boolean;
   savingFrozenConsensus?: boolean;
   onFrozenConsensusModeChange?: (matchNumber: number, mode: ConsensusMode) => void;
+  sampleActive?: boolean;
+  onResampleMatch?: (matchNumber: number) => void;
+  resamplingMatchNumber?: number | null;
 }
 
 export function MasterGroupView({
@@ -47,6 +50,9 @@ export function MasterGroupView({
   canEditFrozenConsensus = false,
   savingFrozenConsensus = false,
   onFrozenConsensusModeChange,
+  sampleActive = false,
+  onResampleMatch,
+  resamplingMatchNumber = null,
 }: Props) {
   const publicMode = isPublicMode();
   const [selectedTeamId, setSelectedTeamId] = useState<number | null>(null);
@@ -186,6 +192,10 @@ export function MasterGroupView({
     }
   };
 
+  const canResampleMatch = (matchNumber: number) =>
+    !actualMatchNumbers.has(matchNumber) &&
+    (masterState.distributions[String(matchNumber)]?.total ?? 0) > 0;
+
   return (
     <>
       <GroupPhaseLayout
@@ -233,6 +243,10 @@ export function MasterGroupView({
             doubledMatchNumbers={doubledMatchNumbers}
             actualMatchNumbers={publicMode ? undefined : actualMatchNumbers}
             onToggleFixedDouble={publicMode ? undefined : handleToggleFixedDouble}
+            showSampleResample={sampleActive}
+            canResampleMatch={sampleActive ? canResampleMatch : undefined}
+            resamplingMatchNumber={resamplingMatchNumber}
+            onResampleMatch={onResampleMatch}
             onSelect={handleSelectMatch}
             onStartEdit={() => {}}
             onSave={() => {}}

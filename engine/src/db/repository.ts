@@ -107,6 +107,7 @@ import {
 import {
   deletePredictionSampleResults,
   performPredictionSample as runPredictionSample,
+  performPredictionSampleMatch as runPredictionSampleMatch,
   readPredictionSampleResults,
   readPredictionSampleSummary,
   PredictionSampleError,
@@ -636,6 +637,22 @@ export class Repository {
       if (err instanceof PredictionSampleError) throw err;
       throw new PredictionSampleError(
         err instanceof Error ? err.message : 'Failed to perform prediction sample',
+      );
+    }
+    this.invalidatePredictionKnockout(predictionId);
+    return this.buildMasterGroupView(predictionId);
+  }
+
+  performPredictionSampleMatch(predictionId: number, matchNumber: number): MasterGroupState {
+    if (!this.getPrediction(predictionId)) {
+      throw new PredictionSampleError(`Prediction not found: ${predictionId}`);
+    }
+    try {
+      runPredictionSampleMatch(this.db, predictionId, matchNumber);
+    } catch (err) {
+      if (err instanceof PredictionSampleError) throw err;
+      throw new PredictionSampleError(
+        err instanceof Error ? err.message : 'Failed to resample fixture',
       );
     }
     this.invalidatePredictionKnockout(predictionId);

@@ -8,6 +8,7 @@ import { Repository } from '../src/db/repository.js';
 import type { Db } from '../src/db/client.js';
 import {
   performPredictionSample,
+  performPredictionSampleMatch,
   PredictionSampleError,
   readPredictionSampleResults,
   readPredictionSampleSummary,
@@ -154,6 +155,49 @@ describe('predictionSample', () => {
 
     repo.deletePrediction(prediction.id);
     expect(readPredictionSampleSummary(db, prediction.id)).toBeNull();
+  });
+
+  describe('performPredictionSampleMatch', () => {
+    it('resamples a single unlocked fixture without changing others', () => {
+      const { prediction, sim1, sim2 } = seedPoolWithTwoScores();
+      repo.updateMatchResult(sim1.id, 2, 1, 1, null);
+      repo.updateMatchResult(sim2.id, 2, 2, 0, null);
+      performPredictionSample(db, prediction.id);
+      const before = readPredictionSampleResults(db, prediction.id);
+      const match2Before = before.get(2)!;
+
+      performPredictionSampleMatch(db, prediction.id, 1);
+
+      const after = readPredictionSampleResults(db, prediction.id);
+      expect(after.has(1)).toBe(true);
+      expect(after.get(2)).toEqual(match2Before);
+      expect(
+        (after.get(1)!.goalsHome === 2 && after.get(1)!.goalsAway === 1) ||
+          (after.get(1)!.goalsHome === 0 && after.get(1)!.goalsAway === 2),
+      ).toBe(true);
+    });
+
+    it('rejects locked fixtures', () => {
+      const { prediction, sim1 } = seedPoolWithTwoScores();
+      repo.setActualResult(1, 3, 0, repo.getFixtures().find((f) => f.matchNumber === 1)!.teamHomeId!);
+      expect(() => performPredictionSampleMatch(db, prediction.id, 1)).toThrow(
+        PredictionSampleError,
+      );
+    });
+
+    it('rejects fixtures without pool data', () => {
+      const prediction = repo.createPrediction('Empty', '1-9999');
+      expect(() => performPredictionSampleMatch(db, prediction.id, 1)).toThrow(
+        PredictionSampleError,
+      );
+    });
+
+    it('rejects knockout fixtures', () => {
+      const { prediction } = seedPoolWithTwoScores();
+      expect(() => performPredictionSampleMatch(db, prediction.id, 73)).toThrow(
+        PredictionSampleError,
+      );
+    });
   });
 
   it('migrates legacy draw results when an empty sample table already exists', () => {

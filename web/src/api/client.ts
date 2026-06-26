@@ -175,6 +175,11 @@ const privateApi = {
   samplePrediction: (id: number) =>
     request<MasterGroupState>(`/api/v1/predictions/${id}/sample`, { method: 'POST' }),
 
+  samplePredictionMatch: (id: number, matchNumber: number) =>
+    request<MasterGroupState>(`/api/v1/predictions/${id}/sample/${matchNumber}`, {
+      method: 'POST',
+    }),
+
   simulatePredictionKnockoutRound: (
     id: number,
     round: string,
@@ -432,6 +437,9 @@ const publicApiStub = {
     throw new Error('Not available in public mode');
   },
   samplePrediction: async (): Promise<MasterGroupState> => {
+    throw new Error('Not available in public mode');
+  },
+  samplePredictionMatch: async (): Promise<MasterGroupState> => {
     throw new Error('Not available in public mode');
   },
   simulatePredictionKnockoutRound: async (): Promise<MasterKnockoutState> => {

@@ -422,6 +422,34 @@ describe('HTTP API', () => {
     expect(res.status).toBe(409);
   });
 
+  it('POST /predictions/:id/sample/:matchNumber resamples one fixture', async () => {
+    const sim1 = repo.createSimulation('Sample match API A');
+    const sim2 = repo.createSimulation('Sample match API B');
+    repo.updateMatchResult(sim1.id, 1, 1, 0, 18);
+    repo.updateMatchResult(sim2.id, 1, 0, 1, 19);
+    repo.updateMatchResult(sim1.id, 2, 2, 1, null);
+    repo.updateMatchResult(sim2.id, 2, 1, 1, null);
+    const prediction = repo.createPrediction('Sample match API', `${sim1.id}-${sim2.id}`);
+
+    const fullRes = await app.request(`/api/v1/predictions/${prediction.id}/sample`, {
+      method: 'POST',
+    });
+    const full = await json<{
+      sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>;
+    }>(fullRes);
+    const match2Before = full.sampleResults?.['2'];
+
+    const res = await app.request(`/api/v1/predictions/${prediction.id}/sample/1`, {
+      method: 'POST',
+    });
+    expect(res.status).toBe(200);
+    const master = await json<{
+      sampleResults?: Record<string, { goalsHome: number; goalsAway: number }>;
+    }>(res);
+    expect(master.sampleResults?.['2']).toEqual(match2Before);
+    expect(master.sampleResults?.['1']).toBeDefined();
+  });
+
   function playAllGroupMatches(simulationId: number) {
     const fixtures = repo.getFixtures().filter((f) => f.group);
     for (const f of fixtures) {

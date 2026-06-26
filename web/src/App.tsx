@@ -95,6 +95,7 @@ export function App() {
   const [showTournamentStats, setShowTournamentStats] = useState(false);
   const [showResampleConfirm, setShowResampleConfirm] = useState(false);
   const [samplingPrediction, setSamplingPrediction] = useState(false);
+  const [resamplingMatchNumber, setResamplingMatchNumber] = useState<number | null>(null);
   const [simulatingPredictionKnockout, setSimulatingPredictionKnockout] = useState(false);
   const [showPredictionKnockoutBulk, setShowPredictionKnockoutBulk] = useState(false);
   const [predictionKnockoutMcCount, setPredictionKnockoutMcCount] = useState(
@@ -583,6 +584,25 @@ export function App() {
     await sample();
   };
 
+  const runPredictionSampleMatch = (matchNumber: number) => {
+    if (predictionId == null || publicMode || consensusModeDraft !== 'sample') return;
+    const resample = async () => {
+      setResamplingMatchNumber(matchNumber);
+      setError(null);
+      try {
+        const next = await api.samplePredictionMatch(predictionId, matchNumber);
+        setMasterStateBase(next);
+        await refreshMasterKnockoutState(predictionId);
+        setToast(`Resampled match ${matchNumber}`);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to resample fixture');
+      } finally {
+        setResamplingMatchNumber(null);
+      }
+    };
+    confirmIfKnockoutResults(resample);
+  };
+
   const handleSampleButton = () => {
     if (publicMode || predictionId == null) return;
 
@@ -1014,6 +1034,9 @@ export function App() {
               canEditFrozenConsensus={!publicMode}
               savingFrozenConsensus={savingFrozenConsensus}
               onFrozenConsensusModeChange={handleFrozenConsensusModeChange}
+              sampleActive={consensusModeDraft === 'sample' && !publicMode}
+              onResampleMatch={runPredictionSampleMatch}
+              resamplingMatchNumber={resamplingMatchNumber}
             />
           ) : masterKnockoutState ? (
             <MasterKnockoutView

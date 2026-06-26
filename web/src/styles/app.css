@@ -766,6 +766,47 @@ button {
   grid-template-columns: 6.75rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1.5rem;
 }
 
+.fixture-list-sample-resample .fixture-row {
+  grid-template-columns: 1.5rem 6.75rem minmax(0, 1fr) auto minmax(0, 1fr) auto;
+}
+
+.fixture-list-doubles.fixture-list-sample-resample .fixture-row {
+  grid-template-columns: 1.5rem 6.75rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1.5rem;
+}
+
+.fixture-resample-btn,
+.fixture-resample-placeholder {
+  width: 1.5rem;
+  min-width: 1.5rem;
+  text-align: center;
+  justify-self: center;
+  flex-shrink: 0;
+}
+
+.fixture-resample-btn {
+  border: none;
+  background: transparent;
+  color: var(--cyan);
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.fixture-resample-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.fixture-resample-btn:disabled {
+  cursor: wait;
+  opacity: 0.45;
+}
+
+.fixture-resample-placeholder {
+  visibility: hidden;
+}
+
 .fixture-score {
   justify-self: center;
 }
@@ -1935,6 +1976,21 @@ button {
     grid-template-columns: 5.5rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1.25rem;
   }
 
+  .fixture-list-sample-resample .fixture-row {
+    grid-template-columns: 1.25rem 5.5rem minmax(0, 1fr) auto minmax(0, 1fr) auto;
+  }
+
+  .fixture-list-doubles.fixture-list-sample-resample .fixture-row {
+    grid-template-columns: 1.25rem 5.5rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1.25rem;
+  }
+
+  .fixture-resample-btn,
+  .fixture-resample-placeholder {
+    width: 1.25rem;
+    min-width: 1.25rem;
+    font-size: 1rem;
+  }
+
   .fixture-prefix {
     font-size: 0.72em;
   }
@@ -2089,6 +2145,21 @@ button {
 
   .fixture-list-doubles .fixture-row {
     grid-template-columns: 4.75rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1.1rem;
+  }
+
+  .fixture-list-sample-resample .fixture-row {
+    grid-template-columns: 1.1rem 4.75rem minmax(0, 1fr) auto minmax(0, 1fr) auto;
+  }
+
+  .fixture-list-doubles.fixture-list-sample-resample .fixture-row {
+    grid-template-columns: 1.1rem 4.75rem minmax(0, 1fr) auto minmax(0, 1fr) auto 1.1rem;
+  }
+
+  .fixture-resample-btn,
+  .fixture-resample-placeholder {
+    width: 1.1rem;
+    min-width: 1.1rem;
+    font-size: 0.95rem;
   }
 
   .fixture-prefix {
