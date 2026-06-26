@@ -70,6 +70,7 @@ import {
   simulatePredictionKnockoutRound,
   type ThirdPlaceOrderEntry,
 } from '../engine/predictionKnockout.js';
+import { validateThirdPlaceOrder } from '../engine/thirdPlaceOrder.js';
 import {
   clearKnockoutResultsFromRoundOnward,
   clearPredictionKnockoutResults,
@@ -1612,6 +1613,7 @@ export class Repository {
         throw new Error(`Unknown group letter: ${entry.groupLetter}`);
       }
     }
+    validateThirdPlaceOrder(order, view.groupStandings);
     writeActualThirdPlaceOrder(this.db, order);
     this.invalidateAllPredictionKnockouts();
     this.resyncAllSimulations();

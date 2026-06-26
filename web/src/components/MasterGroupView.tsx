@@ -129,7 +129,11 @@ export function MasterGroupView({
 
   const effectiveQualifyingThirdGroups = useMemo(() => {
     if (thirdPlaceOrder && thirdPlaceOrder.length > 0) {
-      return thirdPlaceOrder.filter((row) => row.qualified).map((row) => row.groupLetter).sort();
+      return [...thirdPlaceOrder]
+        .sort((a, b) => a.position - b.position)
+        .slice(0, 8)
+        .map((row) => row.groupLetter)
+        .sort();
     }
     return qualifyingThirdGroups;
   }, [thirdPlaceOrder, qualifyingThirdGroups]);

@@ -44,6 +44,7 @@ import { applyConsensusMode } from './lib/applyConsensusMode.js';
 import { inheritFixedDoubleDowns, inheritKnockoutR32FixedDoubleDowns } from './lib/fixedDoubleDowns.js';
 import { applyRatingEloWeightToStateTeams } from './lib/normalizeTeam.js';
 import { applyBlendRatingsToTeams } from '@shared/engine/teamRatings.js';
+import { areThirdPlaceTeamsTiedOnStats } from '@shared/engine/thirdPlaceOrder.js';
 import { MOBILE_QUERY } from './lib/useMediaQuery.js';
 import { SimulationManagerModal } from './components/SimulationManagerModal.js';
 import { PredictionManagerModal } from './components/PredictionManagerModal.js';
@@ -281,12 +282,15 @@ export function App() {
     if (index < 0) return null;
     const swapIndex = direction === 'up' ? index - 1 : index + 1;
     if (swapIndex < 0 || swapIndex >= sorted.length) return null;
+    const current = sorted[index]!;
+    const neighbor = sorted[swapIndex]!;
+    if (!areThirdPlaceTeamsTiedOnStats(current, neighbor)) return null;
     return sorted.map((row, rowIndex) => {
       if (rowIndex === index) {
-        return { groupLetter: row.groupLetter, position: sorted[swapIndex]!.position };
+        return { groupLetter: row.groupLetter, position: neighbor.position };
       }
       if (rowIndex === swapIndex) {
-        return { groupLetter: row.groupLetter, position: sorted[index]!.position };
+        return { groupLetter: row.groupLetter, position: current.position };
       }
       return { groupLetter: row.groupLetter, position: row.position };
     });
@@ -650,7 +654,10 @@ export function App() {
   const handleMoveThirdPlace = (groupLetter: string, direction: 'up' | 'down') => {
     if (!actualState?.thirdPlaceOrder) return;
     const nextOrder = swapThirdPlaceOrder(actualState.thirdPlaceOrder, groupLetter, direction);
-    if (!nextOrder) return;
+    if (!nextOrder) {
+      setError('Can only reorder teams tied on points, goal difference, and goals scored');
+      return;
+    }
     const apply = () => void persistThirdPlaceOrder(nextOrder);
     confirmIfKnockoutResults(apply);
   };

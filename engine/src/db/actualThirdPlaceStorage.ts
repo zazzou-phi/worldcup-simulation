@@ -4,6 +4,7 @@ import {
   defaultThirdPlaceOrder,
   type ThirdPlaceOrderEntry,
 } from '../engine/predictionKnockout.js';
+import { isValidThirdPlaceOrder } from '../engine/thirdPlaceOrder.js';
 import type { GroupStandings } from '../engine/types.js';
 
 export function readActualThirdPlaceOrder(db: Db): ThirdPlaceOrderEntry[] | null {
@@ -35,7 +36,9 @@ export function ensureActualThirdPlaceOrder(
   standings: GroupStandings[],
 ): ThirdPlaceOrderEntry[] {
   const existing = readActualThirdPlaceOrder(db);
-  if (existing) return existing;
+  if (existing && isValidThirdPlaceOrder(existing, standings)) {
+    return existing;
+  }
 
   const order = defaultThirdPlaceOrder(standings);
   writeActualThirdPlaceOrder(db, order);
