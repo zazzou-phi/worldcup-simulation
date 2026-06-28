@@ -39,4 +39,32 @@ describe('compareFixturesChronologically', () => {
     });
     expect(compareFixturesChronologically(early, late)).toBeLessThan(0);
   });
+
+  it('orders knockout fixtures by date and time, not match number', () => {
+    const southAfricaCanada = fixture({
+      matchNumber: 73,
+      round: 'Round of 32',
+      date: '2026-06-28',
+      time: '12:00 UTC-7',
+      group: null,
+    });
+    const brazilJapan = fixture({
+      matchNumber: 76,
+      round: 'Round of 32',
+      date: '2026-06-29',
+      time: '12:00 UTC-5',
+      group: null,
+    });
+    const germanyParaguay = fixture({
+      matchNumber: 74,
+      round: 'Round of 32',
+      date: '2026-06-29',
+      time: '16:30 UTC-4',
+      group: null,
+    });
+    const ordered = [germanyParaguay, brazilJapan, southAfricaCanada].sort(
+      compareFixturesChronologically,
+    );
+    expect(ordered.map((f) => f.matchNumber)).toEqual([73, 76, 74]);
+  });
 });

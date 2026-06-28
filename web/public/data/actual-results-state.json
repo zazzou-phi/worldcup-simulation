@@ -361,6 +361,24 @@
       "predictedGoalsAway": 1
     },
     {
+      "matchNumber": 41,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-27T08:49:14.053Z",
+      "predictedGoalsHome": 1,
+      "predictedGoalsAway": 0
+    },
+    {
+      "matchNumber": 42,
+      "goalsHome": 1,
+      "goalsAway": 5,
+      "winnerTeamId": 19,
+      "recordedAt": "2026-06-27T08:49:29.644Z",
+      "predictedGoalsHome": 0,
+      "predictedGoalsAway": 1
+    },
+    {
       "matchNumber": 43,
       "goalsHome": 0,
       "goalsAway": 0,
@@ -395,6 +413,24 @@
       "recordedAt": "2026-06-22T00:12:16.236Z",
       "predictedGoalsHome": 2,
       "predictedGoalsAway": 1
+    },
+    {
+      "matchNumber": 47,
+      "goalsHome": 0,
+      "goalsAway": 0,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-27T08:48:57.772Z",
+      "predictedGoalsHome": 2,
+      "predictedGoalsAway": 1
+    },
+    {
+      "matchNumber": 48,
+      "goalsHome": 0,
+      "goalsAway": 1,
+      "winnerTeamId": 0,
+      "recordedAt": "2026-06-27T08:48:40.167Z",
+      "predictedGoalsHome": 0,
+      "predictedGoalsAway": 3
     },
     {
       "matchNumber": 49,
@@ -433,6 +469,24 @@
       "predictedGoalsAway": 1
     },
     {
+      "matchNumber": 53,
+      "goalsHome": 1,
+      "goalsAway": 4,
+      "winnerTeamId": 2,
+      "recordedAt": "2026-06-26T21:23:10.852Z",
+      "predictedGoalsHome": 1,
+      "predictedGoalsAway": 3
+    },
+    {
+      "matchNumber": 54,
+      "goalsHome": 5,
+      "goalsAway": 0,
+      "winnerTeamId": 16,
+      "recordedAt": "2026-06-26T21:23:21.435Z",
+      "predictedGoalsHome": 2,
+      "predictedGoalsAway": 0
+    },
+    {
       "matchNumber": 55,
       "goalsHome": 3,
       "goalsAway": 0,
@@ -465,6 +519,24 @@
       "goalsAway": 2,
       "winnerTeamId": 34,
       "recordedAt": "2026-06-23T07:58:28.767Z",
+      "predictedGoalsHome": 1,
+      "predictedGoalsAway": 2
+    },
+    {
+      "matchNumber": 59,
+      "goalsHome": 3,
+      "goalsAway": 3,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-28T10:48:27.296Z",
+      "predictedGoalsHome": 1,
+      "predictedGoalsAway": 3
+    },
+    {
+      "matchNumber": 60,
+      "goalsHome": 1,
+      "goalsAway": 3,
+      "winnerTeamId": 1,
+      "recordedAt": "2026-06-28T10:48:38.435Z",
       "predictedGoalsHome": 1,
       "predictedGoalsAway": 2
     },
@@ -505,6 +577,24 @@
       "predictedGoalsAway": 2
     },
     {
+      "matchNumber": 65,
+      "goalsHome": 0,
+      "goalsAway": 0,
+      "winnerTeamId": null,
+      "recordedAt": "2026-06-28T10:48:04.464Z",
+      "predictedGoalsHome": 1,
+      "predictedGoalsAway": 3
+    },
+    {
+      "matchNumber": 66,
+      "goalsHome": 3,
+      "goalsAway": 1,
+      "winnerTeamId": 53,
+      "recordedAt": "2026-06-28T10:48:16.885Z",
+      "predictedGoalsHome": 0,
+      "predictedGoalsAway": 0
+    },
+    {
       "matchNumber": 67,
       "goalsHome": 4,
       "goalsAway": 2,
@@ -539,9 +629,27 @@
       "recordedAt": "2026-06-24T12:55:36.666Z",
       "predictedGoalsHome": 0,
       "predictedGoalsAway": 3
+    },
+    {
+      "matchNumber": 71,
+      "goalsHome": 0,
+      "goalsAway": 2,
+      "winnerTeamId": 3,
+      "recordedAt": "2026-06-27T23:37:20.839Z",
+      "predictedGoalsHome": 0,
+      "predictedGoalsAway": 2
+    },
+    {
+      "matchNumber": 72,
+      "goalsHome": 2,
+      "goalsAway": 1,
+      "winnerTeamId": 9,
+      "recordedAt": "2026-06-27T23:37:57.431Z",
+      "predictedGoalsHome": 3,
+      "predictedGoalsAway": 0
     }
   ],
-  "phase": "g2",
+  "phase": "g3",
   "groupStandings": [
     {
       "groupLetter": "A",
@@ -1297,6 +1405,36 @@
       "groupLetter": "G",
       "rows": [
         {
+          "teamId": 19,
+          "team": {
+            "id": 19,
+            "name": "Belgium",
+            "countryCode": "BE",
+            "flag": "🇧🇪",
+            "rank": 20,
+            "rating": 1867,
+            "elo": 1867,
+            "total": 876,
+            "goalsFor": 1599,
+            "goalsAgainst": 1359,
+            "eloOffensiveRating": 1.124352797848262,
+            "eloDefensiveRating": 0.7356905796624518,
+            "goalOffensiveRating": 1.1030844370685102,
+            "goalDefensiveRating": 1.2991065374095248,
+            "blendOffensiveRating": 1.119214383176341,
+            "blendDefensiveRating": 1.0090509049115008
+          },
+          "played": 3,
+          "won": 1,
+          "drawn": 2,
+          "lost": 0,
+          "goalsFor": 6,
+          "goalsAgainst": 2,
+          "goalDifference": 4,
+          "points": 5,
+          "position": 1
+        },
+        {
           "teamId": 45,
           "team": {
             "id": 45,
@@ -1316,15 +1454,15 @@
             "blendOffensiveRating": 0.8154441874263696,
             "blendDefensiveRating": 0.9997309060911429
           },
-          "played": 2,
+          "played": 3,
           "won": 1,
-          "drawn": 1,
+          "drawn": 2,
           "lost": 0,
-          "goalsFor": 4,
-          "goalsAgainst": 2,
+          "goalsFor": 5,
+          "goalsAgainst": 3,
           "goalDifference": 2,
-          "points": 4,
-          "position": 1
+          "points": 5,
+          "position": 2
         },
         {
           "teamId": 31,
@@ -1346,44 +1484,14 @@
             "blendOffensiveRating": 0.936948303095598,
             "blendDefensiveRating": 0.8088169765348496
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
-          "drawn": 2,
+          "drawn": 3,
           "lost": 0,
-          "goalsFor": 2,
-          "goalsAgainst": 2,
+          "goalsFor": 3,
+          "goalsAgainst": 3,
           "goalDifference": 0,
-          "points": 2,
-          "position": 2
-        },
-        {
-          "teamId": 19,
-          "team": {
-            "id": 19,
-            "name": "Belgium",
-            "countryCode": "BE",
-            "flag": "🇧🇪",
-            "rank": 20,
-            "rating": 1867,
-            "elo": 1867,
-            "total": 876,
-            "goalsFor": 1599,
-            "goalsAgainst": 1359,
-            "eloOffensiveRating": 1.124352797848262,
-            "eloDefensiveRating": 0.7356905796624518,
-            "goalOffensiveRating": 1.1030844370685102,
-            "goalDefensiveRating": 1.2991065374095248,
-            "blendOffensiveRating": 1.119214383176341,
-            "blendDefensiveRating": 1.0090509049115008
-          },
-          "played": 2,
-          "won": 0,
-          "drawn": 2,
-          "lost": 0,
-          "goalsFor": 1,
-          "goalsAgainst": 1,
-          "goalDifference": 0,
-          "points": 2,
+          "points": 3,
           "position": 3
         },
         {
@@ -1406,13 +1514,13 @@
             "blendOffensiveRating": 0.6764196670983348,
             "blendDefensiveRating": 1.363462972109592
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
           "drawn": 1,
-          "lost": 1,
-          "goalsFor": 3,
-          "goalsAgainst": 5,
-          "goalDifference": -2,
+          "lost": 2,
+          "goalsFor": 4,
+          "goalsAgainst": 10,
+          "goalDifference": -6,
           "points": 1,
           "position": 4
         }
@@ -1441,45 +1549,15 @@
             "blendOffensiveRating": 2.09399142248845,
             "blendDefensiveRating": 0.5428596896256752
           },
-          "played": 2,
-          "won": 1,
+          "played": 3,
+          "won": 2,
           "drawn": 1,
           "lost": 0,
-          "goalsFor": 4,
+          "goalsFor": 5,
           "goalsAgainst": 0,
-          "goalDifference": 4,
-          "points": 4,
+          "goalDifference": 5,
+          "points": 7,
           "position": 1
-        },
-        {
-          "teamId": 15,
-          "team": {
-            "id": 15,
-            "name": "Uruguay",
-            "countryCode": "UY",
-            "flag": "🇺🇾",
-            "rank": 16,
-            "rating": 1892,
-            "elo": 1892,
-            "total": 1019,
-            "goalsFor": 1610,
-            "goalsAgainst": 1254,
-            "eloOffensiveRating": 1.196867323178267,
-            "eloDefensiveRating": 0.6911173407237252,
-            "goalOffensiveRating": 0.9548080937877292,
-            "goalDefensiveRating": 1.0305113280131601,
-            "blendOffensiveRating": 1.1383860556911056,
-            "blendDefensiveRating": 0.8557858231784957
-          },
-          "played": 2,
-          "won": 0,
-          "drawn": 2,
-          "lost": 0,
-          "goalsFor": 3,
-          "goalsAgainst": 3,
-          "goalDifference": 0,
-          "points": 2,
-          "position": 2
         },
         {
           "teamId": 71,
@@ -1501,13 +1579,43 @@
             "blendOffensiveRating": 0.5403771243820972,
             "blendDefensiveRating": 1.2887034299845566
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
-          "drawn": 2,
+          "drawn": 3,
           "lost": 0,
           "goalsFor": 2,
           "goalsAgainst": 2,
           "goalDifference": 0,
+          "points": 3,
+          "position": 2
+        },
+        {
+          "teamId": 15,
+          "team": {
+            "id": 15,
+            "name": "Uruguay",
+            "countryCode": "UY",
+            "flag": "🇺🇾",
+            "rank": 16,
+            "rating": 1892,
+            "elo": 1892,
+            "total": 1019,
+            "goalsFor": 1610,
+            "goalsAgainst": 1254,
+            "eloOffensiveRating": 1.196867323178267,
+            "eloDefensiveRating": 0.6911173407237252,
+            "goalOffensiveRating": 0.9548080937877292,
+            "goalDefensiveRating": 1.0305113280131601,
+            "blendOffensiveRating": 1.1383860556911056,
+            "blendDefensiveRating": 0.8557858231784957
+          },
+          "played": 3,
+          "won": 0,
+          "drawn": 2,
+          "lost": 1,
+          "goalsFor": 3,
+          "goalsAgainst": 4,
+          "goalDifference": -1,
           "points": 2,
           "position": 3
         },
@@ -1531,14 +1639,14 @@
             "blendOffensiveRating": 0.6256794900977436,
             "blendDefensiveRating": 1.2382882208876749
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
-          "drawn": 1,
+          "drawn": 2,
           "lost": 1,
           "goalsFor": 1,
           "goalsAgainst": 5,
           "goalDifference": -4,
-          "points": 1,
+          "points": 2,
           "position": 4
         }
       ]
@@ -1566,14 +1674,14 @@
             "blendOffensiveRating": 1.7215022080980178,
             "blendDefensiveRating": 0.7727794923628781
           },
-          "played": 2,
-          "won": 2,
+          "played": 3,
+          "won": 3,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 6,
-          "goalsAgainst": 1,
-          "goalDifference": 5,
-          "points": 6,
+          "goalsFor": 10,
+          "goalsAgainst": 2,
+          "goalDifference": 8,
+          "points": 9,
           "position": 1
         },
         {
@@ -1596,13 +1704,13 @@
             "blendOffensiveRating": 1.180498467370851,
             "blendDefensiveRating": 1.0001568932491578
           },
-          "played": 2,
+          "played": 3,
           "won": 2,
           "drawn": 0,
-          "lost": 0,
-          "goalsFor": 7,
-          "goalsAgainst": 3,
-          "goalDifference": 4,
+          "lost": 1,
+          "goalsFor": 8,
+          "goalsAgainst": 7,
+          "goalDifference": 1,
           "points": 6,
           "position": 2
         },
@@ -1626,14 +1734,14 @@
             "blendOffensiveRating": 1.0770309231920567,
             "blendDefensiveRating": 0.7545623893070799
           },
-          "played": 2,
-          "won": 0,
+          "played": 3,
+          "won": 1,
           "drawn": 0,
           "lost": 2,
-          "goalsFor": 3,
+          "goalsFor": 8,
           "goalsAgainst": 6,
-          "goalDifference": -3,
-          "points": 0,
+          "goalDifference": 2,
+          "points": 3,
           "position": 3
         },
         {
@@ -1656,13 +1764,13 @@
             "blendOffensiveRating": 0.677374264416043,
             "blendDefensiveRating": 1.1016470580210327
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
           "drawn": 0,
-          "lost": 2,
+          "lost": 3,
           "goalsFor": 1,
-          "goalsAgainst": 7,
-          "goalDifference": -6,
+          "goalsAgainst": 12,
+          "goalDifference": -11,
           "points": 0,
           "position": 4
         }
@@ -1691,14 +1799,14 @@
             "blendOffensiveRating": 1.8552705695665066,
             "blendDefensiveRating": 0.6209465269142934
           },
-          "played": 2,
-          "won": 2,
+          "played": 3,
+          "won": 3,
           "drawn": 0,
           "lost": 0,
-          "goalsFor": 5,
-          "goalsAgainst": 0,
-          "goalDifference": 5,
-          "points": 6,
+          "goalsFor": 8,
+          "goalsAgainst": 1,
+          "goalDifference": 7,
+          "points": 9,
           "position": 1
         },
         {
@@ -1721,14 +1829,14 @@
             "blendOffensiveRating": 1.0348745798496353,
             "blendDefensiveRating": 1.0390507885444578
           },
-          "played": 2,
+          "played": 3,
           "won": 1,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 1,
-          "goalsFor": 3,
-          "goalsAgainst": 3,
+          "goalsFor": 6,
+          "goalsAgainst": 6,
           "goalDifference": 0,
-          "points": 3,
+          "points": 4,
           "position": 2
         },
         {
@@ -1751,14 +1859,14 @@
             "blendOffensiveRating": 0.8486653818569844,
             "blendDefensiveRating": 0.9315386830425144
           },
-          "played": 2,
+          "played": 3,
           "won": 1,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 1,
-          "goalsFor": 2,
-          "goalsAgainst": 4,
+          "goalsFor": 5,
+          "goalsAgainst": 7,
           "goalDifference": -2,
-          "points": 3,
+          "points": 4,
           "position": 3
         },
         {
@@ -1781,13 +1889,13 @@
             "blendOffensiveRating": 0.7233152893847506,
             "blendDefensiveRating": 1.0945512640293544
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
           "drawn": 0,
-          "lost": 2,
-          "goalsFor": 2,
-          "goalsAgainst": 5,
-          "goalDifference": -3,
+          "lost": 3,
+          "goalsFor": 3,
+          "goalsAgainst": 8,
+          "goalDifference": -5,
           "points": 0,
           "position": 4
         }
@@ -1816,14 +1924,14 @@
             "blendOffensiveRating": 1.3067329554875609,
             "blendDefensiveRating": 0.7537262001804617
           },
-          "played": 2,
+          "played": 3,
           "won": 2,
-          "drawn": 0,
+          "drawn": 1,
           "lost": 0,
           "goalsFor": 4,
           "goalsAgainst": 1,
           "goalDifference": 3,
-          "points": 6,
+          "points": 7,
           "position": 1
         },
         {
@@ -1846,14 +1954,14 @@
             "blendOffensiveRating": 1.3995197560565105,
             "blendDefensiveRating": 0.7387451060984849
           },
-          "played": 2,
+          "played": 3,
           "won": 1,
-          "drawn": 1,
+          "drawn": 2,
           "lost": 0,
           "goalsFor": 6,
           "goalsAgainst": 1,
           "goalDifference": 5,
-          "points": 4,
+          "points": 5,
           "position": 2
         },
         {
@@ -1876,14 +1984,14 @@
             "blendOffensiveRating": 0.7247831391679651,
             "blendDefensiveRating": 1.1195718545414954
           },
-          "played": 2,
-          "won": 0,
+          "played": 3,
+          "won": 1,
           "drawn": 1,
           "lost": 1,
-          "goalsFor": 1,
-          "goalsAgainst": 2,
-          "goalDifference": -1,
-          "points": 1,
+          "goalsFor": 4,
+          "goalsAgainst": 3,
+          "goalDifference": 1,
+          "points": 4,
           "position": 3
         },
         {
@@ -1906,13 +2014,13 @@
             "blendOffensiveRating": 0.8548986871495102,
             "blendDefensiveRating": 0.9804879760318093
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
           "drawn": 0,
-          "lost": 2,
-          "goalsFor": 1,
-          "goalsAgainst": 8,
-          "goalDifference": -7,
+          "lost": 3,
+          "goalsFor": 2,
+          "goalsAgainst": 11,
+          "goalDifference": -9,
           "points": 0,
           "position": 4
         }
@@ -1941,45 +2049,15 @@
             "blendOffensiveRating": 1.592250500147668,
             "blendDefensiveRating": 0.6499418017926265
           },
-          "played": 2,
-          "won": 1,
+          "played": 3,
+          "won": 2,
           "drawn": 1,
           "lost": 0,
-          "goalsFor": 4,
+          "goalsFor": 6,
           "goalsAgainst": 2,
-          "goalDifference": 2,
-          "points": 4,
+          "goalDifference": 4,
+          "points": 7,
           "position": 1
-        },
-        {
-          "teamId": 81,
-          "team": {
-            "id": 81,
-            "name": "Ghana",
-            "countryCode": "GH",
-            "flag": "🇬🇭",
-            "rank": 82,
-            "rating": 1503,
-            "elo": 1503,
-            "total": 778,
-            "goalsFor": 1247,
-            "goalsAgainst": 822,
-            "eloOffensiveRating": 0.45257923749391915,
-            "eloDefensiveRating": 1.8276926846543662,
-            "goalOffensiveRating": 0.9686151472316427,
-            "goalDefensiveRating": 0.8847521735564211,
-            "blendOffensiveRating": 0.577252996665739,
-            "blendDefensiveRating": 1.3701931742838196
-          },
-          "played": 2,
-          "won": 1,
-          "drawn": 1,
-          "lost": 0,
-          "goalsFor": 1,
-          "goalsAgainst": 0,
-          "goalDifference": 1,
-          "points": 4,
-          "position": 2
         },
         {
           "teamId": 9,
@@ -2001,14 +2079,44 @@
             "blendOffensiveRating": 1.2527530817866077,
             "blendDefensiveRating": 0.7329055372116952
           },
-          "played": 2,
-          "won": 1,
+          "played": 3,
+          "won": 2,
           "drawn": 0,
           "lost": 1,
-          "goalsFor": 3,
-          "goalsAgainst": 4,
-          "goalDifference": -1,
-          "points": 3,
+          "goalsFor": 5,
+          "goalsAgainst": 5,
+          "goalDifference": 0,
+          "points": 6,
+          "position": 2
+        },
+        {
+          "teamId": 81,
+          "team": {
+            "id": 81,
+            "name": "Ghana",
+            "countryCode": "GH",
+            "flag": "🇬🇭",
+            "rank": 82,
+            "rating": 1503,
+            "elo": 1503,
+            "total": 778,
+            "goalsFor": 1247,
+            "goalsAgainst": 822,
+            "eloOffensiveRating": 0.45257923749391915,
+            "eloDefensiveRating": 1.8276926846543662,
+            "goalOffensiveRating": 0.9686151472316427,
+            "goalDefensiveRating": 0.8847521735564211,
+            "blendOffensiveRating": 0.577252996665739,
+            "blendDefensiveRating": 1.3701931742838196
+          },
+          "played": 3,
+          "won": 1,
+          "drawn": 1,
+          "lost": 1,
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "goalDifference": 0,
+          "points": 4,
           "position": 3
         },
         {
@@ -2031,13 +2139,13 @@
             "blendOffensiveRating": 0.7979299447201945,
             "blendDefensiveRating": 1.147035193971235
           },
-          "played": 2,
+          "played": 3,
           "won": 0,
           "drawn": 0,
-          "lost": 2,
+          "lost": 3,
           "goalsFor": 0,
-          "goalsAgainst": 2,
-          "goalDifference": -2,
+          "goalsAgainst": 4,
+          "goalDifference": -4,
           "points": 0,
           "position": 4
         }
@@ -2046,18 +2154,45 @@
   ],
   "qualifyingThirdGroups": [
     "B",
-    "C",
+    "D",
+    "E",
     "F",
-    "G",
-    "H",
     "I",
     "J",
+    "K",
     "L"
   ],
   "thirdPlaceOrder": [
     {
-      "groupLetter": "F",
+      "groupLetter": "K",
       "position": 1,
+      "teamId": 53,
+      "team": {
+        "id": 53,
+        "name": "DR Congo",
+        "countryCode": "CD",
+        "flag": "🇨🇩",
+        "rank": 54,
+        "rating": 1655,
+        "elo": 1655,
+        "total": 547,
+        "goalsFor": 835,
+        "goalsAgainst": 641,
+        "eloOffensiveRating": 0.6617996444852501,
+        "eloDefensiveRating": 1.2498884949348488,
+        "goalOffensiveRating": 0.9224939974345626,
+        "goalDefensiveRating": 0.9812962085790669,
+        "blendOffensiveRating": 0.7247831391679651,
+        "blendDefensiveRating": 1.1195718545414954
+      },
+      "points": 4,
+      "goalDifference": 1,
+      "goalsFor": 4,
+      "qualified": true
+    },
+    {
+      "groupLetter": "F",
+      "position": 2,
       "teamId": 41,
       "team": {
         "id": 41,
@@ -2083,84 +2218,57 @@
       "qualified": true
     },
     {
-      "groupLetter": "G",
-      "position": 2,
-      "teamId": 19,
-      "team": {
-        "id": 19,
-        "name": "Belgium",
-        "countryCode": "BE",
-        "flag": "🇧🇪",
-        "rank": 20,
-        "rating": 1867,
-        "elo": 1867,
-        "total": 876,
-        "goalsFor": 1599,
-        "goalsAgainst": 1359,
-        "eloOffensiveRating": 1.124352797848262,
-        "eloDefensiveRating": 0.7356905796624518,
-        "goalOffensiveRating": 1.1030844370685102,
-        "goalDefensiveRating": 1.2991065374095248,
-        "blendOffensiveRating": 1.119214383176341,
-        "blendDefensiveRating": 1.0090509049115008
-      },
-      "points": 2,
-      "goalDifference": 0,
-      "goalsFor": 1,
-      "qualified": true
-    },
-    {
-      "groupLetter": "C",
+      "groupLetter": "E",
       "position": 3,
-      "teamId": 26,
+      "teamId": 8,
       "team": {
-        "id": 26,
-        "name": "Scotland",
-        "countryCode": null,
-        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-        "rank": 27,
-        "rating": 1770,
-        "elo": 1770,
-        "total": 868,
-        "goalsFor": 1499,
-        "goalsAgainst": 1076,
-        "eloOffensiveRating": 0.8822388799602389,
-        "eloDefensiveRating": 0.9375870644369771,
-        "goalOffensiveRating": 1.0436294057209938,
-        "goalDefensiveRating": 1.0380588223969578,
-        "blendOffensiveRating": 0.9212306694105821,
-        "blendDefensiveRating": 0.9863343390866129
+        "id": 8,
+        "name": "Ecuador",
+        "countryCode": "EC",
+        "flag": "🇪🇨",
+        "rank": 9,
+        "rating": 1935,
+        "elo": 1935,
+        "total": 599,
+        "goalsFor": 721,
+        "goalsAgainst": 904,
+        "eloOffensiveRating": 1.332700825885171,
+        "eloDefensiveRating": 0.6206762579626095,
+        "goalOffensiveRating": 0.7273992385837171,
+        "goalDefensiveRating": 1.2637786836298812,
+        "blendOffensiveRating": 1.1864605683808094,
+        "blendDefensiveRating": 0.9326991707530505
       },
-      "points": 3,
-      "goalDifference": -3,
-      "goalsFor": 1,
+      "points": 4,
+      "goalDifference": 0,
+      "goalsFor": 2,
       "qualified": true
     },
     {
       "groupLetter": "L",
       "position": 4,
-      "teamId": 9,
+      "teamId": 81,
       "team": {
-        "id": 9,
-        "name": "Croatia",
-        "countryCode": "HR",
-        "flag": "🇭🇷",
-        "rank": 10,
-        "rating": 1930,
-        "elo": 1930,
-        "total": 398,
-        "goalsFor": 694,
-        "goalsAgainst": 401,
-        "eloOffensiveRating": 1.3161457503440563,
-        "eloDefensiveRating": 0.6284834041958145,
-        "goalOffensiveRating": 1.0537577899019461,
-        "goalDefensiveRating": 0.8437051852993226,
-        "blendOffensiveRating": 1.2527530817866077,
-        "blendDefensiveRating": 0.7329055372116952
+        "id": 81,
+        "name": "Ghana",
+        "countryCode": "GH",
+        "flag": "🇬🇭",
+        "rank": 82,
+        "rating": 1503,
+        "elo": 1503,
+        "total": 778,
+        "goalsFor": 1247,
+        "goalsAgainst": 822,
+        "eloOffensiveRating": 0.45257923749391915,
+        "eloDefensiveRating": 1.8276926846543662,
+        "goalOffensiveRating": 0.9686151472316427,
+        "goalDefensiveRating": 0.8847521735564211,
+        "blendOffensiveRating": 0.577252996665739,
+        "blendDefensiveRating": 1.3701931742838196
       },
-      "points": 3,
-      "goalDifference": -1,
-      "goalsFor": 3,
+      "points": 4,
+      "goalDifference": 0,
+      "goalsFor": 2,
       "qualified": true
     },
     {
@@ -2212,68 +2320,14 @@
         "blendOffensiveRating": 0.8486653818569844,
         "blendDefensiveRating": 0.9315386830425144
       },
-      "points": 3,
+      "points": 4,
       "goalDifference": -2,
-      "goalsFor": 2,
-      "qualified": true
-    },
-    {
-      "groupLetter": "I",
-      "position": 7,
-      "teamId": 16,
-      "team": {
-        "id": 16,
-        "name": "Senegal",
-        "countryCode": "SN",
-        "flag": "🇸🇳",
-        "rank": 17,
-        "rating": 1878,
-        "elo": 1878,
-        "total": 704,
-        "goalsFor": 967,
-        "goalsAgainst": 669,
-        "eloOffensiveRating": 1.1557015698026296,
-        "eloDefensiveRating": 0.7157347391466743,
-        "goalOffensiveRating": 0.8300766831944312,
-        "goalDefensiveRating": 0.7957614133989183,
-        "blendOffensiveRating": 1.0770309231920567,
-        "blendDefensiveRating": 0.7545623893070799
-      },
-      "points": 0,
-      "goalDifference": -3,
-      "goalsFor": 3,
-      "qualified": true
-    },
-    {
-      "groupLetter": "H",
-      "position": 8,
-      "teamId": 71,
-      "team": {
-        "id": 71,
-        "name": "Cape Verde",
-        "countryCode": "CV",
-        "flag": "🇨🇻",
-        "rank": 72,
-        "rating": 1549,
-        "elo": 1549,
-        "total": 251,
-        "goalsFor": 267,
-        "goalsAgainst": 278,
-        "eloOffensiveRating": 0.5077366249409898,
-        "eloDefensiveRating": 1.6291433805670867,
-        "goalOffensiveRating": 0.6428385897431611,
-        "goalDefensiveRating": 0.9274713268845639,
-        "blendOffensiveRating": 0.5403771243820972,
-        "blendDefensiveRating": 1.2887034299845566
-      },
-      "points": 2,
-      "goalDifference": 0,
-      "goalsFor": 2,
+      "goalsFor": 5,
       "qualified": true
     },
     {
       "groupLetter": "D",
-      "position": 9,
+      "position": 7,
       "teamId": 21,
       "team": {
         "id": 21,
@@ -2296,65 +2350,65 @@
       "points": 4,
       "goalDifference": -2,
       "goalsFor": 2,
-      "qualified": false
+      "qualified": true
     },
     {
-      "groupLetter": "K",
-      "position": 10,
-      "teamId": 53,
+      "groupLetter": "I",
+      "position": 8,
+      "teamId": 16,
       "team": {
-        "id": 53,
-        "name": "DR Congo",
-        "countryCode": "CD",
-        "flag": "🇨🇩",
-        "rank": 54,
-        "rating": 1655,
-        "elo": 1655,
-        "total": 547,
-        "goalsFor": 835,
-        "goalsAgainst": 641,
-        "eloOffensiveRating": 0.6617996444852501,
-        "eloDefensiveRating": 1.2498884949348488,
-        "goalOffensiveRating": 0.9224939974345626,
-        "goalDefensiveRating": 0.9812962085790669,
-        "blendOffensiveRating": 0.7247831391679651,
-        "blendDefensiveRating": 1.1195718545414954
+        "id": 16,
+        "name": "Senegal",
+        "countryCode": "SN",
+        "flag": "🇸🇳",
+        "rank": 17,
+        "rating": 1878,
+        "elo": 1878,
+        "total": 704,
+        "goalsFor": 967,
+        "goalsAgainst": 669,
+        "eloOffensiveRating": 1.1557015698026296,
+        "eloDefensiveRating": 0.7157347391466743,
+        "goalOffensiveRating": 0.8300766831944312,
+        "goalDefensiveRating": 0.7957614133989183,
+        "blendOffensiveRating": 1.0770309231920567,
+        "blendDefensiveRating": 0.7545623893070799
       },
-      "points": 1,
-      "goalDifference": -1,
-      "goalsFor": 1,
-      "qualified": false
+      "points": 3,
+      "goalDifference": 2,
+      "goalsFor": 8,
+      "qualified": true
     },
     {
-      "groupLetter": "E",
-      "position": 11,
-      "teamId": 8,
+      "groupLetter": "G",
+      "position": 9,
+      "teamId": 31,
       "team": {
-        "id": 8,
-        "name": "Ecuador",
-        "countryCode": "EC",
-        "flag": "🇪🇨",
-        "rank": 9,
-        "rating": 1935,
-        "elo": 1935,
-        "total": 599,
-        "goalsFor": 721,
-        "goalsAgainst": 904,
-        "eloOffensiveRating": 1.332700825885171,
-        "eloDefensiveRating": 0.6206762579626095,
-        "goalOffensiveRating": 0.7273992385837171,
-        "goalDefensiveRating": 1.2637786836298812,
-        "blendOffensiveRating": 1.1864605683808094,
-        "blendDefensiveRating": 0.9326991707530505
+        "id": 31,
+        "name": "Iran",
+        "countryCode": "IR",
+        "flag": "🇮🇷",
+        "rank": 32,
+        "rating": 1764,
+        "elo": 1764,
+        "total": 669,
+        "goalsFor": 1273,
+        "goalsAgainst": 525,
+        "eloOffensiveRating": 0.8691040542308646,
+        "eloDefensiveRating": 0.9517568783246754,
+        "goalOffensiveRating": 1.1499175062030316,
+        "goalDefensiveRating": 0.657147111549577,
+        "blendOffensiveRating": 0.936948303095598,
+        "blendDefensiveRating": 0.8088169765348496
       },
-      "points": 4,
+      "points": 3,
       "goalDifference": 0,
-      "goalsFor": 2,
+      "goalsFor": 3,
       "qualified": false
     },
     {
       "groupLetter": "A",
-      "position": 12,
+      "position": 10,
       "teamId": 32,
       "team": {
         "id": 32,
@@ -2377,6 +2431,60 @@
       "points": 3,
       "goalDifference": -1,
       "goalsFor": 2,
+      "qualified": false
+    },
+    {
+      "groupLetter": "C",
+      "position": 11,
+      "teamId": 26,
+      "team": {
+        "id": 26,
+        "name": "Scotland",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "rank": 27,
+        "rating": 1770,
+        "elo": 1770,
+        "total": 868,
+        "goalsFor": 1499,
+        "goalsAgainst": 1076,
+        "eloOffensiveRating": 0.8822388799602389,
+        "eloDefensiveRating": 0.9375870644369771,
+        "goalOffensiveRating": 1.0436294057209938,
+        "goalDefensiveRating": 1.0380588223969578,
+        "blendOffensiveRating": 0.9212306694105821,
+        "blendDefensiveRating": 0.9863343390866129
+      },
+      "points": 3,
+      "goalDifference": -3,
+      "goalsFor": 1,
+      "qualified": false
+    },
+    {
+      "groupLetter": "H",
+      "position": 12,
+      "teamId": 15,
+      "team": {
+        "id": 15,
+        "name": "Uruguay",
+        "countryCode": "UY",
+        "flag": "🇺🇾",
+        "rank": 16,
+        "rating": 1892,
+        "elo": 1892,
+        "total": 1019,
+        "goalsFor": 1610,
+        "goalsAgainst": 1254,
+        "eloOffensiveRating": 1.196867323178267,
+        "eloDefensiveRating": 0.6911173407237252,
+        "goalOffensiveRating": 0.9548080937877292,
+        "goalDefensiveRating": 1.0305113280131601,
+        "blendOffensiveRating": 1.1383860556911056,
+        "blendDefensiveRating": 0.8557858231784957
+      },
+      "points": 2,
+      "goalDifference": -1,
+      "goalsFor": 3,
       "qualified": false
     }
   ],
@@ -4958,12 +5066,12 @@
         "matchNumber": 41,
         "teamHomeId": 45,
         "teamAwayId": 31,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 45,
@@ -5003,7 +5111,7 @@
       },
       "homeLabel": "Egypt",
       "awayLabel": "Iran",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5022,12 +5130,12 @@
         "matchNumber": 42,
         "teamHomeId": 67,
         "teamAwayId": 19,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 5,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 19,
+        "status": "played"
       },
       "homeTeam": {
         "id": 67,
@@ -5067,7 +5175,7 @@
       },
       "homeLabel": "New Zealand",
       "awayLabel": "Belgium",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5342,12 +5450,12 @@
         "matchNumber": 47,
         "teamHomeId": 71,
         "teamAwayId": 70,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 0,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 71,
@@ -5387,7 +5495,7 @@
       },
       "homeLabel": "Cape Verde",
       "awayLabel": "Saudi Arabia",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5406,12 +5514,12 @@
         "matchNumber": 48,
         "teamHomeId": 15,
         "teamAwayId": 0,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 0,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 0,
+        "status": "played"
       },
       "homeTeam": {
         "id": 15,
@@ -5451,7 +5559,7 @@
       },
       "homeLabel": "Uruguay",
       "awayLabel": "Spain",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5726,12 +5834,12 @@
         "matchNumber": 53,
         "teamHomeId": 11,
         "teamAwayId": 2,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 4,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 2,
+        "status": "played"
       },
       "homeTeam": {
         "id": 11,
@@ -5771,7 +5879,7 @@
       },
       "homeLabel": "Norway",
       "awayLabel": "France",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -5790,12 +5898,12 @@
         "matchNumber": 54,
         "teamHomeId": 16,
         "teamAwayId": 62,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 5,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 16,
+        "status": "played"
       },
       "homeTeam": {
         "id": 16,
@@ -5835,7 +5943,7 @@
       },
       "homeLabel": "Senegal",
       "awayLabel": "Iraq",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6110,12 +6218,12 @@
         "matchNumber": 59,
         "teamHomeId": 34,
         "teamAwayId": 22,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 3,
+        "goalsAway": 3,
         "penGoalsHome": null,
         "penGoalsAway": null,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 34,
@@ -6155,7 +6263,7 @@
       },
       "homeLabel": "Algeria",
       "awayLabel": "Austria",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6174,12 +6282,12 @@
         "matchNumber": 60,
         "teamHomeId": 50,
         "teamAwayId": 1,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 3,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 1,
+        "status": "played"
       },
       "homeTeam": {
         "id": 50,
@@ -6219,7 +6327,7 @@
       },
       "homeLabel": "Jordan",
       "awayLabel": "Argentina",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6494,12 +6602,12 @@
         "matchNumber": 65,
         "teamHomeId": 6,
         "teamAwayId": 5,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 0,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
         "winnerTeamId": null,
-        "status": "scheduled"
+        "status": "played"
       },
       "homeTeam": {
         "id": 6,
@@ -6539,7 +6647,7 @@
       },
       "homeLabel": "Colombia",
       "awayLabel": "Portugal",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6558,12 +6666,12 @@
         "matchNumber": 66,
         "teamHomeId": 53,
         "teamAwayId": 38,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 3,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 53,
+        "status": "played"
       },
       "homeTeam": {
         "id": 53,
@@ -6603,7 +6711,7 @@
       },
       "homeLabel": "DR Congo",
       "awayLabel": "Uzbekistan",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6878,12 +6986,12 @@
         "matchNumber": 71,
         "teamHomeId": 35,
         "teamAwayId": 3,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 0,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 3,
+        "status": "played"
       },
       "homeTeam": {
         "id": 35,
@@ -6923,7 +7031,7 @@
       },
       "homeLabel": "Panama",
       "awayLabel": "England",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -6942,12 +7050,12 @@
         "matchNumber": 72,
         "teamHomeId": 9,
         "teamAwayId": 81,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 2,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 9,
+        "status": "played"
       },
       "homeTeam": {
         "id": 9,
@@ -6987,7 +7095,7 @@
       },
       "homeLabel": "Croatia",
       "awayLabel": "Ghana",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -7069,7 +7177,7 @@
       "result": {
         "matchNumber": 74,
         "teamHomeId": 10,
-        "teamAwayId": 19,
+        "teamAwayId": 21,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7096,25 +7204,25 @@
         "blendDefensiveRating": 0.8082595347010211
       },
       "awayTeam": {
-        "id": 19,
-        "name": "Belgium",
-        "countryCode": "BE",
-        "flag": "🇧🇪",
-        "rank": 20,
-        "rating": 1867,
-        "elo": 1867,
-        "total": 876,
-        "goalsFor": 1599,
-        "goalsAgainst": 1359,
-        "eloOffensiveRating": 1.124352797848262,
-        "eloDefensiveRating": 0.7356905796624518,
-        "goalOffensiveRating": 1.1030844370685102,
-        "goalDefensiveRating": 1.2991065374095248,
-        "blendOffensiveRating": 1.119214383176341,
-        "blendDefensiveRating": 1.0090509049115008
+        "id": 21,
+        "name": "Paraguay",
+        "countryCode": "PY",
+        "flag": "🇵🇾",
+        "rank": 22,
+        "rating": 1833,
+        "elo": 1833,
+        "total": 788,
+        "goalsFor": 1002,
+        "goalsAgainst": 1115,
+        "eloOffensiveRating": 1.032731856824777,
+        "eloDefensiveRating": 0.800958889887749,
+        "goalOffensiveRating": 0.7684328171523438,
+        "goalDefensiveRating": 1.184890091017002,
+        "blendOffensiveRating": 0.9688774734385278,
+        "blendDefensiveRating": 0.9872361093573921
       },
       "homeLabel": "Germany",
-      "awayLabel": "Belgium",
+      "awayLabel": "Paraguay",
       "isLocked": false
     },
     {
@@ -7261,7 +7369,7 @@
       "result": {
         "matchNumber": 77,
         "teamHomeId": 2,
-        "teamAwayId": 16,
+        "teamAwayId": 41,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7288,25 +7396,25 @@
         "blendDefensiveRating": 0.7727794923628781
       },
       "awayTeam": {
-        "id": 16,
-        "name": "Senegal",
-        "countryCode": "SN",
-        "flag": "🇸🇳",
-        "rank": 17,
-        "rating": 1878,
-        "elo": 1878,
-        "total": 704,
-        "goalsFor": 967,
-        "goalsAgainst": 669,
-        "eloOffensiveRating": 1.1557015698026296,
-        "eloDefensiveRating": 0.7157347391466743,
-        "goalOffensiveRating": 0.8300766831944312,
-        "goalDefensiveRating": 0.7957614133989183,
-        "blendOffensiveRating": 1.0770309231920567,
-        "blendDefensiveRating": 0.7545623893070799
+        "id": 41,
+        "name": "Sweden",
+        "countryCode": "SE",
+        "flag": "🇸🇪",
+        "rank": 42,
+        "rating": 1719,
+        "elo": 1719,
+        "total": 1118,
+        "goalsFor": 2226,
+        "goalsAgainst": 1482,
+        "eloOffensiveRating": 0.7766290772219561,
+        "eloDefensiveRating": 1.0650847178590572,
+        "goalOffensiveRating": 1.2032275193558504,
+        "goalDefensiveRating": 1.1100328152699896,
+        "blendOffensiveRating": 0.8796948337595318,
+        "blendDefensiveRating": 1.086892808948118
       },
       "homeLabel": "France",
-      "awayLabel": "Senegal",
+      "awayLabel": "Sweden",
       "isLocked": false
     },
     {
@@ -7389,7 +7497,7 @@
       "result": {
         "matchNumber": 79,
         "teamHomeId": 18,
-        "teamAwayId": 66,
+        "teamAwayId": 8,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7416,25 +7524,25 @@
         "blendDefensiveRating": 0.7943551785539241
       },
       "awayTeam": {
-        "id": 66,
-        "name": "Bosnia and Herzegovina",
-        "countryCode": "BA",
-        "flag": "🇧🇦",
-        "rank": 67,
-        "rating": 1591,
-        "elo": 1591,
-        "total": 280,
-        "goalsFor": 393,
-        "goalsAgainst": 385,
-        "eloOffensiveRating": 0.5639484565881525,
-        "eloDefensiveRating": 1.4667577363336373,
-        "goalOffensiveRating": 0.8482012708404848,
-        "goalDefensiveRating": 1.1514156175936516,
-        "blendOffensiveRating": 0.6326236519365134,
-        "blendDefensiveRating": 1.3137588321347184
+        "id": 8,
+        "name": "Ecuador",
+        "countryCode": "EC",
+        "flag": "🇪🇨",
+        "rank": 9,
+        "rating": 1935,
+        "elo": 1935,
+        "total": 599,
+        "goalsFor": 721,
+        "goalsAgainst": 904,
+        "eloOffensiveRating": 1.332700825885171,
+        "eloDefensiveRating": 0.6206762579626095,
+        "goalOffensiveRating": 0.7273992385837171,
+        "goalDefensiveRating": 1.2637786836298812,
+        "blendOffensiveRating": 1.1864605683808094,
+        "blendDefensiveRating": 0.9326991707530505
       },
       "homeLabel": "Mexico",
-      "awayLabel": "Bosnia and Herzegovina",
+      "awayLabel": "Ecuador",
       "isLocked": false
     },
     {
@@ -7453,7 +7561,7 @@
       "result": {
         "matchNumber": 80,
         "teamHomeId": 3,
-        "teamAwayId": 9,
+        "teamAwayId": 53,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7480,25 +7588,25 @@
         "blendDefensiveRating": 0.6499418017926265
       },
       "awayTeam": {
-        "id": 9,
-        "name": "Croatia",
-        "countryCode": "HR",
-        "flag": "🇭🇷",
-        "rank": 10,
-        "rating": 1930,
-        "elo": 1930,
-        "total": 398,
-        "goalsFor": 694,
-        "goalsAgainst": 401,
-        "eloOffensiveRating": 1.3161457503440563,
-        "eloDefensiveRating": 0.6284834041958145,
-        "goalOffensiveRating": 1.0537577899019461,
-        "goalDefensiveRating": 0.8437051852993226,
-        "blendOffensiveRating": 1.2527530817866077,
-        "blendDefensiveRating": 0.7329055372116952
+        "id": 53,
+        "name": "DR Congo",
+        "countryCode": "CD",
+        "flag": "🇨🇩",
+        "rank": 54,
+        "rating": 1655,
+        "elo": 1655,
+        "total": 547,
+        "goalsFor": 835,
+        "goalsAgainst": 641,
+        "eloOffensiveRating": 0.6617996444852501,
+        "eloDefensiveRating": 1.2498884949348488,
+        "goalOffensiveRating": 0.9224939974345626,
+        "goalDefensiveRating": 0.9812962085790669,
+        "blendOffensiveRating": 0.7247831391679651,
+        "blendDefensiveRating": 1.1195718545414954
       },
       "homeLabel": "England",
-      "awayLabel": "Croatia",
+      "awayLabel": "DR Congo",
       "isLocked": false
     },
     {
@@ -7517,7 +7625,7 @@
       "result": {
         "matchNumber": 81,
         "teamHomeId": 40,
-        "teamAwayId": 41,
+        "teamAwayId": 66,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7544,25 +7652,25 @@
         "blendDefensiveRating": 1.0740108175632193
       },
       "awayTeam": {
-        "id": 41,
-        "name": "Sweden",
-        "countryCode": "SE",
-        "flag": "🇸🇪",
-        "rank": 42,
-        "rating": 1719,
-        "elo": 1719,
-        "total": 1118,
-        "goalsFor": 2226,
-        "goalsAgainst": 1482,
-        "eloOffensiveRating": 0.7766290772219561,
-        "eloDefensiveRating": 1.0650847178590572,
-        "goalOffensiveRating": 1.2032275193558504,
-        "goalDefensiveRating": 1.1100328152699896,
-        "blendOffensiveRating": 0.8796948337595318,
-        "blendDefensiveRating": 1.086892808948118
+        "id": 66,
+        "name": "Bosnia and Herzegovina",
+        "countryCode": "BA",
+        "flag": "🇧🇦",
+        "rank": 67,
+        "rating": 1591,
+        "elo": 1591,
+        "total": 280,
+        "goalsFor": 393,
+        "goalsAgainst": 385,
+        "eloOffensiveRating": 0.5639484565881525,
+        "eloDefensiveRating": 1.4667577363336373,
+        "goalOffensiveRating": 0.8482012708404848,
+        "goalDefensiveRating": 1.1514156175936516,
+        "blendOffensiveRating": 0.6326236519365134,
+        "blendDefensiveRating": 1.3137588321347184
       },
       "homeLabel": "United States",
-      "awayLabel": "Sweden",
+      "awayLabel": "Bosnia and Herzegovina",
       "isLocked": false
     },
     {
@@ -7580,8 +7688,8 @@
       },
       "result": {
         "matchNumber": 82,
-        "teamHomeId": 45,
-        "teamAwayId": 71,
+        "teamHomeId": 19,
+        "teamAwayId": 16,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7590,43 +7698,43 @@
         "status": "scheduled"
       },
       "homeTeam": {
-        "id": 45,
-        "name": "Egypt",
-        "countryCode": "EG",
-        "flag": "🇪🇬",
-        "rank": 46,
-        "rating": 1699,
-        "elo": 1699,
-        "total": 884,
-        "goalsFor": 1545,
-        "goalsAgainst": 921,
-        "eloOffensiveRating": 0.7387524301763619,
-        "eloDefensiveRating": 1.1196927790770395,
-        "goalOffensiveRating": 1.056186515622931,
-        "goalDefensiveRating": 0.8724424383412202,
-        "blendOffensiveRating": 0.8154441874263696,
-        "blendDefensiveRating": 0.9997309060911429
+        "id": 19,
+        "name": "Belgium",
+        "countryCode": "BE",
+        "flag": "🇧🇪",
+        "rank": 20,
+        "rating": 1867,
+        "elo": 1867,
+        "total": 876,
+        "goalsFor": 1599,
+        "goalsAgainst": 1359,
+        "eloOffensiveRating": 1.124352797848262,
+        "eloDefensiveRating": 0.7356905796624518,
+        "goalOffensiveRating": 1.1030844370685102,
+        "goalDefensiveRating": 1.2991065374095248,
+        "blendOffensiveRating": 1.119214383176341,
+        "blendDefensiveRating": 1.0090509049115008
       },
       "awayTeam": {
-        "id": 71,
-        "name": "Cape Verde",
-        "countryCode": "CV",
-        "flag": "🇨🇻",
-        "rank": 72,
-        "rating": 1549,
-        "elo": 1549,
-        "total": 251,
-        "goalsFor": 267,
-        "goalsAgainst": 278,
-        "eloOffensiveRating": 0.5077366249409898,
-        "eloDefensiveRating": 1.6291433805670867,
-        "goalOffensiveRating": 0.6428385897431611,
-        "goalDefensiveRating": 0.9274713268845639,
-        "blendOffensiveRating": 0.5403771243820972,
-        "blendDefensiveRating": 1.2887034299845566
+        "id": 16,
+        "name": "Senegal",
+        "countryCode": "SN",
+        "flag": "🇸🇳",
+        "rank": 17,
+        "rating": 1878,
+        "elo": 1878,
+        "total": 704,
+        "goalsFor": 967,
+        "goalsAgainst": 669,
+        "eloOffensiveRating": 1.1557015698026296,
+        "eloDefensiveRating": 0.7157347391466743,
+        "goalOffensiveRating": 0.8300766831944312,
+        "goalDefensiveRating": 0.7957614133989183,
+        "blendOffensiveRating": 1.0770309231920567,
+        "blendDefensiveRating": 0.7545623893070799
       },
-      "homeLabel": "Egypt",
-      "awayLabel": "Cape Verde",
+      "homeLabel": "Belgium",
+      "awayLabel": "Senegal",
       "isLocked": false
     },
     {
@@ -7645,7 +7753,7 @@
       "result": {
         "matchNumber": 83,
         "teamHomeId": 5,
-        "teamAwayId": 81,
+        "teamAwayId": 9,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7672,25 +7780,25 @@
         "blendDefensiveRating": 0.7387451060984849
       },
       "awayTeam": {
-        "id": 81,
-        "name": "Ghana",
-        "countryCode": "GH",
-        "flag": "🇬🇭",
-        "rank": 82,
-        "rating": 1503,
-        "elo": 1503,
-        "total": 778,
-        "goalsFor": 1247,
-        "goalsAgainst": 822,
-        "eloOffensiveRating": 0.45257923749391915,
-        "eloDefensiveRating": 1.8276926846543662,
-        "goalOffensiveRating": 0.9686151472316427,
-        "goalDefensiveRating": 0.8847521735564211,
-        "blendOffensiveRating": 0.577252996665739,
-        "blendDefensiveRating": 1.3701931742838196
+        "id": 9,
+        "name": "Croatia",
+        "countryCode": "HR",
+        "flag": "🇭🇷",
+        "rank": 10,
+        "rating": 1930,
+        "elo": 1930,
+        "total": 398,
+        "goalsFor": 694,
+        "goalsAgainst": 401,
+        "eloOffensiveRating": 1.3161457503440563,
+        "eloDefensiveRating": 0.6284834041958145,
+        "goalOffensiveRating": 1.0537577899019461,
+        "goalDefensiveRating": 0.8437051852993226,
+        "blendOffensiveRating": 1.2527530817866077,
+        "blendDefensiveRating": 0.7329055372116952
       },
       "homeLabel": "Portugal",
-      "awayLabel": "Ghana",
+      "awayLabel": "Croatia",
       "isLocked": false
     },
     {
@@ -7773,7 +7881,7 @@
       "result": {
         "matchNumber": 85,
         "teamHomeId": 14,
-        "teamAwayId": 26,
+        "teamAwayId": 34,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7800,25 +7908,25 @@
         "blendDefensiveRating": 1.0264875956838801
       },
       "awayTeam": {
-        "id": 26,
-        "name": "Scotland",
-        "countryCode": null,
-        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-        "rank": 27,
-        "rating": 1770,
-        "elo": 1770,
-        "total": 868,
-        "goalsFor": 1499,
-        "goalsAgainst": 1076,
-        "eloOffensiveRating": 0.8822388799602389,
-        "eloDefensiveRating": 0.9375870644369771,
-        "goalOffensiveRating": 1.0436294057209938,
-        "goalDefensiveRating": 1.0380588223969578,
-        "blendOffensiveRating": 0.9212306694105821,
-        "blendDefensiveRating": 0.9863343390866129
+        "id": 34,
+        "name": "Algeria",
+        "countryCode": "DZ",
+        "flag": "🇩🇿",
+        "rank": 35,
+        "rating": 1743,
+        "elo": 1743,
+        "total": 688,
+        "goalsFor": 1052,
+        "goalsAgainst": 703,
+        "eloOffensiveRating": 0.8246531373040713,
+        "eloDefensiveRating": 1.0030590125422463,
+        "goalOffensiveRating": 0.9240419785888707,
+        "goalDefensiveRating": 0.8556502951039503,
+        "blendOffensiveRating": 0.8486653818569844,
+        "blendDefensiveRating": 0.9315386830425144
       },
       "homeLabel": "Switzerland",
-      "awayLabel": "Scotland",
+      "awayLabel": "Algeria",
       "isLocked": false
     },
     {
@@ -7837,7 +7945,7 @@
       "result": {
         "matchNumber": 86,
         "teamHomeId": 1,
-        "teamAwayId": 15,
+        "teamAwayId": 71,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7864,25 +7972,25 @@
         "blendDefensiveRating": 0.6209465269142934
       },
       "awayTeam": {
-        "id": 15,
-        "name": "Uruguay",
-        "countryCode": "UY",
-        "flag": "🇺🇾",
-        "rank": 16,
-        "rating": 1892,
-        "elo": 1892,
-        "total": 1019,
-        "goalsFor": 1610,
-        "goalsAgainst": 1254,
-        "eloOffensiveRating": 1.196867323178267,
-        "eloDefensiveRating": 0.6911173407237252,
-        "goalOffensiveRating": 0.9548080937877292,
-        "goalDefensiveRating": 1.0305113280131601,
-        "blendOffensiveRating": 1.1383860556911056,
-        "blendDefensiveRating": 0.8557858231784957
+        "id": 71,
+        "name": "Cape Verde",
+        "countryCode": "CV",
+        "flag": "🇨🇻",
+        "rank": 72,
+        "rating": 1549,
+        "elo": 1549,
+        "total": 251,
+        "goalsFor": 267,
+        "goalsAgainst": 278,
+        "eloOffensiveRating": 0.5077366249409898,
+        "eloDefensiveRating": 1.6291433805670867,
+        "goalOffensiveRating": 0.6428385897431611,
+        "goalDefensiveRating": 0.9274713268845639,
+        "blendOffensiveRating": 0.5403771243820972,
+        "blendDefensiveRating": 1.2887034299845566
       },
       "homeLabel": "Argentina",
-      "awayLabel": "Uruguay",
+      "awayLabel": "Cape Verde",
       "isLocked": false
     },
     {
@@ -7901,7 +8009,7 @@
       "result": {
         "matchNumber": 87,
         "teamHomeId": 6,
-        "teamAwayId": 34,
+        "teamAwayId": 81,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7928,25 +8036,25 @@
         "blendDefensiveRating": 0.7537262001804617
       },
       "awayTeam": {
-        "id": 34,
-        "name": "Algeria",
-        "countryCode": "DZ",
-        "flag": "🇩🇿",
-        "rank": 35,
-        "rating": 1743,
-        "elo": 1743,
-        "total": 688,
-        "goalsFor": 1052,
-        "goalsAgainst": 703,
-        "eloOffensiveRating": 0.8246531373040713,
-        "eloDefensiveRating": 1.0030590125422463,
-        "goalOffensiveRating": 0.9240419785888707,
-        "goalDefensiveRating": 0.8556502951039503,
-        "blendOffensiveRating": 0.8486653818569844,
-        "blendDefensiveRating": 0.9315386830425144
+        "id": 81,
+        "name": "Ghana",
+        "countryCode": "GH",
+        "flag": "🇬🇭",
+        "rank": 82,
+        "rating": 1503,
+        "elo": 1503,
+        "total": 778,
+        "goalsFor": 1247,
+        "goalsAgainst": 822,
+        "eloOffensiveRating": 0.45257923749391915,
+        "eloDefensiveRating": 1.8276926846543662,
+        "goalOffensiveRating": 0.9686151472316427,
+        "goalDefensiveRating": 0.8847521735564211,
+        "blendOffensiveRating": 0.577252996665739,
+        "blendDefensiveRating": 1.3701931742838196
       },
       "homeLabel": "Colombia",
-      "awayLabel": "Algeria",
+      "awayLabel": "Ghana",
       "isLocked": false
     },
     {
@@ -7965,7 +8073,7 @@
       "result": {
         "matchNumber": 88,
         "teamHomeId": 25,
-        "teamAwayId": 31,
+        "teamAwayId": 45,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -7992,25 +8100,25 @@
         "blendDefensiveRating": 0.9334453948133511
       },
       "awayTeam": {
-        "id": 31,
-        "name": "Iran",
-        "countryCode": "IR",
-        "flag": "🇮🇷",
-        "rank": 32,
-        "rating": 1764,
-        "elo": 1764,
-        "total": 669,
-        "goalsFor": 1273,
-        "goalsAgainst": 525,
-        "eloOffensiveRating": 0.8691040542308646,
-        "eloDefensiveRating": 0.9517568783246754,
-        "goalOffensiveRating": 1.1499175062030316,
-        "goalDefensiveRating": 0.657147111549577,
-        "blendOffensiveRating": 0.936948303095598,
-        "blendDefensiveRating": 0.8088169765348496
+        "id": 45,
+        "name": "Egypt",
+        "countryCode": "EG",
+        "flag": "🇪🇬",
+        "rank": 46,
+        "rating": 1699,
+        "elo": 1699,
+        "total": 884,
+        "goalsFor": 1545,
+        "goalsAgainst": 921,
+        "eloOffensiveRating": 0.7387524301763619,
+        "eloDefensiveRating": 1.1196927790770395,
+        "goalOffensiveRating": 1.056186515622931,
+        "goalDefensiveRating": 0.8724424383412202,
+        "blendOffensiveRating": 0.8154441874263696,
+        "blendDefensiveRating": 0.9997309060911429
       },
       "homeLabel": "Australia",
-      "awayLabel": "Iran",
+      "awayLabel": "Egypt",
       "isLocked": false
     },
     {

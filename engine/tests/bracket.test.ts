@@ -34,7 +34,23 @@ describe('Annex C', () => {
     expect(entry).not.toBeNull();
     expect(entry!.id).toBe(1);
     expect(entry!.thirdByMatch['79']).toBe('E');
-    expect(entry!.thirdByMatch['74']).toBe('H');
+    expect(entry!.thirdByMatch['74']).toBe('F');
+    expect(entry!.thirdByMatch['82']).toBe('H');
+  });
+
+  it('maps the 2026 group-stage third-place combination to official R32 opponents', () => {
+    const entry = lookupAnnexC('BDEFIJKL');
+    expect(entry).not.toBeNull();
+    expect(entry!.thirdByMatch).toEqual({
+      '74': 'D',
+      '77': 'F',
+      '79': 'E',
+      '80': 'K',
+      '81': 'B',
+      '82': 'I',
+      '85': 'J',
+      '87': 'L',
+    });
   });
 });
 

@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+import { compareFixturesChronologically } from '@shared/engine/fixtureOrder.js';
 import { FINAL_MATCH_NUMBER, KNOCKOUT_ROUNDS } from '@shared/lib/bracket-layout.js';
 import {
   bracketDimsForViewport,
@@ -247,7 +249,12 @@ export function KnockoutList({
   actualMatchNumbers,
   onToggleFixedDouble,
 }: Props) {
-  const knockout = matches.filter((m) => m.fixture.group == null);
+  const knockout = useMemo(() => {
+    const filtered = matches.filter((m) => m.fixture.group == null);
+    return [...filtered].sort((a, b) =>
+      compareFixturesChronologically(a.fixture, b.fixture),
+    );
+  }, [matches]);
 
   return (
     <div className="knockout-list">

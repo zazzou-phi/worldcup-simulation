@@ -11,7 +11,13 @@ export function filterGroupMatchesByTeam(
       : matches.filter(
           (m) => m.homeTeam?.id === teamId || m.awayTeam?.id === teamId,
         );
-  return filtered.sort((a, b) =>
+  return sortResolvedMatchesChronologically(filtered);
+}
+
+export function sortResolvedMatchesChronologically(
+  matches: ResolvedMatch[],
+): ResolvedMatch[] {
+  return [...matches].sort((a, b) =>
     compareFixturesChronologically(a.fixture, b.fixture),
   );
 }
