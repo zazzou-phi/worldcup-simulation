@@ -345,6 +345,31 @@ export function createApiApp(repo: Repository) {
     return c.json(serializeMasterKnockoutState(view));
   });
 
+  app.put('/api/v1/predictions/:id/active-knockout-simulation', async (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    const body = await c.req.json().catch(() => null);
+    if (!body || typeof body !== 'object') {
+      throw new ApiError('Request body must be JSON', 400, 'invalid_body');
+    }
+    const simulationIdRaw = (body as { simulationId?: unknown }).simulationId;
+    const simulationId =
+      simulationIdRaw === null || simulationIdRaw === undefined
+        ? null
+        : parseIntParam(String(simulationIdRaw));
+    try {
+      const view = repo.setPredictionActiveKnockoutSimulation(id, simulationId);
+      return c.json(serializeMasterKnockoutState(view));
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new ApiError(err.message, 400, 'invalid_body');
+      }
+      throw err;
+    }
+  });
+
   app.get('/api/v1/predictions/:id/team-stats', (c) => {
     const id = parseIntParam(c.req.param('id'));
     if (!repo.getPrediction(id)) {

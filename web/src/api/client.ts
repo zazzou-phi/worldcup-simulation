@@ -225,6 +225,12 @@ const privateApi = {
       method: 'POST',
     }),
 
+  setPredictionActiveKnockoutSimulation: (id: number, simulationId: number | null) =>
+    request<MasterKnockoutState>(`/api/v1/predictions/${id}/active-knockout-simulation`, {
+      method: 'PUT',
+      body: JSON.stringify({ simulationId }),
+    }),
+
   deletePrediction: (id: number) =>
     request<void>(`/api/v1/predictions/${id}`, { method: 'DELETE' }),
 
@@ -452,6 +458,9 @@ const publicApiStub = {
     throw new Error('Not available in public mode');
   },
   clearPredictionKnockout: async (): Promise<MasterKnockoutState> => {
+    throw new Error('Not available in public mode');
+  },
+  setPredictionActiveKnockoutSimulation: async (): Promise<MasterKnockoutState> => {
     throw new Error('Not available in public mode');
   },
   deletePrediction: async (): Promise<void> => {

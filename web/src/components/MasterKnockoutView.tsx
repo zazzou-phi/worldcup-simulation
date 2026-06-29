@@ -23,6 +23,7 @@ interface Props {
   simulating?: boolean;
   consensusModeDirty?: boolean;
   onSelectMatch: (matchNumber: number | null) => void;
+  onSelectKnockoutRun?: (simulationId: number | null) => void;
   actualResults?: ActualMatchResult[];
 }
 
@@ -35,9 +36,11 @@ export function MasterKnockoutView({
   simulating = false,
   consensusModeDirty = false,
   onSelectMatch,
+  onSelectKnockoutRun,
   actualResults = [],
 }: Props) {
   const publicMode = isPublicMode();
+  const knockoutRuns = masterKnockoutState.knockoutRuns ?? [];
   const [modalMatchNumber, setModalMatchNumber] = useState<number | null>(null);
   const [fixedDoubledMatches, setFixedDoubledMatches] = useState<Set<number>>(() => new Set());
 
@@ -194,6 +197,26 @@ export function MasterKnockoutView({
               </span>
             ))}
           </div>
+          {!publicMode && knockoutRuns.length > 0 && onSelectKnockoutRun && (
+            <label className="master-knockout-run-select">
+              <span className="master-knockout-run-label">Saved run</span>
+              <select
+                value={masterKnockoutState.activeKnockoutSimulationId ?? ''}
+                onChange={(event) => {
+                  const raw = event.target.value;
+                  onSelectKnockoutRun(raw === '' ? null : Number(raw));
+                }}
+                aria-label="Load saved knockout run"
+              >
+                <option value="">Latest consensus</option>
+                {knockoutRuns.map((run) => (
+                  <option key={run.id} value={run.id}>
+                    {run.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
         </div>
 
         <KnockoutPhaseLayout

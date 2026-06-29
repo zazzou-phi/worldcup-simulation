@@ -648,6 +648,23 @@ button {
   gap: 0.35rem;
 }
 
+.master-knockout-run-select {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: auto;
+  font-size: 0.85em;
+}
+
+.master-knockout-run-label {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.master-knockout-run-select select {
+  max-width: 16rem;
+}
+
 .master-knockout-round-pill {
   font-size: 0.75em;
   padding: 0.15rem 0.45rem;

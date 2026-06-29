@@ -80,10 +80,13 @@ import {
   writePredictionKnockoutRound,
 } from './predictionKnockoutStorage.js';
 import {
-  clearPredictionKnockoutSnapshot,
-  isKnockoutSnapshotSimulationId,
-  syncPredictionKnockoutSnapshot,
-} from './predictionKnockoutSnapshot.js';
+  clearActiveKnockoutSimulation,
+  createPredictionKnockoutRun,
+  isKnockoutRunSimulationId,
+  listKnockoutRunsForPrediction,
+  readKnockoutResultsFromSimulation,
+  setActiveKnockoutSimulation,
+} from './predictionKnockoutRuns.js';
 import {
   ensureActualThirdPlaceOrder,
   writeActualThirdPlaceOrder,
@@ -169,6 +172,7 @@ function mapPrediction(row: typeof schema.predictions.$inferSelect): Prediction 
     name: row.name,
     selectionSpec: parseSelectionSpecJson(row.selectionSpec),
     consensusMode: parseConsensusMode(row.consensusMode),
+    activeKnockoutSimulationId: row.activeKnockoutSimulationId ?? null,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -676,7 +680,7 @@ export class Repository {
   }
 
   private refreshPredictionsForSimulation(simulationId: number): void {
-    if (isKnockoutSnapshotSimulationId(this, simulationId)) return;
+    if (isKnockoutRunSimulationId(this, simulationId)) return;
     for (const prediction of this.listPredictions()) {
       if (simulationIdInSpec(simulationId, prediction.selectionSpec)) {
         refreshSimulationInPredictionAggregates(this.db, prediction.id, simulationId);
@@ -687,7 +691,7 @@ export class Repository {
 
   private invalidatePredictionKnockout(predictionId: number): void {
     clearPredictionKnockoutResults(this.db, predictionId);
-    clearPredictionKnockoutSnapshot(this.db, this, predictionId);
+    clearActiveKnockoutSimulation(this.db, predictionId);
   }
 
   private invalidateAllPredictionKnockouts(): void {
@@ -1745,8 +1749,19 @@ export class Repository {
         distribution: result.distribution,
       })),
     );
-    syncPredictionKnockoutSnapshot(this.db, this, predictionId);
+    createPredictionKnockoutRun(this.db, this, predictionId);
 
+    return this.buildMasterKnockoutView(predictionId);
+  }
+
+  setPredictionActiveKnockoutSimulation(
+    predictionId: number,
+    simulationId: number | null,
+  ): MasterKnockoutState {
+    if (!this.getPrediction(predictionId)) {
+      throw new Error(`Prediction not found: ${predictionId}`);
+    }
+    setActiveKnockoutSimulation(this.db, this, predictionId, simulationId);
     return this.buildMasterKnockoutView(predictionId);
   }
 
@@ -1775,12 +1790,18 @@ export class Repository {
       thirdPlaceOrderEntries,
     );
 
-    const knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+    const prediction = this.getPrediction(predictionId)!;
+    const consensusKnockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+    const pathKnockoutResults =
+      prediction.activeKnockoutSimulationId != null
+        ? readKnockoutResultsFromSimulation(this, prediction.activeKnockoutSimulationId)
+        : consensusKnockoutResults;
+
     const { ctx, annexCCombinationId } = buildPredictionSlotContext(
       masterGroup.groupStandings,
       thirdPlaceOrderEntries,
       fixtures,
-      knockoutResults,
+      pathKnockoutResults,
       teamsById,
     );
 
@@ -1788,17 +1809,16 @@ export class Repository {
       fixtures,
       ctx,
       teamsById,
-      knockoutResults,
+      pathKnockoutResults,
       groupStageComplete,
     );
 
     const knockoutResultByMatch = new Map(
-      knockoutResults.map((result) => [result.matchNumber, result]),
+      pathKnockoutResults.map((result) => [result.matchNumber, result]),
     );
 
-    const prediction = this.getPrediction(predictionId)!;
     const distributions: Record<number, OutcomeDistribution> = {};
-    for (const result of knockoutResults) {
+    for (const result of consensusKnockoutResults) {
       if (!result.distribution || result.distribution.total <= 0) continue;
       distributions[result.matchNumber] = {
         ...result.distribution,
@@ -1880,8 +1900,10 @@ export class Repository {
         isComplete: round.isComplete,
         disabledReason: round.disabledReason,
       })),
-      hasKnockoutResults: knockoutResults.length > 0,
+      hasKnockoutResults: pathKnockoutResults.length > 0,
       groupStageComplete,
+      activeKnockoutSimulationId: prediction.activeKnockoutSimulationId,
+      knockoutRuns: listKnockoutRunsForPrediction(this, predictionId),
     };
   }
 }

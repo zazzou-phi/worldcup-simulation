@@ -86,6 +86,7 @@ export function initSchema(sqlite: Database.Database) {
       name TEXT NOT NULL,
       selection_spec TEXT NOT NULL,
       consensus_mode TEXT NOT NULL DEFAULT 'floor',
+      active_knockout_simulation_id INTEGER REFERENCES simulations(id),
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
@@ -251,7 +252,19 @@ function migrateSchema(sqlite: Database.Database) {
   migrateFrozenSampleGoals(sqlite);
   migrateActualResultPredictedGoals(sqlite);
   migratePredictionKnockoutTables(sqlite);
+  migratePredictionActiveKnockoutSimulation(sqlite);
   migrateActualThirdPlaceOrder(sqlite);
+}
+
+function migratePredictionActiveKnockoutSimulation(sqlite: Database.Database) {
+  const columns = sqlite
+    .prepare(`PRAGMA table_info(predictions)`)
+    .all() as Array<{ name: string }>;
+  if (!columns.some((column) => column.name === 'active_knockout_simulation_id')) {
+    sqlite.exec(
+      `ALTER TABLE predictions ADD COLUMN active_knockout_simulation_id INTEGER REFERENCES simulations(id)`,
+    );
+  }
 }
 
 function migratePredictionKnockoutTables(sqlite: Database.Database) {

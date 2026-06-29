@@ -778,6 +778,17 @@ export function App() {
     }
   };
 
+  const handleSelectKnockoutRun = async (simulationId: number | null) => {
+    if (predictionId == null || publicMode) return;
+    setError(null);
+    try {
+      const next = await api.setPredictionActiveKnockoutSimulation(predictionId, simulationId);
+      setMasterKnockoutState(next);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load knockout run');
+    }
+  };
+
   const consensusModeDirty = consensusModeDraft !== consensusModeSaved;
 
   const handleSimulateGroup = async (games: 1 | 2 | 3) => {
@@ -1063,6 +1074,9 @@ export function App() {
               consensusModeDirty={consensusModeDirty}
               actualResults={state?.actualResults ?? []}
               onSelectMatch={setSelectedMatchNumber}
+              onSelectKnockoutRun={
+                publicMode ? undefined : (id) => void handleSelectKnockoutRun(id)
+              }
             />
           ) : (
             <div className="master-empty">

@@ -174,6 +174,8 @@ export interface MasterKnockoutState {
   distributions: Record<string, OutcomeDistribution>;
   hasKnockoutResults: boolean;
   groupStageComplete: boolean;
+  activeKnockoutSimulationId: number | null;
+  knockoutRuns: Array<{ id: number; name: string }>;
 }
 
 export interface MasterTeamStatsRow {

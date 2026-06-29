@@ -191,6 +191,8 @@ export interface MasterKnockoutState {
   distributions: Record<number, OutcomeDistribution>;
   hasKnockoutResults: boolean;
   groupStageComplete: boolean;
+  activeKnockoutSimulationId: number | null;
+  knockoutRuns: Array<{ id: number; name: string }>;
 }
 
 export interface MasterTeamStatsRow {
@@ -214,6 +216,7 @@ export interface Prediction {
   name: string;
   selectionSpec: SelectionSpec;
   consensusMode: 'scoreline' | 'outcome' | 'floor' | 'rounded' | 'sample';
+  activeKnockoutSimulationId: number | null;
   createdAt: string;
   updatedAt: string;
 }

@@ -68,6 +68,9 @@ export const predictions = sqliteTable('predictions', {
     .notNull()
     .$type<'scoreline' | 'outcome' | 'floor' | 'rounded' | 'sample'>()
     .default('floor'),
+  activeKnockoutSimulationId: integer('active_knockout_simulation_id').references(
+    () => simulations.id,
+  ),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
 });

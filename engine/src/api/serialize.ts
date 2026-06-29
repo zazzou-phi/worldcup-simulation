@@ -89,6 +89,8 @@ export function serializeMasterKnockoutState(state: MasterKnockoutState) {
         distribution,
       ]),
     ),
+    activeKnockoutSimulationId: state.activeKnockoutSimulationId,
+    knockoutRuns: state.knockoutRuns,
   };
 }
 
