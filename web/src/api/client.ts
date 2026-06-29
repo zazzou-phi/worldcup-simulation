@@ -203,6 +203,26 @@ const privateApi = {
       }),
     }),
 
+  resimulatePredictionKnockoutMatch: (
+    id: number,
+    matchNumber: number,
+    options?: {
+      count?: number;
+      upsetVariance?: number;
+      ratingEloWeight?: number;
+      tournamentEloDeltaWeight?: number;
+    },
+  ) =>
+    request<MasterKnockoutState>(`/api/v1/predictions/${id}/knockout/resample/${matchNumber}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        count: options?.count,
+        upsetVariance: options?.upsetVariance,
+        ratingEloWeight: options?.ratingEloWeight,
+        tournamentEloDeltaWeight: options?.tournamentEloDeltaWeight,
+      }),
+    }),
+
   setActualThirdPlaceOrder: (
     order: Array<{ groupLetter: string; position: number }>,
   ) =>
@@ -449,6 +469,9 @@ const publicApiStub = {
     throw new Error('Not available in public mode');
   },
   simulatePredictionKnockoutRound: async (): Promise<MasterKnockoutState> => {
+    throw new Error('Not available in public mode');
+  },
+  resimulatePredictionKnockoutMatch: async (): Promise<MasterKnockoutState> => {
     throw new Error('Not available in public mode');
   },
   setActualThirdPlaceOrder: async (): Promise<ActualResultsState> => {

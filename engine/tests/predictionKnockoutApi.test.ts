@@ -3,7 +3,7 @@ import {
   parsePredictionKnockoutCount,
   parseResimulateFlag,
 } from '../src/api/predictionKnockout.js';
-import { knockoutMatchNumbersFromRoundOnward } from '../src/engine/predictionKnockout.js';
+import { knockoutMatchNumbersFromRoundOnward, knockoutMatchNumbersAfterRound } from '../src/engine/predictionKnockout.js';
 
 describe('predictionKnockout API parsers', () => {
   it('parsePredictionKnockoutCount coerces numeric strings', () => {
@@ -26,5 +26,13 @@ describe('knockoutMatchNumbersFromRoundOnward', () => {
     const matches = knockoutMatchNumbersFromRoundOnward('round_of_32');
     expect(matches).toContain(73);
     expect(matches).toContain(104);
+  });
+});
+
+describe('knockoutMatchNumbersAfterRound', () => {
+  it('excludes matches from the named round', () => {
+    const matches = knockoutMatchNumbersAfterRound('round_of_32');
+    expect(matches).not.toContain(73);
+    expect(matches).toContain(89);
   });
 });

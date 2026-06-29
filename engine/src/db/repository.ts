@@ -63,15 +63,20 @@ import {
   buildPredictionKnockoutRatings,
   buildPredictionSlotContext,
   buildThirdPlaceOrderRows,
+  canResimulateKnockoutMatch,
   canResimulateKnockoutRound,
   computeKnockoutRoundAvailability,
+  findKnockoutRoundNameForMatch,
   getQualifyingThirdGroupsFromOrder,
   isGroupStageCompleteForPrediction,
+  ratedTeam,
+  simulatePredictionKnockoutMatch,
   simulatePredictionKnockoutRound,
   type ThirdPlaceOrderEntry,
 } from '../engine/predictionKnockout.js';
 import { validateThirdPlaceOrder } from '../engine/thirdPlaceOrder.js';
 import {
+  clearKnockoutResultsAfterRound,
   clearKnockoutResultsFromRoundOnward,
   clearPredictionKnockoutResults,
   deletePredictionKnockoutData,
@@ -82,6 +87,7 @@ import {
 import {
   clearActiveKnockoutSimulation,
   createPredictionKnockoutRun,
+  ensureKnockoutRunForPrediction,
   isKnockoutRunSimulationId,
   listKnockoutRunsForPrediction,
   readKnockoutResultsFromSimulation,
@@ -1754,6 +1760,119 @@ export class Repository {
     return this.buildMasterKnockoutView(predictionId);
   }
 
+  resimulatePredictionKnockoutMatchForPrediction(
+    predictionId: number,
+    matchNumber: number,
+    options: {
+      count?: number;
+      upsetVariance?: number;
+      ratingEloWeight?: number;
+      tournamentEloDeltaWeight?: number;
+    } = {},
+  ): MasterKnockoutState {
+    if (!this.getPrediction(predictionId)) {
+      throw new Error(`Prediction not found: ${predictionId}`);
+    }
+
+    const roundName = findKnockoutRoundNameForMatch(matchNumber);
+    if (!roundName) {
+      throw new RangeError(`Not a knockout match: ${matchNumber}`);
+    }
+
+    const masterGroup = this.buildMasterGroupView(predictionId);
+    const prediction = this.getPrediction(predictionId)!;
+    const teams = this.getTeams();
+    const teamsById = new Map(teams.map((team) => [team.id, team]));
+    const fixtures = this.getFixtures();
+    const groupMatches = masterGroup.resolvedMatches.filter((match) => match.fixture.group != null);
+    const groupStageComplete = isGroupStageCompleteForPrediction(
+      groupMatches.map((match) => match.result),
+    );
+
+    const thirdPlaceOrder = ensureActualThirdPlaceOrder(
+      this.db,
+      masterGroup.groupStandings,
+    );
+    let knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+    let { ctx } = buildPredictionSlotContext(
+      masterGroup.groupStandings,
+      thirdPlaceOrder,
+      fixtures,
+      knockoutResults,
+      teamsById,
+    );
+
+    const resimulateCheck = canResimulateKnockoutMatch(
+      matchNumber,
+      fixtures,
+      ctx,
+      teamsById,
+      knockoutResults,
+      groupStageComplete,
+      (lockedMatchNumber) => this.isMatchLocked(lockedMatchNumber),
+    );
+    if (!resimulateCheck.allowed) {
+      throw new Error(resimulateCheck.disabledReason ?? 'Match cannot be re-simulated');
+    }
+
+    if (resimulateCheck.clearsLaterRounds) {
+      clearKnockoutResultsAfterRound(this.db, predictionId, roundName);
+      knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+      const rebuilt = buildPredictionSlotContext(
+        masterGroup.groupStandings,
+        thirdPlaceOrder,
+        fixtures,
+        knockoutResults,
+        teamsById,
+      );
+      ctx = rebuilt.ctx;
+    }
+
+    const fixture = fixtures.find((entry) => entry.matchNumber === matchNumber);
+    if (!fixture) {
+      throw new RangeError(`Unknown match: ${matchNumber}`);
+    }
+    const { home, away } = resolveMatchTeams(fixture, ctx, teamsById);
+    if (!home || !away) {
+      throw new Error(`Unresolved participants for match ${matchNumber}`);
+    }
+
+    const eloWeight = options.ratingEloWeight ?? this.getRatingEloWeight();
+    const deltaWeight = options.tournamentEloDeltaWeight ?? this.getTournamentEloDeltaWeight();
+    const ratingsByTeamId = buildPredictionKnockoutRatings(
+      teams,
+      fixtures,
+      ctx,
+      teamsById,
+      groupMatches.map((match) => ({ fixture: match.fixture, result: match.result })),
+      knockoutResults,
+      eloWeight,
+      deltaWeight,
+    );
+
+    const simulated = simulatePredictionKnockoutMatch(
+      ratedTeam(home, ratingsByTeamId),
+      ratedTeam(away, ratingsByTeamId),
+      prediction.consensusMode,
+      options,
+    );
+
+    writePredictionKnockoutRound(this.db, predictionId, [
+      {
+        matchNumber,
+        goalsHome: simulated.goalsHome,
+        goalsAway: simulated.goalsAway,
+        winnerTeamId: simulated.winnerTeamId!,
+        penGoalsHome: simulated.penGoalsHome ?? null,
+        penGoalsAway: simulated.penGoalsAway ?? null,
+        distribution: simulated.distribution,
+      },
+    ]);
+    createPredictionKnockoutRun(this.db, this, predictionId);
+
+    return this.buildMasterKnockoutView(predictionId);
+  }
+
   setPredictionActiveKnockoutSimulation(
     predictionId: number,
     simulationId: number | null,
@@ -1766,6 +1885,8 @@ export class Repository {
   }
 
   buildMasterKnockoutView(predictionId: number): MasterKnockoutState {
+    ensureKnockoutRunForPrediction(this.db, this, predictionId);
+
     const masterGroup = this.buildMasterGroupView(predictionId);
     const teams = this.getTeams();
     const teamsById = new Map(teams.map((team) => [team.id, team]));

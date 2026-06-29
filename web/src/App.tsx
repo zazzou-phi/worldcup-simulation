@@ -1,4 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  findKnockoutRoundNameForMatch,
+  knockoutMatchNumbersAfterRound,
+} from '@shared/engine/predictionKnockout.js';
 import { api, isPublicMode, loadInitialPrediction, loadInitialSimulation } from './api/client.js';
 import { loadPublicMeta } from './api/staticClient.js';
 import { clearStoredPrediction, persistLocalPrediction } from './lib/localPredictionStorage.js';
@@ -111,6 +115,7 @@ export function App() {
   } | null>(null);
   const [showKnockoutClearConfirm, setShowKnockoutClearConfirm] = useState(false);
   const [knockoutClearAction, setKnockoutClearAction] = useState<(() => void) | null>(null);
+  const [knockoutResampleConfirm, setKnockoutResampleConfirm] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [simulating, setSimulating] = useState(false);
   const [exportingPublic, setExportingPublic] = useState(false);
@@ -614,6 +619,55 @@ export function App() {
     confirmIfKnockoutResults(resample);
   };
 
+  const knockoutSimOptions = {
+    count: predictionKnockoutMcCount,
+    upsetVariance,
+    ratingEloWeight,
+    tournamentEloDeltaWeight,
+  };
+
+  const knockoutMatchClearsLaterRounds = (matchNumber: number) => {
+    const roundName = findKnockoutRoundNameForMatch(matchNumber);
+    if (!roundName || !effectiveMasterKnockoutState) return false;
+    const laterMatches = new Set(knockoutMatchNumbersAfterRound(roundName));
+    return effectiveMasterKnockoutState.resolvedMatches.some(
+      (match) =>
+        laterMatches.has(match.fixture.matchNumber) &&
+        match.result.status === 'played' &&
+        !(state?.actualResults ?? []).some(
+          (result) => result.matchNumber === match.fixture.matchNumber,
+        ),
+    );
+  };
+
+  const executePredictionKnockoutResampleMatch = async (matchNumber: number) => {
+    if (predictionId == null || publicMode) return;
+    setResamplingMatchNumber(matchNumber);
+    setError(null);
+    try {
+      const next = await api.resimulatePredictionKnockoutMatch(
+        predictionId,
+        matchNumber,
+        knockoutSimOptions,
+      );
+      setMasterKnockoutState(next);
+      setToast(`Resampled match ${matchNumber}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to resample knockout match');
+    } finally {
+      setResamplingMatchNumber(null);
+    }
+  };
+
+  const runPredictionKnockoutResampleMatch = (matchNumber: number) => {
+    if (predictionId == null || publicMode) return;
+    if (knockoutMatchClearsLaterRounds(matchNumber)) {
+      setKnockoutResampleConfirm(matchNumber);
+      return;
+    }
+    void executePredictionKnockoutResampleMatch(matchNumber);
+  };
+
   const handleSampleButton = () => {
     if (publicMode || predictionId == null) return;
 
@@ -667,13 +721,6 @@ export function App() {
     }
     const apply = () => void persistThirdPlaceOrder(nextOrder);
     confirmIfKnockoutResults(apply);
-  };
-
-  const knockoutSimOptions = {
-    count: predictionKnockoutMcCount,
-    upsetVariance,
-    ratingEloWeight,
-    tournamentEloDeltaWeight,
   };
 
   const handleSimulatePredictionKnockoutRound = async (
@@ -1077,6 +1124,10 @@ export function App() {
               onSelectKnockoutRun={
                 publicMode ? undefined : (id) => void handleSelectKnockoutRun(id)
               }
+              onResampleMatch={
+                publicMode ? undefined : runPredictionKnockoutResampleMatch
+              }
+              resamplingMatchNumber={resamplingMatchNumber}
             />
           ) : (
             <div className="master-empty">
@@ -1235,6 +1286,20 @@ export function App() {
         <SampleConfirmModal
           onConfirm={() => void runPredictionSample()}
           onClose={() => setShowResampleConfirm(false)}
+        />
+      )}
+
+      {knockoutResampleConfirm != null && (
+        <KnockoutClearConfirmModal
+          title="Clear later knockout rounds?"
+          message="Re-sampling this match may change who advances. Simulated results in later rounds will be cleared."
+          confirmLabel="Resample"
+          onConfirm={() => {
+            const matchNumber = knockoutResampleConfirm;
+            setKnockoutResampleConfirm(null);
+            void executePredictionKnockoutResampleMatch(matchNumber);
+          }}
+          onClose={() => setKnockoutResampleConfirm(null)}
         />
       )}
 

@@ -24,6 +24,8 @@ interface Props {
   consensusModeDirty?: boolean;
   onSelectMatch: (matchNumber: number | null) => void;
   onSelectKnockoutRun?: (simulationId: number | null) => void;
+  onResampleMatch?: (matchNumber: number) => void;
+  resamplingMatchNumber?: number | null;
   actualResults?: ActualMatchResult[];
 }
 
@@ -37,6 +39,8 @@ export function MasterKnockoutView({
   consensusModeDirty = false,
   onSelectMatch,
   onSelectKnockoutRun,
+  onResampleMatch,
+  resamplingMatchNumber = null,
   actualResults = [],
 }: Props) {
   const publicMode = isPublicMode();
@@ -149,6 +153,14 @@ export function MasterKnockoutView({
     }
   };
 
+  const canResampleMatch = (matchNumber: number) =>
+    !actualMatchNumbers.has(matchNumber) &&
+    (masterKnockoutState.distributions[String(matchNumber)]?.total ??
+      masterKnockoutState.distributions[matchNumber as unknown as string]?.total ??
+      0) > 0 &&
+    masterKnockoutState.resolvedMatches.find((match) => match.fixture.matchNumber === matchNumber)
+      ?.result.status === 'played';
+
   const matchProps = {
     matches: masterKnockoutState.resolvedMatches,
     selectedMatchNumber,
@@ -167,6 +179,10 @@ export function MasterKnockoutView({
     onSave: () => {},
     onCancelEdit: () => {},
     onClear: () => {},
+    showSampleResample: !publicMode && onResampleMatch != null,
+    canResampleMatch: onResampleMatch != null ? canResampleMatch : undefined,
+    resamplingMatchNumber,
+    onResampleMatch,
   };
 
   return (

@@ -279,12 +279,19 @@ export function buildPredictionKnockoutRatings(
   return computeSimulationRatings(teams, deltas, eloWeight, deltaWeight);
 }
 
-function ratedTeam(
+export function ratedTeam(
   team: Team,
   ratingsByTeamId?: Map<number, SimulationRatings>,
 ): Team {
   const ratings = ratingsByTeamId?.get(team.id);
   return ratings ? teamForSimulation(team, ratings) : team;
+}
+
+export function findKnockoutRoundNameForMatch(matchNumber: number): string | null {
+  const round = SIMULATION_KNOCKOUT_ROUNDS.find((entry) =>
+    (entry.matches as readonly number[]).includes(matchNumber),
+  );
+  return round?.name ?? null;
 }
 
 export function knockoutMatchNumbersFromRoundOnward(roundName: string): number[] {
@@ -297,6 +304,62 @@ export function knockoutMatchNumbersFromRoundOnward(roundName: string): number[]
     matchNumbers.push(...SIMULATION_KNOCKOUT_ROUNDS[index]!.matches);
   }
   return matchNumbers;
+}
+
+export function knockoutMatchNumbersAfterRound(roundName: string): number[] {
+  const roundIndex = SIMULATION_KNOCKOUT_ROUNDS.findIndex((round) => round.name === roundName);
+  if (roundIndex < 0) {
+    throw new RangeError(`Unknown knockout round: ${roundName}`);
+  }
+  const matchNumbers: number[] = [];
+  for (let index = roundIndex + 1; index < SIMULATION_KNOCKOUT_ROUNDS.length; index += 1) {
+    matchNumbers.push(...SIMULATION_KNOCKOUT_ROUNDS[index]!.matches);
+  }
+  return matchNumbers;
+}
+
+export function canResimulateKnockoutMatch(
+  matchNumber: number,
+  fixtures: Fixture[],
+  ctx: SlotContext,
+  teamsById: Map<number, Team>,
+  knockoutResults: PredictionKnockoutResult[],
+  groupStageComplete: boolean,
+  isLocked: (matchNumber: number) => boolean,
+): { allowed: boolean; disabledReason?: string; clearsLaterRounds: boolean } {
+  if (isLocked(matchNumber)) {
+    return { allowed: false, disabledReason: 'Actual result is locked', clearsLaterRounds: false };
+  }
+
+  if (!groupStageComplete) {
+    return { allowed: false, disabledReason: 'Complete the group stage first', clearsLaterRounds: false };
+  }
+
+  const hasResult = knockoutResults.some((result) => result.matchNumber === matchNumber);
+  if (!hasResult) {
+    return { allowed: false, disabledReason: 'Match has not been simulated yet', clearsLaterRounds: false };
+  }
+
+  const roundName = findKnockoutRoundNameForMatch(matchNumber);
+  if (!roundName) {
+    return { allowed: false, disabledReason: 'Not a knockout match', clearsLaterRounds: false };
+  }
+
+  const fixture = fixtures.find((entry) => entry.matchNumber === matchNumber);
+  if (!fixture) {
+    return { allowed: false, disabledReason: 'Unknown match', clearsLaterRounds: false };
+  }
+
+  const { home, away } = resolveMatchTeams(fixture, ctx, teamsById);
+  if (!home || !away) {
+    return { allowed: false, disabledReason: 'Teams not yet resolved for this match', clearsLaterRounds: false };
+  }
+
+  const played = playedKnockoutMatchNumbers(knockoutResults);
+  const laterMatches = knockoutMatchNumbersAfterRound(roundName);
+  const clearsLaterRounds = laterMatches.some((laterMatchNumber) => played.has(laterMatchNumber));
+
+  return { allowed: true, clearsLaterRounds };
 }
 
 export function canResimulateKnockoutRound(

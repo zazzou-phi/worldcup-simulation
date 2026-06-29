@@ -44,6 +44,10 @@ interface Props {
   doubledMatchNumbers?: ReadonlySet<number>;
   actualMatchNumbers?: ReadonlySet<number>;
   onToggleFixedDouble?: (matchNumber: number) => void;
+  showSampleResample?: boolean;
+  canResampleMatch?: (matchNumber: number) => boolean;
+  resamplingMatchNumber?: number | null;
+  onResampleMatch?: (matchNumber: number) => void;
 }
 
 function teamClassName(match: ResolvedMatch, side: 'home' | 'away'): string {
@@ -270,6 +274,10 @@ export function KnockoutList({
   doubledMatchNumbers,
   actualMatchNumbers,
   onToggleFixedDouble,
+  showSampleResample,
+  canResampleMatch,
+  resamplingMatchNumber,
+  onResampleMatch,
 }: Props) {
   const knockout = useMemo(() => {
     const filtered = matches.filter((m) => m.fixture.group == null);
@@ -301,6 +309,10 @@ export function KnockoutList({
         onClear={onClear}
         canClearMatch={canClearMatch}
         canModifyMatch={canModifyMatch}
+        showSampleResample={showSampleResample}
+        canResampleMatch={canResampleMatch}
+        resamplingMatchNumber={resamplingMatchNumber}
+        onResampleMatch={onResampleMatch}
       />
     </div>
   );

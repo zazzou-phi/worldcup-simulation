@@ -5,6 +5,7 @@ import * as schema from '../src/db/schema.js';
 import { initSchema } from '../src/db/client.js';
 import { seedDatabase } from '../src/db/seed.js';
 import { Repository } from '../src/db/repository.js';
+import { readPredictionKnockoutResults } from '../src/db/predictionKnockoutStorage.js';
 
 function ensureTestPrediction(repo: Repository, maxId = 9999): number {
   const existing = repo.getActivePrediction();
@@ -337,6 +338,56 @@ describe('repository integration', () => {
     )!;
     expect(unplayedGroup.status).toBe('scheduled');
     expect(unplayedGroup.goalsHome).toBeNull();
+  });
+
+  it('backfills a knockout run when results exist but no saved run', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const runId = repo.buildMasterKnockoutView(predictionId).knockoutRuns[0]!.id;
+    repo.setPredictionActiveKnockoutSimulation(predictionId, null);
+    expect(repo.deleteSimulation(runId)).toBe(true);
+
+    const view = repo.buildMasterKnockoutView(predictionId);
+    expect(view.knockoutRuns).toHaveLength(1);
+    expect(view.activeKnockoutSimulationId).toBe(view.knockoutRuns[0]!.id);
+    const r32 = repo
+      .getSimulationMatches(view.knockoutRuns[0]!.id)
+      .find((match) => match.matchNumber === 73)!;
+    expect(r32.status).toBe('played');
+  });
+
+  it('resimulates a single knockout match without changing other matches in the round', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const before = readPredictionKnockoutResults(repo['db'], predictionId);
+    const otherMatch = before.find((result) => result.matchNumber !== 73)!;
+    const beforeOther = { ...otherMatch };
+
+    repo.resimulatePredictionKnockoutMatchForPrediction(predictionId, 73, { count: 100 });
+
+    const after = readPredictionKnockoutResults(repo['db'], predictionId);
+    const after73 = after.find((result) => result.matchNumber === 73)!;
+    const afterOther = after.find((result) => result.matchNumber === otherMatch.matchNumber)!;
+    expect(after73.goalsHome).not.toBeNull();
+    expect(afterOther.goalsHome).toBe(beforeOther.goalsHome);
+    expect(afterOther.goalsAway).toBe(beforeOther.goalsAway);
+    expect(repo.buildMasterKnockoutView(predictionId).knockoutRuns.length).toBeGreaterThan(1);
   });
 
   it('master knockout keeps simulated predictions when actual results exist', () => {

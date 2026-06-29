@@ -345,6 +345,52 @@ export function createApiApp(repo: Repository) {
     return c.json(serializeMasterKnockoutState(view));
   });
 
+  app.post('/api/v1/predictions/:id/knockout/resample/:matchNumber', async (c) => {
+    const id = parseIntParam(c.req.param('id'));
+    const matchNumber = parseIntParam(c.req.param('matchNumber'));
+    if (!repo.getPrediction(id)) {
+      throw new ApiError('Prediction not found', 404, 'prediction_not_found');
+    }
+    const body = await c.req.json().catch(() => ({}));
+    const count =
+      body && typeof body === 'object' && (body as { count?: unknown }).count !== undefined
+        ? parsePredictionKnockoutCount((body as { count?: unknown }).count)
+        : undefined;
+    const upsetVariance =
+      body && typeof body === 'object'
+        ? parseUpsetVariance((body as { upsetVariance?: unknown }).upsetVariance)
+        : undefined;
+    const ratingEloWeightRaw =
+      body && typeof body === 'object' ? (body as { ratingEloWeight?: unknown }).ratingEloWeight : undefined;
+    const tournamentEloDeltaWeightRaw =
+      body && typeof body === 'object'
+        ? (body as { tournamentEloDeltaWeight?: unknown }).tournamentEloDeltaWeight
+        : undefined;
+    const ratingEloWeight =
+      ratingEloWeightRaw === undefined ? undefined : parseRatingEloWeight(ratingEloWeightRaw);
+    const tournamentEloDeltaWeight =
+      tournamentEloDeltaWeightRaw === undefined
+        ? undefined
+        : parseTournamentEloDeltaWeight(tournamentEloDeltaWeightRaw);
+    try {
+      const view = repo.resimulatePredictionKnockoutMatchForPrediction(id, matchNumber, {
+        count,
+        upsetVariance,
+        ratingEloWeight,
+        tournamentEloDeltaWeight,
+      });
+      return c.json(serializeMasterKnockoutState(view));
+    } catch (err) {
+      if (err instanceof RangeError) {
+        throw new ApiError(err.message, 400, 'invalid_body');
+      }
+      if (err instanceof Error) {
+        throw new ApiError(err.message, 409, 'knockout_resample_error');
+      }
+      throw err;
+    }
+  });
+
   app.put('/api/v1/predictions/:id/active-knockout-simulation', async (c) => {
     const id = parseIntParam(c.req.param('id'));
     if (!repo.getPrediction(id)) {

@@ -172,6 +172,17 @@ export function clearActiveKnockoutSimulation(db: Db, predictionId: number): voi
     .run();
 }
 
+/** Backfill a saved run when knockout results exist from before run persistence shipped. */
+export function ensureKnockoutRunForPrediction(
+  db: Db,
+  repo: Repository,
+  predictionId: number,
+): void {
+  if (listKnockoutRunsForPrediction(repo, predictionId).length > 0) return;
+  if (readPredictionKnockoutResults(db, predictionId).length === 0) return;
+  createPredictionKnockoutRun(db, repo, predictionId);
+}
+
 /** Persist the current prediction knockout path as a new loadable simulation run. */
 export function createPredictionKnockoutRun(
   db: Db,

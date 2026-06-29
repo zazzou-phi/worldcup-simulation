@@ -8,6 +8,7 @@ import type {
 } from '../engine/predictionKnockout.js';
 import {
   defaultThirdPlaceOrder,
+  knockoutMatchNumbersAfterRound,
   knockoutMatchNumbersFromRoundOnward,
 } from '../engine/predictionKnockout.js';
 import type { GroupStandings } from '../engine/types.js';
@@ -101,6 +102,23 @@ export function clearKnockoutResultsFromRoundOnward(
 ): void {
   const matchNumbers = knockoutMatchNumbersFromRoundOnward(roundName);
   for (const matchNumber of matchNumbers) {
+    db.delete(schema.predictionKnockoutResults)
+      .where(
+        and(
+          eq(schema.predictionKnockoutResults.predictionId, predictionId),
+          eq(schema.predictionKnockoutResults.matchNumber, matchNumber),
+        ),
+      )
+      .run();
+  }
+}
+
+export function clearKnockoutResultsAfterRound(
+  db: Db,
+  predictionId: number,
+  roundName: string,
+): void {
+  for (const matchNumber of knockoutMatchNumbersAfterRound(roundName)) {
     db.delete(schema.predictionKnockoutResults)
       .where(
         and(
