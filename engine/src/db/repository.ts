@@ -80,6 +80,11 @@ import {
   writePredictionKnockoutRound,
 } from './predictionKnockoutStorage.js';
 import {
+  clearPredictionKnockoutSnapshot,
+  isKnockoutSnapshotSimulationId,
+  syncPredictionKnockoutSnapshot,
+} from './predictionKnockoutSnapshot.js';
+import {
   ensureActualThirdPlaceOrder,
   writeActualThirdPlaceOrder,
 } from './actualThirdPlaceStorage.js';
@@ -671,6 +676,7 @@ export class Repository {
   }
 
   private refreshPredictionsForSimulation(simulationId: number): void {
+    if (isKnockoutSnapshotSimulationId(this, simulationId)) return;
     for (const prediction of this.listPredictions()) {
       if (simulationIdInSpec(simulationId, prediction.selectionSpec)) {
         refreshSimulationInPredictionAggregates(this.db, prediction.id, simulationId);
@@ -681,6 +687,7 @@ export class Repository {
 
   private invalidatePredictionKnockout(predictionId: number): void {
     clearPredictionKnockoutResults(this.db, predictionId);
+    clearPredictionKnockoutSnapshot(this.db, this, predictionId);
   }
 
   private invalidateAllPredictionKnockouts(): void {
@@ -1738,6 +1745,7 @@ export class Repository {
         distribution: result.distribution,
       })),
     );
+    syncPredictionKnockoutSnapshot(this.db, this, predictionId);
 
     return this.buildMasterKnockoutView(predictionId);
   }
@@ -1805,20 +1813,7 @@ export class Repository {
       const isLocked = this.isMatchLocked(fixture.matchNumber);
 
       let result: SimulationMatch;
-      if (actual) {
-        result = {
-          simulationId: 0,
-          matchNumber: fixture.matchNumber,
-          teamHomeId: home?.id ?? fixture.teamHomeId,
-          teamAwayId: away?.id ?? fixture.teamAwayId,
-          goalsHome: actual.goalsHome,
-          goalsAway: actual.goalsAway,
-          penGoalsHome: null,
-          penGoalsAway: null,
-          winnerTeamId: actual.winnerTeamId,
-          status: 'played',
-        };
-      } else if (persisted) {
+      if (persisted) {
         result = {
           simulationId: 0,
           matchNumber: fixture.matchNumber,
@@ -1829,6 +1824,19 @@ export class Repository {
           penGoalsHome: persisted.penGoalsHome,
           penGoalsAway: persisted.penGoalsAway,
           winnerTeamId: persisted.winnerTeamId,
+          status: 'played',
+        };
+      } else if (actual) {
+        result = {
+          simulationId: 0,
+          matchNumber: fixture.matchNumber,
+          teamHomeId: home?.id ?? fixture.teamHomeId,
+          teamAwayId: away?.id ?? fixture.teamAwayId,
+          goalsHome: actual.goalsHome,
+          goalsAway: actual.goalsAway,
+          penGoalsHome: null,
+          penGoalsAway: null,
+          winnerTeamId: actual.winnerTeamId,
           status: 'played',
         };
       } else {

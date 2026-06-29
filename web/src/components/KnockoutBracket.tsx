@@ -60,11 +60,13 @@ function MatchNode({
   large = false,
   simulating = false,
   canEdit,
+  canClear = false,
   onSelect,
   onStartEdit,
   onSimulate,
   onSave,
   onCancelEdit,
+  onClear,
   actual,
   hidePredicted = false,
 }: {
@@ -74,11 +76,13 @@ function MatchNode({
   large?: boolean;
   simulating?: boolean;
   canEdit: boolean;
+  canClear?: boolean;
   onSelect: () => void;
   onStartEdit: () => void;
   onSimulate?: () => void;
   onSave: (h: number, a: number, w: number | null) => void;
   onCancelEdit: () => void;
+  onClear?: () => void;
   actual?: ActualMatchResult;
   hidePredicted?: boolean;
 }) {
@@ -142,6 +146,18 @@ function MatchNode({
       <div className={`bracket-node-team ${teamClassName(match, 'away')}`}>
         {matchSideCode(match, 'away')}
       </div>
+      {selected && canClear && !editing && onClear && (
+        <button
+          type="button"
+          className="btn btn-small btn-danger bracket-node-clear"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClear();
+          }}
+        >
+          Clear
+        </button>
+      )}
     </div>
   );
 }
@@ -157,6 +173,7 @@ export function KnockoutBracket({
   onSave,
   onCancelEdit,
   onClear,
+  canClearMatch,
   canModifyMatch,
   actualResults = [],
   hidePredictedWhenLocked = false,
@@ -194,6 +211,9 @@ export function KnockoutBracket({
                   !m.isLocked && (canModifyMatch == null || canModifyMatch(num));
                 const actual = actualByMatch.get(num);
                 const hidePredicted = hidePredictedWhenLocked && m.isLocked && actual != null;
+                const played = m.result.status === 'played';
+                const canClear =
+                  played && (canClearMatch == null ? !m.isLocked : canClearMatch(num));
                 return (
                   <div
                     key={num}
@@ -207,6 +227,7 @@ export function KnockoutBracket({
                       large={large}
                       simulating={simulating}
                       canEdit={editable}
+                      canClear={canClear}
                       onSelect={() => onSelect(num === selectedMatchNumber ? null : num)}
                       onStartEdit={() => onStartEdit(num)}
                       onSimulate={
@@ -214,6 +235,7 @@ export function KnockoutBracket({
                       }
                       onSave={(h, a, w) => onSave(num, h, a, w)}
                       onCancelEdit={onCancelEdit}
+                      onClear={() => onClear(num)}
                       actual={actual}
                       hidePredicted={hidePredicted}
                     />

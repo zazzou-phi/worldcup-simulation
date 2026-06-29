@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api, isPublicMode, loadInitialPrediction, loadInitialSimulation } from './api/client.js';
 import { loadPublicMeta } from './api/staticClient.js';
 import { clearStoredPrediction, persistLocalPrediction } from './lib/localPredictionStorage.js';
+import { applyLocalKnockoutToMasterState } from './lib/applyLocalKnockoutToMasterState.js';
 import {
   clearLocalMatchScore,
   LocalSimulationError,
@@ -184,6 +185,12 @@ export function App() {
     );
   }, [masterStateBase, consensusModeDraft, state, publicMode]);
 
+  const effectiveMasterKnockoutState = useMemo(() => {
+    if (!masterKnockoutState) return null;
+    if (!publicMode || !state) return masterKnockoutState;
+    return applyLocalKnockoutToMasterState(state, masterKnockoutState);
+  }, [masterKnockoutState, state, publicMode]);
+
   const canSamplePrediction = useMemo(() => {
     if (!masterState) return false;
     return masterState.resolvedMatches.some((match) => {
@@ -264,7 +271,7 @@ export function App() {
     appView === 'predictions' ? predictionsShowGroupView : showGroupView;
 
   const confirmIfKnockoutResults = (action: () => void | Promise<void>) => {
-    if (masterKnockoutState?.hasKnockoutResults) {
+    if (effectiveMasterKnockoutState?.hasKnockoutResults) {
       setKnockoutClearAction(() => () => void action());
       setShowKnockoutClearConfirm(true);
       return;
@@ -580,7 +587,7 @@ export function App() {
         setShowResampleConfirm(false);
       }
     };
-    if (masterKnockoutState?.hasKnockoutResults) {
+    if (effectiveMasterKnockoutState?.hasKnockoutResults) {
       setKnockoutClearAction(() => () => void sample());
       setShowKnockoutClearConfirm(true);
       return;
@@ -617,7 +624,7 @@ export function App() {
 
     if (consensusModeDraft === 'sample') {
       if (masterStateBase?.sample?.sampledAt) {
-        if (masterKnockoutState?.hasKnockoutResults) {
+        if (effectiveMasterKnockoutState?.hasKnockoutResults) {
           setKnockoutClearAction(() => () => setShowResampleConfirm(true));
           setShowKnockoutClearConfirm(true);
         } else {
@@ -987,9 +994,9 @@ export function App() {
         sampling={samplingPrediction}
         simulatingPredictionKnockout={simulatingPredictionKnockout}
         onSample={publicMode ? undefined : handleSampleButton}
-        predictionKnockoutRounds={masterKnockoutState?.rounds}
-        predictionGroupStageComplete={masterKnockoutState?.groupStageComplete ?? false}
-        predictionHasKnockoutResults={masterKnockoutState?.hasKnockoutResults ?? false}
+        predictionKnockoutRounds={effectiveMasterKnockoutState?.rounds}
+        predictionGroupStageComplete={effectiveMasterKnockoutState?.groupStageComplete ?? false}
+        predictionHasKnockoutResults={effectiveMasterKnockoutState?.hasKnockoutResults ?? false}
         onSimulatePredictionKnockoutRound={
           publicMode ? undefined : handleSimulatePredictionKnockoutRound
         }
@@ -1036,7 +1043,7 @@ export function App() {
               fixtures={state.fixtures}
               groupMemberships={state.groupMemberships}
               actualResults={state?.actualResults ?? []}
-              thirdPlaceOrder={masterKnockoutState?.thirdPlaceOrder}
+              thirdPlaceOrder={effectiveMasterKnockoutState?.thirdPlaceOrder}
               canEditThirdPlace={false}
               canEditFrozenConsensus={!publicMode}
               savingFrozenConsensus={savingFrozenConsensus}
@@ -1045,10 +1052,10 @@ export function App() {
               onResampleMatch={runPredictionSampleMatch}
               resamplingMatchNumber={resamplingMatchNumber}
             />
-          ) : masterKnockoutState ? (
+          ) : effectiveMasterKnockoutState ? (
             <MasterKnockoutView
               predictionId={predictionId}
-              masterKnockoutState={masterKnockoutState}
+              masterKnockoutState={effectiveMasterKnockoutState}
               useBracketView={knockoutBracketView}
               onViewChange={setKnockoutBracketView}
               selectedMatchNumber={selectedMatchNumber}

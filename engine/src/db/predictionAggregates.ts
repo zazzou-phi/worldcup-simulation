@@ -8,6 +8,7 @@ import {
   type SelectionSpec,
 } from '../lib/simulationSelection.js';
 import { FINAL_MATCH_NUMBER } from '../engine/simulationRounds.js';
+import { KNOCKOUT_SNAPSHOT_SIMULATION_SQL } from './predictionKnockoutSnapshot.js';
 
 export interface PredictionMatchOutcomeCounts {
   homeWin: number;
@@ -563,6 +564,7 @@ export function rebuildPredictionAggregates(
       AND sm.goals_away IS NOT NULL
       AND ${UNLOCKED_GROUP_MATCH_SQL}
       AND ${simFilter}
+      AND ${KNOCKOUT_SNAPSHOT_SIMULATION_SQL}
     GROUP BY sm.match_number;
 
     INSERT INTO prediction_match_scorelines (prediction_id, match_number, goals_home, goals_away, count)
@@ -575,6 +577,7 @@ export function rebuildPredictionAggregates(
       AND sm.goals_away IS NOT NULL
       AND ${UNLOCKED_GROUP_MATCH_SQL}
       AND ${simFilter}
+      AND ${KNOCKOUT_SNAPSHOT_SIMULATION_SQL}
     GROUP BY sm.match_number, sm.goals_home, sm.goals_away;
 
     INSERT INTO prediction_group_match_results (prediction_id, simulation_id, match_number, goals_home, goals_away)
@@ -586,7 +589,8 @@ export function rebuildPredictionAggregates(
       AND sm.goals_home IS NOT NULL
       AND sm.goals_away IS NOT NULL
       AND ${UNLOCKED_GROUP_MATCH_SQL}
-      AND ${simFilter};
+      AND ${simFilter}
+      AND ${KNOCKOUT_SNAPSHOT_SIMULATION_SQL};
 
     INSERT INTO prediction_simulation_team_goals (prediction_id, simulation_id, team_id, goals)
     SELECT ${predictionId}, simulation_id, team_id, SUM(goals)
@@ -597,6 +601,7 @@ export function rebuildPredictionAggregates(
         AND sm.team_home_id IS NOT NULL
         AND sm.goals_home IS NOT NULL
         AND ${simFilter}
+        AND ${KNOCKOUT_SNAPSHOT_SIMULATION_SQL}
       UNION ALL
       SELECT sm.simulation_id, sm.team_away_id AS team_id, sm.goals_away AS goals
       FROM simulation_matches sm
@@ -604,6 +609,7 @@ export function rebuildPredictionAggregates(
         AND sm.team_away_id IS NOT NULL
         AND sm.goals_away IS NOT NULL
         AND ${simFilter}
+        AND ${KNOCKOUT_SNAPSHOT_SIMULATION_SQL}
     )
     GROUP BY simulation_id, team_id;
 
@@ -623,6 +629,7 @@ export function rebuildPredictionAggregates(
         AND sm.status = 'played'
         AND sm.winner_team_id IS NOT NULL
         AND ${simFilter}
+        AND ${KNOCKOUT_SNAPSHOT_SIMULATION_SQL}
     ) AS all_teams
     LEFT JOIN (
       SELECT team_id, SUM(goals) AS total_goals, COUNT(*) AS simulations_with_matches
@@ -637,6 +644,7 @@ export function rebuildPredictionAggregates(
         AND sm.status = 'played'
         AND sm.winner_team_id IS NOT NULL
         AND ${simFilter}
+        AND ${KNOCKOUT_SNAPSHOT_SIMULATION_SQL}
       GROUP BY sm.winner_team_id
     ) champion_stats ON champion_stats.team_id = all_teams.team_id;
   `);

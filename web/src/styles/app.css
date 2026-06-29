@@ -1178,6 +1178,14 @@ button {
   white-space: nowrap;
 }
 
+.bracket-node-clear {
+  display: block;
+  width: 100%;
+  margin-top: 0.2rem;
+  padding: 0.1rem 0.25rem;
+  font-size: 0.72em;
+}
+
 .team-winner {
   color: var(--green);
   font-weight: 600;

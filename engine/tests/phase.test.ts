@@ -152,4 +152,19 @@ describe('actual result phase', () => {
     expect(canClearSimulationResult(1, matches, fixtures)).toBe(false);
     expect(canClearSimulationResult(3, matches, fixtures)).toBe(true);
   });
+
+  it('canClearActualResult allows clearing knockout results in the latest played round', () => {
+    const fixtures = repo.getFixtures();
+    for (const f of fixtures.filter((fixture) => fixture.group != null)) {
+      repo.setActualResult(f.matchNumber, 1, 0, f.teamHomeId);
+    }
+    repo.setActualResult(73, 2, 1, null);
+    const actuals = repo.getActualResults();
+    expect(canClearActualResult(73, actuals, fixtures)).toBe(true);
+
+    repo.setActualResult(74, 1, 0, null);
+    const withSameRound = repo.getActualResults();
+    expect(canClearActualResult(73, withSameRound, fixtures)).toBe(true);
+    expect(canClearActualResult(74, withSameRound, fixtures)).toBe(true);
+  });
 });

@@ -261,6 +261,61 @@ describe('repository integration', () => {
     expect(southAfrica.goalsFor).toBe(1);
   });
 
+  it('syncs prediction knockout results to a snapshot simulation', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const prediction = repo.getPrediction(predictionId)!;
+    const snapshot = repo
+      .listSimulations()
+      .find((entry) => entry.name === `Knockout snapshot — ${prediction.name}`);
+    expect(snapshot).toBeDefined();
+
+    const r32 = repo.getSimulationMatches(snapshot!.id).find((m) => m.matchNumber === 73)!;
+    expect(r32.status).toBe('played');
+    expect(r32.goalsHome).not.toBeNull();
+    expect(r32.goalsAway).not.toBeNull();
+  });
+
+  it('master knockout keeps simulated predictions when actual results exist', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const beforeActual = repo.buildMasterKnockoutView(predictionId);
+    const r32Match = beforeActual.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
+    expect(r32Match.result.status).toBe('played');
+    const predictedHome = r32Match.result.goalsHome!;
+    const predictedAway = r32Match.result.goalsAway!;
+
+    let actualHome = 2;
+    let actualAway = 0;
+    if (predictedHome === actualHome && predictedAway === actualAway) {
+      actualHome = 3;
+      actualAway = 1;
+    }
+    repo.setActualResult(73, actualHome, actualAway, null);
+
+    const afterActual = repo.buildMasterKnockoutView(predictionId);
+    const r32After = afterActual.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
+    expect(r32After.result.goalsHome).toBe(predictedHome);
+    expect(r32After.result.goalsAway).toBe(predictedAway);
+    expect(r32After.isLocked).toBe(true);
+  });
+
   it('aggregates team goals across simulations including knockouts', () => {
     const sim1 = repo.createSimulation('One');
     const sim2 = repo.createSimulation('Two');
