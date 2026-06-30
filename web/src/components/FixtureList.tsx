@@ -9,6 +9,10 @@ interface Props {
   editingMatchNumber: number | null;
   filterTeamLabel?: string | null;
   allowEdit?: boolean;
+  /** In the recorded-results editor, locked matches are still editable/clearable. */
+  editRecordedResults?: boolean;
+  /** Single-click score selects the row (double-click still edits). */
+  selectOnScoreClick?: boolean;
   clearLockedOnly?: boolean;
   canClearMatch?: (matchNumber: number) => boolean;
   canModifyMatch?: (matchNumber: number) => boolean;
@@ -51,6 +55,8 @@ export function FixtureList({
   editingMatchNumber,
   filterTeamLabel = null,
   allowEdit = true,
+  editRecordedResults = false,
+  selectOnScoreClick = false,
   clearLockedOnly = false,
   canClearMatch,
   canModifyMatch,
@@ -104,7 +110,9 @@ export function FixtureList({
           const played = m.result.status === 'played';
           const locked = m.isLocked;
           const canEdit =
-            allowEdit && !locked && (canModifyMatch == null || canModifyMatch(num));
+            allowEdit &&
+            (editRecordedResults || !locked) &&
+            (canModifyMatch == null || canModifyMatch(num));
           const canSimulate = canEdit && !played && onSimulateMatch != null;
           const canClear =
             played &&
@@ -193,7 +201,9 @@ export function FixtureList({
                     canSimulate={canSimulate}
                     simulating={simulating}
                     onClick={() => {
-                      if (played && canEdit) {
+                      if (selectOnScoreClick && played) {
+                        onSelect(selected ? null : num);
+                      } else if (played && canEdit) {
                         onStartEdit(num);
                       } else if (canSimulate) {
                         onSimulateMatch!(num);

@@ -37,6 +37,8 @@ interface Props {
   onClear: (matchNumber: number) => void;
   canClearMatch?: (matchNumber: number) => boolean;
   canModifyMatch?: (matchNumber: number) => boolean;
+  editRecordedResults?: boolean;
+  selectOnScoreClick?: boolean;
   actualResults?: ActualMatchResult[];
   hidePredictedWhenLocked?: boolean;
   doubleCount?: number;
@@ -65,6 +67,7 @@ function MatchNode({
   simulating = false,
   canEdit,
   canClear = false,
+  selectOnScoreClick = false,
   onSelect,
   onStartEdit,
   onSimulate,
@@ -81,6 +84,7 @@ function MatchNode({
   simulating?: boolean;
   canEdit: boolean;
   canClear?: boolean;
+  selectOnScoreClick?: boolean;
   onSelect: () => void;
   onStartEdit: () => void;
   onSimulate?: () => void;
@@ -138,7 +142,9 @@ function MatchNode({
           canSimulate={canSimulate}
           simulating={simulating}
           onClick={() => {
-            if (played && editable) {
+            if (selectOnScoreClick && played) {
+              onSelect();
+            } else if (played && editable) {
               onStartEdit();
             } else if (canSimulate) {
               onSimulate!();
@@ -179,6 +185,8 @@ export function KnockoutBracket({
   onClear,
   canClearMatch,
   canModifyMatch,
+  editRecordedResults = false,
+  selectOnScoreClick = false,
   actualResults = [],
   hidePredictedWhenLocked = false,
 }: Props) {
@@ -212,7 +220,8 @@ export function KnockoutBracket({
                 if (!m) return null;
                 const large = num === FINAL_MATCH_NUMBER;
                 const editable =
-                  !m.isLocked && (canModifyMatch == null || canModifyMatch(num));
+                  (editRecordedResults || !m.isLocked) &&
+                  (canModifyMatch == null || canModifyMatch(num));
                 const actual = actualByMatch.get(num);
                 const hidePredicted = hidePredictedWhenLocked && m.isLocked && actual != null;
                 const played = m.result.status === 'played';
@@ -232,6 +241,7 @@ export function KnockoutBracket({
                       simulating={simulating}
                       canEdit={editable}
                       canClear={canClear}
+                      selectOnScoreClick={selectOnScoreClick}
                       onSelect={() => onSelect(num === selectedMatchNumber ? null : num)}
                       onStartEdit={() => onStartEdit(num)}
                       onSimulate={
@@ -267,6 +277,8 @@ export function KnockoutList({
   onClear,
   canClearMatch,
   canModifyMatch,
+  editRecordedResults = false,
+  selectOnScoreClick = false,
   actualResults = [],
   hidePredictedWhenLocked = false,
   doubleCount,
@@ -309,6 +321,8 @@ export function KnockoutList({
         onClear={onClear}
         canClearMatch={canClearMatch}
         canModifyMatch={canModifyMatch}
+        editRecordedResults={editRecordedResults}
+        selectOnScoreClick={selectOnScoreClick}
         showSampleResample={showSampleResample}
         canResampleMatch={canResampleMatch}
         resamplingMatchNumber={resamplingMatchNumber}

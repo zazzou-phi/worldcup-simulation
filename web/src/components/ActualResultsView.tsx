@@ -125,6 +125,8 @@ export function ActualResultsView({
           editingMatchNumber={editingMatchNumber}
           filterTeamLabel={filterTeamLabel}
           allowEdit={!readOnly}
+          editRecordedResults
+          selectOnScoreClick
           canClearMatch={canClearMatch}
           canModifyMatch={canModifyMatch}
           onSelect={onSelectMatch}
