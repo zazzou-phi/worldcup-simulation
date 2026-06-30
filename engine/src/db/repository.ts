@@ -70,6 +70,8 @@ import {
   getQualifyingThirdGroupsFromOrder,
   isGroupStageCompleteForPrediction,
   ratedTeam,
+  resampleKnockoutMatchFromDistribution,
+  resamplePredictionKnockoutRound,
   simulatePredictionKnockoutMatch,
   simulatePredictionKnockoutRound,
   type ThirdPlaceOrderEntry,
@@ -1709,21 +1711,41 @@ export class Repository {
       if (!resimulateCheck.allowed) {
         throw new Error(resimulateCheck.disabledReason ?? 'Round cannot be re-simulated');
       }
-      clearUnlockedKnockoutResultsFromRoundOnward(
+
+      const isMatchLocked = (matchNumber: number) => this.isMatchLocked(matchNumber);
+      const { results, clearsLaterRounds } = resamplePredictionKnockoutRound(
+        roundName,
+        fixtures,
+        ctx,
+        teamsById,
+        knockoutResults,
+        { isMatchLocked },
+      );
+
+      if (clearsLaterRounds) {
+        clearUnlockedKnockoutResultsAfterRound(
+          this.db,
+          predictionId,
+          roundName,
+          isMatchLocked,
+        );
+      }
+
+      writePredictionKnockoutRound(
         this.db,
         predictionId,
-        roundName,
-        (matchNumber) => this.isMatchLocked(matchNumber),
+        results.map((result) => ({
+          matchNumber: result.matchNumber,
+          goalsHome: result.goalsHome,
+          goalsAway: result.goalsAway,
+          winnerTeamId: result.winnerTeamId!,
+          penGoalsHome: result.penGoalsHome ?? null,
+          penGoalsAway: result.penGoalsAway ?? null,
+          distribution: result.distribution,
+        })),
       );
-      knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
-      const rebuilt = buildPredictionSlotContext(
-        masterGroup.groupStandings,
-        thirdPlaceOrder,
-        fixtures,
-        knockoutResults,
-        teamsById,
-      );
-      ctx = rebuilt.ctx;
+      syncActiveKnockoutRun(this.db, this, predictionId);
+      return this.buildMasterKnockoutView(predictionId);
     } else if (!round.canSimulate) {
       throw new Error(round.disabledReason ?? 'Round cannot be simulated');
     }
@@ -1828,24 +1850,6 @@ export class Repository {
       throw new Error(resimulateCheck.disabledReason ?? 'Match cannot be re-simulated');
     }
 
-    if (resimulateCheck.clearsLaterRounds) {
-      clearUnlockedKnockoutResultsAfterRound(
-        this.db,
-        predictionId,
-        roundName,
-        (lockedMatchNumber) => this.isMatchLocked(lockedMatchNumber),
-      );
-      knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
-      const rebuilt = buildPredictionSlotContext(
-        masterGroup.groupStandings,
-        thirdPlaceOrder,
-        fixtures,
-        knockoutResults,
-        teamsById,
-      );
-      ctx = rebuilt.ctx;
-    }
-
     const fixture = fixtures.find((entry) => entry.matchNumber === matchNumber);
     if (!fixture) {
       throw new RangeError(`Unknown match: ${matchNumber}`);
@@ -1855,35 +1859,30 @@ export class Repository {
       throw new Error(`Unresolved participants for match ${matchNumber}`);
     }
 
-    const eloWeight = options.ratingEloWeight ?? this.getRatingEloWeight();
-    const deltaWeight = options.tournamentEloDeltaWeight ?? this.getTournamentEloDeltaWeight();
-    const ratingsByTeamId = buildPredictionKnockoutRatings(
-      teams,
-      fixtures,
-      ctx,
-      teamsById,
-      groupMatches.map((match) => ({ fixture: match.fixture, result: match.result })),
-      knockoutResults,
-      eloWeight,
-      deltaWeight,
-    );
+    const existing = knockoutResults.find((result) => result.matchNumber === matchNumber);
+    if (!existing?.distribution || existing.distribution.total <= 0) {
+      throw new Error(`No Monte Carlo distribution for match ${matchNumber}`);
+    }
 
-    const simulated = simulatePredictionKnockoutMatch(
-      ratedTeam(home, ratingsByTeamId),
-      ratedTeam(away, ratingsByTeamId),
-      prediction.consensusMode,
-      options,
-    );
+    const resampled = resampleKnockoutMatchFromDistribution(home, away, existing.distribution);
+    if (resampled.winnerTeamId !== existing.winnerTeamId) {
+      clearUnlockedKnockoutResultsAfterRound(
+        this.db,
+        predictionId,
+        roundName,
+        (lockedMatchNumber) => this.isMatchLocked(lockedMatchNumber),
+      );
+    }
 
     writePredictionKnockoutRound(this.db, predictionId, [
       {
         matchNumber,
-        goalsHome: simulated.goalsHome,
-        goalsAway: simulated.goalsAway,
-        winnerTeamId: simulated.winnerTeamId!,
-        penGoalsHome: simulated.penGoalsHome ?? null,
-        penGoalsAway: simulated.penGoalsAway ?? null,
-        distribution: simulated.distribution,
+        goalsHome: resampled.goalsHome,
+        goalsAway: resampled.goalsAway,
+        winnerTeamId: resampled.winnerTeamId!,
+        penGoalsHome: resampled.penGoalsHome ?? null,
+        penGoalsAway: resampled.penGoalsAway ?? null,
+        distribution: resampled.distribution,
       },
     ]);
     syncActiveKnockoutRun(this.db, this, predictionId);

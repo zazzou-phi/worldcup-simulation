@@ -137,7 +137,7 @@ function predictionsHelp(publicMode: boolean): ViewHelp {
       3,
       0,
       'Use Sample on the Group stage to switch to saved pool scores. If none exist yet, it samples unlocked group fixtures from the pool. Press Sample again while active to Resample (with confirmation).',
-      'On the Knockout stage, Resample round re-runs Monte Carlo for the latest simulated knockout round only. Select a fixture and click ↻ to resample that match alone (later rounds clear if the winner changes).',
+      'On the Knockout stage, Resample round picks another scoreline from the stored Monte Carlo distribution for each unlocked fixture in the latest round (no new simulation run). Select a fixture and click ↻ to resample that match alone. Later rounds clear only if the winner changes.',
       'Save consensus mode changes with Save mode in the ⋮ menu.',
       'Override consensus for individual fixtures in the distribution modal (frozen consensus).',
       'Adjust the double-down counter in the Group fixture list to highlight influential group fixtures.',

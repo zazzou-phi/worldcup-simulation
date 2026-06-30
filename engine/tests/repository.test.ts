@@ -428,6 +428,31 @@ describe('repository integration', () => {
     expect(changed).toBeDefined();
   });
 
+  it('resample round preserves Monte Carlo distributions', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const before = readPredictionKnockoutResults(repo['db'], predictionId);
+    const beforeDist = before.find((result) => result.matchNumber === 73)!.distribution!;
+
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', {
+      count: 9999,
+      resimulate: true,
+    });
+
+    const after = readPredictionKnockoutResults(repo['db'], predictionId);
+    const afterDist = after.find((result) => result.matchNumber === 73)!.distribution!;
+    expect(afterDist.total).toBe(beforeDist.total);
+    expect(afterDist.scorelines).toEqual(beforeDist.scorelines);
+  });
+
   it('master knockout keeps simulated predictions when actual results exist', () => {
     const sim = repo.createSimulation('Full group');
     const groupFixtures = repo.getFixtures().filter((f) => f.group);

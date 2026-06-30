@@ -624,6 +624,114 @@ export function simulatePredictionKnockoutRound(
   return results;
 }
 
+function pickWeightedScoreline(
+  scorelines: ScorelineCount[],
+  rng: RandomSource,
+): { goalsHome: number; goalsAway: number } | null {
+  if (scorelines.length === 0) return null;
+  const total = scorelines.reduce((sum, line) => sum + line.n, 0);
+  if (total <= 0) return null;
+  let roll = rng.random() * total;
+  for (const line of scorelines) {
+    roll -= line.n;
+    if (roll <= 0) {
+      return { goalsHome: line.goalsHome, goalsAway: line.goalsAway };
+    }
+  }
+  const last = scorelines[scorelines.length - 1]!;
+  return { goalsHome: last.goalsHome, goalsAway: last.goalsAway };
+}
+
+/** Pick a new scoreline from an existing Monte Carlo distribution (no re-simulation). */
+export function resampleKnockoutMatchFromDistribution(
+  home: Team,
+  away: Team,
+  distribution: KnockoutMatchDistribution,
+  options: { rng?: RandomSource } = {},
+): MatchResultRow & { distribution: KnockoutMatchDistribution } {
+  const rng = options.rng ?? { random: () => Math.random() };
+  const sample = pickWeightedScoreline(distribution.scorelines, rng);
+  if (!sample) {
+    throw new Error('No scorelines in Monte Carlo distribution');
+  }
+
+  let goalsHome = sample.goalsHome;
+  let goalsAway = sample.goalsAway;
+  let winnerTeamId = winnerFromGoals(goalsHome, goalsAway, home.id, away.id);
+  let penGoalsHome: number | null = null;
+  let penGoalsAway: number | null = null;
+
+  if (winnerTeamId == null) {
+    const pHome = teamPenaltyRate(home, away);
+    const pAway = teamPenaltyRate(away, home);
+    const shootout = simulatePenaltyShootout(pHome, pAway, rng);
+    penGoalsHome = shootout.penGoalsHome;
+    penGoalsAway = shootout.penGoalsAway;
+    winnerTeamId = shootout.homeWins ? home.id : away.id;
+  }
+
+  return {
+    matchNumber: 0,
+    goalsHome,
+    goalsAway,
+    winnerTeamId,
+    penGoalsHome,
+    penGoalsAway,
+    distribution,
+  };
+}
+
+export function resamplePredictionKnockoutRound(
+  roundName: string,
+  fixtures: Fixture[],
+  ctx: SlotContext,
+  teamsById: Map<number, Team>,
+  existingResults: PredictionKnockoutResult[],
+  options: {
+    isMatchLocked?: (matchNumber: number) => boolean;
+    rng?: RandomSource;
+  } = {},
+): { results: SimulatedPredictionKnockoutMatch[]; clearsLaterRounds: boolean } {
+  const round = SIMULATION_KNOCKOUT_ROUNDS.find((entry) => entry.name === roundName);
+  if (!round) {
+    throw new RangeError(`Unknown knockout round: ${roundName}`);
+  }
+
+  const existingByMatch = new Map(existingResults.map((result) => [result.matchNumber, result]));
+  const results: SimulatedPredictionKnockoutMatch[] = [];
+  let clearsLaterRounds = false;
+
+  for (const matchNumber of round.matches) {
+    if (options.isMatchLocked?.(matchNumber)) continue;
+
+    const existing = existingByMatch.get(matchNumber);
+    if (!existing?.distribution || existing.distribution.total <= 0) {
+      throw new Error(`No Monte Carlo distribution for match ${matchNumber}`);
+    }
+
+    const fixture = fixtures.find((entry) => entry.matchNumber === matchNumber);
+    if (!fixture) continue;
+
+    const { home, away } = resolveMatchTeams(fixture, ctx, teamsById);
+    if (!home || !away) {
+      throw new Error(`Unresolved participants for match ${matchNumber}`);
+    }
+
+    const resampled = resampleKnockoutMatchFromDistribution(
+      home,
+      away,
+      existing.distribution,
+      options,
+    );
+    if (resampled.winnerTeamId !== existing.winnerTeamId) {
+      clearsLaterRounds = true;
+    }
+    results.push({ ...resampled, matchNumber });
+  }
+
+  return { results, clearsLaterRounds };
+}
+
 export function isGroupStageCompleteForPrediction(
   groupMatches: Array<{ status: string }>,
 ): boolean {
