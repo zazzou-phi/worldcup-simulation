@@ -453,7 +453,7 @@ describe('repository integration', () => {
     expect(afterDist.scorelines).toEqual(beforeDist.scorelines);
   });
 
-  it('master knockout keeps simulated predictions when actual results exist', () => {
+  it('master knockout prefers actual results over simulated predictions', () => {
     const sim = repo.createSimulation('Full group');
     const groupFixtures = repo.getFixtures().filter((f) => f.group);
     for (const f of groupFixtures) {
@@ -480,8 +480,8 @@ describe('repository integration', () => {
 
     const afterActual = repo.buildMasterKnockoutView(predictionId);
     const r32After = afterActual.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
-    expect(r32After.result.goalsHome).toBe(predictedHome);
-    expect(r32After.result.goalsAway).toBe(predictedAway);
+    expect(r32After.result.goalsHome).toBe(actualHome);
+    expect(r32After.result.goalsAway).toBe(actualAway);
     expect(r32After.isLocked).toBe(true);
   });
 

@@ -69,6 +69,7 @@ import {
   findKnockoutRoundNameForMatch,
   getQualifyingThirdGroupsFromOrder,
   isGroupStageCompleteForPrediction,
+  mergeActualResultsIntoKnockoutResults,
   ratedTeam,
   resampleKnockoutMatchFromDistribution,
   resamplePredictionKnockoutRound,
@@ -1674,7 +1675,11 @@ export class Repository {
       this.db,
       masterGroup.groupStandings,
     );
-    let knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+    const actualResults = this.getActualResults();
+    let knockoutResults = mergeActualResultsIntoKnockoutResults(
+      readPredictionKnockoutResults(this.db, predictionId),
+      actualResults,
+    );
     let { ctx } = buildPredictionSlotContext(
       masterGroup.groupStandings,
       thirdPlaceOrder,
@@ -1828,7 +1833,11 @@ export class Repository {
       this.db,
       masterGroup.groupStandings,
     );
-    let knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
+    const actualResults = this.getActualResults();
+    let knockoutResults = mergeActualResultsIntoKnockoutResults(
+      readPredictionKnockoutResults(this.db, predictionId),
+      actualResults,
+    );
     let { ctx } = buildPredictionSlotContext(
       masterGroup.groupStandings,
       thirdPlaceOrder,
@@ -1910,7 +1919,6 @@ export class Repository {
     const fixtures = this.getFixtures();
     const knockoutFixtures = fixtures.filter((fixture) => fixture.group == null);
     const actualResults = this.getActualResults();
-    const actualByMatch = new Map(actualResults.map((result) => [result.matchNumber, result]));
 
     const groupMatches = masterGroup.resolvedMatches.filter((match) => match.fixture.group != null);
     const groupStageComplete = isGroupStageCompleteForPrediction(
@@ -1930,10 +1938,12 @@ export class Repository {
 
     const prediction = this.getPrediction(predictionId)!;
     const consensusKnockoutResults = readPredictionKnockoutResults(this.db, predictionId);
-    const pathKnockoutResults =
+    const pathKnockoutResults = mergeActualResultsIntoKnockoutResults(
       prediction.activeKnockoutSimulationId != null
         ? readKnockoutResultsFromSimulation(this, prediction.activeKnockoutSimulationId)
-        : consensusKnockoutResults;
+        : consensusKnockoutResults,
+      actualResults,
+    );
 
     const { ctx, annexCCombinationId } = buildPredictionSlotContext(
       masterGroup.groupStandings,
@@ -1967,7 +1977,6 @@ export class Repository {
     const resolvedMatches: ResolvedMatch[] = knockoutFixtures.map((fixture) => {
       const { home, away } = resolveMatchTeams(fixture, ctx, teamsById);
       const persisted = knockoutResultByMatch.get(fixture.matchNumber);
-      const actual = actualByMatch.get(fixture.matchNumber);
       const isLocked = this.isMatchLocked(fixture.matchNumber);
 
       let result: SimulationMatch;
@@ -1982,19 +1991,6 @@ export class Repository {
           penGoalsHome: persisted.penGoalsHome,
           penGoalsAway: persisted.penGoalsAway,
           winnerTeamId: persisted.winnerTeamId,
-          status: 'played',
-        };
-      } else if (actual) {
-        result = {
-          simulationId: 0,
-          matchNumber: fixture.matchNumber,
-          teamHomeId: home?.id ?? fixture.teamHomeId,
-          teamAwayId: away?.id ?? fixture.teamAwayId,
-          goalsHome: actual.goalsHome,
-          goalsAway: actual.goalsAway,
-          penGoalsHome: null,
-          penGoalsAway: null,
-          winnerTeamId: actual.winnerTeamId,
           status: 'played',
         };
       } else {

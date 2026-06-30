@@ -31,7 +31,14 @@ import {
   SIMULATION_KNOCKOUT_ROUNDS,
 } from './simulationRounds.js';
 import { rankThirdPlaceTeams } from './standings.js';
-import type { Fixture, GroupStandings, SimulationMatch, Team, ThirdPlaceOrderRow } from './types.js';
+import type {
+  ActualMatchResult,
+  Fixture,
+  GroupStandings,
+  SimulationMatch,
+  Team,
+  ThirdPlaceOrderRow,
+} from './types.js';
 
 export type SimulatedPredictionKnockoutMatch = MatchResultRow & {
   distribution: KnockoutMatchDistribution;
@@ -135,6 +142,37 @@ export function knockoutResultsToSimulationMatches(
     winnerTeamId: result.winnerTeamId,
     status: 'played' as const,
   }));
+}
+
+const KNOCKOUT_MATCH_NUMBERS = new Set(
+  SIMULATION_KNOCKOUT_ROUNDS.flatMap((round) => round.matches),
+);
+
+/** Prefer actual results over simulated predictions when resolving knockout paths. */
+export function mergeActualResultsIntoKnockoutResults(
+  knockoutResults: PredictionKnockoutResult[],
+  actualResults: ActualMatchResult[],
+): PredictionKnockoutResult[] {
+  const resultByMatch = new Map(knockoutResults.map((result) => [result.matchNumber, result]));
+
+  for (const actual of actualResults) {
+    if (!KNOCKOUT_MATCH_NUMBERS.has(actual.matchNumber) || actual.winnerTeamId == null) {
+      continue;
+    }
+
+    const existing = resultByMatch.get(actual.matchNumber);
+    resultByMatch.set(actual.matchNumber, {
+      matchNumber: actual.matchNumber,
+      goalsHome: actual.goalsHome,
+      goalsAway: actual.goalsAway,
+      winnerTeamId: actual.winnerTeamId,
+      penGoalsHome: null,
+      penGoalsAway: null,
+      distribution: existing?.distribution,
+    });
+  }
+
+  return [...resultByMatch.values()];
 }
 
 export function buildPredictionSlotContext(
