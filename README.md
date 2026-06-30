@@ -81,7 +81,7 @@ On success the CLI prints a JSON line with `ok`, `outDir`, and `exportedAt`.
 
 ### Reveal policy
 
-Exports use a **kickoff** reveal policy: for the master (consensus) view, group-stage predictions for fixtures whose kickoff has not yet passed at export time are redacted — scores are cleared, outcome distributions zeroed, and standings are recomputed from revealed matches only. Team stats and bootstrap data are always included in full.
+Exports use a **kickoff** reveal policy: for the master (consensus) view, group-stage and knockout predictions for fixtures whose kickoff has not yet passed at export time are redacted — scores are cleared, outcome distributions zeroed, and (for the group stage) standings are recomputed from revealed matches only. Knockout winner/loser slots that depend on unrevealed matches stay as placeholders (e.g. `W73`) rather than showing predicted teams. Unrevealed knockout actual results are also withheld from the export. Team stats and bootstrap fixture data are always included in full.
 
 Re-export after kickoff to publish newly revealed predictions.
 

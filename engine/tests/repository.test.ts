@@ -453,7 +453,7 @@ describe('repository integration', () => {
     expect(afterDist.scorelines).toEqual(beforeDist.scorelines);
   });
 
-  it('master knockout prefers actual results over simulated predictions', () => {
+  it('master knockout uses actual results for bracket path but keeps predictions for display', () => {
     const sim = repo.createSimulation('Full group');
     const groupFixtures = repo.getFixtures().filter((f) => f.group);
     for (const f of groupFixtures) {
@@ -470,19 +470,28 @@ describe('repository integration', () => {
     const predictedHome = r32Match.result.goalsHome!;
     const predictedAway = r32Match.result.goalsAway!;
 
-    let actualHome = 2;
-    let actualAway = 0;
-    if (predictedHome === actualHome && predictedAway === actualAway) {
-      actualHome = 3;
-      actualAway = 1;
+    const predictedWinnerId = r32Match.result.winnerTeamId!;
+    const homeId = r32Match.homeTeam!.id;
+    const awayId = r32Match.awayTeam!.id;
+
+    if (predictedWinnerId === homeId) {
+      repo.setActualResult(73, 0, 2, awayId);
+    } else {
+      repo.setActualResult(73, 2, 0, homeId);
     }
-    repo.setActualResult(73, actualHome, actualAway, null);
 
     const afterActual = repo.buildMasterKnockoutView(predictionId);
     const r32After = afterActual.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
-    expect(r32After.result.goalsHome).toBe(actualHome);
-    expect(r32After.result.goalsAway).toBe(actualAway);
+    expect(r32After.result.goalsHome).toBe(predictedHome);
+    expect(r32After.result.goalsAway).toBe(predictedAway);
     expect(r32After.isLocked).toBe(true);
+
+    const actualWinnerId = repo.getActualResult(73)!.winnerTeamId!;
+    expect(actualWinnerId).not.toBe(predictedWinnerId);
+    const r16Match = afterActual.resolvedMatches.find((m) => m.fixture.matchNumber === 90)!;
+    expect(r16Match.homeTeam?.id === actualWinnerId || r16Match.awayTeam?.id === actualWinnerId).toBe(
+      true,
+    );
   });
 
   it('aggregates team goals across simulations including knockouts', () => {

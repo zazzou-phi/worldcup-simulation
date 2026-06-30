@@ -167,7 +167,6 @@ export function MasterKnockoutView({
     editingMatchNumber: null,
     simulating,
     actualResults,
-    hidePredictedWhenLocked: true,
     canClearMatch: () => false,
     canModifyMatch: () => false,
     doubleCount: publicMode ? undefined : KNOCKOUT_R32_DOUBLE_DOWN_COUNT,

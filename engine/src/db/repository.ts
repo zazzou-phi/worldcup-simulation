@@ -1938,10 +1938,12 @@ export class Repository {
 
     const prediction = this.getPrediction(predictionId)!;
     const consensusKnockoutResults = readPredictionKnockoutResults(this.db, predictionId);
-    const pathKnockoutResults = mergeActualResultsIntoKnockoutResults(
+    const rawKnockoutResults =
       prediction.activeKnockoutSimulationId != null
         ? readKnockoutResultsFromSimulation(this, prediction.activeKnockoutSimulationId)
-        : consensusKnockoutResults,
+        : consensusKnockoutResults;
+    const pathKnockoutResults = mergeActualResultsIntoKnockoutResults(
+      rawKnockoutResults,
       actualResults,
     );
 
@@ -1961,8 +1963,8 @@ export class Repository {
       groupStageComplete,
     );
 
-    const knockoutResultByMatch = new Map(
-      pathKnockoutResults.map((result) => [result.matchNumber, result]),
+    const displayResultByMatch = new Map(
+      rawKnockoutResults.map((result) => [result.matchNumber, result]),
     );
 
     const distributions: Record<number, OutcomeDistribution> = {};
@@ -1976,7 +1978,7 @@ export class Repository {
 
     const resolvedMatches: ResolvedMatch[] = knockoutFixtures.map((fixture) => {
       const { home, away } = resolveMatchTeams(fixture, ctx, teamsById);
-      const persisted = knockoutResultByMatch.get(fixture.matchNumber);
+      const persisted = displayResultByMatch.get(fixture.matchNumber);
       const isLocked = this.isMatchLocked(fixture.matchNumber);
 
       let result: SimulationMatch;

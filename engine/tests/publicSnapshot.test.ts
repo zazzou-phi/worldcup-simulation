@@ -106,4 +106,65 @@ describe('publicSnapshot', () => {
     expect(mexico.points).toBe(3);
     expect(korea?.points ?? 0).toBe(0);
   });
+
+  it('redacts pre-kickoff knockout predictions and downstream winner slots', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const exportTime = new Date(parseKickoff('2026-06-29', '12:00 UTC-5').getTime());
+    const snapshot = buildPublicSnapshot(repo, exportTime);
+
+    const r32Revealed = snapshot.masterKnockoutState.resolvedMatches.find(
+      (m) => m.fixture.matchNumber === 73,
+    )!;
+    const r32Hidden = snapshot.masterKnockoutState.resolvedMatches.find(
+      (m) => m.fixture.matchNumber === 75,
+    )!;
+    const r16Hidden = snapshot.masterKnockoutState.resolvedMatches.find(
+      (m) => m.fixture.matchNumber === 90,
+    )!;
+
+    expect(r32Revealed.result.status).toBe('played');
+    expect(r32Revealed.result.goalsHome).not.toBeNull();
+    expect(snapshot.masterKnockoutState.distributions['73'].total).toBeGreaterThan(0);
+
+    expect(r32Hidden.result.status).toBe('scheduled');
+    expect(r32Hidden.result.goalsHome).toBeNull();
+    expect(snapshot.masterKnockoutState.distributions['75'].total).toBe(0);
+
+    expect(r16Hidden.result.status).toBe('scheduled');
+    expect(r16Hidden.result.goalsHome).toBeNull();
+    expect(r16Hidden.homeLabel).not.toBe(r16Hidden.awayLabel);
+    expect(r16Hidden.awayLabel).toBe('W75');
+    expect(r16Hidden.awayTeam).toBeNull();
+  });
+
+  it('omits unrevealed knockout actual results from bootstrap', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    ensureTestPrediction(repo);
+    repo.setActualResult(73, 2, 0, null);
+    repo.setActualResult(75, 1, 0, null);
+
+    const exportTime = new Date(parseKickoff('2026-06-29', '12:00 UTC-5').getTime());
+    const snapshot = buildPublicSnapshot(repo, exportTime);
+
+    expect(snapshot.bootstrap.actualResults.some((result) => result.matchNumber === 73)).toBe(true);
+    expect(snapshot.bootstrap.actualResults.some((result) => result.matchNumber === 75)).toBe(false);
+    expect(
+      snapshot.actualResultsState.resolvedMatches.find((m) => m.fixture.matchNumber === 75)?.result
+        .status,
+    ).toBe('scheduled');
+  });
 });
