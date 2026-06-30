@@ -78,6 +78,8 @@ import { validateThirdPlaceOrder } from '../engine/thirdPlaceOrder.js';
 import {
   clearKnockoutResultsAfterRound,
   clearKnockoutResultsFromRoundOnward,
+  clearUnlockedKnockoutResultsAfterRound,
+  clearUnlockedKnockoutResultsFromRoundOnward,
   clearPredictionKnockoutResults,
   deletePredictionKnockoutData,
   hasPredictionKnockoutResults,
@@ -92,6 +94,7 @@ import {
   listKnockoutRunsForPrediction,
   readKnockoutResultsFromSimulation,
   setActiveKnockoutSimulation,
+  syncActiveKnockoutRun,
 } from './predictionKnockoutRuns.js';
 import {
   ensureActualThirdPlaceOrder,
@@ -1706,7 +1709,12 @@ export class Repository {
       if (!resimulateCheck.allowed) {
         throw new Error(resimulateCheck.disabledReason ?? 'Round cannot be re-simulated');
       }
-      clearKnockoutResultsFromRoundOnward(this.db, predictionId, roundName);
+      clearUnlockedKnockoutResultsFromRoundOnward(
+        this.db,
+        predictionId,
+        roundName,
+        (matchNumber) => this.isMatchLocked(matchNumber),
+      );
       knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
       const rebuilt = buildPredictionSlotContext(
         masterGroup.groupStandings,
@@ -1733,13 +1741,14 @@ export class Repository {
       deltaWeight,
     );
 
+    const isMatchLocked = (matchNumber: number) => this.isMatchLocked(matchNumber);
     const results = simulatePredictionKnockoutRound(
       roundName,
       fixtures,
       ctx,
       teamsById,
       prediction.consensusMode,
-      { ...options, ratingsByTeamId },
+      { ...options, ratingsByTeamId, isMatchLocked },
     );
 
     writePredictionKnockoutRound(
@@ -1755,7 +1764,11 @@ export class Repository {
         distribution: result.distribution,
       })),
     );
-    createPredictionKnockoutRun(this.db, this, predictionId);
+    if (options.resimulate) {
+      syncActiveKnockoutRun(this.db, this, predictionId);
+    } else {
+      createPredictionKnockoutRun(this.db, this, predictionId);
+    }
 
     return this.buildMasterKnockoutView(predictionId);
   }
@@ -1816,7 +1829,12 @@ export class Repository {
     }
 
     if (resimulateCheck.clearsLaterRounds) {
-      clearKnockoutResultsAfterRound(this.db, predictionId, roundName);
+      clearUnlockedKnockoutResultsAfterRound(
+        this.db,
+        predictionId,
+        roundName,
+        (lockedMatchNumber) => this.isMatchLocked(lockedMatchNumber),
+      );
       knockoutResults = readPredictionKnockoutResults(this.db, predictionId);
       const rebuilt = buildPredictionSlotContext(
         masterGroup.groupStandings,
@@ -1868,7 +1886,7 @@ export class Repository {
         distribution: simulated.distribution,
       },
     ]);
-    createPredictionKnockoutRun(this.db, this, predictionId);
+    syncActiveKnockoutRun(this.db, this, predictionId);
 
     return this.buildMasterKnockoutView(predictionId);
   }

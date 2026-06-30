@@ -209,3 +209,20 @@ export function createPredictionKnockoutRun(
 
   return simulationId;
 }
+
+/** Update the active knockout run from current prediction results (resample path). */
+export function syncActiveKnockoutRun(db: Db, repo: Repository, predictionId: number): void {
+  const prediction = repo.getPrediction(predictionId);
+  if (!prediction?.activeKnockoutSimulationId) return;
+
+  const simulationId = prediction.activeKnockoutSimulationId;
+  writeKnockoutResultsToRun(
+    db,
+    repo,
+    simulationId,
+    readPredictionKnockoutResults(db, predictionId),
+  );
+  repo.touchSimulation(simulationId);
+  repo.syncResolvedParticipants(simulationId, { refreshMasterStats: false });
+  repo.recomputeTournamentEloDeltas(simulationId);
+}

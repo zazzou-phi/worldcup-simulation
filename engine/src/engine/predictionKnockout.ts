@@ -591,6 +591,7 @@ export function simulatePredictionKnockoutRound(
     upsetVariance?: number;
     rng?: RandomSource;
     ratingsByTeamId?: Map<number, SimulationRatings>;
+    isMatchLocked?: (matchNumber: number) => boolean;
   } = {},
 ): SimulatedPredictionKnockoutMatch[] {
   const round = SIMULATION_KNOCKOUT_ROUNDS.find((entry) => entry.name === roundName);
@@ -601,6 +602,8 @@ export function simulatePredictionKnockoutRound(
   const results: SimulatedPredictionKnockoutMatch[] = [];
 
   for (const matchNumber of round.matches) {
+    if (options.isMatchLocked?.(matchNumber)) continue;
+
     const fixture = fixtures.find((f) => f.matchNumber === matchNumber);
     if (!fixture) continue;
 

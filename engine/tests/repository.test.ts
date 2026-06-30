@@ -289,15 +289,16 @@ describe('repository integration', () => {
     });
 
     const viewAfterSecond = repo.buildMasterKnockoutView(predictionId);
-    expect(viewAfterSecond.knockoutRuns).toHaveLength(2);
-    expect(viewAfterSecond.activeKnockoutSimulationId).toBe(viewAfterSecond.knockoutRuns[1]!.id);
+    expect(viewAfterSecond.knockoutRuns).toHaveLength(1);
+    expect(viewAfterSecond.activeKnockoutSimulationId).toBe(viewAfterFirst.knockoutRuns[0]!.id);
 
     repo.setPredictionActiveKnockoutSimulation(predictionId, firstRunId);
     const loadedFirst = repo.buildMasterKnockoutView(predictionId);
     expect(loadedFirst.activeKnockoutSimulationId).toBe(firstRunId);
+    const latestR32 = viewAfterSecond.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
     const loadedR32 = loadedFirst.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
-    expect(loadedR32.result.goalsHome).toBe(r32First.goalsHome);
-    expect(loadedR32.result.goalsAway).toBe(r32First.goalsAway);
+    expect(loadedR32.result.goalsHome).toBe(latestR32.result.goalsHome);
+    expect(loadedR32.result.goalsAway).toBe(latestR32.result.goalsAway);
   });
 
   it('knockout runs seed group scores from actual results only', () => {
@@ -387,7 +388,44 @@ describe('repository integration', () => {
     expect(after73.goalsHome).not.toBeNull();
     expect(afterOther.goalsHome).toBe(beforeOther.goalsHome);
     expect(afterOther.goalsAway).toBe(beforeOther.goalsAway);
-    expect(repo.buildMasterKnockoutView(predictionId).knockoutRuns.length).toBeGreaterThan(1);
+    expect(repo.buildMasterKnockoutView(predictionId).knockoutRuns).toHaveLength(1);
+  });
+
+  it('resimulating a knockout round skips matches with actual results', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const before = readPredictionKnockoutResults(repo['db'], predictionId);
+    const lockedMatch = before.find((result) => result.matchNumber === 73)!;
+    repo.setActualResult(73, 3, 1, null);
+
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', {
+      count: 100,
+      resimulate: true,
+    });
+
+    const after = readPredictionKnockoutResults(repo['db'], predictionId);
+    const afterLocked = after.find((result) => result.matchNumber === 73)!;
+    expect(afterLocked.goalsHome).toBe(lockedMatch.goalsHome);
+    expect(afterLocked.goalsAway).toBe(lockedMatch.goalsAway);
+    expect(after.length).toBeGreaterThan(1);
+    const changed = after.find(
+      (result) =>
+        result.matchNumber !== 73 &&
+        before.some(
+          (entry) =>
+            entry.matchNumber === result.matchNumber &&
+            (entry.goalsHome !== result.goalsHome || entry.goalsAway !== result.goalsAway),
+        ),
+    );
+    expect(changed).toBeDefined();
   });
 
   it('master knockout keeps simulated predictions when actual results exist', () => {

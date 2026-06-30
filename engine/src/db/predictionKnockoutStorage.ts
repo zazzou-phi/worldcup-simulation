@@ -100,17 +100,24 @@ export function clearKnockoutResultsFromRoundOnward(
   predictionId: number,
   roundName: string,
 ): void {
-  const matchNumbers = knockoutMatchNumbersFromRoundOnward(roundName);
-  for (const matchNumber of matchNumbers) {
-    db.delete(schema.predictionKnockoutResults)
-      .where(
-        and(
-          eq(schema.predictionKnockoutResults.predictionId, predictionId),
-          eq(schema.predictionKnockoutResults.matchNumber, matchNumber),
-        ),
-      )
-      .run();
-  }
+  clearKnockoutResultsWhere(
+    db,
+    predictionId,
+    knockoutMatchNumbersFromRoundOnward(roundName),
+  );
+}
+
+export function clearUnlockedKnockoutResultsFromRoundOnward(
+  db: Db,
+  predictionId: number,
+  roundName: string,
+  isLocked: (matchNumber: number) => boolean,
+): void {
+  clearKnockoutResultsWhere(
+    db,
+    predictionId,
+    knockoutMatchNumbersFromRoundOnward(roundName).filter((matchNumber) => !isLocked(matchNumber)),
+  );
 }
 
 export function clearKnockoutResultsAfterRound(
@@ -118,7 +125,28 @@ export function clearKnockoutResultsAfterRound(
   predictionId: number,
   roundName: string,
 ): void {
-  for (const matchNumber of knockoutMatchNumbersAfterRound(roundName)) {
+  clearKnockoutResultsWhere(db, predictionId, knockoutMatchNumbersAfterRound(roundName));
+}
+
+export function clearUnlockedKnockoutResultsAfterRound(
+  db: Db,
+  predictionId: number,
+  roundName: string,
+  isLocked: (matchNumber: number) => boolean,
+): void {
+  clearKnockoutResultsWhere(
+    db,
+    predictionId,
+    knockoutMatchNumbersAfterRound(roundName).filter((matchNumber) => !isLocked(matchNumber)),
+  );
+}
+
+function clearKnockoutResultsWhere(
+  db: Db,
+  predictionId: number,
+  matchNumbers: number[],
+): void {
+  for (const matchNumber of matchNumbers) {
     db.delete(schema.predictionKnockoutResults)
       .where(
         and(
