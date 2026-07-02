@@ -62,6 +62,7 @@ import {
 import {
   buildPredictionKnockoutRatings,
   buildPredictionSlotContext,
+  buildDisplayKnockoutResults,
   buildThirdPlaceOrderRows,
   canResimulateKnockoutMatch,
   canResimulateKnockoutRound,
@@ -1946,6 +1947,12 @@ export class Repository {
       rawKnockoutResults,
       actualResults,
     );
+    const lockedMatchNumbers = new Set(actualResults.map((result) => result.matchNumber));
+    const displayKnockoutResults = buildDisplayKnockoutResults(
+      consensusKnockoutResults,
+      rawKnockoutResults,
+      lockedMatchNumbers,
+    );
 
     const { ctx, annexCCombinationId } = buildPredictionSlotContext(
       masterGroup.groupStandings,
@@ -1964,7 +1971,7 @@ export class Repository {
     );
 
     const displayResultByMatch = new Map(
-      rawKnockoutResults.map((result) => [result.matchNumber, result]),
+      displayKnockoutResults.map((result) => [result.matchNumber, result]),
     );
 
     const distributions: Record<number, OutcomeDistribution> = {};

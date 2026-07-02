@@ -175,6 +175,37 @@ export function mergeActualResultsIntoKnockoutResults(
   return [...resultByMatch.values()];
 }
 
+/** Keep stored predictions for display when actual results have overwritten the active run. */
+export function buildDisplayKnockoutResults(
+  consensusResults: PredictionKnockoutResult[],
+  pathResults: PredictionKnockoutResult[],
+  lockedMatchNumbers: ReadonlySet<number>,
+): PredictionKnockoutResult[] {
+  const consensusByMatch = new Map(
+    consensusResults.map((result) => [result.matchNumber, result]),
+  );
+  const displayByMatch = new Map<number, PredictionKnockoutResult>();
+
+  for (const result of pathResults) {
+    if (lockedMatchNumbers.has(result.matchNumber)) {
+      const consensus = consensusByMatch.get(result.matchNumber);
+      if (consensus) {
+        displayByMatch.set(result.matchNumber, consensus);
+      }
+      continue;
+    }
+    displayByMatch.set(result.matchNumber, result);
+  }
+
+  for (const result of consensusResults) {
+    if (!displayByMatch.has(result.matchNumber)) {
+      displayByMatch.set(result.matchNumber, result);
+    }
+  }
+
+  return [...displayByMatch.values()];
+}
+
 export function buildPredictionSlotContext(
   standings: GroupStandings[],
   thirdPlaceOrder: ThirdPlaceOrderEntry[],

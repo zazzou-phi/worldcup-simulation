@@ -494,6 +494,44 @@ describe('repository integration', () => {
     );
   });
 
+  it('master knockout display keeps predictions when active run has actual results applied', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const beforeActual = repo.buildMasterKnockoutView(predictionId);
+    const r32Match = beforeActual.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
+    const predictedHome = r32Match.result.goalsHome!;
+    const predictedAway = r32Match.result.goalsAway!;
+    const homeId = r32Match.homeTeam!.id;
+    const awayId = r32Match.awayTeam!.id;
+
+    const activeRunId = repo.getPrediction(predictionId)!.activeKnockoutSimulationId;
+    if (activeRunId != null) {
+      repo.setPredictionActiveKnockoutSimulation(predictionId, null);
+      repo.deleteSimulation(activeRunId);
+    }
+
+    repo.setActualResult(
+      73,
+      predictedHome === 2 ? 0 : 2,
+      predictedAway === 0 ? 2 : 0,
+      predictedHome >= predictedAway ? awayId : homeId,
+    );
+
+    const afterRunBackfill = repo.buildMasterKnockoutView(predictionId);
+    const r32After = afterRunBackfill.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
+    expect(r32After.result.goalsHome).toBe(predictedHome);
+    expect(r32After.result.goalsAway).toBe(predictedAway);
+    expect(repo.getActualResult(73)!.goalsHome).not.toBe(predictedHome);
+  });
+
   it('aggregates team goals across simulations including knockouts', () => {
     const sim1 = repo.createSimulation('One');
     const sim2 = repo.createSimulation('Two');

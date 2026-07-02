@@ -82,8 +82,8 @@ export function App() {
     total: number;
   } | null>(null);
   const [bulkSimulating, setBulkSimulating] = useState(false);
-  const [viewKnockout, setViewKnockout] = useState(false);
-  const [predictionsViewKnockout, setPredictionsViewKnockout] = useState(false);
+  const [viewKnockout, setViewKnockout] = useState(true);
+  const [predictionsViewKnockout, setPredictionsViewKnockout] = useState(true);
   const [appView, setAppView] = useState<AppView>(publicMode ? 'simulations' : 'predictions');
   const [actualState, setActualState] = useState<ActualResultsState | null>(null);
   const [knockoutBracketView, setKnockoutBracketView] = useState(
