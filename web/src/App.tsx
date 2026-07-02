@@ -6,7 +6,6 @@ import {
 import { api, isPublicMode, loadInitialPrediction, loadInitialSimulation } from './api/client.js';
 import { loadPublicMeta } from './api/staticClient.js';
 import { clearStoredPrediction, persistLocalPrediction } from './lib/localPredictionStorage.js';
-import { applyLocalKnockoutToMasterState } from './lib/applyLocalKnockoutToMasterState.js';
 import {
   clearLocalMatchScore,
   LocalSimulationError,
@@ -190,11 +189,7 @@ export function App() {
     );
   }, [masterStateBase, consensusModeDraft, state, publicMode]);
 
-  const effectiveMasterKnockoutState = useMemo(() => {
-    if (!masterKnockoutState) return null;
-    if (!publicMode || !state) return masterKnockoutState;
-    return applyLocalKnockoutToMasterState(state, masterKnockoutState);
-  }, [masterKnockoutState, state, publicMode]);
+  const effectiveMasterKnockoutState = useMemo(() => masterKnockoutState, [masterKnockoutState]);
 
   const canSamplePrediction = useMemo(() => {
     if (!masterState) return false;
