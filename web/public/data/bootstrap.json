@@ -3047,6 +3047,15 @@
       "recordedAt": "2026-07-01T22:56:48.597Z",
       "predictedGoalsHome": null,
       "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 84,
+      "goalsHome": 3,
+      "goalsAway": 0,
+      "winnerTeamId": 0,
+      "recordedAt": "2026-07-02T21:19:24.143Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
     }
   ]
 }

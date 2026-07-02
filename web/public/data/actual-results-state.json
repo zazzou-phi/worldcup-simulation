@@ -737,6 +737,15 @@
       "recordedAt": "2026-07-01T22:56:48.597Z",
       "predictedGoalsHome": null,
       "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 84,
+      "goalsHome": 3,
+      "goalsAway": 0,
+      "winnerTeamId": 0,
+      "recordedAt": "2026-07-02T21:19:24.143Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
     }
   ],
   "phase": "g3",
@@ -7908,12 +7917,12 @@
         "matchNumber": 84,
         "teamHomeId": 0,
         "teamAwayId": 22,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 3,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 0,
+        "status": "played"
       },
       "homeTeam": {
         "id": 0,
@@ -7953,7 +7962,7 @@
       },
       "homeLabel": "Spain",
       "awayLabel": "Austria",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -8483,7 +8492,7 @@
       "result": {
         "matchNumber": 93,
         "teamHomeId": null,
-        "teamAwayId": null,
+        "teamAwayId": 0,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -8492,9 +8501,26 @@
         "status": "scheduled"
       },
       "homeTeam": null,
-      "awayTeam": null,
+      "awayTeam": {
+        "id": 0,
+        "name": "Spain",
+        "countryCode": "ES",
+        "flag": "🇪🇸",
+        "rank": 1,
+        "rating": 2165,
+        "elo": 2165,
+        "total": 780,
+        "goalsFor": 1591,
+        "goalsAgainst": 697,
+        "eloOffensiveRating": 2.3683833209240883,
+        "eloDefensiveRating": 0.34925755230844235,
+        "goalOffensiveRating": 1.232650558276307,
+        "goalDefensiveRating": 0.7482859538114454,
+        "blendOffensiveRating": 2.0437453483191628,
+        "blendDefensiveRating": 0.5655883846394144
+      },
       "homeLabel": "W83",
-      "awayLabel": "W84",
+      "awayLabel": "Spain",
       "isLocked": false
     },
     {
