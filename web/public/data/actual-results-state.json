@@ -685,11 +685,56 @@
       "predictedGoalsAway": null
     },
     {
+      "matchNumber": 77,
+      "goalsHome": 3,
+      "goalsAway": 0,
+      "winnerTeamId": 2,
+      "recordedAt": "2026-06-30T22:57:04.008Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
       "matchNumber": 78,
       "goalsHome": 1,
       "goalsAway": 2,
       "winnerTeamId": 11,
       "recordedAt": "2026-06-30T18:59:07.553Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 79,
+      "goalsHome": 2,
+      "goalsAway": 0,
+      "winnerTeamId": 18,
+      "recordedAt": "2026-07-01T06:18:54.055Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 80,
+      "goalsHome": 2,
+      "goalsAway": 1,
+      "winnerTeamId": 3,
+      "recordedAt": "2026-07-01T18:27:39.174Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 81,
+      "goalsHome": 2,
+      "goalsAway": 0,
+      "winnerTeamId": 40,
+      "recordedAt": "2026-07-02T05:09:12.918Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 82,
+      "goalsHome": 3,
+      "goalsAway": 2,
+      "winnerTeamId": 19,
+      "recordedAt": "2026-07-01T22:56:48.597Z",
       "predictedGoalsHome": null,
       "predictedGoalsAway": null
     }
@@ -7415,12 +7460,12 @@
         "matchNumber": 77,
         "teamHomeId": 2,
         "teamAwayId": 41,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 3,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 2,
+        "status": "played"
       },
       "homeTeam": {
         "id": 2,
@@ -7460,7 +7505,7 @@
       },
       "homeLabel": "France",
       "awayLabel": "Sweden",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -7543,12 +7588,12 @@
         "matchNumber": 79,
         "teamHomeId": 18,
         "teamAwayId": 8,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 2,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 18,
+        "status": "played"
       },
       "homeTeam": {
         "id": 18,
@@ -7588,7 +7633,7 @@
       },
       "homeLabel": "Mexico",
       "awayLabel": "Ecuador",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -7607,12 +7652,12 @@
         "matchNumber": 80,
         "teamHomeId": 3,
         "teamAwayId": 53,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 2,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 3,
+        "status": "played"
       },
       "homeTeam": {
         "id": 3,
@@ -7652,7 +7697,7 @@
       },
       "homeLabel": "England",
       "awayLabel": "DR Congo",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -7671,12 +7716,12 @@
         "matchNumber": 81,
         "teamHomeId": 40,
         "teamAwayId": 66,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 2,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 40,
+        "status": "played"
       },
       "homeTeam": {
         "id": 40,
@@ -7716,7 +7761,7 @@
       },
       "homeLabel": "United States",
       "awayLabel": "Bosnia and Herzegovina",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -7735,12 +7780,12 @@
         "matchNumber": 82,
         "teamHomeId": 19,
         "teamAwayId": 16,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 3,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 19,
+        "status": "played"
       },
       "homeTeam": {
         "id": 19,
@@ -7780,7 +7825,7 @@
       },
       "homeLabel": "Belgium",
       "awayLabel": "Senegal",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -8182,7 +8227,7 @@
       "result": {
         "matchNumber": 89,
         "teamHomeId": 21,
-        "teamAwayId": null,
+        "teamAwayId": 2,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -8208,9 +8253,26 @@
         "blendOffensiveRating": 0.9571845914622328,
         "blendDefensiveRating": 1.009104866427958
       },
-      "awayTeam": null,
+      "awayTeam": {
+        "id": 2,
+        "name": "France",
+        "countryCode": "FR",
+        "flag": "🇫🇷",
+        "rank": 3,
+        "rating": 2081,
+        "elo": 2081,
+        "total": 938,
+        "goalsFor": 1706,
+        "goalsAgainst": 1272,
+        "eloOffensiveRating": 1.9197742083596192,
+        "eloDefensiveRating": 0.43087137955712,
+        "goalOffensiveRating": 1.0991085549761628,
+        "goalDefensiveRating": 1.1355694247560573,
+        "blendOffensiveRating": 1.6851950514813874,
+        "blendDefensiveRating": 0.8129191588271568
+      },
       "homeLabel": "Paraguay",
-      "awayLabel": "W77",
+      "awayLabel": "France",
       "isLocked": false
     },
     {
@@ -8356,8 +8418,8 @@
       },
       "result": {
         "matchNumber": 92,
-        "teamHomeId": null,
-        "teamAwayId": null,
+        "teamHomeId": 18,
+        "teamAwayId": 3,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -8365,10 +8427,44 @@
         "winnerTeamId": null,
         "status": "scheduled"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W79",
-      "awayLabel": "W80",
+      "homeTeam": {
+        "id": 18,
+        "name": "Mexico",
+        "countryCode": "MX",
+        "flag": "🇲🇽",
+        "rank": 19,
+        "rating": 1868,
+        "elo": 1868,
+        "total": 1029,
+        "goalsFor": 1824,
+        "goalsAgainst": 1055,
+        "eloOffensiveRating": 1.1271671963752088,
+        "eloDefensiveRating": 0.7338536503316929,
+        "goalOffensiveRating": 1.0712081272701144,
+        "goalDefensiveRating": 0.8585517989654933,
+        "blendOffensiveRating": 1.1111718501629673,
+        "blendDefensiveRating": 0.8014579967453114
+      },
+      "awayTeam": {
+        "id": 3,
+        "name": "England",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "rank": 4,
+        "rating": 2020,
+        "elo": 2020,
+        "total": 1160,
+        "goalsFor": 2719,
+        "goalsAgainst": 1118,
+        "eloOffensiveRating": 1.648239220975248,
+        "eloDefensiveRating": 0.5018541914714629,
+        "goalOffensiveRating": 1.4164968665356628,
+        "goalDefensiveRating": 0.8070737683195627,
+        "blendOffensiveRating": 1.581997961951808,
+        "blendDefensiveRating": 0.6673271373934829
+      },
+      "homeLabel": "Mexico",
+      "awayLabel": "England",
       "isLocked": false
     },
     {
@@ -8416,8 +8512,8 @@
       },
       "result": {
         "matchNumber": 94,
-        "teamHomeId": null,
-        "teamAwayId": null,
+        "teamHomeId": 40,
+        "teamAwayId": 19,
         "goalsHome": null,
         "goalsAway": null,
         "penGoalsHome": null,
@@ -8425,10 +8521,44 @@
         "winnerTeamId": null,
         "status": "scheduled"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W81",
-      "awayLabel": "W82",
+      "homeTeam": {
+        "id": 40,
+        "name": "United States",
+        "countryCode": "US",
+        "flag": "🇺🇸",
+        "rank": 41,
+        "rating": 1721,
+        "elo": 1721,
+        "total": 825,
+        "goalsFor": 1246,
+        "goalsAgainst": 1073,
+        "eloOffensiveRating": 0.7805219466715485,
+        "eloDefensiveRating": 1.0597725856671791,
+        "goalOffensiveRating": 0.9127009310535226,
+        "goalDefensiveRating": 1.0891186403772897,
+        "blendOffensiveRating": 0.8183040015016863,
+        "blendDefensiveRating": 1.075682371580052
+      },
+      "awayTeam": {
+        "id": 19,
+        "name": "Belgium",
+        "countryCode": "BE",
+        "flag": "🇧🇪",
+        "rank": 20,
+        "rating": 1867,
+        "elo": 1867,
+        "total": 876,
+        "goalsFor": 1599,
+        "goalsAgainst": 1359,
+        "eloOffensiveRating": 1.124352797848262,
+        "eloDefensiveRating": 0.7356905796624518,
+        "goalOffensiveRating": 1.1030844370685102,
+        "goalDefensiveRating": 1.2991065374095248,
+        "blendOffensiveRating": 1.1182734473608535,
+        "blendDefensiveRating": 1.041143130480589
+      },
+      "homeLabel": "United States",
+      "awayLabel": "Belgium",
       "isLocked": false
     },
     {
