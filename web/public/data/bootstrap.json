@@ -3049,11 +3049,56 @@
       "predictedGoalsAway": null
     },
     {
+      "matchNumber": 83,
+      "goalsHome": 2,
+      "goalsAway": 1,
+      "winnerTeamId": 5,
+      "recordedAt": "2026-07-03T07:09:08.912Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
       "matchNumber": 84,
       "goalsHome": 3,
       "goalsAway": 0,
       "winnerTeamId": 0,
       "recordedAt": "2026-07-02T21:19:24.143Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 85,
+      "goalsHome": 2,
+      "goalsAway": 0,
+      "winnerTeamId": 14,
+      "recordedAt": "2026-07-03T07:09:17.051Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 86,
+      "goalsHome": 3,
+      "goalsAway": 2,
+      "winnerTeamId": 1,
+      "recordedAt": "2026-07-04T07:00:48.998Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 87,
+      "goalsHome": 1,
+      "goalsAway": 0,
+      "winnerTeamId": 6,
+      "recordedAt": "2026-07-04T07:00:58.070Z",
+      "predictedGoalsHome": null,
+      "predictedGoalsAway": null
+    },
+    {
+      "matchNumber": 88,
+      "goalsHome": 1,
+      "goalsAway": 1,
+      "winnerTeamId": 45,
+      "recordedAt": "2026-07-03T20:52:42.801Z",
       "predictedGoalsHome": null,
       "predictedGoalsAway": null
     }
