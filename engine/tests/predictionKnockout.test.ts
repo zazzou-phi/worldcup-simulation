@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildDisplayKnockoutResults,
   buildPredictionKnockoutRatings,
   buildPredictionSlotContext,
   computeKnockoutRoundAvailability,
@@ -61,6 +62,46 @@ function teamIdFromGroup(groupLetter: string, position: number): number {
 }
 
 describe('predictionKnockout', () => {
+  it('buildDisplayKnockoutResults keeps stored consensus for locked matches', () => {
+    const consensus = [
+      {
+        matchNumber: 73,
+        goalsHome: 2,
+        goalsAway: 1,
+        winnerTeamId: 18,
+        penGoalsHome: null,
+        penGoalsAway: null,
+      },
+    ];
+    const path = [
+      {
+        matchNumber: 73,
+        goalsHome: 0,
+        goalsAway: 2,
+        winnerTeamId: 78,
+        penGoalsHome: null,
+        penGoalsAway: null,
+      },
+      {
+        matchNumber: 90,
+        goalsHome: 1,
+        goalsAway: 0,
+        winnerTeamId: 18,
+        penGoalsHome: null,
+        penGoalsAway: null,
+      },
+    ];
+
+    const display = buildDisplayKnockoutResults(consensus, path, new Set([73]));
+    const r32 = display.find((result) => result.matchNumber === 73)!;
+    const r16 = display.find((result) => result.matchNumber === 90)!;
+
+    expect(r32.goalsHome).toBe(2);
+    expect(r32.goalsAway).toBe(1);
+    expect(r16.goalsHome).toBe(1);
+    expect(r16.goalsAway).toBe(0);
+  });
+
   it('derives qualifying third groups from manual order', () => {
     const order = [
       { groupLetter: 'B', position: 1 },

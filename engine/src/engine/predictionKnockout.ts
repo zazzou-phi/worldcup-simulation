@@ -175,29 +175,20 @@ export function mergeActualResultsIntoKnockoutResults(
   return [...resultByMatch.values()];
 }
 
-/** Keep stored predictions for display when actual results have overwritten the active run. */
+/** Keep stored consensus for display; never substitute actual results for locked matches. */
 export function buildDisplayKnockoutResults(
   consensusResults: PredictionKnockoutResult[],
   pathResults: PredictionKnockoutResult[],
   lockedMatchNumbers: ReadonlySet<number>,
 ): PredictionKnockoutResult[] {
-  const consensusByMatch = new Map(
-    consensusResults.map((result) => [result.matchNumber, result]),
-  );
   const displayByMatch = new Map<number, PredictionKnockoutResult>();
 
-  for (const result of pathResults) {
-    if (lockedMatchNumbers.has(result.matchNumber)) {
-      const consensus = consensusByMatch.get(result.matchNumber);
-      if (consensus) {
-        displayByMatch.set(result.matchNumber, consensus);
-      }
-      continue;
-    }
+  for (const result of consensusResults) {
     displayByMatch.set(result.matchNumber, result);
   }
 
-  for (const result of consensusResults) {
+  for (const result of pathResults) {
+    if (lockedMatchNumbers.has(result.matchNumber)) continue;
     if (!displayByMatch.has(result.matchNumber)) {
       displayByMatch.set(result.matchNumber, result);
     }

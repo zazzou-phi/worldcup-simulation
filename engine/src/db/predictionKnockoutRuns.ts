@@ -68,12 +68,11 @@ function writePlayedMatch(
 
 function writeKnockoutResultsToRun(
   db: Db,
-  repo: Repository,
+  _repo: Repository,
   simulationId: number,
   results: PredictionKnockoutResult[],
 ): void {
   for (const result of results) {
-    if (repo.isMatchLocked(result.matchNumber)) continue;
     writePlayedMatch(db, simulationId, result.matchNumber, result.goalsHome, result.goalsAway, result.winnerTeamId, {
       penGoalsHome: result.penGoalsHome,
       penGoalsAway: result.penGoalsAway,
@@ -198,8 +197,8 @@ export function createPredictionKnockoutRun(
     deferMasterStats: true,
   }).id;
 
-  // Group scores come from actual results applied in createSimulation; only knockout
-  // predictions are written here (actual knockouts remain from applyActualResults).
+  // Group scores come from actual results applied in createSimulation; stored knockout
+  // consensus overwrites any seeded actuals so saved runs match the prediction view.
   writeKnockoutResultsToRun(db, repo, simulationId, readPredictionKnockoutResults(db, predictionId));
 
   repo.touchSimulation(simulationId);

@@ -532,6 +532,52 @@ describe('repository integration', () => {
     expect(repo.getActualResult(73)!.goalsHome).not.toBe(predictedHome);
   });
 
+  it('keeps locked round consensus scores when simulating the next knockout round', () => {
+    const sim = repo.createSimulation('Full group');
+    const groupFixtures = repo.getFixtures().filter((f) => f.group);
+    for (const f of groupFixtures) {
+      repo.updateMatchResult(sim.id, f.matchNumber, 1, 0, f.teamHomeId!);
+    }
+
+    const predictionId = ensureTestPrediction(repo);
+    repo.rebuildAllPredictionAggregates();
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_32', { count: 100 });
+
+    const beforeLock = repo.buildMasterKnockoutView(predictionId);
+    const r32Match = beforeLock.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
+    const predictedHome = r32Match.result.goalsHome!;
+    const predictedAway = r32Match.result.goalsAway!;
+    const predictedWinnerId = r32Match.result.winnerTeamId!;
+    const homeId = r32Match.homeTeam!.id;
+    const awayId = r32Match.awayTeam!.id;
+
+    if (predictedWinnerId === homeId) {
+      repo.setActualResult(73, 0, 2, awayId);
+    } else {
+      repo.setActualResult(73, 2, 0, homeId);
+    }
+
+    repo.simulatePredictionKnockoutRoundForPrediction(predictionId, 'round_of_16', { count: 100 });
+
+    const afterNextRound = repo.buildMasterKnockoutView(predictionId);
+    const r32After = afterNextRound.resolvedMatches.find((m) => m.fixture.matchNumber === 73)!;
+    expect(r32After.result.goalsHome).toBe(predictedHome);
+    expect(r32After.result.goalsAway).toBe(predictedAway);
+    expect(r32After.isLocked).toBe(true);
+
+    const stored = readPredictionKnockoutResults(repo['db'], predictionId).find(
+      (result) => result.matchNumber === 73,
+    )!;
+    expect(stored.goalsHome).toBe(predictedHome);
+    expect(stored.goalsAway).toBe(predictedAway);
+
+    const activeRunId = repo.getPrediction(predictionId)!.activeKnockoutSimulationId!;
+    const runR32 = repo.getSimulationMatches(activeRunId).find((m) => m.matchNumber === 73)!;
+    expect(runR32.goalsHome).toBe(predictedHome);
+    expect(runR32.goalsAway).toBe(predictedAway);
+    expect(repo.getActualResult(73)!.goalsHome).not.toBe(predictedHome);
+  });
+
   it('aggregates team goals across simulations including knockouts', () => {
     const sim1 = repo.createSimulation('One');
     const sim2 = repo.createSimulation('Two');
