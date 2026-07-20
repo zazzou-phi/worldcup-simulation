@@ -1042,12 +1042,12 @@
         "matchNumber": 89,
         "teamHomeId": 21,
         "teamAwayId": 2,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 0,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 2,
+        "status": "played"
       },
       "homeTeam": {
         "id": 21,
@@ -1087,7 +1087,7 @@
       },
       "homeLabel": "Paraguay",
       "awayLabel": "France",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1106,12 +1106,12 @@
         "matchNumber": 90,
         "teamHomeId": 24,
         "teamAwayId": 23,
-        "goalsHome": null,
-        "goalsAway": null,
-        "penGoalsHome": null,
-        "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "goalsHome": 1,
+        "goalsAway": 1,
+        "penGoalsHome": 3,
+        "penGoalsAway": 4,
+        "winnerTeamId": 23,
+        "status": "played"
       },
       "homeTeam": {
         "id": 24,
@@ -1151,7 +1151,7 @@
       },
       "homeLabel": "Canada",
       "awayLabel": "Morocco",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1170,12 +1170,12 @@
         "matchNumber": 91,
         "teamHomeId": 4,
         "teamAwayId": 11,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 3,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 4,
+        "status": "played"
       },
       "homeTeam": {
         "id": 4,
@@ -1215,7 +1215,7 @@
       },
       "homeLabel": "Brazil",
       "awayLabel": "Norway",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1234,12 +1234,12 @@
         "matchNumber": 92,
         "teamHomeId": 18,
         "teamAwayId": 3,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 3,
+        "status": "played"
       },
       "homeTeam": {
         "id": 18,
@@ -1279,7 +1279,7 @@
       },
       "homeLabel": "Mexico",
       "awayLabel": "England",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1298,12 +1298,12 @@
         "matchNumber": 93,
         "teamHomeId": 5,
         "teamAwayId": 0,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 0,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 0,
+        "status": "played"
       },
       "homeTeam": {
         "id": 5,
@@ -1343,7 +1343,7 @@
       },
       "homeLabel": "Portugal",
       "awayLabel": "Spain",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1362,12 +1362,12 @@
         "matchNumber": 94,
         "teamHomeId": 40,
         "teamAwayId": 19,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 2,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 40,
+        "status": "played"
       },
       "homeTeam": {
         "id": 40,
@@ -1407,7 +1407,7 @@
       },
       "homeLabel": "United States",
       "awayLabel": "Belgium",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1426,12 +1426,12 @@
         "matchNumber": 95,
         "teamHomeId": 1,
         "teamAwayId": 45,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 2,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 1,
+        "status": "played"
       },
       "homeTeam": {
         "id": 1,
@@ -1471,7 +1471,7 @@
       },
       "homeLabel": "Argentina",
       "awayLabel": "Egypt",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1490,12 +1490,12 @@
         "matchNumber": 96,
         "teamHomeId": 14,
         "teamAwayId": 6,
-        "goalsHome": null,
-        "goalsAway": null,
+        "goalsHome": 1,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 6,
+        "status": "played"
       },
       "homeTeam": {
         "id": 14,
@@ -1535,7 +1535,7 @@
       },
       "homeLabel": "Switzerland",
       "awayLabel": "Colombia",
-      "isLocked": false
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1552,20 +1552,54 @@
       },
       "result": {
         "matchNumber": 97,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
+        "teamHomeId": 2,
+        "teamAwayId": 23,
+        "goalsHome": 2,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 2,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W89",
-      "awayLabel": "W90",
-      "isLocked": false
+      "homeTeam": {
+        "id": 2,
+        "name": "France",
+        "countryCode": "FR",
+        "flag": "🇫🇷",
+        "rank": 3,
+        "rating": 2081,
+        "elo": 2081,
+        "total": 938,
+        "goalsFor": 1706,
+        "goalsAgainst": 1272,
+        "eloOffensiveRating": 1.9197742083596192,
+        "eloDefensiveRating": 0.43087137955712,
+        "goalOffensiveRating": 1.0991085549761628,
+        "goalDefensiveRating": 1.1355694247560573,
+        "blendOffensiveRating": 1.6851950514813874,
+        "blendDefensiveRating": 0.8129191588271568
+      },
+      "awayTeam": {
+        "id": 23,
+        "name": "Morocco",
+        "countryCode": "MA",
+        "flag": "🇲🇦",
+        "rank": 24,
+        "rating": 1822,
+        "elo": 1822,
+        "total": 728,
+        "goalsFor": 1103,
+        "goalsAgainst": 614,
+        "eloOffensiveRating": 1.004718677371244,
+        "eloDefensiveRating": 0.8232909173723315,
+        "goalOffensiveRating": 0.9156057953973916,
+        "goalDefensiveRating": 0.7062629262762258,
+        "blendOffensiveRating": 0.9792466417935004,
+        "blendDefensiveRating": 0.7598449004359872
+      },
+      "homeLabel": "France",
+      "awayLabel": "Morocco",
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1582,20 +1616,54 @@
       },
       "result": {
         "matchNumber": 98,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
+        "teamHomeId": 0,
+        "teamAwayId": 19,
+        "goalsHome": 2,
+        "goalsAway": 0,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 0,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W93",
-      "awayLabel": "W94",
-      "isLocked": false
+      "homeTeam": {
+        "id": 0,
+        "name": "Spain",
+        "countryCode": "ES",
+        "flag": "🇪🇸",
+        "rank": 1,
+        "rating": 2165,
+        "elo": 2165,
+        "total": 780,
+        "goalsFor": 1591,
+        "goalsAgainst": 697,
+        "eloOffensiveRating": 2.3683833209240883,
+        "eloDefensiveRating": 0.34925755230844235,
+        "goalOffensiveRating": 1.232650558276307,
+        "goalDefensiveRating": 0.7482859538114454,
+        "blendOffensiveRating": 2.0437453483191628,
+        "blendDefensiveRating": 0.5655883846394144
+      },
+      "awayTeam": {
+        "id": 19,
+        "name": "Belgium",
+        "countryCode": "BE",
+        "flag": "🇧🇪",
+        "rank": 20,
+        "rating": 1867,
+        "elo": 1867,
+        "total": 876,
+        "goalsFor": 1599,
+        "goalsAgainst": 1359,
+        "eloOffensiveRating": 1.124352797848262,
+        "eloDefensiveRating": 0.7356905796624518,
+        "goalOffensiveRating": 1.1030844370685102,
+        "goalDefensiveRating": 1.2991065374095248,
+        "blendOffensiveRating": 1.1182734473608535,
+        "blendDefensiveRating": 1.041143130480589
+      },
+      "homeLabel": "Spain",
+      "awayLabel": "Belgium",
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1612,20 +1680,54 @@
       },
       "result": {
         "matchNumber": 99,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
+        "teamHomeId": 11,
+        "teamAwayId": 3,
+        "goalsHome": 1,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 3,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W91",
-      "awayLabel": "W92",
-      "isLocked": false
+      "homeTeam": {
+        "id": 11,
+        "name": "Norway",
+        "countryCode": "NO",
+        "flag": "🇳🇴",
+        "rank": 12,
+        "rating": 1912,
+        "elo": 1912,
+        "total": 886,
+        "goalsFor": 1373,
+        "goalsAgainst": 1443,
+        "eloOffensiveRating": 1.2582320230542536,
+        "eloDefensiveRating": 0.6574111502790929,
+        "goalOffensiveRating": 0.9364858401309484,
+        "goalDefensiveRating": 1.3638356135338718,
+        "blendOffensiveRating": 1.166264060208765,
+        "blendDefensiveRating": 1.0403948966471226
+      },
+      "awayTeam": {
+        "id": 3,
+        "name": "England",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "rank": 4,
+        "rating": 2020,
+        "elo": 2020,
+        "total": 1160,
+        "goalsFor": 2719,
+        "goalsAgainst": 1118,
+        "eloOffensiveRating": 1.648239220975248,
+        "eloDefensiveRating": 0.5018541914714629,
+        "goalOffensiveRating": 1.4164968665356628,
+        "goalDefensiveRating": 0.8070737683195627,
+        "blendOffensiveRating": 1.581997961951808,
+        "blendDefensiveRating": 0.6673271373934829
+      },
+      "homeLabel": "Norway",
+      "awayLabel": "England",
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1642,20 +1744,54 @@
       },
       "result": {
         "matchNumber": 100,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
+        "teamHomeId": 1,
+        "teamAwayId": 14,
+        "goalsHome": 3,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 1,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W95",
-      "awayLabel": "W96",
-      "isLocked": false
+      "homeTeam": {
+        "id": 1,
+        "name": "Argentina",
+        "countryCode": "AR",
+        "flag": "🇦🇷",
+        "rank": 2,
+        "rating": 2113,
+        "elo": 2113,
+        "total": 1109,
+        "goalsFor": 2112,
+        "goalsAgainst": 1136,
+        "eloOffensiveRating": 2.0796665727719073,
+        "eloDefensiveRating": 0.39774441365933794,
+        "goalOffensiveRating": 1.1508713200674314,
+        "goalDefensiveRating": 0.8577805666604725,
+        "blendOffensiveRating": 1.8141796398246626,
+        "blendDefensiveRating": 0.6471502291507069
+      },
+      "awayTeam": {
+        "id": 14,
+        "name": "Switzerland",
+        "countryCode": "CH",
+        "flag": "🇨🇭",
+        "rank": 15,
+        "rating": 1894,
+        "elo": 1894,
+        "total": 896,
+        "goalsFor": 1339,
+        "goalsAgainst": 1483,
+        "eloOffensiveRating": 1.2028666456016333,
+        "eloDefensiveRating": 0.6876703786065674,
+        "goalOffensiveRating": 0.9031023391025836,
+        "goalDefensiveRating": 1.385997857866384,
+        "blendOffensiveRating": 1.1171819846305977,
+        "blendDefensiveRating": 1.0662643941173375
+      },
+      "homeLabel": "Argentina",
+      "awayLabel": "Switzerland",
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1672,20 +1808,54 @@
       },
       "result": {
         "matchNumber": 101,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
+        "teamHomeId": 2,
+        "teamAwayId": 0,
+        "goalsHome": 2,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 2,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W97",
-      "awayLabel": "W98",
-      "isLocked": false
+      "homeTeam": {
+        "id": 2,
+        "name": "France",
+        "countryCode": "FR",
+        "flag": "🇫🇷",
+        "rank": 3,
+        "rating": 2081,
+        "elo": 2081,
+        "total": 938,
+        "goalsFor": 1706,
+        "goalsAgainst": 1272,
+        "eloOffensiveRating": 1.9197742083596192,
+        "eloDefensiveRating": 0.43087137955712,
+        "goalOffensiveRating": 1.0991085549761628,
+        "goalDefensiveRating": 1.1355694247560573,
+        "blendOffensiveRating": 1.6851950514813874,
+        "blendDefensiveRating": 0.8129191588271568
+      },
+      "awayTeam": {
+        "id": 0,
+        "name": "Spain",
+        "countryCode": "ES",
+        "flag": "🇪🇸",
+        "rank": 1,
+        "rating": 2165,
+        "elo": 2165,
+        "total": 780,
+        "goalsFor": 1591,
+        "goalsAgainst": 697,
+        "eloOffensiveRating": 2.3683833209240883,
+        "eloDefensiveRating": 0.34925755230844235,
+        "goalOffensiveRating": 1.232650558276307,
+        "goalDefensiveRating": 0.7482859538114454,
+        "blendOffensiveRating": 2.0437453483191628,
+        "blendDefensiveRating": 0.5655883846394144
+      },
+      "homeLabel": "France",
+      "awayLabel": "Spain",
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1702,20 +1872,54 @@
       },
       "result": {
         "matchNumber": 102,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
-        "penGoalsHome": null,
-        "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "teamHomeId": 3,
+        "teamAwayId": 1,
+        "goalsHome": 1,
+        "goalsAway": 1,
+        "penGoalsHome": 5,
+        "penGoalsAway": 3,
+        "winnerTeamId": 3,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W99",
-      "awayLabel": "W100",
-      "isLocked": false
+      "homeTeam": {
+        "id": 3,
+        "name": "England",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "rank": 4,
+        "rating": 2020,
+        "elo": 2020,
+        "total": 1160,
+        "goalsFor": 2719,
+        "goalsAgainst": 1118,
+        "eloOffensiveRating": 1.648239220975248,
+        "eloDefensiveRating": 0.5018541914714629,
+        "goalOffensiveRating": 1.4164968665356628,
+        "goalDefensiveRating": 0.8070737683195627,
+        "blendOffensiveRating": 1.581997961951808,
+        "blendDefensiveRating": 0.6673271373934829
+      },
+      "awayTeam": {
+        "id": 1,
+        "name": "Argentina",
+        "countryCode": "AR",
+        "flag": "🇦🇷",
+        "rank": 2,
+        "rating": 2113,
+        "elo": 2113,
+        "total": 1109,
+        "goalsFor": 2112,
+        "goalsAgainst": 1136,
+        "eloOffensiveRating": 2.0796665727719073,
+        "eloDefensiveRating": 0.39774441365933794,
+        "goalOffensiveRating": 1.1508713200674314,
+        "goalDefensiveRating": 0.8577805666604725,
+        "blendOffensiveRating": 1.8141796398246626,
+        "blendDefensiveRating": 0.6471502291507069
+      },
+      "homeLabel": "England",
+      "awayLabel": "Argentina",
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1732,20 +1936,54 @@
       },
       "result": {
         "matchNumber": 103,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
+        "teamHomeId": 2,
+        "teamAwayId": 3,
+        "goalsHome": 1,
+        "goalsAway": 2,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 3,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "L101",
-      "awayLabel": "L102",
-      "isLocked": false
+      "homeTeam": {
+        "id": 2,
+        "name": "France",
+        "countryCode": "FR",
+        "flag": "🇫🇷",
+        "rank": 3,
+        "rating": 2081,
+        "elo": 2081,
+        "total": 938,
+        "goalsFor": 1706,
+        "goalsAgainst": 1272,
+        "eloOffensiveRating": 1.9197742083596192,
+        "eloDefensiveRating": 0.43087137955712,
+        "goalOffensiveRating": 1.0991085549761628,
+        "goalDefensiveRating": 1.1355694247560573,
+        "blendOffensiveRating": 1.6851950514813874,
+        "blendDefensiveRating": 0.8129191588271568
+      },
+      "awayTeam": {
+        "id": 3,
+        "name": "England",
+        "countryCode": null,
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "rank": 4,
+        "rating": 2020,
+        "elo": 2020,
+        "total": 1160,
+        "goalsFor": 2719,
+        "goalsAgainst": 1118,
+        "eloOffensiveRating": 1.648239220975248,
+        "eloDefensiveRating": 0.5018541914714629,
+        "goalOffensiveRating": 1.4164968665356628,
+        "goalDefensiveRating": 0.8070737683195627,
+        "blendOffensiveRating": 1.581997961951808,
+        "blendDefensiveRating": 0.6673271373934829
+      },
+      "homeLabel": "France",
+      "awayLabel": "England",
+      "isLocked": true
     },
     {
       "fixture": {
@@ -1762,20 +2000,54 @@
       },
       "result": {
         "matchNumber": 104,
-        "teamHomeId": null,
-        "teamAwayId": null,
-        "goalsHome": null,
-        "goalsAway": null,
+        "teamHomeId": 0,
+        "teamAwayId": 1,
+        "goalsHome": 2,
+        "goalsAway": 1,
         "penGoalsHome": null,
         "penGoalsAway": null,
-        "winnerTeamId": null,
-        "status": "scheduled"
+        "winnerTeamId": 0,
+        "status": "played"
       },
-      "homeTeam": null,
-      "awayTeam": null,
-      "homeLabel": "W101",
-      "awayLabel": "W102",
-      "isLocked": false
+      "homeTeam": {
+        "id": 0,
+        "name": "Spain",
+        "countryCode": "ES",
+        "flag": "🇪🇸",
+        "rank": 1,
+        "rating": 2165,
+        "elo": 2165,
+        "total": 780,
+        "goalsFor": 1591,
+        "goalsAgainst": 697,
+        "eloOffensiveRating": 2.3683833209240883,
+        "eloDefensiveRating": 0.34925755230844235,
+        "goalOffensiveRating": 1.232650558276307,
+        "goalDefensiveRating": 0.7482859538114454,
+        "blendOffensiveRating": 2.0437453483191628,
+        "blendDefensiveRating": 0.5655883846394144
+      },
+      "awayTeam": {
+        "id": 1,
+        "name": "Argentina",
+        "countryCode": "AR",
+        "flag": "🇦🇷",
+        "rank": 2,
+        "rating": 2113,
+        "elo": 2113,
+        "total": 1109,
+        "goalsFor": 2112,
+        "goalsAgainst": 1136,
+        "eloOffensiveRating": 2.0796665727719073,
+        "eloDefensiveRating": 0.39774441365933794,
+        "goalOffensiveRating": 1.1508713200674314,
+        "goalDefensiveRating": 0.8577805666604725,
+        "blendOffensiveRating": 1.8141796398246626,
+        "blendDefensiveRating": 0.6471502291507069
+      },
+      "homeLabel": "Spain",
+      "awayLabel": "Argentina",
+      "isLocked": true
     }
   ],
   "thirdPlaceOrder": [
@@ -2155,7 +2427,8 @@
         96
       ],
       "canSimulate": false,
-      "isComplete": false
+      "isComplete": true,
+      "disabledReason": "Round already simulated"
     },
     {
       "name": "quarter_final",
@@ -2167,8 +2440,8 @@
         100
       ],
       "canSimulate": false,
-      "isComplete": false,
-      "disabledReason": "Simulate Round of 16 first"
+      "isComplete": true,
+      "disabledReason": "Round already simulated"
     },
     {
       "name": "semi_final",
@@ -2178,8 +2451,8 @@
         102
       ],
       "canSimulate": false,
-      "isComplete": false,
-      "disabledReason": "Simulate Quarter-final first"
+      "isComplete": true,
+      "disabledReason": "Round already simulated"
     },
     {
       "name": "third_place",
@@ -2188,8 +2461,8 @@
         103
       ],
       "canSimulate": false,
-      "isComplete": false,
-      "disabledReason": "Simulate Semi-final first"
+      "isComplete": true,
+      "disabledReason": "Round already simulated"
     },
     {
       "name": "final",
@@ -2198,8 +2471,8 @@
         104
       ],
       "canSimulate": false,
-      "isComplete": false,
-      "disabledReason": "Simulate Third place first"
+      "isComplete": true,
+      "disabledReason": "Round already simulated"
     }
   ],
   "hasKnockoutResults": true,
@@ -6610,119 +6883,4616 @@
       "consensusMode": "sample"
     },
     "89": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 1684,
+      "draw": 1927,
+      "awayWin": 6389,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 978
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 661
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 878
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 232
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 71
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 319
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 392
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 34
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 453
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 981
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 732
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 444
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 909
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 36
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 470
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 380
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 183
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 211
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 98
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 473
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 153
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 169
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 97
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 99
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 3
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 82
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 134
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 58
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 25
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 9,
+          "n": 4
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 41
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 21
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 8
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 14
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 9
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 19
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 8
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 13
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 31
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 9
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 10
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 6
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 8
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 10
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 3
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 6
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 11
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 8,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 10,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 13,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "90": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 2660,
+      "draw": 2794,
+      "awayWin": 4546,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 333
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 1525
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 776
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 433
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 531
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 310
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 170
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 1196
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 1082
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1224
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 975
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 91
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 42
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 159
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 490
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 51
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 117
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 16
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 8
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 39
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 122
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 120
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 13
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 7
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 4
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 36
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 23
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 36
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 9
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 8
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 24
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 5
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 6
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 4
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "91": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 5679,
+      "draw": 2166,
+      "awayWin": 2155,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 615
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 317
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 1053
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 604
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 447
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 549
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 638
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 642
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 261
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 152
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 208
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 941
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 990
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 254
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 27
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 945
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 46
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 43
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 97
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 14
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 104
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 37
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 116
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 117
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 343
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 143
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 61
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 18
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 4
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 52
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 13
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 18
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 35
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 11
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 5
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 11
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 11
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 9
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 5
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 10
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 10
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 3
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 0,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "92": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 2273,
+      "draw": 2436,
+      "awayWin": 5291,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1107
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 93
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 909
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 230
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 767
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 83
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 972
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 608
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 1163
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 537
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 425
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 814
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 487
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 99
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 260
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 354
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 210
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 36
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 50
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 229
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 30
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 28
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 119
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 73
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 132
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 12
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 29
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 28
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 10
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 11
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 32
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 5
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 5
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 5
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 10
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 8
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 6
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 3
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 3
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 6
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "93": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 1906,
+      "draw": 2056,
+      "awayWin": 6038,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 553
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 972
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 488
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 977
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 63
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 117
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 976
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 647
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 654
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 532
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 368
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 89
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 442
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 1038
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 162
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 292
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 137
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 153
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 296
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 286
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 26
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 47
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 160
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 29
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 32
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 3
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 47
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 55
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 108
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 45
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 65
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 12
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 19
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 11
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 17
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 22
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 4
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 14
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 8
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 6
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 3
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 11,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 3
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 11,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 9,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "94": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 2691,
+      "draw": 2506,
+      "awayWin": 4803,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 412
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 630
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 192
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 478
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 938
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 219
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 812
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 1114
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1163
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 861
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 191
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 188
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 230
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 454
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 89
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 63
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 794
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 55
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 73
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 439
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 80
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 170
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 20
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 21
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 14
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 14
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 48
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 12
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 10
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 35
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 24
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 24
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 11
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 5
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 65
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 4
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 7
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 5
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 12
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 2
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "95": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 7487,
+      "draw": 1537,
+      "awayWin": 976,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 1072
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 486
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 689
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 387
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 1293
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 206
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 1149
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 258
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 642
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 137
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 860
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 731
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 268
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 352
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 47
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 119
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 30
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 181
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 81
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 67
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 143
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 361
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 35
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 63
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 27
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 2,
+          "n": 4
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 23
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 76
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 34
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 59
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 8
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 12
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 12
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 9
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 0,
+          "n": 7
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 7
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 19
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 3
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 2,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 11
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 8
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "96": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 2496,
+      "draw": 2327,
+      "awayWin": 5177,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 235
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 507
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 605
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 491
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 1039
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 624
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 162
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1114
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 932
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 502
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 268
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 166
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 905
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 382
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 658
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 79
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 52
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 30
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 103
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 239
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 252
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 53
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 51
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 101
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 28
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 4
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 111
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 86
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 10
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 39
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 14
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 6
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 5
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 5
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 23
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 7
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 11
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 11
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 15
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 9
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 4
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 6
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 25
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 3
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 9,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 2
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 9
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 2
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 2
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "97": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 5040,
+      "draw": 2473,
+      "awayWin": 2487,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 465
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 515
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 900
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 202
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 1140
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 607
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1175
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 159
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 501
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 65
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 757
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 395
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 859
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 199
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 734
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 231
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 149
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 112
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 44
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 253
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 8
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 94
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 88
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 10
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 25
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 89
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 15
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 28
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 7
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 14
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 38
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 28
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 23
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 19
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 9
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 10
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 8
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 4
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "98": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 7597,
+      "draw": 1421,
+      "awayWin": 982,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 666
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 273
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 853
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 908
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 155
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 687
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 297
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 200
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 280
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 1056
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 326
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 756
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 390
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 749
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 49
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 292
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 18
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 101
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 35
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 514
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 6
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 27
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 57
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 332
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 75
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 67
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 26
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 97
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 81
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 18
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 143
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 202
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 21
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 36
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 55
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 14
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 0,
+          "n": 15
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 11
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 35
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 3,
+          "n": 3
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 5
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 2,
+          "n": 9
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 22
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 13,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 2,
+          "n": 3
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 8
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 0,
+          "n": 4
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "99": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 1844,
+      "draw": 2026,
+      "awayWin": 6130,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 628
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 1001
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 116
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 488
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 166
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 764
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 936
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 60
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 386
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 869
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 487
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 172
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 180
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 146
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 323
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 975
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 184
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 463
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 315
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 83
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 449
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 95
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 256
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 15
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 71
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 23
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 30
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 20
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 55
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 14
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 3
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 23
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 8
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 34
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 8
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 43
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 19
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 5
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 3
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 35
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 9
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 11,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 7
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 6
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 10,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 9,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "100": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 6904,
+      "draw": 1698,
+      "awayWin": 1398,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 433
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 238
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 813
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 325
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 774
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 457
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 364
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 851
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 171
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 333
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 208
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 1009
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 783
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 30
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 678
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 580
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 113
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 65
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 63
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 384
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 275
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 1,
+          "n": 7
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 121
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 152
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 69
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 125
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 30
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 13
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 103
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 100
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 12
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 20
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 41
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 2,
+          "n": 7
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 14
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 48
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 20
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 19
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 48
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 5
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 35
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 17
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 4
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 4
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 6
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 4
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 3,
+          "n": 3
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 11,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 2,
+          "n": 2
+        },
+        {
+          "goalsHome": 12,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 0,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "101": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 2371,
+      "draw": 1924,
+      "awayWin": 5705,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 843
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 588
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 599
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 369
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 67
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 322
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 218
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 22
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 43
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 518
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 144
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 742
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 373
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 347
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 789
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 166
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 107
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 170
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 73
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 855
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 394
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 4
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 145
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 250
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 485
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 558
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 24
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 160
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 102
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 25
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 6
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 58
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 33
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 42
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 70
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 7
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 89
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 19
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 10
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 6
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 39
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 7,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 24
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 17
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 4
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 11
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 9,
+          "n": 5
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 10,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 9
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 6
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 6
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 8,
+          "n": 2
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 11,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 7
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 4
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 11,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 10,
+          "n": 2
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 6,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "102": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 3257,
+      "draw": 2271,
+      "awayWin": 4472,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 898
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 703
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 755
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 27
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 734
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 595
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 466
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 193
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1090
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 536
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 455
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 253
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 202
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 452
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 314
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 2
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 44
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 804
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 32
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 260
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 10
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 78
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 141
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 86
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 4
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 36
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 75
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 99
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 24
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 214
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 13
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 12
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 105
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 35
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 106
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 11
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 8
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 9
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 3
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 9
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 34
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 24
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 3
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 12
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 10
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 4
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "103": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 3473,
+      "draw": 2292,
+      "awayWin": 4235,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 795
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 509
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 469
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 654
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 253
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 651
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 481
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 786
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 180
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1086
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 778
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 256
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 66
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 105
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 379
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 568
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 46
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 380
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 38
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 328
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 122
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 68
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 175
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 111
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 7,
+          "n": 9
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 14
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 151
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 27
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 147
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 31
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 71
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 46
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 55
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 21
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 15
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 4
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 5
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 23
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 22
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 9
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 9
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 7,
+          "n": 3
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 17
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 4
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 7
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 3
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 6
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 9,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 6
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 1
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 2,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     },
     "104": {
-      "homeWin": 0,
-      "draw": 0,
-      "awayWin": 0,
-      "total": 0,
-      "scorelines": []
+      "homeWin": 4575,
+      "draw": 2345,
+      "awayWin": 3080,
+      "total": 10000,
+      "scorelines": [
+        {
+          "goalsHome": 2,
+          "goalsAway": 3,
+          "n": 267
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 0,
+          "n": 852
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 1,
+          "n": 884
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 3,
+          "n": 345
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 1,
+          "n": 494
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 0,
+          "n": 706
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 2,
+          "n": 436
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 4,
+          "n": 12
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 0,
+          "n": 425
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 3,
+          "n": 230
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 2,
+          "n": 704
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 2,
+          "n": 616
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 4,
+          "n": 41
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 2,
+          "n": 290
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 1,
+          "n": 84
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 3,
+          "n": 124
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 1,
+          "n": 1049
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 5,
+          "n": 37
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 0,
+          "n": 541
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 0,
+          "n": 19
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 0,
+          "n": 187
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 1,
+          "n": 650
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 1,
+          "n": 227
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 4,
+          "n": 80
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 4,
+          "n": 68
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 5,
+          "n": 17
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 2,
+          "n": 120
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 2,
+          "n": 44
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 3,
+          "n": 23
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 0,
+          "n": 78
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 1,
+          "n": 28
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 4,
+          "n": 125
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 5,
+          "n": 30
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 2,
+          "n": 6
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 2,
+          "n": 21
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 3,
+          "n": 2
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 6,
+          "n": 10
+        },
+        {
+          "goalsHome": 10,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 7,
+          "n": 3
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 1,
+          "n": 9
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 2,
+          "n": 1
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 5,
+          "n": 19
+        },
+        {
+          "goalsHome": 1,
+          "goalsAway": 7,
+          "n": 4
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 4,
+          "n": 7
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 3,
+          "n": 48
+        },
+        {
+          "goalsHome": 7,
+          "goalsAway": 0,
+          "n": 6
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 3,
+          "n": 7
+        },
+        {
+          "goalsHome": 5,
+          "goalsAway": 5,
+          "n": 3
+        },
+        {
+          "goalsHome": 0,
+          "goalsAway": 6,
+          "n": 7
+        },
+        {
+          "goalsHome": 9,
+          "goalsAway": 1,
+          "n": 1
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 6,
+          "n": 2
+        },
+        {
+          "goalsHome": 4,
+          "goalsAway": 5,
+          "n": 1
+        },
+        {
+          "goalsHome": 3,
+          "goalsAway": 6,
+          "n": 1
+        },
+        {
+          "goalsHome": 6,
+          "goalsAway": 4,
+          "n": 2
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 1,
+          "n": 2
+        },
+        {
+          "goalsHome": 2,
+          "goalsAway": 8,
+          "n": 1
+        },
+        {
+          "goalsHome": 8,
+          "goalsAway": 0,
+          "n": 1
+        }
+      ],
+      "consensusMode": "sample"
     }
   },
-  "activeKnockoutSimulationId": 140360,
+  "activeKnockoutSimulationId": 140365,
   "knockoutRuns": [
     {
       "id": 137854,
@@ -6751,6 +11521,26 @@
     {
       "id": 140360,
       "name": "Knockout — Bulk 2026-06-24T15-04-16 #6"
+    },
+    {
+      "id": 140361,
+      "name": "Knockout — Bulk 2026-06-24T15-04-16 #7"
+    },
+    {
+      "id": 140362,
+      "name": "Knockout — Bulk 2026-06-24T15-04-16 #8"
+    },
+    {
+      "id": 140363,
+      "name": "Knockout — Bulk 2026-06-24T15-04-16 #9"
+    },
+    {
+      "id": 140364,
+      "name": "Knockout — Bulk 2026-06-24T15-04-16 #10"
+    },
+    {
+      "id": 140365,
+      "name": "Knockout — Bulk 2026-06-24T15-04-16 #11"
     }
   ]
 }
